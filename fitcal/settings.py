@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'pages',
     'members',
+    'orders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

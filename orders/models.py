@@ -1,0 +1,21 @@
+import uuid
+
+from django.db import models
+
+
+# Create your models here.
+class Order(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # TODO
+    # 還沒辦法關聯到 user 和 store model，等組員將 user, store model
+    # 建立好後再加入欄位
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # store = models.ForeignKey(Store, on_delete=models.DO_NOTHING)
+    pickup_time = models.DateTimeField()
+    note = models.TextField()
+    order_status = models.CharField(max_length=5, default='pending')
+    payment_method = models.CharField(max_length=10)
+    payment_status = models.CharField(max_length=5, default='unpaid')
+    total_price = models.PositiveIntegerField()
+    customize = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
