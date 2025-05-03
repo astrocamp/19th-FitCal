@@ -1,0 +1,20 @@
+<h2>商品首頁</h2>
+
+<a href="{% url 'product:new' %}">新增商品</a>
+
+<ul>
+{% for product in products %}
+  <li>
+    <a href="/product/{{ product.id }}">
+      <section>
+        <h3>{{ product.name }}</h3>
+        <h3>{{ product.descript }}</h3>
+        <h3>{{ product.calories }}</h3>
+        <h3>{{ product.quantity }}</h3>
+        <h3>{{ product.price }}</h3>
+        <h3>{{ product.customize }}</h3>
+      </section>
+    </a>
+  </li>
+{% endfor %}
+</ul>
