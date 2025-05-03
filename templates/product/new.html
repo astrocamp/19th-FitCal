@@ -1,0 +1,13 @@
+<h3>新增商品</h3>
+
+<a href="{% url 'product:index' %}">回商品首頁</a>
+
+<form action="/product/" method="post">
+  {% csrf_token %} {% for field in form %}
+  <div>{{ field.label_tag }} {{ field }}</div>
+  {% endfor %}
+
+  <div>
+    <input type="submit" value="新增商品" />
+  </div>
+</form>

@@ -1,0 +1,28 @@
+{% block main %}
+
+<h1>
+  <h3>商品名稱: {{ product.name }}</h3>
+  <br />
+  <img src="{{ product.image }}" alt="Product Image" style="width: 200px; height: 200px" />
+  <br />
+  <p>商品介紹: {{ product.description }}</p>
+  <p>卡路里: {{ product.calories }}</p>
+  <p>可販售數量: {{ product.quantity }}</p>
+  <p>價格: {{ product.price }}</p>
+  <p>客製化: {{ product.customize }}</p>
+</h1>
+
+{% endblock %}
+
+<a href="{% url 'product:edit' product.id %}">編輯</a>
+
+<form
+  action="{% url 'product:delete' product.id %}"
+  method="post"
+  onsubmit="return confirm('確定要刪除嗎?');"
+>
+  {% csrf_token %}
+  <input type="submit" value="刪除" />
+</form>
+
+<a href="{% url 'product:index' %}">回商品首頁</a>
