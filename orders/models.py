@@ -19,3 +19,14 @@ class Order(models.Model):
     total_price = models.PositiveIntegerField()
     customize = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class OrderItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    oder = models.ForeignKey(Order, on_delete=models.CASCADE)
+    # TODO
+    # 還沒辦法關聯到 product model，等組員將 user, store model
+    # 建立好後再加入欄位
+    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    unit_price = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
