@@ -6,4 +6,6 @@
 <h2>付款狀態: {{ order.payment_status }}</h2>
 <h2>總金額: {{ order.total_price }}</h2>
 
-<a href="{% url "orders:index" %}">回上一頁</a>
+<a href="{% url 'orders:index' %}">回上一頁</a>
+
+<a href="{% url 'orders:edit' order.id %}">更新訂單狀態</a>

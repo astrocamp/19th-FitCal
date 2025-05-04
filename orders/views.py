@@ -49,3 +49,19 @@ def success(req):
 def show(req, id):
     order = get_object_or_404(Order, id=id)
     return render(req, 'orders/show.html', {'order': order})
+
+
+def edit(req, id):
+    order = get_object_or_404(Order, pk=id)
+    form = OrderForm(instance=order, mode='update')
+    return render(req, 'orders/edit.html', {'form': form, 'order': order})
+
+
+def update(req, id):
+    order = get_object_or_404(Order, id=id)
+    form = OrderForm(req.POST, instance=order, mode='update')
+    if form.is_valid():
+        form.save()
+        return redirect('orders:show', id=order.id)
+
+    return redirect('orders:show', id=order.id)
