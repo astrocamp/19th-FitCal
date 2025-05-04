@@ -1,14 +1,11 @@
 <h1>登入頁面</h1>
+{{ request.message }}
 <form method="post" action="{% url 'users:create_session' %}">
   {% csrf_token %}
   <input type="hidden" name="next" value="{{ next }}" />
   <label>帳號：</label>
-  <input type="text" name="email" required /><br />
+  <input type="text" name="username" required /><br />
   <label>密碼：</label>
   <input type="password" name="password" required /><br />
   <button type="submit">登入</button>
 </form>
-
-{% comment %}
-<p style="color: red">{{ messages }}</p>
-{% endcomment %}
