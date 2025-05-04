@@ -8,4 +8,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('create/', views.create, name='create'),
     path('success/', views.success, name='success'),
+    path('<uuid:id>/', views.show, name='show'),
 ]

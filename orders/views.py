@@ -1,12 +1,13 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import OrderForm
-from .models import OrderItem
+from .models import Order, OrderItem
 
 
 # Create your views here.
 def index(req):
-    return render(req, 'orders/index.html')
+    orders = Order.objects.order_by('-created_at')
+    return render(req, 'orders/index.html', {'orders': orders})
 
 
 def create(req):
@@ -43,3 +44,8 @@ def create(req):
 
 def success(req):
     return render(req, 'orders/success.html')
+
+
+def show(req, id):
+    order = get_object_or_404(Order, id=id)
+    return render(req, 'orders/show.html', {'order': order})
