@@ -47,11 +47,8 @@ class OrderForm(ModelForm):
         mode = kwargs.pop('mode', 'create')
         super().__init__(*args, **kwargs)
 
-        # 建立訂單時，不需要填訂單狀態、付款狀態、總金額和客製化選項
-
-        # 總金額會在儲存訂單時計算，客製化選項可以在前端提供預設值
         if mode == 'create':
-            # Exclude 'order_status' and 'payment_status' from the form
+            # 在建立訂單時，隱藏不需要的欄位
             self.fields.pop('order_status')
             self.fields.pop('payment_status')
             self.fields.pop('total_price')
@@ -61,6 +58,7 @@ class OrderForm(ModelForm):
         now = timezone.now()
         self.fields['pickup_time'].initial = round_up_to_next_10min(now)
 
+    # 在儲存訂單時，依訂單項目計算總金額
     def save(self, commit=True):
         instance = super().save(commit=False)
 
@@ -68,7 +66,7 @@ class OrderForm(ModelForm):
         if commit and not instance.pk:
             instance.save()
 
-        # 確保 order_items 是查詢集
+        # 取得所有的 OrderItem
         order_items = instance.orderitem_set.all()
 
         # 計算總金額
