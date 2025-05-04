@@ -1,0 +1,9 @@
+<h1>訂單</h1>
+
+<h2>訂單編號: {{ order.id }}</h2>
+<h2>預計取貨時間:{{ order.pickup_time }}</h2>
+<h2>訂單狀態: {{ order.order_status }}</h2>
+<h2>付款狀態: {{ order.payment_status }}</h2>
+<h2>總金額: {{ order.total_price }}</h2>
+
+<a href="{% url "orders:index" %}">回上一頁</a>

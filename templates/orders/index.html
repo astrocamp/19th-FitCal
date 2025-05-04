@@ -1,3 +1,17 @@
 <h1>訂單列表</h1>
 
 <a href="{% url 'orders:create' %}">建立訂單</a>
+
+<ul>
+  {% for order in orders %}
+  <li>
+    <a href="{% url 'orders:show' order.id %}">
+      <h3>訂單編號: {{ order.id }}</h3>
+      <h3>預計取貨時間: {{ order.pickup_time }}</h3>
+      <h3>訂單狀態: {{ order.order_status }}</h3>
+      <h3>付款狀態: {{ order.payment_status }}</h3>
+      <h3>總金額: {{ order.total_price }}</h3>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
