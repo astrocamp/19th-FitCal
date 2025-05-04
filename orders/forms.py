@@ -41,6 +41,21 @@ class OrderForm(ModelForm):
                     ('cash', '現金'),
                 ]
             ),
+            # 下拉式選單
+            'order_status': RadioSelect(
+                choices=[
+                    ('pending', '待處理'),
+                    ('in_progress', '處理中'),
+                    ('completed', '已完成'),
+                    ('canceled', '已取消'),
+                ]
+            ),
+            'payment_status': RadioSelect(
+                choices=[
+                    ('unpaid', '未付款'),
+                    ('paid', '已付款'),
+                ]
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -52,6 +67,14 @@ class OrderForm(ModelForm):
             self.fields.pop('order_status')
             self.fields.pop('payment_status')
             self.fields.pop('total_price')
+
+        if mode == 'update':
+            # 在更新訂單時，隱藏不需要的欄位
+            # self.fields.pop('pickup_time')
+            self.fields.pop('note')
+            self.fields.pop('payment_method')
+            self.fields.pop('total_price')
+            self.fields.pop('customize')
 
         # 設定預計取貨時間的初始值為當前時間向上取整到最近的10分鐘
         # 這樣可以確保預計取貨時間至少在10分鐘後
