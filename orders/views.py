@@ -65,3 +65,9 @@ def update(req, id):
         return redirect('orders:show', id=order.id)
 
     return redirect('orders:show', id=order.id)
+
+
+def delete(req, id):
+    order = get_object_or_404(Order, id=id)
+    order.delete()
+    return redirect('orders:index')
