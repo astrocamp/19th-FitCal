@@ -1,0 +1,16 @@
+<h1>建立訂單</h1>
+
+<form action="{% url 'orders:create' %}" method="post">
+  {% csrf_token %}
+
+  <h2>商品：舒肥雞腿</h2>
+  <label for="quantity">數量</label>
+  <input type="number" id="quantity" name="quantity" value="2" />
+
+  <label for="unit_price">單價</label>
+  <input type="number" id="unit_price" name="unit_price" value="100" />
+
+  {{ form }}
+
+  <button type="submit">提交訂單</button>
+</form>
