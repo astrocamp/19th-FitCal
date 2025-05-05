@@ -1,16 +1,39 @@
-<h1>建立訂單</h1>
+<html>
+  <head>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+  <body>
+    <h1>建立訂單</h1>
 
-<form action="{% url 'orders:create' %}" method="post">
-  {% csrf_token %}
+    <form action="{% url 'orders:create' %}" method="post" x-data="{ quantity: 2, unitPrice: 100 }">
+      {% csrf_token %}
 
-  <h2>商品：舒肥雞腿</h2>
-  <label for="quantity">數量</label>
-  <input type="number" id="quantity" name="quantity" value="2" />
+      <h2>商品：舒肥雞腿</h2>
+      <label for="quantity">數量</label>
+      <input
+        x-model.number="quantity"
+        type="number"
+        id="quantity"
+        name="quantity"
+        value="2"
+        min="0"
+      />
 
-  <label for="unit_price">單價</label>
-  <input type="number" id="unit_price" name="unit_price" value="100" />
+      <label for="unit_price">單價</label>
+      <input
+        x-model.number="unitPrice"
+        type="number"
+        id="unit_price"
+        name="unit_price"
+        value="100"
+        min="0"
+      />
 
-  {{ form }}
+      {{ form }}
 
-  <button type="submit">提交訂單</button>
-</form>
+      <p>總金額：<span x-text="quantity * unitPrice"></span> 元</p>
+
+      <button type="submit">提交訂單</button>
+    </form>
+  </body>
+</html>
