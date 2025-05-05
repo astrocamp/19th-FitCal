@@ -1,0 +1,12 @@
+{% extends 'layouts/default.html' %} {% block main %}
+<h1>編輯會員資料</h1>
+<form method="POST" action="{% url 'members:show' id %}">
+  {% csrf_token %} {% for field in form %}
+  <div>{{ field.label_tag }} {{ field }}</div>
+  {% endfor %}
+  <div>
+    <button type="submit">更新</button>
+    <button><a href="{% url 'members:show' id %}">取消</a></button>
+  </div>
+</form>
+{% endblock main %}

@@ -1,0 +1,20 @@
+{% extends 'layouts/default.html' %} {% block main %}
+<button><a href="{% url 'members:index' %}">返回列表</a></button>
+<p>ID：{{ member.id }}</p>
+<p>電話：{{ member.phone_number }}</p>
+<p>性別：{{ member.get_gender_display }}</p>
+<p>生日：{{ member.date_of_birth|date:'Y-m-d' }}</p>
+<p>Line：{{ member.line_id|default:'未連結' }}</p>
+<p>Google：{{ member.google_id|default:'未連結' }}</p>
+<p>建立時間：{{ member.created_at|date:'Y-m-d H:i' }}</p>
+<p>更新時間：{{ member.updated_at|date:'Y-m-d H:i' }}</p>
+<button><a href="{% url 'members:edit' member.id %}">更新資料</a></button>
+<form
+  action="{% url 'members:delete' member.id %}"
+  method="post"
+  onsubmit="return confirm('確定要刪除嗎?');"
+>
+  {% csrf_token %}
+  <button type="submit">刪除</button>
+</form>
+{% endblock main %}
