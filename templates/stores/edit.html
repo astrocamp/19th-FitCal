@@ -1,0 +1,13 @@
+{% extends "layouts/default.html" %} {% block main %}
+<h1>編輯店家資訊</h1>
+
+<form action="{% url 'stores:edit' store.pk %}" method="post">
+  {% csrf_token %} {% for field in form %}
+  <div>{{ field.label_tag }} {{ field }}</div>
+  {% endfor %}
+
+  <input type="submit" value="儲存變更" />
+</form>
+
+<a href="{% url 'stores:show' store.pk %}">返回店家資訊</a>
+{% endblock %}
