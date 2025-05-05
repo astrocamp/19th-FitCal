@@ -10,12 +10,11 @@ class OrderForm(ModelForm):
         model = Order
         fields = [
             'pickup_time',
-            'note',
             'order_status',
             'payment_method',
             'payment_status',
             'total_price',
-            'customize',
+            'note',
         ]
         labels = {
             'pickup_time': '預計取貨時間',
@@ -31,7 +30,6 @@ class OrderForm(ModelForm):
             'pickup_time': DateTimeInput(
                 attrs={
                     'type': 'datetime-local',
-                    'step': '600',  # 每 10 分鐘一格
                 }
             ),
             'payment_method': RadioSelect(
@@ -41,7 +39,6 @@ class OrderForm(ModelForm):
                     ('cash', '現金'),
                 ]
             ),
-            # 下拉式選單
             'order_status': RadioSelect(
                 choices=[
                     ('pending', '待處理'),
@@ -74,12 +71,17 @@ class OrderForm(ModelForm):
             self.fields.pop('note')
             self.fields.pop('payment_method')
             self.fields.pop('total_price')
-            self.fields.pop('customize')
 
         # 設定預計取貨時間的初始值為當前時間向上取整到最近的10分鐘
         # 這樣可以確保預計取貨時間至少在10分鐘後
         now = timezone.now()
-        self.fields['pickup_time'].initial = round_up_to_next_10min(now)
+        rounded_time = round_up_to_next_10min(now)
+        self.fields['pickup_time'].initial = rounded_time
+        # TODO 時間也要不能選擇過去的時間
+        # 設定預計取貨時間的日期選單不能選擇過去的日期
+        self.fields['pickup_time'].widget.attrs['min'] = rounded_time.strftime(
+            '%Y-%m-%dT%H:%M'
+        )
 
     # 在儲存訂單時，依訂單項目計算總金額
     def save(self, commit=True):
