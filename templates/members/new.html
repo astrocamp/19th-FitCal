@@ -8,5 +8,6 @@
     <button type="submit">新增</button>
     <button><a href="{% url 'members:index' %}">取消</a></button>
   </div>
+  {{ form.errors }}
 </form>
 {% endblock main %}

@@ -12,6 +12,8 @@ def index(request):
         if form.is_valid():
             form.save()
             return redirect('members:index')
+        else:
+            return render(request, 'members/new.html', {'form': form})
     return render(request, 'members/index.html', {'members': members})
 
 
@@ -27,6 +29,8 @@ def show(request, id):
         if form.is_valid():
             form.save()
             return redirect('members:show', id)
+        else:
+            return render(request, 'members/edit.html', {'form': form})
     return render(request, 'members/show.html', {'member': member})
 
 
