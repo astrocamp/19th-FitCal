@@ -33,9 +33,7 @@ def show(request, id):
 def edit(request, id):
     member = get_object_or_404(Member, id=id)
     form = MemberForm(instance=member)
-    return render(
-        request, 'members/edit.html', {'member': member, 'form': form, 'id': id}
-    )
+    return render(request, 'members/edit.html', {'member': member, 'form': form})
 
 
 def delete(request, id):
