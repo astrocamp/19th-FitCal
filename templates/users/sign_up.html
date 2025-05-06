@@ -1,0 +1,17 @@
+<h1>快速註冊</h1>
+<form method="post" action="{% url 'users:create_user' %}">
+  {% csrf_token %}
+  {% for field in userform %}
+    <p>
+      {{ field.label_tag }}<br>
+      {{ field }}
+      {% if field.errors %}
+        <div>{{ field.errors }}</div>
+      {% endif %}
+    </p>
+  {% endfor %}
+
+  <button type="submit">註冊</button>
+</form>
+
+<p>已經有帳號了嗎？<a href="{% url 'users:sign_in' %}">登入</a></p>
