@@ -1,4 +1,4 @@
-from django.forms import DateTimeInput, ModelForm, NumberInput, RadioSelect
+from django.forms import DateTimeInput, ModelForm, NumberInput
 from django.utils import timezone
 
 from .models import Order, OrderItem
@@ -31,27 +31,6 @@ class OrderForm(ModelForm):
                 attrs={
                     'type': 'datetime-local',
                 }
-            ),
-            'payment_method': RadioSelect(
-                choices=[
-                    ('credit_card', '信用卡'),
-                    ('mobile_payment', 'Line Pay'),
-                    ('cash', '現金'),
-                ]
-            ),
-            'order_status': RadioSelect(
-                choices=[
-                    ('pending', '待處理'),
-                    ('in_progress', '處理中'),
-                    ('completed', '已完成'),
-                    ('canceled', '已取消'),
-                ]
-            ),
-            'payment_status': RadioSelect(
-                choices=[
-                    ('unpaid', '未付款'),
-                    ('paid', '已付款'),
-                ]
             ),
         }
 
@@ -87,10 +66,8 @@ class OrderForm(ModelForm):
         if commit and not instance.pk:
             instance.save()
 
-        # 取得所有的 OrderItem
         order_items = instance.orderitem_set.all()
 
-        # 計算總金額
         total_price = sum(item.unit_price * item.quantity for item in order_items)
         instance.total_price = total_price
 

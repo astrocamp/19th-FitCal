@@ -1,22 +1,48 @@
 import uuid
 
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
 # Create your models here.
 class Order(models.Model):
+    ORDER_STATUS_CHOICES = [
+        ('pending', '待處理'),
+        ('confirmed', '已確認'),
+        ('canceled', '已取消'),
+        ('completed', '已完成'),
+    ]
+
+    PAYMENT_METHOD_CHOICES = [
+        ('cash', '現金'),
+        ('credit_card', '信用卡'),
+        ('line_pay', 'LINE Pay'),
+    ]
+
+    PAYMENT_STATUS_CHOICES = [
+        ('unpaid', '未付款'),
+        ('paid', '已付款'),
+        ('refunded', '已退款'),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # TODO
-    # 還沒辦法關聯到 user 和 store model，等組員將 user, store model
-    # 建立好後再加入欄位
+    # TODO: 等待 user 與 store model 完成後再加入
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
     # store = models.ForeignKey(Store, on_delete=models.DO_NOTHING)
     pickup_time = models.DateTimeField()
     note = models.TextField(null=True, blank=True)
-    order_status = models.CharField(max_length=20, default='pending')
-    payment_method = models.CharField(max_length=20)
-    payment_status = models.CharField(max_length=20, default='unpaid')
-    total_price = models.PositiveIntegerField()
+    order_status = models.CharField(
+        max_length=20, choices=ORDER_STATUS_CHOICES, default='pending'
+    )
+    payment_method = models.CharField(
+        max_length=20, choices=PAYMENT_METHOD_CHOICES, default='cash'
+    )
+    payment_status = models.CharField(
+        max_length=20, choices=PAYMENT_STATUS_CHOICES, default='unpaid'
+    )
+    total_price = models.DecimalField(
+        max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
+    )
     customize = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -24,9 +50,9 @@ class Order(models.Model):
 class OrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    # TODO
-    # 還沒辦法關聯到 product model，等組員將 user, store model
-    # 建立好後再加入欄位
+    # TODO: 等待 product model 完成後再加入
     # product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    unit_price = models.PositiveIntegerField()
-    quantity = models.PositiveIntegerField()
+    unit_price = models.DecimalField(
+        max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
+    )
+    quantity = models.PositiveIntegerField(default=1)
