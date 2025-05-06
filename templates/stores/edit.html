@@ -1,0 +1,13 @@
+<h1>編輯：{{ store.id }}</h1>
+
+<form action="{% url 'stores:show' store.id %}" method="post">
+  {% csrf_token %} {% for field in form %}
+  <div>{{ field.label_tag }} {{ field }}</div>
+
+  {% endfor %}
+
+  <input type="submit" value="更新店家" />
+</form>
+
+<a href="{% url 'stores:show' store.id %}">回上一頁</a>
+<a href="{% url 'stores:index' %}">回店家列表</a>
