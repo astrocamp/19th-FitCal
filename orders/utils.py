@@ -1,11 +1,20 @@
-# 預計取餐時間至少要在 10 分鐘後
-def round_up_to_next_10min(dt):
-    # 先計算向上取整到最近10分鐘的倍數
-    next_slot = ((dt.minute + 9) // 10) * 10
-    # 然後再推進一個10分鐘單位，確保是至少下一個10分鐘槽
-    minute = next_slot + 10
-    hour = dt.hour
-    if minute >= 60:
-        hour += 1
-        minute -= 60
-    return dt.replace(hour=hour, minute=minute, second=0, microsecond=0)
+from datetime import timedelta
+
+
+def next_10min(datetime):
+    """
+    計算下一個 10 分鐘的時間點
+    :param datetime: 當前時間
+    :return: 下一個 10 分鐘的時間點
+    :rtype: datetime
+
+    :example:
+    10:00 -> 10:10
+    10:01 -> 10:20
+    """
+    datetime += timedelta(minutes=10)
+    # 計算要補幾分鐘才會對齊下一個 10 分鐘點
+    remainder = datetime.minute % 10
+    if remainder != 0:
+        datetime += timedelta(minutes=(10 - remainder))
+    return datetime.replace(second=0, microsecond=0)

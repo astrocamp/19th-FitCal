@@ -2,7 +2,7 @@ from django.forms import DateTimeInput, ModelForm, NumberInput, RadioSelect
 from django.utils import timezone
 
 from .models import Order, OrderItem
-from .utils import round_up_to_next_10min
+from .utils import next_10min
 
 
 class OrderForm(ModelForm):
@@ -60,24 +60,20 @@ class OrderForm(ModelForm):
         super().__init__(*args, **kwargs)
 
         if mode == 'create':
-            # 在建立訂單時，隱藏不需要的欄位
             self.fields.pop('order_status')
             self.fields.pop('payment_status')
             self.fields.pop('total_price')
 
         if mode == 'update':
-            # 在更新訂單時，隱藏不需要的欄位
-            # self.fields.pop('pickup_time')
             self.fields.pop('note')
             self.fields.pop('payment_method')
             self.fields.pop('total_price')
 
-        # 設定預計取貨時間的初始值為當前時間向上取整到最近的10分鐘
-        # 這樣可以確保預計取貨時間至少在10分鐘後
+        # initialize pickup_time
         now = timezone.now()
-        rounded_time = round_up_to_next_10min(now)
+        rounded_time = next_10min(now)
         self.fields['pickup_time'].initial = rounded_time
-        # TODO 時間也要不能選擇過去的時間
+
         # 設定預計取貨時間的日期選單不能選擇過去的日期
         self.fields['pickup_time'].widget.attrs['min'] = rounded_time.strftime(
             '%Y-%m-%dT%H:%M'
