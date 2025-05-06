@@ -5,18 +5,17 @@ from .forms import OrderForm
 from .models import Order, OrderItem
 
 
-# Create your views here.
 def index(req):
     orders = Order.objects.order_by('-created_at')
     return render(req, 'orders/index.html', {'orders': orders})
 
 
-def add(req):
+def new(req):
     form = OrderForm(mode='create')
 
     return render(
         req,
-        'orders/add.html',
+        'orders/new.html',
         {
             'form': form,
         },
