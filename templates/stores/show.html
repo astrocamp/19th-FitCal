@@ -1,19 +1,18 @@
-{% extends "layouts/default.html" %} {% block main %}
-<h1>{{ store.user }}</h1>
-<h1>{{ store.name }}</h1>
+<h1>
+  <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
+  <div>店家地址：{{ store.address }}</div>
+  <div>店家電話：{{ store.phone_number }}</div>
+  <div>店家統編：{{ store.tax_id }}</div>
+</h1>
 
-<ul>
-  <li><strong>地址：</strong> {{ store.address }}</li>
-  <li><strong>聯絡電話：</strong> {{ store.phone_number }}</li>
-  <li><strong>統一編號：</strong> {{ store.tax_id }}</li>
-</ul>
-
-<!-- 編輯與刪除按鈕 -->
-<a href="{% url 'stores:edit' store.pk %}">編輯</a>
-
-<form action="{% url 'stores:delete' store.pk %}" method="post" style="display: inline">
+<form
+  action="{% url 'stores:delete' store.id %}"
+  method="post"
+  onsubmit="return confirm('是否確認刪除')"
+>
   {% csrf_token %}
-  <button type="submit" onclick="return confirm('確定要刪除嗎？');">刪除</button>
+  <button>刪除</button>
 </form>
 
-{% endblock %}
+<a href="{% url 'stores:edit' store.id %}">編輯</a>
+<a href="{% url 'stores:index' %}">回上一頁</a>

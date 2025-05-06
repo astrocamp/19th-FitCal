@@ -1,0 +1,18 @@
+<h1>店家列表</h1>
+
+<a href="{% url 'stores:new' %}">新增店家</a>
+
+<ul>
+  {% for store in stores %}
+  <li>
+    <a href="{% url 'stores:show' store.id %}">
+      <section>
+        <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
+        <h1>店家地址：{{ store.address }}</h1>
+        <h1>店家電話：{{ store.phone_number }}</h1>
+        <h1>店家統編：{{ store.tax_id }}</h1>
+      </section>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
