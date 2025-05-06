@@ -34,8 +34,8 @@ def create(req):
     # 處理 OrderItem
     OrderItem.objects.create(
         order=order,
-        quantity=req.POST.get('quantity', 1),  # 預設數量為1
-        unit_price=req.POST.get('unit_price', 0),  # 預設單價為0
+        quantity=req.POST.get('quantity'),
+        unit_price=req.POST.get('unit_price'),
     )
 
     # 再次儲存 Order，更新總金額
