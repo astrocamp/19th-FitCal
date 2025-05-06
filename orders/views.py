@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import OrderForm
 from .models import Order, OrderItem
@@ -10,36 +11,38 @@ def index(req):
     return render(req, 'orders/index.html', {'orders': orders})
 
 
-def create(req):
-    if req.method == 'POST':
-        form = OrderForm(req.POST)
-        if form.is_valid():
-            order = form.save(commit=False)  # 不立即儲存到資料庫
-            order.save()
-        else:
-            print(order.errors)
-
-        # 處理 OrderItem
-        OrderItem.objects.create(
-            order=order,
-            quantity=req.POST.get('quantity', 1),  # 預設數量為1
-            unit_price=req.POST.get('unit_price', 0),  # 預設單價為0
-        )
-
-        # 再次儲存 Order，更新總金額
-        form.save(commit=True)
-
-        return redirect('orders:success')  # 重定向到成功頁面
-
-    form = OrderForm(mode='create')  # 預設模式為建立訂單
+def add(req):
+    form = OrderForm(mode='create')
 
     return render(
         req,
-        'orders/create.html',
+        'orders/add.html',
         {
             'form': form,
         },
     )
+
+
+@require_POST
+def create(req):
+    form = OrderForm(req.POST)
+    if form.is_valid():
+        order = form.save(commit=False)  # 不立即儲存到資料庫
+        order.save()
+    else:
+        print(order.errors)
+
+    # 處理 OrderItem
+    OrderItem.objects.create(
+        order=order,
+        quantity=req.POST.get('quantity', 1),  # 預設數量為1
+        unit_price=req.POST.get('unit_price', 0),  # 預設單價為0
+    )
+
+    # 再次儲存 Order，更新總金額
+    form.save(commit=True)
+
+    return redirect('orders:success')  # 重定向到成功頁面
 
 
 def success(req):

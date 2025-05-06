@@ -6,6 +6,7 @@ app_name = 'orders'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('add/', views.add, name='add'),
     path('create/', views.create, name='create'),
     path('success/', views.success, name='success'),
     path('<uuid:id>/', views.show, name='show'),
