@@ -1,3 +1,6 @@
+from datetime import date
+
+from django import forms
 from django.forms import DateInput, ModelForm, TextInput
 
 from .models import Member
@@ -16,7 +19,12 @@ class MemberForm(ModelForm):
         }
         widgets = {
             'phone_number': TextInput(attrs={'type': 'tel'}),
-            'date_of_birth': DateInput(attrs={'type': 'date'}),
+            'date_of_birth': DateInput(
+                attrs={
+                    'type': 'date',
+                    'max': date.today().isoformat(),
+                }
+            ),
         }
         error_messages = {
             'phone_number': {
@@ -42,3 +50,9 @@ class MemberForm(ModelForm):
 
         self.fields['line_id'].required = False
         self.fields['google_id'].required = False
+
+    def clean_date_of_birth(self):
+        birthday = self.cleaned_data['date_of_birth']
+        if birthday > date.today():
+            raise forms.ValidationError('生日不能是未來的日期')
+        return birthday
