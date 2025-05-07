@@ -64,7 +64,6 @@ def update(req, id):
     form = OrderForm(req.POST, instance=order, mode='update')
     if form.is_valid():
         form.save()
-        return redirect('orders:show', id=order.id)
 
     return redirect('orders:show', id=order.id)
 

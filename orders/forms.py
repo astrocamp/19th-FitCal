@@ -86,5 +86,5 @@ class OrderItemForm(ModelForm):
         }
         widgets = {
             'unit_price': NumberInput(attrs={'min': 0}),
-            'quantity': NumberInput(attrs={'min': 0}),
+            'quantity': NumberInput(attrs={'min': 1}),
         }
