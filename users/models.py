@@ -1,7 +1,9 @@
 # users/models.py
+import uuid
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-import uuid
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -23,6 +25,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser 必須設 is_superuser=True')
 
         return self.create_user(email, password, **extra_fields)
+
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
