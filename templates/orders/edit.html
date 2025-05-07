@@ -8,3 +8,5 @@
   {% csrf_token %} {{ form }}
   <button>更新</button>
 </form>
+
+<a href="{% url 'orders:show' order.id %}">回上一頁</a>

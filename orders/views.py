@@ -28,20 +28,28 @@ def create(req):
     if form.is_valid():
         order = form.save(commit=False)  # 不立即儲存到資料庫
         order.save()
+
+        # 處理 OrderItem
+        OrderItem.objects.create(
+            order=order,
+            quantity=req.POST.get('quantity'),
+            unit_price=req.POST.get('unit_price'),
+        )
+
+        # 再次儲存 Order，更新總金額
+        form.save(commit=True)
+
+        return redirect('orders:success')
     else:
-        print(order.errors)
+        print(form.errors)
 
-    # 處理 OrderItem
-    OrderItem.objects.create(
-        order=order,
-        quantity=req.POST.get('quantity'),
-        unit_price=req.POST.get('unit_price'),
+    return render(
+        req,
+        'orders/new.html',
+        {
+            'form': form,
+        },
     )
-
-    # 再次儲存 Order，更新總金額
-    form.save(commit=True)
-
-    return redirect('orders:success')  # 重定向到成功頁面
 
 
 def success(req):
@@ -62,10 +70,12 @@ def edit(req, id):
 def update(req, id):
     order = get_object_or_404(Order, id=id)
     form = OrderForm(req.POST, instance=order, mode='update')
+
     if form.is_valid():
         form.save()
-
-    return redirect('orders:show', id=order.id)
+        return redirect('orders:show', id=order.id)
+    else:
+        return render(req, 'orders/edit.html', {'form': form, 'order': order})
 
 
 def delete(req, id):

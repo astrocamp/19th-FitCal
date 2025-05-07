@@ -3,8 +3,9 @@
 <h1>訂單</h1>
 
 <h2>訂單編號: {{ order.id }}</h2>
-<h2>預計取貨時間:{{ order.pickup_time|datetime_format }}</h2>
+<h2>預計取貨時間: {{ order.pickup_time|datetime_format }}</h2>
 <h2>訂單狀態: {{ order|get_display:"order_status" }}</h2>
+<h2>付款方式: {{ order|get_display:"payment_method" }}</h2>
 <h2>付款狀態: {{ order|get_display:"payment_status" }}</h2>
 <h2>總金額: {{ order.total_price }}</h2>
 
