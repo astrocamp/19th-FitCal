@@ -1,2 +1,88 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+.flatpickr-calendar {
+  @apply bg-[#f7f7f7] text-gray-800 border border-[#66bb6a] shadow-lg rounded-xl transition-all duration-300 ease-in-out scale-95 hover:scale-100 overflow-visible;
+}
+
+.flatpickr-months,
+.flatpickr-weekdays {
+  background: linear-gradient(90deg, #66bb6a 0%, #81c784 100%);
+  @apply text-white text-sm font-semibold tracking-wide rounded-t-xl;
+}
+
+.flatpickr-weekday {
+  @apply text-white uppercase text-xs tracking-widest;
+}
+
+.flatpickr-day {
+  @apply w-10 h-10 flex items-center justify-center text-sm font-mono text-[#4caf50] border border-transparent rounded-md transition-all duration-200;
+}
+
+.flatpickr-day:hover {
+  @apply bg-[#ffb74d] text-[#ff9800] border-[#ff9800];
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+景 */ .flatpickr-day.today {
+  @apply border border-[#66bb6a] text-white bg-[#66bb6a] shadow-md;
+}
+
+.flatpickr-day.selected {
+  background: #66bb6a;
+  color: white !important;
+  box-shadow: 0 0 12px rgba(102, 187, 106, 0.5);
+  border: 1px solid #388e3c;
+}
+
+.flatpickr-day.inRange {
+  @apply bg-[#a5d6a7]/50 text-[#81c784];
+}
+
+.flatpickr-day.disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  @apply text-gray-600 bg-transparent opacity-40 cursor-not-allowed;
+}
+
+.flatpickr-time {
+  @apply bg-[#f7f7f7] border-t border-[#66bb6a] mt-1 mb-1 pt-2 pb-2 flex justify-center gap-2 rounded-b-xl max-w-full;
+  box-sizing: border-box;
+  padding-left: 8px;
+  padding-right: 8px;
+  align-items: center;
+}
+
+.flatpickr-time input {
+  @apply w-14 text-center bg-[#fff8e1] text-[#66bb6a] border border-[#66bb6a] rounded-md shadow-sm max-w-full;
+  box-sizing: border-box;
+  padding-left: 4px;
+  padding-right: 4px;
+  width: 3rem;
+}
+
+.flatpickr-time .flatpickr-hour,
+.flatpickr-time .flatpickr-minute {
+  @apply flex items-center justify-center;
+  width: 3rem;
+  height: 2rem;
+}
+
+.flatpickr-time .flatpickr-hour input,
+.flatpickr-time .flatpickr-minute input {
+  @apply w-full h-full text-center bg-[#fff8e1] text-[#66bb6a] border border-[#66bb6a] rounded-md shadow-sm;
+}
+
+.flatpickr-time .flatpickr-hour,
+.flatpickr-time .flatpickr-minute {
+  @apply flex items-center justify-center;
+}
+
+.flatpickr-time .numInputWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 4px;
+}

@@ -1,4 +1,7 @@
-{% load datetime_format %} {% load model_display %}
+{% extends "layouts/default.html" %}{% load datetime_format %} {% load model_display %}
+
+<!-- prettier-ignore -->
+{% block main %}
 
 <h1>訂單</h1>
 
@@ -21,3 +24,5 @@
   {% csrf_token %}
   <button>刪除</button>
 </form>
+
+{% endblock %}

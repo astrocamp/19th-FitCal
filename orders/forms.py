@@ -31,7 +31,11 @@ class OrderForm(ModelForm):
         }
 
         widgets = {
-            'pickup_time': DateTimeInput(attrs={'type': 'datetime-local'}),
+            'pickup_time': DateTimeInput(
+                attrs={
+                    'type': 'datetime-local',
+                },
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -86,6 +90,7 @@ class OrderForm(ModelForm):
             instance.save()
         return instance
 
+    # 針對 pickup_time 欄位的後端驗證
     def clean_pickup_time(self):
         pickup_time = self.cleaned_data['pickup_time']
 
