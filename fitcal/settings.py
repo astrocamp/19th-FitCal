@@ -135,8 +135,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     'line': {
         'APP': {
-            'client_id': os.getenv('SOCIAL_AUTH_LINE_CLIENT_ID'),
-            'secret': os.getenv('SOCIAL_AUTH_LINE_SECRET'),
+            'client_id': os.getenv('SOCIAL_AUTH_LINE_CHANNEL_ID'),
+            'secret': os.getenv('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
         },
         'SCOPE': ['profile', 'openid', 'email'],
     },
