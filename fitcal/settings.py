@@ -14,6 +14,15 @@ import os
 from pathlib import Path
 
 import environ
+from dotenv import load_dotenv
+
+
+def is_dev():
+    return os.getenv('DJANGO_ENV') == 'development'
+
+
+if is_dev():
+    load_dotenv()
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -35,8 +44,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://19e4-61-220-182-115.ngrok.io']
+# AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
@@ -46,6 +55,12 @@ INSTALLED_APPS = [
     'members',
     'orders',
     'products',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django.contrib.sites',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.line',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,6 +70,21 @@ INSTALLED_APPS = [
     'stores',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # 預設認證後端
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth 認證後端
+]
+
+SITE_ID = 1  # Django Sites Framework 的 ID，預設為 1
+
+LOGIN_REDIRECT_URL = '/'  # 登入成功後的重導向 URL
+LOGOUT_REDIRECT_URL = '/'  # 登出後的重導向 URL
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = False
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -63,6 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'fitcal.urls'
@@ -74,6 +105,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -83,6 +115,35 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'fitcal.wsgi.application'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APPS': [
+            {
+                'client_id': os.getenv('SOCIAL_AUTH_GOOGLE_CLIENT_ID'),
+                'secret': os.getenv('SOCIAL_AUTH_GOOGLE_SECRET'),
+                'settings': {
+                    'scope': [
+                        'profile',
+                        'email',
+                    ],
+                    'auth_params': {
+                        'access_type': 'online',
+                    },
+                },
+            },
+        ],
+    },
+    'line': {
+        'APP': {
+            'client_id': os.getenv('SOCIAL_AUTH_LINE_CLIENT_ID'),
+            'secret': os.getenv('SOCIAL_AUTH_LINE_SECRET'),
+        },
+        'SCOPE': ['profile', 'openid', 'email'],
+    },
+}
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 
 # Database
@@ -138,3 +199,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AUTH_USER_MODEL = 'users.User'
+
+# LOGIN_URL = 'users:sign_in'
