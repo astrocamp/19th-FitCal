@@ -5,17 +5,18 @@ from .models import Store
 
 
 def index(req):
-    if req.POST:
+    stores = Store.objects.all()
+
+    if req.method == 'POST':
         form = StoreForm(req.POST)
-        store = form.save()
-        return redirect('stores:show', store.id)
+        if form.is_valid():
+            store = form.save()
+            return redirect('stores:show', store.id)
+        else:
+            return render(req, 'stores/index.html', {'stores': stores, 'form': form})
     else:
-        stores = Store.objects.order_by('-id')
-    return render(
-        req,
-        'stores/index.html',
-        {'stores': stores},
-    )
+        form = StoreForm()
+        return render(req, 'stores/index.html', {'stores': stores, 'form': form})
 
 
 def new(req):
@@ -32,14 +33,17 @@ def show(req, id):
 
     if req.POST:
         form = StoreForm(req.POST, instance=store)
-        form.save()
-        return redirect('stores:show', store.id)
+        if form.is_valid():
+            form.save()
+            return redirect('stores:show', store.id)
     else:
-        return render(
-            req,
-            'stores/show.html',
-            {'store': store},
-        )
+        form = StoreForm(instance=store)
+
+    return render(
+        req,
+        'stores/show.html',
+        {'store': store, 'form': form},
+    )
 
 
 def edit(req, id):

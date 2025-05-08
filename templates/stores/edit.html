@@ -2,7 +2,11 @@
 
 <form action="{% url 'stores:show' store.id %}" method="post">
   {% csrf_token %} {% for field in form %}
-  <div>{{ field.label_tag }} {{ field }}</div>
+  <div>
+    {{ field.label_tag }} {{ field }} {% if field.errors %}
+    <div style="color: red">{{ field.errors }}</div>
+    {% endif %}
+  </div>
 
   {% endfor %}
 
