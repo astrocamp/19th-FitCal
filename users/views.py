@@ -19,8 +19,9 @@ def create_user(req):
     if userform.is_valid():
         user = userform.save()
         login(req, user)
-        messages.success(req, '已登入成功！')
+        messages.success(req, '註冊成功已登入！')
         return redirect('pages:index')
+    messages.error(req, '帳號或密碼錯誤')
     return render(
         req,
         'users/sign_up.html',
@@ -40,7 +41,6 @@ def sign_in(req):
 def create_session(req):
     email = req.POST.get('email')
     password = req.POST.get('password')
-
     user = authenticate(
         email=email,
         password=password,
@@ -58,5 +58,5 @@ def create_session(req):
 @require_POST
 def delete_session(req):
     logout(req)
-    messages.success(req, '已登出')
+    messages.success(req, '已登出！')
     return redirect('pages:index')

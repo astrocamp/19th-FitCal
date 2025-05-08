@@ -1,4 +1,4 @@
-{% extends "layouts/default.html" %} {% block main %}
+{% extends 'layouts/default.html' %} {% block main %}
 <h1>快速註冊</h1>
 <form method="post" action="{% url 'users:create_user' %}">
   {% csrf_token %}
