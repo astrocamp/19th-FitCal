@@ -24,7 +24,6 @@ def is_dev():
 if is_dev():
     load_dotenv()
 
-AUTH_USER_MODEL = 'users.User'
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +44,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://19e4-61-220-182-115.ngrok.io']
-# AUTH_USER_MODEL = 'users.User'
+
 
 # Application definition
 
@@ -200,6 +199,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 
-# LOGIN_URL = 'users:sign_in'
+LOGIN_URL = 'users:sign_in'
