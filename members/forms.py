@@ -1,6 +1,7 @@
 from datetime import date
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import DateInput, ModelForm, TextInput
 
 from .models import Member
@@ -47,12 +48,17 @@ class MemberForm(ModelForm):
         self.fields['phone_number'].required = True
         self.fields['gender'].required = True
         self.fields['date_of_birth'].required = True
+        if self.instance and not self.instance._state.adding:
+            self.fields['date_of_birth'].disabled = True
 
         self.fields['line_id'].required = False
         self.fields['google_id'].required = False
 
     def clean_date_of_birth(self):
         birthday = self.cleaned_data['date_of_birth']
+        if self.instance and not self.instance._state.adding:
+            if birthday != self.instance.date_of_birth:
+                raise ValidationError('生日不可修改。')
         if birthday > date.today():
             raise forms.ValidationError('生日不能是未來的日期')
         return birthday

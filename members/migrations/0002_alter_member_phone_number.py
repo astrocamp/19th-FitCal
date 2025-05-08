@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='phone_number',
-            field=models.CharField(max_length=20, validators=[django.core.validators.RegexValidator('^09\\d{8}$', message='請輸入正確手機號碼')]),
+            field=models.CharField(max_length=20, validators=[django.core.validators.RegexValidator('^09\\d{8}$', message='手機號碼格式錯誤')]),
         ),
     ]

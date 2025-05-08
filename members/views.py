@@ -30,7 +30,9 @@ def show(request, id):
             form.save()
             return redirect('members:show', id)
         else:
-            return render(request, 'members/edit.html', {'form': form})
+            return render(
+                request, 'members/edit.html', {'member': member, 'form': form}
+            )
     return render(request, 'members/show.html', {'member': member})
 
 
