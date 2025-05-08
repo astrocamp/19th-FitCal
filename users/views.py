@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
@@ -18,8 +19,10 @@ def create_user(request):
     if userform.is_valid():
         user = userform.save()
         login(request, user)
+        messages.success(request, '註冊成功！')
         return redirect('pages:home')
     else:
+        messages.error(request, '帳號或密碼錯誤')
         return render(
             request,
             'users/sign_up.html',
