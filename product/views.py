@@ -10,9 +10,8 @@ def index(request):
         form = ProductForm(request.POST)
         product = form.save()
         return redirect('product:show', product.id)
-    else:
-        products = Product.objects.all()
-        return render(request, 'product/index.html', {'products': products})
+    products = Product.objects.all()
+    return render(request, 'product/index.html', {'products': products})
 
 
 def new(request):

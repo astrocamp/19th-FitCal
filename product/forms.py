@@ -7,7 +7,6 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = [
-            # 'id',  不要放這個就不會有這個問題
             'name',
             'description',
             'calories',
@@ -16,7 +15,6 @@ class ProductForm(ModelForm):
             'customize',
         ]
         labels = {
-            'id': '商品ID',
             'name': '商品名稱',
             'description': '商品介紹',
             'calories': '卡路里',
