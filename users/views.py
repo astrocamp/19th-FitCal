@@ -49,6 +49,7 @@ def create_session(request):
     )
     if user is not None:
         login(request, user)
+        messages.success(request, '登入成功！')
         return redirect('pages:home')
     else:
         return redirect('users:sign_in')
@@ -58,4 +59,5 @@ def create_session(request):
 @require_POST
 def delete_session(request):
     logout(request)
+    messages.success(request, '已登出！')
     return redirect('pages:home')
