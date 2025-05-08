@@ -1,9 +1,10 @@
-<h1>
-  <div>店家名稱(先用UUID替代)：{{ store.id }}</div>
-  <div>店家地址：{{ store.address }}</div>
-  <div>店家電話：{{ store.phone_number }}</div>
-  <div>店家統編：{{ store.tax_id }}</div>
-</h1>
+<h1>店家資訊</h1>
+<div>店家名稱(先用UUID替代)：{{ store.id }}</div>
+<div>店家地址：{{ store.address }}</div>
+<div>店家電話：{{ store.phone_number }}</div>
+<div>店家統編：{{ store.tax_id }}</div>
+<div>開店時間：{{ store.opening_time }}</div>
+<div>打烊時間：{{ store.closing_time }}</div>
 
 <form
   action="{% url 'stores:delete' store.id %}"

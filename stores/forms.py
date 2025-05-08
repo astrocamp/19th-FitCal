@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm, TextInput, TimeInput
 
 from .models import Store
 
@@ -29,7 +29,7 @@ def validate_tax_id(tax_id):
 class StoreForm(ModelForm):
     class Meta:
         model = Store
-        fields = ['address', 'phone_number', 'tax_id']
+        fields = ['address', 'phone_number', 'tax_id', 'opening_time', 'closing_time']
         error_messages = {
             'address': {
                 'required': '地址不能空白',
@@ -40,19 +40,34 @@ class StoreForm(ModelForm):
             'tax_id': {
                 'required': '必須為8位數字的有效統編',
             },
+            'opening_time': {
+                'required': '開店時間不能空白',
+            },
+            'closing_time': {
+                'required': '打烊時間不能空白',
+            },
         }
 
         labels = {
             'address': '地址',
             'phone_number': '行動電話',
             'tax_id': '統編',
+            'opening_time': '開店時間',
+            'closing_time': '打烊時間',
         }
 
         widgets = {
+            'address': TextInput(
+                attrs={
+                    'placeholder': '格式範例：台北市中正區衡陽路7號5樓',
+                    'required': 'required',
+                }
+            ),
             'tax_id': TextInput(
                 attrs={
                     'pattern': r'\d{8}',
                     'title': '必須為8位數字的有效統編',
+                    'placeholder': '格式範例：12345678',
                     'required': 'required',
                 }
             ),
@@ -60,9 +75,12 @@ class StoreForm(ModelForm):
                 attrs={
                     'pattern': r'09\d{8}',
                     'title': '電話必須為 09 開頭的 10 位數字',
+                    'placeholder': '格式範例：0912345678',
                     'required': 'required',
                 }
             ),
+            'opening_time': TimeInput(attrs={'type': 'time', 'required': 'required'}),
+            'closing_time': TimeInput(attrs={'type': 'time', 'required': 'required'}),
         }
 
     def clean_address(self):
@@ -82,3 +100,15 @@ class StoreForm(ModelForm):
         if not validate_tax_id(tax_id):
             raise ValidationError('請輸入正確的統一編號')
         return tax_id
+
+    def clean_opening_time(self):
+        opening_time = self.cleaned_data.get('opening_time')
+        if not opening_time:
+            raise ValidationError('開店時間不能空白')
+        return opening_time
+
+    def clean_closing_time(self):
+        closing_time = self.cleaned_data.get('closing_time')
+        if not closing_time:
+            raise ValidationError('打烊時間不能空白')
+        return closing_time
