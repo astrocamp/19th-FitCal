@@ -1,3 +1,5 @@
+{% extends "layouts/default.html" %} {% block main %}
+
 <h1>更新訂單</h1>
 
 <form
@@ -10,3 +12,5 @@
 </form>
 
 <a href="{% url 'orders:show' order.id %}">回上一頁</a>
+
+{% endblock %}

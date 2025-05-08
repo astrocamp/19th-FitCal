@@ -1,5 +1,7 @@
-{% load datetime_format %} {% load model_display %}
+{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
 
+<!-- prettier-ignore -->
+{% block main %}
 <h1>訂單列表</h1>
 
 <a href="{% url 'orders:new' %}">建立訂單</a>
@@ -17,3 +19,4 @@
   </li>
   {% endfor %}
 </ul>
+{% endblock %}
