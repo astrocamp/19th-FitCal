@@ -25,8 +25,7 @@ def show(request, id):
         form = ProductForm(request.POST, instance=product)
         form.save()
         return redirect('product:show', product.id)
-    else:
-        return render(request, 'product/show.html', {'product': product})
+    return render(request, 'product/show.html', {'product': product})
 
 
 def edit(request, id):
