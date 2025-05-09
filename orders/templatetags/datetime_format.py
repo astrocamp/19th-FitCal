@@ -5,10 +5,10 @@ register = template.Library()
 
 
 @register.filter
-def datetime_format(value, format='%Y年%-m月%-d日 %H:%M'):
+def datetime_format(value, format='%Y年%m月%d日 %H:%M'):
     """
     將 datetime 格式化為自訂格式。
-    預設格式為：2025年5月7日 16:40
+    預設格式為：2025年05月07日 16:40
     """
     if not value:
         return ''
