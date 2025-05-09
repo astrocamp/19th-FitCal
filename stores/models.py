@@ -15,6 +15,3 @@ class Store(models.Model):
         validators=[RegexValidator(r'^\d{8}$', message='統編必須為8位數字')],
         blank=False,
     )
-
-    def __str__(self):
-        return f'{self.tax_id} | {self.phone_number} | {self.opening_time} | {self.closing_time} | {self.address}'

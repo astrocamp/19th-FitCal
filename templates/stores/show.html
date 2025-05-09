@@ -12,7 +12,7 @@
   onsubmit="return confirm('是否確認刪除')"
 >
   {% csrf_token %}
-  <button>刪除</button>
+  <button type="submit">刪除</button>
 </form>
 
 <a href="{% url 'stores:edit' store.id %}">編輯</a>

@@ -13,22 +13,14 @@ def index(req):
             store = form.save()
             return redirect('stores:show', store.id)
         else:
-            return render(req, 'stores/index.html', {'stores': stores, 'form': form})
+            return render(req, 'stores/new.html', {'form': form})
     else:
-        form = StoreForm()
-        return render(req, 'stores/index.html', {'stores': stores, 'form': form})
+        return render(req, 'stores/index.html', {'stores': stores})
 
 
-def new(request):
-    if request.method == 'POST':
-        form = StoreForm(request.POST)
-        if form.is_valid():
-            store = form.save()
-            return redirect('stores:show', store.id)
-        return render(request, 'stores/new.html', {'form': form})
-    else:
-        form = StoreForm()
-        return render(request, 'stores/new.html', {'form': form})
+def new(req):
+    form = StoreForm()
+    return render(req, 'stores/new.html', {'form': form})
 
 
 def show(req, id):
@@ -51,20 +43,18 @@ def show(req, id):
         )
 
 
-def edit(request, store_id):
+def edit(req, store_id):
     store = get_object_or_404(Store, id=store_id)
 
-    if request.method == 'POST':
-        form = StoreForm(request.POST, instance=store)
+    if req.method == 'POST':
+        form = StoreForm(req.POST, instance=store)
         if form.is_valid():
             form.save()
-            return redirect('stores:show', store.id)  # 成功更新後，重定向到展示頁面
-        else:
-            # 如果表單驗證失敗，留在編輯頁面，顯示錯誤
-            return render(request, 'stores/edit.html', {'form': form, 'store': store})
+            return redirect('stores:show', store.id)
+        return render(req, 'stores/edit.html', {'form': form, 'store': store})
     else:
         form = StoreForm(instance=store)
-        return render(request, 'stores/edit.html', {'form': form, 'store': store})
+        return render(req, 'stores/edit.html', {'form': form, 'store': store})
 
 
 def delete(req, id):

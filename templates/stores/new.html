@@ -1,6 +1,6 @@
 <h1>新增店家</h1>
 
-<form action="{% url 'stores:new' %}" method="post">
+<form action="{% url 'stores:index' %}" method="post">
   {% csrf_token %} {% for field in form %}
   <div>
     {{ field.label_tag }} {{ field }} {% if field.errors %}
