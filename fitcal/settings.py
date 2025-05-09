@@ -43,7 +43,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://19e4-61-220-182-115.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://84f1-61-71-98-101.ngrok.io']
 
 
 # Application definition
@@ -83,7 +83,10 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_SIGNUP_FIELDS = ['email']
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 
 MIDDLEWARE = [
@@ -122,7 +125,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'APPS': [
             {
                 'client_id': os.getenv('SOCIAL_AUTH_GOOGLE_CLIENT_ID'),
-                'secret': os.getenv('SOCIAL_AUTH_GOOGLE_SECRET'),
+                'secret': os.getenv('SOCIAL_AUTH_GOOGLE_CLIENT_SECRET'),
                 'settings': {
                     'scope': [
                         'profile',
@@ -145,6 +148,10 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
+# OAUTH_PKCE_ENABLED: True
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
+    'http://127.0.0.1:8000/accounts/google/login/callback/'
+)
 
 
 # Database
