@@ -16,7 +16,7 @@
 ## Setup
 
 - `uv sync`同步虛擬環境、格式器及套件
-- `npm install`同步前端格式器及套件
+- `npm run reset`同步前端格式器及套件(會安裝缺失套件以及刪除失效套件)
 - 複製`.env-example`到專案根目錄下，重新命名為`.env`
 
   - 修改`SECRET_KEY`為自己的版本(**如為團體專案請統一設定**)：  
@@ -30,4 +30,6 @@
      `DATABASE_URL=postgres://postgres:1234@localhost/MyDB`
 
 - `uv run manage.py migrate`同步資料庫設定
-- `uv run manage.py runserver`啟動伺服器
+- `uv run manage.py runserver`啟動伺服器  
+  或  
+  `npm run dev`同時啟動`esbuild`，`Tailwind`的監聽及`django server`
