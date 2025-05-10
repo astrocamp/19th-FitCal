@@ -470,9 +470,6 @@
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
-  .px-3 {
-    padding-inline: calc(var(--spacing) * 3);
-  }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
@@ -491,9 +488,6 @@
   }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-  }
-  .\[input\:type\=\"datetime-local\"\] {
-    input: type="datetime-local";
   }
   .hover\:border-\[\#66bb6a\] {
     &:hover {
@@ -531,6 +525,9 @@
       outline-style: none;
     }
   }
+}
+button {
+  cursor: pointer;
 }
 .flatpickr-calendar {
   --tw-scale-x: 95%;

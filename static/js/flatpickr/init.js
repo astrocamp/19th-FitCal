@@ -1,3 +1,5 @@
+import { stylePresets } from './styles.js';
+
 class StyledFlatpickr {
   constructor(selector, stylePreset = 'default', customOptions = {}) {
     this.selector = selector;
@@ -5,41 +7,10 @@ class StyledFlatpickr {
     this.customOptions = customOptions;
 
     this.stylePresets = {
-      healthy_style: {
-        altInputClasses: [
-          'px-2',
-          'py-2',
-          'border',
-          'border-[#66bb6a]',
-          'rounded-lg',
-          'shadow-md',
-          'focus:ring-2',
-          'focus:ring-[#66bb6a]',
-          'bg-[#fff8e1]',
-          'text-[#66bb6a]',
-          'hover:border-[#66bb6a]',
-          'cursor-pointer',
-          'focus:outline-none',
-        ],
-      },
-      cool_style: {
-        altInputClasses: [
-          'px-2',
-          'py-2',
-          'border',
-          'border-blue-500',
-          'rounded-md',
-          'bg-blue-50',
-          'text-blue-700',
-          'focus:ring-2',
-          'focus:ring-blue-400',
-          'hover:border-blue-500',
-          'cursor-pointer',
-        ],
-      },
       default: {
         altInputClasses: [],
       },
+      ...stylePresets,
     };
 
     this.init();
@@ -82,15 +53,7 @@ class StyledFlatpickr {
   }
 }
 
-new StyledFlatpickr('#id_pickup_time', 'healthy_style', {
-  enableTime: true,
-  dateFormat: 'Y-m-d\\TH:i',
-  altFormat: 'Y年m月d日',
-  altInput: true,
-  altFormat: 'Y年m月d日 H:i',
-});
-
-new StyledFlatpickr('input[type="datetime-local"]');
+export { StyledFlatpickr };
 
 // 這是原本的 flatpickr 初始化程式碼
 // 如果需要使用原本的樣式，可以取消註解這段程式碼

@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+button {
+  @apply cursor-pointer;
+}
+
 .flatpickr-calendar {
   @apply bg-[#f7f7f7] text-gray-800 border border-[#66bb6a] shadow-lg rounded-xl transition-all duration-300 ease-in-out scale-95 hover:scale-100 overflow-visible;
 }
