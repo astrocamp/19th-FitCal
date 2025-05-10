@@ -1,24 +1,12 @@
 {% load static %}
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FitCal</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-    <!-- 載入自定義 Tailwind 樣式以覆蓋 flatpickr -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-
-    <!-- JS (defer) -->
-
-    <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script type="module" defer src="{% static 'js/flatpickr/main.js' %}"></script>
-
-    <!-- Alpine CDN -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'assets/styles/styles.css' %}" />
+    <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
   </head>
   <body>
     {% include 'shared/messages.html' %}

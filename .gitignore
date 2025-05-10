@@ -16,4 +16,9 @@ node_modules
 # DB
 *.sqlite3
 
+# esbuild & Tailwind
+/static/assets/styles/style.css
+/static/assets/scripts/app.js
+
+# Others
 .DS_Store

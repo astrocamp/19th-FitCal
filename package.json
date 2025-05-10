@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "tailwind.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "npx tailwindcss -i ./static/src/input.css -o ./static/css/styles.css --watch"
+    "reset": "npm install && npm prune",
+    "dev": "concurrently --kill-others --names \"esbuild,tailwind,django\" -c \"yellow,blue,green\" \"esbuild ./src/scripts/input.js --bundle --outfile=./static/assets/scripts/app.js --watch\" \"npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles/style.css --watch\" \"uv run manage.py runserver\"",
+    "build": "esbuild ./src/scripts/input.js --bundle --outfile=./static/assets/scripts/app.js --watch && npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles/style.css"
   },
   "keywords": [],
   "author": "",
@@ -12,13 +13,18 @@
   "description": "",
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.4",
-    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
     "daisyui": "^5.0.28",
+    "esbuild": "^0.25.4",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
-    "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "tailwindcss": "^4.1.4"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.9",
+    "flatpickr": "^4.6.13",
+    "htmx.org": "^1.9.12"
   }
 }

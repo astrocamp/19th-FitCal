@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+@import 'flatpickr/dist/flatpickr.min.css';
 @import './components/flatpickr.css';
 
 @layer base {
