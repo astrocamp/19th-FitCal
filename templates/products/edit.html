@@ -1,0 +1,11 @@
+<h2>編輯</h2>
+
+<form action="{%  url 'products:show' product.id  %}" method="post">
+  {% csrf_token %} {% for field in form %}
+  <div>{{ field.label_tag }} {{ field }}</div>
+  {% endfor %}
+
+  <a href="{% url 'products:index' %}">回商品首頁</a>
+  <a href="{% url 'products:show' product.id %}">回商品頁面</a>
+  <input type="submit" value="更新資料" />
+</form>

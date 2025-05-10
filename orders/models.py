@@ -50,8 +50,8 @@ class Order(models.Model):
 class OrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    # TODO: 等待 product model 完成後再加入
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # TODO: 等待 products model 完成後再加入
+    # products = models.ForeignKey(Product, on_delete=models.CASCADE)
     unit_price = models.DecimalField(
         max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
     )

@@ -1,11 +1,11 @@
 <h2>商品首頁</h2>
 
-<a href="{% url 'product:new' %}">新增商品</a>
+<a href="{% url 'products:new' %}">新增商品</a>
 
 <ul>
-{% for product in products %}
+  {% for product in products %}
   <li>
-    <a href="{% url 'product:show' product.id %}">
+    <a href="{% url 'products:show' product.id %}">
       <section>
         <h3>{{ product.name }}</h3>
         <h3>{{ product.description }}</h3>
@@ -16,5 +16,5 @@
       </section>
     </a>
   </li>
-{% endfor %}
+  {% endfor %}
 </ul>

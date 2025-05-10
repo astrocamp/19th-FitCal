@@ -8,15 +8,15 @@ from .models import Product
 def index(request):
     if request.POST:
         form = ProductForm(request.POST)
-        product = form.save()
-        return redirect('product:show', product.id)
+        product= form.save()
+        return redirect('products:show', product.id)
     products = Product.objects.all()
-    return render(request, 'product/index.html', {'products': products})
+    return render(request, 'products/index.html', {'products': products})
 
 
 def new(request):
     form = ProductForm()
-    return render(request, 'product/new.html', {'form': form})
+    return render(request, 'products/new.html', {'form': form})
 
 
 def show(request, id):
@@ -24,17 +24,17 @@ def show(request, id):
     if request.POST:
         form = ProductForm(request.POST, instance=product)
         form.save()
-        return redirect('product:show', product.id)
-    return render(request, 'product/show.html', {'product': product})
+        return redirect('products:show', product.id)
+    return render(request, 'products/show.html', {'product': product})
 
 
 def edit(request, id):
     product = get_object_or_404(Product, pk=id)
     form = ProductForm(instance=product)
-    return render(request, 'product/edit.html', {'product': product, 'form': form})
+    return render(request, 'products/edit.html', {'product': product, 'form': form})
 
 
 def delete(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
-    return redirect('product:index')
+    return redirect('products:index')

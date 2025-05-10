@@ -14,10 +14,10 @@
 
 {% endblock %}
 
-<a href="{% url 'product:edit' product.id %}">編輯</a>
+<a href="{% url 'products:edit' product.id %}">編輯</a>
 
 <form
-  action="{% url 'product:delete' product.id %}"
+  action="{% url 'products:delete' product.id %}"
   method="post"
   onsubmit="return confirm('確定要刪除嗎?');"
 >
@@ -25,4 +25,4 @@
   <input type="submit" value="刪除" />
 </form>
 
-<a href="{% url 'product:index' %}">回商品首頁</a>
+<a href="{% url 'products:index' %}">回商品首頁</a>

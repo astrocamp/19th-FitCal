@@ -12,10 +12,10 @@ def validate_tax_id(tax_id):
     total = 0
 
     for i in range(8):
-        product = int(tax_id[i]) * weights[i]
-        if product >= 10:
-            product = (product // 10) + (product % 10)
-        total += product
+        products = int(tax_id[i]) * weights[i]
+        if products >= 10:
+            products = (products // 10) + (products % 10)
+        total += products
 
     # 特例：第七碼是 7 時
     if total % 10 == 0:
