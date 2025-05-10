@@ -21,56 +21,57 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # env init
 env = environ.Env()
 # 預設會讀取專案根目錄的 `.env`
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'pages',
-    'members',
-    'orders',
-    'products',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'django.contrib.sites',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.line',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'stores',
+    "users",
+    "pages",
+    "members",
+    "orders",
+    "products",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "django.contrib.sites",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.line",
+    "debug_toolbar",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "stores",
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # 預設認證後端
-    'allauth.account.auth_backends.AuthenticationBackend',  # allauth 認證後端
+    "django.contrib.auth.backends.ModelBackend",  # 預設認證後端
+    "allauth.account.auth_backends.AuthenticationBackend",  # allauth 認證後端
 ]
 
 SITE_ID = 1  # Django Sites Framework 的 ID，預設為 1
 
-LOGIN_REDIRECT_URL = '/'  # 登入成功後的重導向 URL
-LOGOUT_REDIRECT_URL = '/'  # 登出後的重導向 URL
+LOGIN_REDIRECT_URL = "/"  # 登入成功後的重導向 URL
+LOGOUT_REDIRECT_URL = "/"  # 登出後的重導向 URL
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -79,68 +80,69 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
-ROOT_URLCONF = 'fitcal.urls'
+ROOT_URLCONF = "fitcal.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": ["templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'fitcal.wsgi.application'
+WSGI_APPLICATION = "fitcal.wsgi.application"
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APPS': [
+    "google": {
+        "APPS": [
             {
-                'client_id': env('SOCIAL_AUTH_GOOGLE_CLIENT_ID'),
-                'secret': env('SOCIAL_AUTH_GOOGLE_CLIENT_SECRET'),
-                'settings': {
-                    'scope': [
-                        'profile',
-                        'email',
+                "client_id": env("SOCIAL_AUTH_GOOGLE_CLIENT_ID"),
+                "secret": env("SOCIAL_AUTH_GOOGLE_CLIENT_SECRET"),
+                "settings": {
+                    "scope": [
+                        "profile",
+                        "email",
                     ],
-                    'auth_params': {
-                        'access_type': 'online',
+                    "auth_params": {
+                        "access_type": "online",
                     },
                 },
             },
         ],
     },
-    'line': {
-        'APP': {
-            'client_id': env('SOCIAL_AUTH_LINE_CHANNEL_ID'),
-            'secret': env('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
+    "line": {
+        "APP": {
+            "client_id": env("SOCIAL_AUTH_LINE_CHANNEL_ID"),
+            "secret": env("SOCIAL_AUTH_LINE_CHANNEL_SECRET"),
         },
-        'SCOPE': ['profile', 'openid', 'email'],
+        "SCOPE": ["profile", "openid", "email"],
     },
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 # OAUTH_PKCE_ENABLED: True
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
-    'http://127.0.0.1:8000/accounts/google/login/callback/'
-    'http://localhost:8000/accounts/google/login/callback/'
+    "http://127.0.0.1:8000/accounts/google/login/callback/"
+    "http://localhost:8000/accounts/google/login/callback/"
 )
 
 
@@ -149,7 +151,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
 
 DATABASES = {
     # 自動解析 DATABASE_URL
-    'default': env.db()
+    "default": env.db()
 }
 
 
@@ -159,17 +161,17 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         # 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-        'NAME': 'users.validators.CustomUserAttributeSimilarityValidator',
+        "NAME": "users.validators.CustomUserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
         # 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-        'NAME': 'users.validators.CustomCommonPasswordValidator',
+        "NAME": "users.validators.CustomCommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -177,9 +179,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Asia/Taipei'
+TIME_ZONE = "Asia/Taipei"
 
 USE_I18N = True
 
@@ -189,16 +191,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
-LOGIN_URL = 'users:sign_in'
+LOGIN_URL = "users:sign_in"
+
+# Debug Toolbar
+INTERNAL_IPS = ["127.0.0.1", "localhost"]
