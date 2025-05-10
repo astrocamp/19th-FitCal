@@ -3,8 +3,11 @@ import uuid
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from members.models import Member
+from products.models import Product
+from stores.models import Store
 
-# Create your models here.
+
 class Order(models.Model):
     ORDER_STATUS_CHOICES = [
         ('pending', '待處理'),
@@ -26,9 +29,16 @@ class Order(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # TODO: 等待 user 與 store model 完成後再加入
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # store = models.ForeignKey(Store, on_delete=models.DO_NOTHING)
+    member = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    store = models.ForeignKey(
+        Store,
+        on_delete=models.DO_NOTHING,
+        null=True,
+    )
     pickup_time = models.DateTimeField()
     note = models.TextField(null=True, blank=True)
     order_status = models.CharField(
@@ -45,13 +55,22 @@ class Order(models.Model):
     )
     customize = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    product = models.ManyToManyField(
+        Product, through='OrderItem', related_name='orders'
+    )
 
 
 class OrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    # TODO: 等待 products model 完成後再加入
-    # products = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    product_name = models.CharField(max_length=100, default='')
     unit_price = models.DecimalField(
         max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
     )
