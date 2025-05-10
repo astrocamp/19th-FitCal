@@ -1,22 +1,25 @@
 {% extends "layouts/default.html" %} {% block main %}
 <h1>建立訂單</h1>
 
-<form action="{% url 'orders:create' %}" method="post" x-data="{ quantity: 2, unitPrice: 100 }">
+<h1>(需先在 products 建立商品才能測試 order-product 之間的關聯)</h1>
+<h1>(建立訂單後，商品的庫存會減少，庫存不足會無法建立訂單)</h1>
+
+<form
+  action="{% url 'orders:create' %}"
+  method="post"
+  x-data="{ quantity: 1, unitPrice: {{ product.price }} }"
+>
   {% csrf_token %}
 
-  <h2>商品：舒肥雞腿</h2>
-  <label for="quantity">數量</label>
-  <input x-model.number="quantity" type="number" id="quantity" name="quantity" value="2" min="0" />
+  <h2>商品：{{ product.name }}</h2>
+  <input type="hidden" name="product_id" value="{{ product.id }}" />
 
+  <label for="quantity">數量</label>
+  <input x-model.number="quantity" type="number" id="quantity" name="quantity" value="1" min="1" />
+
+  <!-- 單價欄位不應該綁定到 x-model，直接顯示商品價格 -->
   <label for="unit_price">單價</label>
-  <input
-    x-model.number="unitPrice"
-    type="number"
-    id="unit_price"
-    name="unit_price"
-    value="100"
-    min="0"
-  />
+  <input type="number" id="unit_price" name="unit_price" :value="unitPrice" readonly />
 
   {{ form }}
 
