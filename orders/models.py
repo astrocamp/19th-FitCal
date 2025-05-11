@@ -31,12 +31,12 @@ class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     member = models.ForeignKey(
         Member,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
     )
     store = models.ForeignKey(
         Store,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         null=True,
     )
     pickup_time = models.DateTimeField()
@@ -50,16 +50,23 @@ class Order(models.Model):
     payment_status = models.CharField(
         max_length=20, choices=PAYMENT_STATUS_CHOICES, default='unpaid'
     )
+    # TODO
+    # 如果未來會加入優惠券、服務費、運費等項目，可以名稱改為 final_total 或修改欄位如下
+    # subtotal, discount, final_total
     total_price = models.DecimalField(
         max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
     )
     customize = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
 
     product = models.ManyToManyField(
         Product, through='OrderItem', related_name='orders'
     )
+    # 快照
+    member_name = models.CharField(max_length=50, editable=False, null=True)
+    store_name = models.CharField(max_length=100, editable=False, null=True)
 
 
 class OrderItem(models.Model):
@@ -67,11 +74,19 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
     )
+    # 快照
     product_name = models.CharField(max_length=100, default='')
     unit_price = models.DecimalField(
         max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
     )
     quantity = models.PositiveIntegerField(default=1)
+    subtotal = models.DecimalField(
+        max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
+    )
+
+    def save(self, *args, **kwargs):
+        self.subtotal = self.unit_price * self.quantity
+        super().save(*args, **kwargs)
