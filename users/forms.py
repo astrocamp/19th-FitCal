@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
+from email_validator import EmailNotValidError, validate_email as strict_validate_email
 
 from .models import User
 
@@ -18,7 +18,6 @@ class UserForm(UserCreationForm):
         self.fields['email'].widget.attrs.update({'placeholder': 'example@mail.com'})
         self.fields['password1'].widget.attrs.update({'placeholder': '請輸入密碼'})
         self.fields['password2'].widget.attrs.update({'placeholder': '再次輸入密碼'})
-        self.fields['email'].error_messages['invalid'] = '請輸入正確格式的電子郵件地址'
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -35,12 +34,16 @@ class UserForm(UserCreationForm):
         return password2
 
     def clean_email(self):
-        try:
-            validate_email(self)
-        except ValidationError:
-            raise ValidationError('您輸入的E-mail格式不正確')
+        raw_email = self.cleaned_data.get('email')
 
-        email = self.cleaned_data.get('email')
+        try:
+            # 更嚴格的 email 檢查（格式 + 可達性），並標準化
+            valid = strict_validate_email(raw_email, check_deliverability=True)
+            email = valid.email  # 自動轉小寫、去空格
+        except EmailNotValidError:
+            raise ValidationError('您輸入的 E-mail 格式不正確')
+
         if User.objects.filter(email=email).exists():
             raise ValidationError('這個電子郵件已經被註冊過了')
+
         return email
