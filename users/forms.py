@@ -16,6 +16,9 @@ class UserForm(UserCreationForm):
         self.fields['password1'].label = '密碼'
         self.fields['password2'].label = '確認密碼'
         self.fields['email'].widget.attrs.update({'placeholder': 'example@mail.com'})
+        self.fields['email'].error_messages.update(
+            {'invalid': '您輸入的電子郵件格式不正確'}
+        )
         self.fields['password1'].widget.attrs.update({'placeholder': '請輸入密碼'})
         self.fields['password2'].widget.attrs.update({'placeholder': '再次輸入密碼'})
         self.fields['email'].error_messages['invalid'] = '您輸入的電子郵件格式不正確'
