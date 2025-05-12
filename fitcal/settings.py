@@ -14,16 +14,6 @@ import os
 from pathlib import Path
 
 import environ
-from dotenv import load_dotenv
-
-
-def is_dev():
-    return os.getenv('DJANGO_ENV') == 'development'
-
-
-if is_dev():
-    load_dotenv()
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://84f1-61-71-98-101.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -52,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'pages',
     'members',
+    'product',
     'orders',
     'products',
     'allauth',
@@ -124,8 +115,8 @@ SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APPS': [
             {
-                'client_id': os.getenv('SOCIAL_AUTH_GOOGLE_CLIENT_ID'),
-                'secret': os.getenv('SOCIAL_AUTH_GOOGLE_CLIENT_SECRET'),
+                'client_id': env('SOCIAL_AUTH_GOOGLE_CLIENT_ID'),
+                'secret': env('SOCIAL_AUTH_GOOGLE_CLIENT_SECRET'),
                 'settings': {
                     'scope': [
                         'profile',
@@ -140,8 +131,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
     'line': {
         'APP': {
-            'client_id': os.getenv('SOCIAL_AUTH_LINE_CHANNEL_ID'),
-            'secret': os.getenv('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
+            'client_id': env('SOCIAL_AUTH_LINE_CHANNEL_ID'),
+            'secret': env('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
         },
         'SCOPE': ['profile', 'openid', 'email'],
     },
@@ -151,6 +142,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 # OAUTH_PKCE_ENABLED: True
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
     'http://127.0.0.1:8000/accounts/google/login/callback/'
+    'http://localhost:8000/accounts/google/login/callback/'
 )
 
 
