@@ -1,8 +1,9 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth import login, logout
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
-from .forms import UserForm
+from .forms import LoginForm, UserForm
 
 
 # 顯示註冊表單 (GET)
@@ -36,18 +37,17 @@ def sign_in(req):
 # 處理登入 (POST)
 @require_POST
 def create_session(req):
-    email = req.POST.get('email')
-    password = req.POST.get('password')
-
-    user = authenticate(
-        email=email,
-        password=password,
-    )
-    if user is not None:
-        login(req, user)
-        return redirect('pages:index')
+    if req.method == 'POST':
+        form = LoginForm(req.POST)
+        if form.is_valid():
+            login(req, form.user)
+            messages.success(req, '登入成功，歡迎回來！')
+            return redirect('pages:home')
+        else:
+            messages.error(req, '登入失敗')
     else:
-        return redirect('users:sign_in')
+        form = LoginForm()
+    return render(req, 'users/sign_in.html', {'form': form})
 
 
 # 處理登出 (POST)

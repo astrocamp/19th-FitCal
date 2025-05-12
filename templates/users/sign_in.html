@@ -1,10 +1,30 @@
 <h1>登入頁面</h1>
 <form method="post" action="{% url 'users:create_session' %}">
   {% csrf_token %}
-  <input type="hidden" name="next" value="{{ next }}" />
-  <label>帳號：</label>
-  <input type="text" name="email" required /><br />
-  <label>密碼：</label>
-  <input type="password" name="password" required /><br />
+
+  <!--Django 用來顯示「非欄位錯誤」的預設方式，兩個欄位不是一組-->
+  {% if form.non_field_errors %}
+  <p class="error-msg">{{ form.non_field_errors }}</p>
+  {% endif %}
+
+  <label for="{{ form.email.id_for_label }}">帳號：</label><br />
+  <input
+    type="email"
+    name="{{ form.email.name }}"
+    id="{{ form.email.id_for_label }}"
+    placeholder="example@mail.com"
+    required
+  />
+  <br />
+
+  <label for="{{ form.password.id_for_label }}">密碼：</label><br />
+  <input
+    type="password"
+    name="{{ form.password.name }}"
+    id="{{ form.password.id_for_label }}"
+    placeholder="請輸入密碼"
+    required
+  />
+  <br />
   <button type="submit">登入</button>
 </form>

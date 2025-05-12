@@ -1,8 +1,10 @@
+from django import forms
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from email_validator import EmailNotValidError, validate_email as strict_validate_email
 
-from .models import User
+User = get_user_model()
 
 
 class UserForm(UserCreationForm):
@@ -47,3 +49,32 @@ class UserForm(UserCreationForm):
             raise ValidationError('這個電子郵件已經被註冊過了')
 
         return email
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        error_messages={'required': '請輸入電子郵件'},
+        widget=forms.EmailInput(attrs={'placeholder': 'example@mail.com'}),
+    )
+    password = forms.CharField(
+        error_messages={'required': '請輸入密碼'},
+        widget=forms.PasswordInput(attrs={'placeholder': '請輸入密碼'}),
+    )
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+
+        # 檢查是否有此帳號
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise forms.ValidationError('無此帳號，請先註冊')
+
+        # 驗證密碼
+        user = authenticate(username=email, password=password)
+        if not user:
+            raise forms.ValidationError('帳號或密碼錯誤')
+
+        self.cleaned_data['user'] = user
+        return self.cleaned_data
