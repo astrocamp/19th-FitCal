@@ -1,5 +1,6 @@
+{% extends 'layouts/default.html' %} {% block main %}
 <h1>店家資訊</h1>
-<div>店家名稱(先用UUID替代)：{{ store.id }}</div>
+<div>店家名稱：{{ store.name }}</div>
 <div>店家地址：{{ store.address }}</div>
 <div>店家電話：{{ store.phone_number }}</div>
 <div>店家統編：{{ store.tax_id }}</div>
@@ -22,12 +23,13 @@
 <form
   action="{% url 'stores:delete' store.id %}"
   method="post"
-  onsubmit="return confirm('是否確認刪除')"
+  onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')"
 >
   {% csrf_token %}
-  <button type="submit">刪除店家及所屬商品</button>
+  <button type="submit">刪除帳號與店家</button>
 </form>
 
 <a href="{% url 'stores:edit' store.id %}">編輯</a>
 <a href="{% url 'stores:index' %}">回上一頁</a>
 <a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a>
+{% endblock main %}

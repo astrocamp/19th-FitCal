@@ -1,8 +1,7 @@
 from datetime import date
 
-from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import DateInput, ModelForm, TextInput
+from django.forms import DateInput, HiddenInput, ModelForm, TextInput
 
 from .models import Member
 
@@ -10,8 +9,16 @@ from .models import Member
 class MemberForm(ModelForm):
     class Meta:
         model = Member
-        fields = ['phone_number', 'gender', 'date_of_birth', 'line_id', 'google_id']
+        fields = [
+            'name',
+            'phone_number',
+            'gender',
+            'date_of_birth',
+            'line_id',
+            'google_id',
+        ]
         labels = {
+            'name': '姓名',
             'phone_number': '電話',
             'gender': '性別',
             'date_of_birth': '生日',
@@ -19,6 +26,7 @@ class MemberForm(ModelForm):
             'google_id': 'Google ID',
         }
         widgets = {
+            'user': HiddenInput(),
             'phone_number': TextInput(attrs={'type': 'tel'}),
             'date_of_birth': DateInput(
                 attrs={
@@ -28,6 +36,9 @@ class MemberForm(ModelForm):
             ),
         }
         error_messages = {
+            'name': {
+                'required': '請輸入姓名',
+            },
             'phone_number': {
                 'required': '請輸入電話號碼',
             },
@@ -44,21 +55,17 @@ class MemberForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields['name'].required = True
         self.fields['phone_number'].initial = '09'
         self.fields['phone_number'].required = True
         self.fields['gender'].required = True
         self.fields['date_of_birth'].required = True
-        if self.instance and not self.instance._state.adding:
-            self.fields['date_of_birth'].disabled = True
 
         self.fields['line_id'].required = False
         self.fields['google_id'].required = False
 
     def clean_date_of_birth(self):
-        birthday = self.cleaned_data['date_of_birth']
-        if self.instance and not self.instance._state.adding:
-            if birthday != self.instance.date_of_birth:
-                raise ValidationError('生日不可修改。')
+        birthday = self.cleaned_data.get('date_of_birth')
         if birthday > date.today():
-            raise forms.ValidationError('生日不能是未來的日期')
+            raise ValidationError('生日不能是未來的日期')
         return birthday

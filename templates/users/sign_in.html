@@ -1,11 +1,18 @@
 {% extends "layouts/default.html" %} {% load socialaccount %} {% block main %}
 
 <h1>登入頁面</h1>
+{% if error %}
+<p style="color: red">{{ error }}</p>
+<a href="{% url 'users:sign_up' %}">
+  <button type="button">前往註冊頁</button>
+</a>
+{% endif %}
 <form method="post" action="{% url 'users:create_session' %}">
   {% csrf_token %}
 
   <label>帳號：</label>
-  <input type="text" name="email" required /><br />
+  <input type="text" name="email" required value="{{ email|default:'' }}" /><br />
+
   <label>密碼：</label>
   <input type="password" name="password" required /><br />
   <button type="submit">登入</button>

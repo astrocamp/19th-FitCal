@@ -16,20 +16,36 @@ def sign_up(req):
 @require_POST
 def create_user(req):
     userform = UserForm(req.POST)
-    if userform.is_valid():
+    role = req.POST.get('role')  # 'member' 或 'store'
+
+    if userform.is_valid() and role in ['member', 'store']:
         userform.save()
         user = authenticate(
             email=userform.cleaned_data['email'],
             password=userform.cleaned_data['password2'],
         )
         login(req, user)
-        messages.success(req, '註冊成功已登入！')
-        return redirect('pages:index')
+
+        if role == 'member':
+            from members.models import Member
+
+            Member.objects.create(user=user, name=user.email)
+            messages.success(req, '註冊成功已登入！')
+            return redirect('members:new')
+
+        elif role == 'store':
+            from stores.models import Store
+
+            Store.objects.create(user=user, name=user.email)
+            messages.success(req, '註冊成功已登入！')
+            return redirect('stores:new')
+
     return render(
         req,
         'users/sign_up.html',
         {
             'userform': userform,
+            'error': '註冊失敗，請確認所有欄位與身份選擇',
         },
     )
 

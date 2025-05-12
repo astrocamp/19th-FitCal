@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, TextInput, TimeInput
+from django.forms import HiddenInput, ModelForm, TextInput, TimeInput
 
 from .models import Store
 
@@ -29,8 +29,18 @@ def validate_tax_id(tax_id):
 class StoreForm(ModelForm):
     class Meta:
         model = Store
-        fields = ['address', 'phone_number', 'tax_id', 'opening_time', 'closing_time']
+        fields = [
+            'name',
+            'address',
+            'phone_number',
+            'tax_id',
+            'opening_time',
+            'closing_time',
+        ]
         error_messages = {
+            'name': {
+                'required': '店家名稱不能空白',
+            },
             'address': {
                 'required': '地址不能空白',
             },
@@ -49,6 +59,7 @@ class StoreForm(ModelForm):
         }
 
         labels = {
+            'name': '店家名稱',
             'address': '地址',
             'phone_number': '行動電話',
             'tax_id': '統編',
@@ -57,6 +68,13 @@ class StoreForm(ModelForm):
         }
 
         widgets = {
+            'user': HiddenInput(),
+            'name': TextInput(
+                attrs={
+                    'placeholder': '格式範例：五倍學院',
+                    'required': 'required',
+                }
+            ),
             'address': TextInput(
                 attrs={
                     'placeholder': '格式範例：台北市中正區衡陽路7號5樓',
@@ -82,6 +100,12 @@ class StoreForm(ModelForm):
             'opening_time': TimeInput(attrs={'type': 'time', 'required': 'required'}),
             'closing_time': TimeInput(attrs={'type': 'time', 'required': 'required'}),
         }
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name.strip():
+            raise ValidationError('店家名稱不能空白')
+        return name
 
     def clean_address(self):
         address = self.cleaned_data.get('address')

@@ -9,4 +9,5 @@ urlpatterns = [
     path('sign_in/', views.sign_in, name='sign_in'),
     path('create_session/', views.create_session, name='create_session'),
     path('delete_session/', views.delete_session, name='delete_session'),
+    path('login-redirect/', views.login_redirect, name='login_redirect'),
 ]

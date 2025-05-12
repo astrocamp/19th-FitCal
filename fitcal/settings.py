@@ -208,3 +208,4 @@ LOGIN_URL = 'users:sign_in'
 
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
+LOGIN_REDIRECT_URL = '/users/login-redirect/'

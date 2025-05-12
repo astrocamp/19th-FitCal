@@ -1,20 +1,21 @@
+{% extends 'layouts/default.html' %} {% block main %}
 <h1>店家列表</h1>
 
-<a href="{% url 'stores:new' %}">新增店家</a>
+{% if store %}
 
-<ul>
-  {% for store in stores %}
-  <li>
-    <a href="{% url 'stores:show' store.id %}">
-      <section>
-        <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
-        <h1>店家地址：{{ store.address }}</h1>
-        <h1>店家電話：{{ store.phone_number }}</h1>
-        <h1>店家統編：{{ store.tax_id }}</h1>
-        <h1>開店時間：{{ store.opening_time }}</h1>
-        <h1>打烊時間：{{ store.closing_time }}</h1>
-      </section>
-    </a>
-  </li>
-  {% endfor %}
-</ul>
+<li>
+  <a href="{% url 'stores:show' store.id %}">
+    <section>
+      <h1>店家名稱：{{ store.name }}</h1>
+      <h1>店家地址：{{ store.address }}</h1>
+      <h1>店家電話：{{ store.phone_number }}</h1>
+      <h1>店家統編：{{ store.tax_id }}</h1>
+      <h1>開店時間：{{ store.opening_time }}</h1>
+      <h1>打烊時間：{{ store.closing_time }}</h1>
+    </section>
+  </a>
+</li>
+
+{% else %}
+<p>目前沒有店家資料</p>
+{% endif %} {% endblock main %}
