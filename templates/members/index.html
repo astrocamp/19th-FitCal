@@ -1,15 +1,15 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>會員列表</h1>
-<button><a href="{% url 'members:new' %}">新增會員資料</a></button>
-{% for member in members %}
-<ul>
-  <li>
-    <a href="{% url 'members:show' member.id %}">
-      <p>{{ member.id }}</p>
-      <p>{{ member.phone }}</p>
-    </a>
-  </li>
-</ul>
-{% empty %}
+
+{% if member %}
+
+<li>
+  <a href="{% url 'members:show' member.id %}">
+    <p>{{ member.id }}</p>
+    <p>{{ member.phone }}</p>
+  </a>
+</li>
+
+{% else %}
 <p>目前沒有會員資料</p>
-{% endfor %} {% endblock main %}
+{% endif %} {% endblock main %}

@@ -1,48 +1,83 @@
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MemberForm
 from .models import Member
 
 
-# Create your views here.
+@login_required
 def index(request):
-    members = Member.objects.order_by('-created_at')
+    try:
+        member = Member.objects.get(user=request.user)
+    except Member.DoesNotExist:
+        member = None
+
     if request.method == 'POST':
-        form = MemberForm(request.POST)
+        form = MemberForm(request.POST, instance=member)
         if form.is_valid():
-            form.save()
-            return redirect('members:index')
+            member = form.save(commit=False)
+            member.user = request.user
+            member = form.save()
+            return redirect('members:show', member.id)
         else:
             return render(request, 'members/new.html', {'form': form})
-    return render(request, 'members/index.html', {'members': members})
+    else:
+        if member:
+            return render(request, 'members/index.html', {'member': member})
+        else:
+            form = MemberForm()
+            return render(request, 'members/new.html', {'form': form})
 
 
+@login_required
 def new(request):
     form = MemberForm()
     return render(request, 'members/new.html', {'form': form})
 
 
+@login_required
 def show(request, id):
-    member = get_object_or_404(Member, id=id)
+    member = get_object_or_404(Member, pk=id, user=request.user)
+
     if request.method == 'POST':
         form = MemberForm(request.POST, instance=member)
         if form.is_valid():
             form.save()
-            return redirect('members:show', id)
+            return redirect('members:show', member.id)
+        return render(request, 'members/show.html', {'member': member, 'form': form})
+
+    else:
+        form = MemberForm(instance=member)
+
+        return render(request, 'members/show.html', {'member': member, 'form': form})
+
+
+@login_required
+def edit(request, id):
+    member = get_object_or_404(Member, pk=id, user=request.user)
+
+    if request.method == 'POST':
+        form = MemberForm(request.POST, instance=member)
+        if form.is_valid():
+            form.save()
+            return redirect('members:show', member.id)
         else:
             return render(
-                request, 'members/edit.html', {'member': member, 'form': form}
+                request, 'members/edit.html', {'form': form, 'member': member}
             )
-    return render(request, 'members/show.html', {'member': member})
+    else:
+        form = MemberForm(instance=member)
+        return render(request, 'members/edit.html', {'form': form, 'member': member})
 
 
-def edit(request, id):
-    member = get_object_or_404(Member, id=id)
-    form = MemberForm(instance=member)
-    return render(request, 'members/edit.html', {'member': member, 'form': form})
-
-
+@login_required
 def delete(request, id):
-    member = get_object_or_404(Member, id=id)
+    member = get_object_or_404(Member, pk=id, user=request.user)
+    user = request.user
+
     member.delete()
-    return redirect('members:index')
+    user.delete()
+    logout(request)
+
+    return redirect('users:sign_up')

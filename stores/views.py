@@ -1,30 +1,44 @@
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import StoreForm
 from .models import Store
 
 
+@login_required
 def index(req):
-    stores = Store.objects.all()
+    try:
+        store = Store.objects.get(user=req.user)
+    except Store.DoesNotExist:
+        store = None
 
     if req.method == 'POST':
-        form = StoreForm(req.POST)
+        form = StoreForm(req.POST, instance=store)
         if form.is_valid():
+            store = form.save(commit=False)
+            store.user = req.user
             store = form.save()
             return redirect('stores:show', store.id)
         else:
             return render(req, 'stores/new.html', {'form': form})
     else:
-        return render(req, 'stores/index.html', {'stores': stores})
+        if store:
+            return render(req, 'stores/index.html', {'store': store})
+        else:
+            form = StoreForm()
+            return render(req, 'stores/new.html', {'form': form})
 
 
+@login_required
 def new(req):
     form = StoreForm()
     return render(req, 'stores/new.html', {'form': form})
 
 
+@login_required
 def show(req, id):
-    store = get_object_or_404(Store, pk=id)
+    store = get_object_or_404(Store, pk=id, user=req.user)
 
     if req.method == 'POST':
         form = StoreForm(req.POST, instance=store)
@@ -43,22 +57,29 @@ def show(req, id):
         )
 
 
-def edit(req, store_id):
-    store = get_object_or_404(Store, id=store_id)
+@login_required
+def edit(req, id):
+    store = get_object_or_404(Store, pk=id, user=req.user)
 
     if req.method == 'POST':
         form = StoreForm(req.POST, instance=store)
         if form.is_valid():
             form.save()
             return redirect('stores:show', store.id)
-        return render(req, 'stores/edit.html', {'form': form, 'store': store})
+        else:
+            return render(req, 'stores/edit.html', {'form': form, 'store': store})
     else:
         form = StoreForm(instance=store)
         return render(req, 'stores/edit.html', {'form': form, 'store': store})
 
 
+@login_required
 def delete(req, id):
-    store = get_object_or_404(Store, pk=id)
-    store.delete()
+    store = get_object_or_404(Store, pk=id, user=req.user)
+    user = req.user
 
-    return redirect('stores:index')
+    store.delete()
+    user.delete()
+    logout(req)
+
+    return redirect('users:sign_up')
