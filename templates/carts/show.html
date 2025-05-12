@@ -1,0 +1,10 @@
+{% extends "layouts/default.html" %} {% block main %}
+<h2>店家：{{ cart.store }}</h2>
+{% for item in cart_item %}
+<div class="mb-2 border-2">{{ item.product.name }}：{{ item.quantity }}</div>
+<form action="{% url 'carts:delete_item' item.id %}" method="post" onsubmit="return confirm('確認刪除商品？')">
+  {% csrf_token %}
+  <button class="btn" type="submit">刪除</button>
+  <a href="{% url 'carts:edit' cart.id %}" class="btn">編輯購物車商品</a>
+</form>
+{% endfor %} {% endblock main %}

@@ -1,0 +1,16 @@
+{% extends "layouts/default.html" %} {% block main %}
+<h2>編輯購物車</h2>
+<div>商家：{{ cart_form.instance.store }}</div>
+<form action="{% url 'carts:show' id %}" method="post">
+  {% csrf_token %}
+  <!-- 多個 cart item 表單 -->
+  {{ formset.management_form }} {% for form in formset %} {{ form.non_field_errors }}
+  <div>
+    {% for field in form %} {% if field.name == 'id' or field.name == 'cart' %} {{ field.as_hidden }} {% else %}
+    <div class="border-2 w-fit">{{ field.label_tag }} {{ field }} {{ field.errors }}</div>
+    {% endif %} {% endfor %}
+  </div>
+  {% endfor %}
+  <button class="btn" type="submit">更新購物車</button>
+</form>
+{% endblock main %}

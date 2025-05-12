@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.line',
+    'carts',
     'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
