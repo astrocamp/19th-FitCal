@@ -18,6 +18,9 @@ class UserForm(UserCreationForm):
         self.fields['password1'].label = '密碼'
         self.fields['password2'].label = '確認密碼'
         self.fields['email'].widget.attrs.update({'placeholder': 'example@mail.com'})
+        self.fields['email'].error_messages.update(
+            {'invalid': '您輸入的電子郵件格式不正確'}
+        )
         self.fields['password1'].widget.attrs.update({'placeholder': '請輸入密碼'})
         self.fields['password2'].widget.attrs.update({'placeholder': '再次輸入密碼'})
 
@@ -43,7 +46,7 @@ class UserForm(UserCreationForm):
             valid = strict_validate_email(raw_email, check_deliverability=True)
             email = valid.email  # 自動轉小寫、去空格
         except EmailNotValidError:
-            raise ValidationError('您輸入的 E-mail 格式不正確')
+            raise ValidationError('請輸入有效的電子郵件信箱')
 
         if User.objects.filter(email=email).exists():
             raise ValidationError('這個電子郵件已經被註冊過了')
