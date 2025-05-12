@@ -3,6 +3,8 @@ import uuid
 from django.core.validators import RegexValidator
 from django.db import models
 
+from stores.models import Store
+
 
 class Member(models.Model):
     GENDER_CHOICES = [
@@ -22,3 +24,7 @@ class Member(models.Model):
     google_id = models.CharField(max_length=64, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    ordered_stores = models.ManyToManyField(
+        Store, through='orders.Order', related_name='ordering_members'
+    )

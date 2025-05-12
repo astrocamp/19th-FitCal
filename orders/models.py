@@ -62,7 +62,7 @@ class Order(models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)
 
     product = models.ManyToManyField(
-        Product, through='OrderItem', related_name='orders'
+        Product, through='OrderItem', related_name='ordered_in'
     )
     # 快照
     member_name = models.CharField(max_length=50, editable=False, null=True)
