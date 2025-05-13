@@ -41,9 +41,5 @@ class UserForm(UserCreationForm):
             valid = strict_validate_email(raw_email, check_deliverability=True)
             email = valid.email  # 自動轉小寫、去空格
         except EmailNotValidError:
-            raise ValidationError('您輸入的 E-mail 格式不正確')
-
-        if User.objects.filter(email=email).exists():
-            raise ValidationError('這個電子郵件已經被註冊過了')
-
+            raise ValidationError('請輸入有效的電子郵件地址')
         return email
