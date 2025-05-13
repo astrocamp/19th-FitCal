@@ -16,10 +16,7 @@ def member_factory():
 
 @pytest.fixture
 def store_factory():
-    def create_store(**kwargs):
-        return StoreFactory(**kwargs)
-
-    return create_store
+    return StoreFactory
 
 
 @pytest.fixture
