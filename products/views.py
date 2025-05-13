@@ -12,22 +12,29 @@ def index(request):
         if form.is_valid():
             store_id = request.POST.get('store_id')
             store = get_object_or_404(Store, id=store_id)
-
             product = form.save(commit=False)
             product.store = store
             product.save()
-
             return redirect('stores:show', id=store.id)
     else:
         form = ProductForm()
-
     products = Product.objects.all()
     return render(request, 'products/index.html', {'products': products, 'form': form})
 
 
 def new(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
-    form = ProductForm()
+    store = get_object_or_404(
+        Store,
+        id=store_id,
+    )
+    form = ProductForm(request.POST, request.FILES)
+    if request.POST:
+        if form.is_valid():
+            product = form.save()
+            print(product.image.url)
+            return redirect('products:show', product.id)
+    else:
+        form = ProductForm()
     return render(request, 'products/new.html', {'form': form, 'store': store})
 
 
@@ -50,3 +57,24 @@ def delete(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
     return redirect('products:index')
+
+
+# def upload_file(request):
+#     if request.method == 'POST' and request.FILES.get('file'):
+#         file = request.FILES['file']
+#         file_name = default_storage.save(f'uploads/{file.name}', file)
+#         file_url = default_storage.url(file_name)
+#         print('檔案網址：', file_url)
+#         return render(request, 'upload_success.html', {'file_url': file_url})
+#     return render(request, 'upload_form.html')
+
+
+def upload_image(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            # 儲存並上傳檔案到 S3
+            form.save()
+    else:
+        form = ProductForm()
+    return render(request, 'upload.html', {'form': form})
