@@ -1,15 +1,16 @@
 from functools import wraps
 
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from users.forms import UserForm
 
 from .forms import MemberForm
-from .models import Member
+from .models import Favorite, Member, Store
 
 
 def member_required(view_func):
@@ -119,7 +120,16 @@ def delete(request, id):
     user = request.user
 
     member.delete()
-    user.delete()
-    logout(request)
+    return redirect('members:index')
 
-    return redirect('users:sign_up')
+
+@require_POST
+def toggle_like(req, store_id):
+    member = req.user.member
+    store = get_object_or_404(Store, id=store_id)
+    favorite, created = Favorite.objects.get_or_create(member=member, store=store)
+
+    if not created:
+        favorite.delete()
+
+    return redirect('stores:index')

@@ -1,0 +1,11 @@
+{% for store in stores %}
+<p>{{ store.name }}</p>
+
+<form method="post" action="{% url 'members:toggle_like' store.id %}">
+  {% csrf_token %} {% if member in store.favorited_by.all %}
+  <button class="btn btn-sm btn-outline">已讚</button>
+  {% else %}
+  <button class="btn btn-sm btn-neutral">讚</button>
+  {% endif %}
+</form>
+{% endfor %}

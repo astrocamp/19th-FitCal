@@ -11,4 +11,5 @@ urlpatterns = [
     path('<uuid:id>/', views.show, name='show'),
     path('<uuid:id>/edit/', views.edit, name='edit'),
     path('<uuid:id>/delete/', views.delete, name='delete'),
+    path('favorite/<uuid:store_id>/', views.toggle_like, name='toggle_like'),
 ]
