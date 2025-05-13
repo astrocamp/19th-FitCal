@@ -21,7 +21,6 @@ def create_user(req):
         login(req, user)
         messages.success(req, '註冊成功已登入！')
         return redirect('pages:index')
-    messages.error(req, '帳號或密碼錯誤')
     return render(
         req,
         'users/sign_up.html',
