@@ -21,7 +21,7 @@ def store_factory():
 
 @pytest.fixture
 def product_factory():
-    return ProductFactory()
+    return ProductFactory
 
 
 @pytest.fixture
