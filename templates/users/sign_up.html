@@ -1,3 +1,4 @@
+{% extends "layouts/default.html" %} {% block main %}
 <h1>快速註冊</h1>
 <form method="post" action="{% url 'users:create_user' %}">
   {% csrf_token %}
@@ -15,3 +16,4 @@
 </form>
 
 <p>已經有帳號了嗎？<a href="{% url 'users:sign_in' %}">登入</a></p>
+{% endblock %}

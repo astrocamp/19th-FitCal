@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
@@ -18,6 +19,7 @@ def create_user(req):
     if userform.is_valid():
         user = userform.save()
         login(req, user)
+        messages.success(req, '已登入成功！')
         return redirect('pages:index')
     return render(
         req,
@@ -45,8 +47,10 @@ def create_session(req):
     )
     if user is not None:
         login(req, user)
+        messages.success(req, '登入成功！')
         return redirect('pages:index')
     else:
+        messages.error(req, '登入失敗，請檢查電子郵件或密碼是否正確')
         return redirect('users:sign_in')
 
 
@@ -54,4 +58,5 @@ def create_session(req):
 @require_POST
 def delete_session(req):
     logout(req)
+    messages.success(req, '已登出')
     return redirect('pages:index')
