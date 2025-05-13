@@ -17,6 +17,8 @@ dev = [
     "django-stubs>=5.2.0",
     "ruff>=0.11.8",
     "django-debug-toolbar>=5.2.0",
+    "pytest>=8.3.5",
+    "pytest-django>=4.11.1",
 ]
 
 # ruff設定
@@ -30,6 +32,7 @@ line-length = 88
 target-version = "py311"
 # 自動修復違規（包含格式與排序）
 fix = true
+unfixable = ["F401"]
 
 [tool.ruff.format]
 # 使用單引號
@@ -40,3 +43,7 @@ line-ending = "lf"
 [tool.ruff.isort]
 # 排序 import 時合併 as 語法
 combine-as-imports = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "fitcal.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
