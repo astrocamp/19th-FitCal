@@ -13,9 +13,7 @@ class MemberFactory(factory.django.DjangoModelFactory):
         model = Member
 
     id = factory.LazyFunction(uuid.uuid4)
-    phone_number = factory.LazyFunction(
-        lambda: fake.phone_number().replace('-', '')[:10].rjust(10, '0')
-    )
+    phone_number = '0912345678'
     gender = factory.Iterator(['male', 'female', 'other'])
     date_of_birth = factory.Faker('date_of_birth', minimum_age=18, maximum_age=60)
     line_id = factory.Faker('bothify', text='line_##??##')

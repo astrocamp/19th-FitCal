@@ -11,10 +11,7 @@ from tests.factories import (
 
 @pytest.fixture
 def member_factory():
-    def create_member(**kwargs):
-        return MemberFactory(**kwargs)
-
-    return create_member
+    return MemberFactory
 
 
 @pytest.fixture
