@@ -6,6 +6,7 @@ from tests.factories import (
     OrderFactory,
     ProductFactory,
     StoreFactory,
+    UserFactory,
 )
 
 
@@ -22,6 +23,11 @@ def store_factory():
 @pytest.fixture
 def product_factory():
     return ProductFactory
+
+
+@pytest.fixture
+def user_factory():
+    return UserFactory
 
 
 @pytest.fixture

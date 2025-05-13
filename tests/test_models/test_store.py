@@ -1,5 +1,5 @@
 import uuid
-from datetime import date, time
+from datetime import time
 
 import pytest
 from django.core.exceptions import ValidationError
