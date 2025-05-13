@@ -32,26 +32,10 @@ def user_factory():
 
 
 @pytest.fixture
-def order_factory(member_factory, store_factory):
-    def factory(**kwargs):
-        defaults = {
-            'member': member_factory(),
-            'store': store_factory(),
-        }
-        defaults.update(kwargs)
-        return OrderFactory(**defaults)
-
-    return factory
+def order_factory():
+    return OrderFactory
 
 
 @pytest.fixture
-def orderitem_factory(order_factory, product_factory):
-    def factory(**kwargs):
-        defaults = {
-            'order': order_factory(),
-            'product': product_factory(),
-        }
-        defaults.update(kwargs)
-        return OrderItemFactory(**defaults)
-
-    return factory
+def orderitem_factory():
+    return OrderItemFactory

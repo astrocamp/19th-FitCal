@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -90,3 +91,10 @@ class OrderItem(models.Model):
     def save(self, *args, **kwargs):
         self.subtotal = self.unit_price * self.quantity
         super().save(*args, **kwargs)
+
+    def clean(self):
+        expected_subtotal = self.unit_price * self.quantity
+        if self.subtotal != expected_subtotal:
+            raise ValidationError(
+                {'subtotal': 'Subtotal must equal unit_price × quantity'}
+            )
