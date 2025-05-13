@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from decimal import Decimal
 
 import factory
 from django.utils import timezone
@@ -22,7 +23,7 @@ class OrderFactory(factory.django.DjangoModelFactory):
     order_status = 'pending'
     payment_method = 'cash'
     payment_status = 'unpaid'
-    total_price = 1000
+    total_price = Decimal(1000)
     customize = {}
     created_at = factory.LazyFunction(datetime.now)
     updated_at = factory.LazyFunction(datetime.now)
@@ -36,6 +37,6 @@ class OrderItemFactory(factory.django.DjangoModelFactory):
     order = factory.SubFactory(OrderFactory)
     product = factory.SubFactory(ProductFactory)
     product_name = factory.Faker('word')
-    unit_price = 200
+    unit_price = Decimal(200)
     quantity = 1
     subtotal = factory.LazyAttribute(lambda obj: obj.unit_price * obj.quantity)

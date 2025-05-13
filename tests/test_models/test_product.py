@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 
 import pytest
 from django.core.exceptions import ValidationError
@@ -13,7 +14,7 @@ def test_product_factory_is_valid(product_factory):
 
 # Factory 欄位型別與格式檢查（包含必填欄位）
 @pytest.mark.django_db
-def test_product_creation(product_factory):
+def test_product_model_fields(product_factory):
     product = product_factory()
 
     assert isinstance(product.id, uuid.UUID), 'id 應為 UUID 類型'
