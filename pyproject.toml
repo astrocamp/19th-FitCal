@@ -34,7 +34,7 @@ line-length = 88
 target-version = "py311"
 # 自動修復違規（包含格式與排序）
 fix = true
-unfixable = ["F401"]
+# unfixable = ["F401"]
 
 [tool.ruff.format]
 # 使用單引號
