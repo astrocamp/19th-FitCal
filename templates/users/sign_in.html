@@ -1,20 +1,24 @@
 {% extends "layouts/default.html" %} {% load socialaccount %} {% block main %}
 
 <h1>登入頁面</h1>
-{% if error %}
-<p style="color: red">{{ error }}</p>
-<a href="{% url 'users:sign_up' %}">
-  <button type="button">前往註冊頁</button>
-</a>
-{% endif %}
+
 <form method="post" action="{% url 'users:create_session' %}">
-  {% csrf_token %}
+  {% csrf_token %} {% if error %}
+  <p style="color: red">{{ error }}</p>
+  {% endif %}
 
-  <label>帳號：</label>
-  <input type="text" name="email" required value="{{ email|default:'' }}" /><br />
+  <input type="hidden" name="role" value="{{ role }}" />
 
-  <label>密碼：</label>
-  <input type="password" name="password" required /><br />
+  <p>
+    <label for="email">電子郵件</label><br />
+    <input type="email" name="email" value="{{ email }}" />
+  </p>
+
+  <p>
+    <label for="password">密碼</label><br />
+    <input type="password" name="password" />
+  </p>
+
   <button type="submit">登入</button>
 </form>
 
@@ -30,3 +34,4 @@
   <button style="background-color: #00c300; color: white">使用 LINE 登入</button>
 </a>
 {% endblock %}
+<p>還沒有帳號？<a href="{% url 'users:select_role' %}">註冊新帳號</a></p>

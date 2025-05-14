@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>選擇角色</title>
+  </head>
+  <body>
+    <h1>請選擇您的身份</h1>
+
+    <a href="{% url 'users:sign_up' %}?role=store">
+      <h2>賣FitCal</h2>
+    </a>
+
+    <a href="{% url 'users:sign_up' %}?role=member">
+      <h2>買FitCal</h2>
+    </a>
+  </body>
+</html>

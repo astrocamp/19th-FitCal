@@ -2,28 +2,27 @@
 <h1>快速註冊</h1>
 <form method="post" action="{% url 'users:create_user' %}">
   {% csrf_token %}
+
+  <input type="hidden" name="role" value="{{ role }}">
+
+  {% if error %}
+    <p style="color:red;">{{ error }}</p>
+  {% endif %}
+
   {% for field in userform %}
     <p>
       {{ field.label_tag }}<br>
       {{ field }}
       {% if field.errors %}
-        <div>{{ field.errors }}</div>
+      <div style="color:red;">{{ field.errors }}</div>
       {% endif %}
     </p>
   {% endfor %}
 
-  <p>
-    <label>註冊身份：</label><br />
-    <select name="role" required>
-      <option value="">-- 請選擇 --</option>
-      <option value="member">會員</option>
-      <option value="store">店家</option>
-    </select>
-  </p>
+ 
 
 
   <button type="submit">註冊</button>
 </form>
 
-<p>已經有帳號了嗎？<a href="{% url 'users:sign_in' %}">登入</a></p>
-{% endblock %}
+<p>已經有帳號了嗎？<a href="{% url 'users:sign_in' %}?role={{ role }}">登入</a></p>
