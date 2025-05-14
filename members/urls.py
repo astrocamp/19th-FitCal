@@ -14,4 +14,5 @@ urlpatterns = [
     path('favorite/<uuid:store_id>', views.favorite, name='favorite'),
     path('favorite/', views.favorite_list, name='favorite_list'),
     path('store_list/', views.store_list, name='store_list'),
+    path('collections/', views.collections, name='collections'),
 ]
