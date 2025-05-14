@@ -48,13 +48,20 @@ def create_user(req):
     email = req.POST.get('email')
     User = get_user_model()
     if User.objects.filter(email=email).exists():
+        existing_user = User.objects.get(email=email)
+        role_info = ''
+        if hasattr(existing_user, 'store'):
+            role_info = '店家'
+        elif hasattr(existing_user, 'member'):
+            role_info = '會員'
+
         return render(
             req,
             'users/sign_up.html',
             {
                 'userform': userform,
                 'role': role,
-                'error': '此帳號已存在，請使用登入功能。',
+                'error': f'此帳號已被註冊為{role_info}，請使用{role_info}身份登入。',
             },
         )
 
