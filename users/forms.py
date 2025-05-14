@@ -35,11 +35,13 @@ class UserForm(UserCreationForm):
 
     def clean_email(self):
         raw_email = self.cleaned_data.get('email')
-
         try:
             # 更嚴格的 email 檢查（格式 + 可達性），並標準化
             valid = strict_validate_email(raw_email, check_deliverability=True)
             email = valid.email  # 自動轉小寫、去空格
         except EmailNotValidError:
             raise ValidationError('請輸入有效的電子郵件地址')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('這個 Email 已經被註冊過')
+
         return email
