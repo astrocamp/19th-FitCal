@@ -2,6 +2,8 @@ import uuid
 
 from django.db import models
 
+from stores.models import Store
+
 
 # Create your models here.
 class Product(models.Model):
@@ -12,3 +14,4 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
     customize = models.TextField(null=True, blank=True)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='products')

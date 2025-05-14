@@ -1,4 +1,5 @@
-<h1>編輯：{{ store.id }}</h1>
+{% extends 'layouts/default.html' %} {% block main %}
+<h1>編輯：{{ store.id }}的店家資料</h1>
 
 <form action="{% url 'stores:edit' store.id %}" method="post">
   {% csrf_token %} {% for field in form %}
@@ -19,3 +20,4 @@
 
 <a href="{% url 'stores:show' store.id %}">回上一頁</a>
 <a href="{% url 'stores:index' %}">回店家列表</a>
+{% endblock main %}

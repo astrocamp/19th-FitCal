@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
+from stores.models import Store
+
 from .forms import ProductForm
 from .models import Product
 
@@ -8,15 +10,24 @@ from .models import Product
 def index(request):
     if request.POST:
         form = ProductForm(request.POST)
-        product= form.save()
+        product = form.save()
         return redirect('products:show', product.id)
     products = Product.objects.all()
     return render(request, 'products/index.html', {'products': products})
 
 
-def new(request):
-    form = ProductForm()
-    return render(request, 'products/new.html', {'form': form})
+def new(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.store = store
+            product.save()
+            return redirect('stores:show', id=store.id)
+    else:
+        form = ProductForm()
+    return render(request, 'products/new.html', {'form': form, 'store': store})
 
 
 def show(request, id):
