@@ -5,7 +5,7 @@
 <h1>(建立訂單後，商品的庫存會減少，庫存不足會無法建立訂單)</h1>
 
 <form
-  action="{% url 'orders:create' %}"
+  action="{% url 'orders:index' %}"
   method="post"
   x-data="{ quantity: 1, unitPrice: {{ product.price }} }"
 >
