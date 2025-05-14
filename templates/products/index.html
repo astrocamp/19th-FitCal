@@ -1,8 +1,15 @@
-{% extends "layouts/default.html" %} {% block main %}
+{% extends 'layouts/default.html' %} {% block main%}
 <h2>商品首頁</h2>
 
+<!-- 新增商品按鈕 -->
+{% for store in stores %}
+<a href="{% url 'products:new' store.id %}">新增商品</a>
+{% endfor %}
+<!-- 產品列表 -->
 <ul>
   {% for product in products %}
+  <!-- prettier-ignore -->
+  {% include "shares/collections_btn.html" with product=product member=member %}
   <li>
     <a href="{% url 'products:show' product.id %}">
       <section>
@@ -18,12 +25,12 @@
         <h3>可販售數量：{{ product.quantity }}</h3>
         <h3>價格：{{ product.price }}</h3>
         <h3>客製化：{{ product.customize }}</h3>
-      </section> </a
-    >3
+      </section>
+    </a>
   </li>
   {% empty %}
-  <li>目前沒有商品</li>
+  <li>目前沒有產品</li>
   {% endfor %}
 </ul>
-
-{% endblock main %}
+<a href="{% url 'members:collections' %}">查看收藏❤️</a>
+{% endblock %}

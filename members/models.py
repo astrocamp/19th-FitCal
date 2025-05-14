@@ -2,7 +2,9 @@ import uuid
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import UniqueConstraint
 
+from products.models import Product
 from stores.models import Store
 from users.models import User
 
@@ -33,6 +35,11 @@ class Member(models.Model):
     ordered_stores = models.ManyToManyField(
         Store, through='orders.Order', related_name='ordering_members'
     )
+    favorite_products = models.ManyToManyField(
+        Product,
+        through='Collection',  # 使用中介表
+        related_name='favorited_by',  # 反向關聯名稱，讓 product.favorited_by.all() 可用
+    )
 
 
 class Favorite(models.Model):
@@ -47,3 +54,17 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'{self.member.name} 收藏了 {self.store.name}'
+
+
+class Collection(models.Model):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    collected_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['member', 'product'], name='unique_member_product')
+        ]
+
+    def __str__(self):
+        return f'{self.member} 收藏了 {self.product}'

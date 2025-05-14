@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
+from members.models import Member
 from stores.models import Store
 
 from .forms import ProductForm
@@ -20,7 +21,12 @@ def index(request):
     else:
         form = ProductForm()
     products = Product.objects.all()
-    return render(request, 'products/index.html', {'products': products, 'form': form})
+    members = Member.objects.all()
+    return render(
+        request,
+        'products/index.html',
+        {'products': products, 'form': form, 'members': members},
+    )
 
 
 def new(request, store_id):

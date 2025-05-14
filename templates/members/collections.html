@@ -1,0 +1,15 @@
+<h2>{{ member.name }} 的收藏列表</h2>
+
+<h3>已收藏的產品</h3>
+<ul>
+    {% for collection in collections %}
+        <li>
+            {{ collection.product.name }} - {{ collection.product.price }}
+            {% comment %} <a href="{% url 'members:remove_collection' collection.id %}">移除</a>  {% endcomment %}
+        </li>
+    {% empty %}
+        <li>尚未收藏任何產品</li>
+    {% endfor %}
+</ul>
+
+ 

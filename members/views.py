@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from users.forms import UserForm
 
 from .forms import MemberForm
-from .models import Member, Store
+from .models import Collection, Member, Store
 
 
 def member_required(view_func):
@@ -157,3 +157,16 @@ def store_list(req):
     stores = Store.objects.all()
     member = req.user.member
     return render(req, 'members/store_list.html', {'stores': stores, 'member': member})
+
+
+def collections(request):
+    members = Member.objects.all()
+    collections = Collection.objects.all()
+    return render(
+        request,
+        'members/collections.html',
+        {
+            'members': members,
+            'collections': collections,
+        },
+    )
