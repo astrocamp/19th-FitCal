@@ -1,7 +1,7 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>編輯：{{ store.id }}的店家資料</h1>
 
-<form action="{% url 'stores:edit' store.id %}" method="post">
+<form action="{% url 'stores:show' store.id %}" method="post">
   {% csrf_token %} {% for field in form %}
   <div>
     {{ field.label_tag }} {{ field }} {% if field.errors %}

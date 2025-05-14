@@ -3,6 +3,7 @@ import uuid
 import factory
 
 from stores.models import Store
+from tests.helpers import generate_tax_id
 
 
 class StoreFactory(factory.django.DjangoModelFactory):
@@ -14,4 +15,4 @@ class StoreFactory(factory.django.DjangoModelFactory):
     phone_number = '0912345678'
     opening_time = factory.Faker('time_object')
     closing_time = factory.Faker('time_object')
-    tax_id = factory.Faker('bothify', text='########')  # 8位數字
+    tax_id = factory.LazyFunction(generate_tax_id)

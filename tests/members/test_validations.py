@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from tests.constants import *
+from tests.constants import INVALID_GENDER_MSG, INVALID_PHONE_MSG
 from tests.helpers import assert_validation_errors
 
 

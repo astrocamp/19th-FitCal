@@ -1,3 +1,5 @@
+import random
+
 import pytest
 from django.core.exceptions import ValidationError
 
@@ -49,3 +51,36 @@ def assert_validation_errors(instance, expected_messages):
 #     assert 'form' in response.context
 #     assert response.context['form'].errors
 #     assert model_class.objects.count() == 0
+
+
+def validate_tax_id(tax_id):
+    if not tax_id.isdigit() or len(tax_id) != 8:
+        return False
+
+    weights = [1, 2, 1, 2, 1, 2, 4, 1]
+    total = 0
+
+    for i in range(8):
+        products = int(tax_id[i]) * weights[i]
+        if products >= 10:
+            products = (products // 10) + (products % 10)
+        total += products
+
+    # 特例：第七碼是 7 時
+    if total % 10 == 0:
+        return True
+    elif tax_id[6] == '7' and (total + 1) % 10 == 0:
+        return True
+    else:
+        return False
+
+
+def generate_tax_id():
+    # 隨機生成8位數字
+    tax_id = ''.join(str(random.randint(0, 9)) for _ in range(8))
+
+    # 使用台灣統一編號檢查碼演算法來檢查是否有效
+    while not validate_tax_id(tax_id):
+        tax_id = ''.join(str(random.randint(0, 9)) for _ in range(8))
+
+    return tax_id
