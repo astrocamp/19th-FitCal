@@ -1,0 +1,15 @@
+<h1>{{ member.name }} 收藏的店家</h1>
+
+<ul>
+  {% for store in favorites %}
+  <li>
+    <p>店家名稱：{{ store.name }}</p>
+    <p>地址：{{ store.address }}</p>
+    <p>電話：{{ store.phone_number }}</p>
+  </li>
+  {% empty %}
+  <li>目前尚未收藏任何店家。</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'stores:index' %}">← 回到店家列表</a>

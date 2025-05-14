@@ -125,11 +125,28 @@ def delete(request, id):
 
 @require_POST
 def toggle_like(req, store_id):
-    member = req.user.member
+    # member = req.user.member正常從user註冊為member的找法
+    member = Member.objects.first()  # 暫時按讚都先用第一個會員來執行
     store = get_object_or_404(Store, id=store_id)
-    favorite, created = Favorite.objects.get_or_create(member=member, store=store)
+    favorite, create = Favorite.objects.get_or_create(member=member, store=store)
 
-    if not created:
+    if not create:
         favorite.delete()
-
     return redirect('stores:index')
+    # return redirect(reverse('stores:index'))
+    # return render(req, 'members/index.html', {'member': member, 'store': store})
+
+
+def favorite_list(req):
+    # member = req.user.member
+    member = Member.objects.first()  # 都暫時先用第一位會員測試
+    favorites = member.favorite.all()  # 拿到所有被收藏的店家
+
+    return render(
+        req,
+        'members/favorite.html',
+        {
+            'member': member,
+            'favorites': favorites,
+        },
+    )
