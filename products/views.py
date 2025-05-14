@@ -31,7 +31,6 @@ def new(request, store_id):
     if request.POST:
         if form.is_valid():
             product = form.save()
-            print(product.image.url)
             return redirect('products:show', product.id)
     else:
         form = ProductForm()
@@ -57,24 +56,3 @@ def delete(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
     return redirect('products:index')
-
-
-# def upload_file(request):
-#     if request.method == 'POST' and request.FILES.get('file'):
-#         file = request.FILES['file']
-#         file_name = default_storage.save(f'uploads/{file.name}', file)
-#         file_url = default_storage.url(file_name)
-#         print('檔案網址：', file_url)
-#         return render(request, 'upload_success.html', {'file_url': file_url})
-#     return render(request, 'upload_form.html')
-
-
-def upload_image(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            # 儲存並上傳檔案到 S3
-            form.save()
-    else:
-        form = ProductForm()
-    return render(request, 'upload.html', {'form': form})

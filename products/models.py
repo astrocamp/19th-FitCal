@@ -8,12 +8,6 @@ from stores.models import Store
 # Create your models here.
 
 
-def product_image_upload_path(instance, filename):
-    # instance 是 Product model 的物件
-    # 將圖片存到 products/<product_id>/<filename>
-    return f'products/{instance.id}/{filename}'
-
-
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     name = models.CharField(max_length=100)

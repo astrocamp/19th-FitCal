@@ -1,2 +1,20 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上傳圖片</title>
+</head>
+<body>
+    <h1>上傳圖片到 S3</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">上傳</button>
+    </form>
+</body>
+</html>
+
+
 <p>檔案上傳成功！</p>
 <a href="{{ file_url }}" target="_blank">檢視檔案</a>
