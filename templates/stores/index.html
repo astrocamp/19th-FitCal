@@ -6,7 +6,7 @@
 <ul>
   {% for store in stores %}
   <li>
-    {% include "shares/favorite_btn.html" %}
+    {% include "shares/favorite_btn.html" with store=store member=member %}
     <a href="{% url 'stores:show' store.id %}">
       <section>
         <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
@@ -20,3 +20,5 @@
   </li>
   {% endfor %}
 </ul>
+
+<a href="{% url 'members:favorite_list' %}">我要看我按讚的所有商家</a>
