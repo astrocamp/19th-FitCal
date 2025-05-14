@@ -17,29 +17,30 @@ def test_member_index_get_view(client, member_factory):
 
 @pytest.mark.django_db
 def test_member_index_post_valid(client):
-    url = reverse('members:index')
-    data = {
+    valid_data = {
         'phone_number': '0912345678',
         'gender': 'male',
         'date_of_birth': '1990-01-01',
     }
-    response = client.post(url, data)
+    url = reverse('members:index')
+    response = client.post(url, data=valid_data)
 
-    assert response.status_code == 302  # Redirect
+    assert response.status_code == 302  # redirect after successful post
     assert Member.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_member_index_post_invalid(client):
-    url = reverse('members:index')
-    data = {
+    invalid_data = {
         'phone_number': 'invalid',  # 格式錯誤
         'gender': 'invalid',
         'date_of_birth': '1990-01-01',
     }
-    response = client.post(url, data)
+    url = reverse('members:index')
+    response = client.post(url, data=invalid_data)
 
-    assert response.status_code == 200  # 回到 form 頁面
+    # 表單無效時應回傳 200，並重渲染頁面
+    assert response.status_code == 200
     assert 'form' in response.context
     assert response.context['form'].errors
     assert Member.objects.count() == 0
