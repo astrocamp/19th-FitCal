@@ -11,6 +11,6 @@ urlpatterns = [
     path('<uuid:id>/', views.show, name='show'),
     path('<uuid:id>/edit/', views.edit, name='edit'),
     path('<uuid:id>/delete/', views.delete, name='delete'),
+    path('favorite/<uuid:store_id>', views.favorite, name='favorite'),
     path('favorite/', views.favorite_list, name='favorite_list'),
-    path('favorite/<uuid:store_id>/', views.toggle_like, name='toggle_like'),
 ]

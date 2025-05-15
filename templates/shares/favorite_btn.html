@@ -1,7 +1,17 @@
-<form method="post" action="{% url 'members:toggle_like' store.id %}">
-  {% csrf_token %} {% if member.first in store.favorited_by.all %}
-  <button class="btn btn-sm btn-outline">已讚</button>
-  {% else %}
-  <button class="btn btn-sm btn-neutral">讚</button>
-  {% endif %}
-</form>
+{% if member in store.favorited_by.all %}
+<button
+  hx-swap="outerHTML"
+  hx-post="{% url 'members:favorite' store.id %}"
+  class="btn btn-sm btn-outline"
+>
+  已讚
+</button>
+{% else %}
+<button
+  hx-swap="outerHTML"
+  hx-post="{% url 'members:favorite' store.id %}"
+  class="btn btn-sm btn-neutral"
+>
+  讚
+</button>
+{% endif %}

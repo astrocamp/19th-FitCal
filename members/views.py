@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from users.forms import UserForm
 
 from .forms import MemberForm
-from .models import Favorite, Member, Store
+from .models import Member, Store
 
 
 def member_required(view_func):
@@ -124,17 +124,18 @@ def delete(request, id):
 
 
 @require_POST
-def toggle_like(req, store_id):
+def favorite(req, store_id):
     # member = req.user.member正常從user註冊為member的找法
     member = Member.objects.first()  # 暫時按讚都先用第一個會員來執行
-    store = get_object_or_404(Store, id=store_id)
-    favorite, create = Favorite.objects.get_or_create(member=member, store=store)
 
-    if not create:
-        favorite.delete()
-    return redirect('stores:index')
-    # return redirect(reverse('stores:index'))
-    # return render(req, 'members/index.html', {'member': member, 'store': store})
+    favorites = member.favorite
+    store = get_object_or_404(Store, id=store_id)
+
+    if favorites.filter(pk=store.pk).exists():
+        favorites.remove(store)
+    else:
+        favorites.add(store)
+    return render(req, 'shares/favorite_btn.html', {'member': member, 'store': store})
 
 
 def favorite_list(req):
