@@ -17,7 +17,11 @@ def sign_up(req):
 def create_user(req):
     userform = UserForm(req.POST)
     if userform.is_valid():
-        user = userform.save()
+        userform.save()
+        user = authenticate(
+            email=userform.cleaned_data['email'],
+            password=userform.cleaned_data['password2'],
+        )
         login(req, user)
         messages.success(req, '註冊成功已登入！')
         return redirect('pages:index')
