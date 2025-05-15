@@ -67,28 +67,31 @@ def create_user(req):
 
     # 驗證表單是否合法
     if userform.is_valid():
-        user = userform.save()
+        email = userform.cleaned_data.get('email')
+        User = get_user_model()
 
-        # 防止同帳號有多個身分
-        if hasattr(user, 'store') or hasattr(user, 'member'):
+        if User.objects.filter(email=email).exists():
+            existing_user = User.objects.get(email=email)
+            if hasattr(existing_user, 'store'):
+                role_info = '店家'
+            elif hasattr(existing_user, 'member'):
+                role_info = '會員'
+            else:
+                role_info = '未知身份'
+
             return render(
                 req,
                 'users/sign_up.html',
                 {
                     'userform': userform,
                     'role': role,
-                    'error': '該帳號已經擁有會員或店家身份。',
+                    'error': f'此帳號已被註冊為{role_info}，請使用{role_info}身份登入。',
                 },
             )
 
-        # 登入帳號
-        user = authenticate(
-            email=userform.cleaned_data['email'],
-            password=userform.cleaned_data['password2'],
-        )
+        user = userform.save()
         login(req, user)
 
-        # 根據角色建立資料
         if role == 'member':
             Member.objects.create(user=user, name=user.email)
             return redirect('members:new')
@@ -103,7 +106,6 @@ def create_user(req):
         {
             'userform': userform,
             'role': role,
-            'error': '註冊失敗，請確認所有欄位是否正確填寫。',
         },
     )
 

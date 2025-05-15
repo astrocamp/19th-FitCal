@@ -3,7 +3,9 @@
 <form method="POST" action="{% url 'members:edit' member.id %}">
   {% csrf_token %} {% for field in form %}
   <div>
-    {{ field.label_tag }} {{ field }} {% if field.errors %}
+    {{ field.label_tag }} {{ field }} {% if field.help_text %}
+    <div style="color: gray">{{ field.help_text }}</div>
+    {% endif %} {% if field.errors %}
     <div style="color: red">
       {% for error in field.errors %}
       <p>{{ error }}</p>
@@ -14,7 +16,7 @@
   {% endfor %}
   <div>
     <button type="submit">更新</button>
-    <button><a href="{% url 'members:show' member.id %}">取消</a></button>
+    <a href="{% url 'members:show' member.id %}"><button type="button">取消</button></a>
   </div>
 </form>
 {% endblock main %}

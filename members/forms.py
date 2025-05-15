@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.core.exceptions import ValidationError
-from django.forms import DateInput, HiddenInput, ModelForm, TextInput
+from django.forms import DateInput, ModelForm, TextInput
 
 from .models import Member
 
@@ -26,7 +26,6 @@ class MemberForm(ModelForm):
             'google_id': 'Google ID',
         }
         widgets = {
-            'user': HiddenInput(),
             'phone_number': TextInput(attrs={'type': 'tel'}),
             'date_of_birth': DateInput(
                 attrs={
@@ -53,6 +52,7 @@ class MemberForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.is_create = kwargs.pop('is_create', False)
         super().__init__(*args, **kwargs)
 
         self.fields['name'].required = True
@@ -64,8 +64,22 @@ class MemberForm(ModelForm):
         self.fields['line_id'].required = False
         self.fields['google_id'].required = False
 
+        if not self.is_create:
+            self.fields['date_of_birth'].widget.attrs['readonly'] = True
+            self.fields['date_of_birth'].help_text = '此欄位僅供查看，無法修改。'
+
     def clean_date_of_birth(self):
         birthday = self.cleaned_data.get('date_of_birth')
-        if birthday > date.today():
-            raise ValidationError('生日不能是未來的日期')
+
+        if self.is_create:
+            if not birthday:
+                raise ValidationError('請輸入生日')
+            if birthday > date.today():
+                raise ValidationError('生日不能是未來的日期')
+            return birthday
+
+        if self.instance and self.instance.pk:
+            if self.instance.date_of_birth and birthday != self.instance.date_of_birth:
+                raise ValidationError('生日不可修改')
+
         return birthday

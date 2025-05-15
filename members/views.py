@@ -14,11 +14,11 @@ def index(request):
         member = None
 
     if request.method == 'POST':
-        form = MemberForm(request.POST, instance=member)
+        form = MemberForm(request.POST, instance=member, is_create=not bool(member))
         if form.is_valid():
             member = form.save(commit=False)
             member.user = request.user
-            member = form.save()
+            member.save()
             return redirect('members:show', member.id)
         else:
             return render(request, 'members/new.html', {'form': form})
@@ -26,13 +26,13 @@ def index(request):
         if member:
             return render(request, 'members/index.html', {'member': member})
         else:
-            form = MemberForm()
+            form = MemberForm(is_create=True)
             return render(request, 'members/new.html', {'form': form})
 
 
 @login_required
 def new(request):
-    form = MemberForm()
+    form = MemberForm(is_create=True)
     return render(request, 'members/new.html', {'form': form})
 
 

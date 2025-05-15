@@ -46,6 +46,5 @@ class UserForm(UserCreationForm):
         except EmailNotValidError:
             raise ValidationError('請輸入有效的電子郵件地址')
         if User.objects.filter(email=email).exists():
-            raise ValidationError('這個 Email 已經被註冊過')
-
+            raise ValidationError('此電子郵件已被註冊，請直接登入或使用其他信箱。')
         return email
