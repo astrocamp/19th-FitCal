@@ -19,7 +19,7 @@ def test_sign_up_view_get(client):
 @pytest.mark.django_db
 def test_create_user_valid(client):
     valid_data = {
-        'email': 'test@example.com',
+        'email': 'test@gmail.com',
         'password1': 'StrongPass1357',
         'password2': 'StrongPass1357',
     }
@@ -28,7 +28,7 @@ def test_create_user_valid(client):
 
     assert response.status_code == 302
     assert response.url == reverse('pages:index')
-    assert User.objects.filter(email='test@example.com').exists()
+    assert User.objects.filter(email='test@gmail.com').exists()
 
 
 @pytest.mark.django_db

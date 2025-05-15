@@ -3,9 +3,11 @@ from decimal import Decimal
 
 import pytest
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.timezone import localtime, make_aware
 
 from orders.models import Order, OrderItem
+from orders.utils import next_10min
 
 
 @pytest.mark.django_db
@@ -23,8 +25,10 @@ def test_order_index_get_view(client, order_factory):
 def test_order_index_post_valid(client, product_factory):
     product = product_factory(name='雞肉餐盒', quantity=10, price=Decimal('150'))
 
+    pickup_time = next_10min(timezone.localtime(timezone.now()))
+
     data = {
-        'pickup_time': '2025-05-15T12:00',
+        'pickup_time': pickup_time,
         'note': '請加辣',
         'product_id': str(product.id),
         'quantity': '2',
