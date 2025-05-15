@@ -1,7 +1,7 @@
 {% extends "layouts/default.html" %} {% block main %}
 <h2>編輯</h2>
 
-<form action="{%  url 'products:show' product.id  %}" method="post">
+<form action="{%  url 'products:show' product.id  %}" method="post" enctype="multipart/form-data">
   {% csrf_token %} {% for field in form %}
   <div>{{ field.label_tag }} {{ field }}</div>
   {% endfor %}
