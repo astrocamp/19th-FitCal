@@ -1,9 +1,13 @@
-from django import forms
 from django.forms import ModelForm
+from django.forms.widgets import ClearableFileInput
 
 from .models import Product
 
 
+class NoLabelClearableFileInput(ClearableFileInput):
+    initial_text = '目前檔案'
+    input_text = '更新檔案'
+    clear_checkbox_label = ''
 
 
 class ProductForm(ModelForm):
@@ -26,4 +30,7 @@ class ProductForm(ModelForm):
             'quantity': '可販售數量',
             'price': '價格',
             'customize': '客製化',
+        }
+        widgets = {
+            'image': NoLabelClearableFileInput,
         }

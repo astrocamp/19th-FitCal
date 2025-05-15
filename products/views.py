@@ -6,6 +6,7 @@ from .forms import ProductForm
 from .models import Product
 
 
+# Create your views here.
 def index(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
@@ -40,9 +41,10 @@ def new(request, store_id):
 def show(request, id):
     product = get_object_or_404(Product, pk=id)
     if request.POST:
-        form = ProductForm(request.POST, instance=product)
-        form.save()
-        return redirect('products:show', product.id)
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('products:show', product.id)
     return render(request, 'products/show.html', {'product': product})
 
 

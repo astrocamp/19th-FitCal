@@ -11,7 +11,11 @@ from stores.models import Store
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='products/', null=True, blank=True)
+    image = models.ImageField(
+        upload_to='products/',
+        null=False,
+        blank=False,
+    )
     description = models.TextField()
     calories = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
