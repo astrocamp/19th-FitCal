@@ -7,6 +7,7 @@ from stores.models import Store
 
 from .forms import CartForm, EditCartItemFormSet, NewCartItemFormSet
 from .models import Cart, CartItem
+from .utils import add_to_cart
 
 
 # 這裏是後續以member關聯的購物車的相關功能
@@ -48,44 +49,18 @@ def index(req):
         cart_form = CartForm(req.POST)
         formset = NewCartItemFormSet(req.POST)
         if cart_form.is_valid() and formset.is_valid():
-            store = cart_form.cleaned_data['store']
-
-            # 檢查是否已有相同 member 與 store 的 cart
-            cart, created = Cart.objects.get_or_create(
-                member=member,
-                store=store,
-                defaults={
-                    'note': cart_form.cleaned_data.get('note', ''),
-                    'total_price': cart_form.cleaned_data.get('total_price', 0),
+            add_to_cart(member, cart_form, formset)
+            return redirect('carts:index')
+        else:
+            return render(
+                req,
+                'carts/new.html',
+                {
+                    'cart_form': cart_form,
+                    'formset': formset,
+                    'stores': stores,
                 },
             )
-
-            if not created:
-                # 若是已存在的 cart，更新欄位（視情況而定）
-                cart.note = cart_form.cleaned_data.get('note', '')
-                cart.total_price = cart_form.cleaned_data.get('total_price', 0)
-                cart.save()
-
-                # 手動儲存每個 form
-            for form in formset:
-                if form.cleaned_data:
-                    product = form.cleaned_data['product']
-                    quantity = form.cleaned_data['quantity']
-                    customize = form.cleaned_data.get('customize', '')
-
-                    # 嘗試找出是否已有相同 product 的項目
-                    item, created = CartItem.objects.get_or_create(
-                        cart=cart,
-                        product=product,
-                        defaults={'quantity': quantity, 'customize': customize},
-                    )
-                    if not created:
-                        # 如果已存在，就加上數量（或視需求改為覆蓋）
-                        item.quantity += quantity
-                        item.customize = customize  # 可視情況合併或取代
-                        item.save()
-
-            return redirect('carts:index')
     return render(
         req, 'carts/index.html', {'carts': carts, 'stores': stores, 'member': member}
     )
@@ -110,13 +85,25 @@ def show(req, id):
     cart = get_object_or_404(Cart, id=id)
     # cart_item = CartItem.objects.filter(cart=cart)
     # carts = Cart.objects.filter(member=req.user)
-    cart_item = CartItem.objects.filter(cart__member=member).filter(cart=cart)
-
     if req.method == 'POST':
         formset = EditCartItemFormSet(req.POST, instance=cart)
         if formset.is_valid():
-            formset.save()
-            return redirect('carts:show', id=cart.id)
+            for form in formset:
+                if form.cleaned_data:
+                    form.save()
+        else:
+            return render(
+                req,
+                'carts/edit.html',
+                {
+                    'cart_form': CartForm(instance=cart),
+                    'formset': formset,
+                    'id': id,
+                },
+            )
+    if cart.items.count() == 0:
+        return delete_cart(req, id)
+    cart_item = CartItem.objects.filter(cart__member=member, cart=cart)
     return render(
         req,
         'carts/show.html',
@@ -146,10 +133,11 @@ def delete_cart(req, id):
     return redirect('carts:index')
 
 
-def delete_item(req, id):
+def delete_item(req, id, from_show=False):
     cart_item = get_object_or_404(CartItem, id=id)
+    cart = cart_item.cart
     cart_item.delete()
-    if cart_item.cart.items.count() == 0:
-        cart_item.cart.delete()
+    if cart.items.count() == 0:
+        cart.delete()
         return redirect('carts:index')
     return redirect('carts:show', id=cart_item.cart.id)

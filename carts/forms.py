@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import IntegerField, ModelForm, NumberInput, inlineformset_factory
 
 from .models import Cart, CartItem
 
@@ -15,6 +15,15 @@ class CartForm(ModelForm):
 
 
 class CartItemForm(ModelForm):
+    quantity = IntegerField(
+        min_value=1,
+        widget=NumberInput(attrs={'min': 1, 'step': 1}),
+        error_messages={
+            'min_value': '數量不能小於 1',
+            'invalid': '請輸入正整數',
+        },
+    )
+
     class Meta:
         model = CartItem
         fields = ['product', 'quantity', 'customize']
@@ -28,6 +37,7 @@ class CartItemForm(ModelForm):
 NewCartItemFormSet = inlineformset_factory(
     Cart,
     CartItem,
+    form=CartItemForm,
     fields=['product', 'quantity', 'customize'],
     can_delete=False,
     extra=1,  # 顯示一筆空白表單
@@ -36,6 +46,7 @@ NewCartItemFormSet = inlineformset_factory(
 EditCartItemFormSet = inlineformset_factory(
     Cart,
     CartItem,
+    form=CartItemForm,
     fields=['product', 'quantity', 'customize'],
     can_delete=False,
     extra=0,
