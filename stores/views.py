@@ -19,7 +19,8 @@ def index(req):
 
 
 def new(req):
-    form = StoreForm()
+    # todo:先提供一個預設值方便測試，上線前移除
+    form = StoreForm(initial={'tax_id': '22099131'})
     return render(req, 'stores/new.html', {'form': form})
 
 
