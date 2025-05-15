@@ -27,7 +27,6 @@ class Member(models.Model):
     google_id = models.CharField(max_length=64, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    store = models.OneToOneField(Store, on_delete=models.CASCADE, null=True)
     favorite = models.ManyToManyField(
         Store, through='Favorite', related_name='favorited_by'
     )

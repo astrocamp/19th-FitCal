@@ -5,10 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FitCal</title>
+
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
   </head>
-  <body>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include 'shared/messages.html' %}
     <h1 class="bg-amber-500 text-gray-700">這裏是模板</h1>
     <h2 class="text-blue-500 text-right">user id: {{user.id}}</h2>
