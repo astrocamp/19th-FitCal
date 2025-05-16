@@ -47,7 +47,7 @@ def create_user(req):
 
     if userform.is_valid():
         user = userform.save()
-        # user.backend = 'django.contrib.auth.backends.ModelBackend'
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(req, user)
 
         if role == 'member':

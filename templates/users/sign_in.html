@@ -22,6 +22,9 @@
   <button type="submit">登入</button>
 </form>
 
+<p>還沒有帳號？<a href="{% url 'users:select_role' %}">註冊新帳號</a></p>
+<p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
+
 <hr />
 
 <h3>使用第三方登入</h3>
@@ -33,8 +36,5 @@
 <a href="{% provider_login_url 'line' %}">
   <button style="background-color: #00c300; color: white">使用 LINE 登入</button>
 </a>
-
-<p>還沒有帳號？<a href="{% url 'users:select_role' %}">註冊新帳號</a></p>
-<p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
 
 {% endblock main %}
