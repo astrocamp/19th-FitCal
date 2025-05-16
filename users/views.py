@@ -1,9 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
 from members.models import Member
+from stores.models import Store
 
 from .forms import UserForm
 
@@ -44,52 +45,9 @@ def create_user(req):
             },
         )
 
-    # 檢查 email 是否已存在
-    email = req.POST.get('email')
-    User = get_user_model()
-    if User.objects.filter(email=email).exists():
-        existing_user = User.objects.get(email=email)
-        role_info = ''
-        if hasattr(existing_user, 'store'):
-            role_info = '店家'
-        elif hasattr(existing_user, 'member'):
-            role_info = '會員'
-
-        return render(
-            req,
-            'users/sign_up.html',
-            {
-                'userform': userform,
-                'role': role,
-                'error': f'此帳號已被註冊為{role_info}，請使用{role_info}身份登入。',
-            },
-        )
-
-    # 驗證表單是否合法
     if userform.is_valid():
-        email = userform.cleaned_data.get('email')
-        User = get_user_model()
-
-        if User.objects.filter(email=email).exists():
-            existing_user = User.objects.get(email=email)
-            if hasattr(existing_user, 'store'):
-                role_info = '店家'
-            elif hasattr(existing_user, 'member'):
-                role_info = '會員'
-            else:
-                role_info = '未知身份'
-
-            return render(
-                req,
-                'users/sign_up.html',
-                {
-                    'userform': userform,
-                    'role': role,
-                    'error': f'此帳號已被註冊為{role_info}，請使用{role_info}身份登入。',
-                },
-            )
-
         user = userform.save()
+        # user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(req, user)
 
         if role == 'member':
@@ -150,21 +108,31 @@ def create_session(req):
         login(req, user)
 
         try:
-            messages.success(req, '登入成功！')
-            return redirect('stores:show', user.store.id)
+            store = user.store
+            messages.success(req, '店家登入成功！')
+            return redirect('stores:show', store.id)
         except Store.DoesNotExist:
-            messages.success(req, '登入成功！')
-            return redirect('members:show', user.member.id)
+            try:
+                member = user.member
+                messages.success(req, '會員登入成功！')
+                return redirect('members:show', member.id)
+            except Member.DoesNotExist:
+                # 沒有任何角色，刪除帳號並登出
+                messages.warning(req, '登入成功，但無對應角色資料，請重新註冊。')
+                user.delete()
+                logout(req)
+                return redirect('users:select_role')
 
-    return render(
-        req,
-        'users/sign_in.html',
-        {
-            'error': '帳號或密碼錯誤，請再試一次。',
-            'email': email,
-            'role': role,
-        },
-    )
+    else:
+        return render(
+            req,
+            'users/sign_in.html',
+            {
+                'error': '帳號或密碼錯誤，請再試一次。',
+                'email': email,
+                'role': role,
+            },
+        )
 
 
 # 處理登出 (POST)
@@ -172,4 +140,4 @@ def create_session(req):
 def delete_session(req):
     logout(req)
     messages.success(req, '已登出！')
-    return redirect('pages:index')
+    return redirect('users:select_role')

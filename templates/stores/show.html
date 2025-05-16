@@ -29,6 +29,13 @@
   <button type="submit">刪除帳號與店家</button>
 </form>
 
+{% if request.user.is_authenticated %}
+<form method="POST" action="{% url 'users:delete_session' %}" style="margin-top: 1rem">
+  {% csrf_token %}
+  <button type="submit">登出</button>
+</form>
+{% endif %}
+
 <a href="{% url 'stores:edit' store.id %}">編輯</a>
 <a href="{% url 'stores:index' %}">回上一頁</a>
 <a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a>

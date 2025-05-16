@@ -1,5 +1,6 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>快速註冊</h1>
+<p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
 <form method="post" action="{% url 'users:create_user' %}">
   {% csrf_token %}
 
@@ -25,5 +26,11 @@
   <button type="submit">註冊</button>
 </form>
 
-<p>已經有帳號了嗎？<a href="{% url 'users:sign_in' %}?role={{ role }}">登入</a></p>
-<p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
+{% if request.user.is_authenticated %}
+  <form method="POST" action="{% url 'users:delete_session' %}" style="margin-top: 1rem;">
+    {% csrf_token %}
+    <button type="submit">登出</button>
+  </form>
+{% endif %}
+
+{% endblock %}

@@ -7,7 +7,7 @@ app_name = 'fitcal'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
-    path('', include('pages.urls', namespace='pages')),
+    path('', include('users.urls', namespace='users')),
     path('users/', include('users.urls', namespace='users')),
     path('members/', include('members.urls', namespace='members')),
     path('orders/', include('orders.urls', namespace='orders')),
