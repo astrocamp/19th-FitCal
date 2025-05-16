@@ -1,3 +1,4 @@
+{% extends "layouts/default.html" %} {% block main %}
 <h2>編輯</h2>
 
 <form action="{%  url 'products:show' product.id  %}" method="post">
@@ -9,3 +10,5 @@
   <a href="{% url 'products:show' product.id %}">回商品頁面</a>
   <input type="submit" value="更新資料" />
 </form>
+
+{% endblock main %}

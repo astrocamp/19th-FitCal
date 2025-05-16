@@ -1,3 +1,4 @@
+{% extends 'layouts/default.html' %} {% block main %}
 <h1>建立訂單</h1>
 
 <form action="{% url 'orders:create' %}" method="post">
@@ -14,3 +15,4 @@
 
   <button type="submit">提交訂單</button>
 </form>
+{% endblock main %}

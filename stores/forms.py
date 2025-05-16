@@ -85,7 +85,7 @@ class StoreForm(ModelForm):
                 attrs={
                     'pattern': r'\d{8}',
                     'title': '必須為8位數字的有效統編',
-                    'placeholder': '格式範例：12345678',
+                    'placeholder': '格式範例：83598406',
                     'required': 'required',
                 }
             ),

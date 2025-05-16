@@ -1,3 +1,4 @@
+{% extends "layouts/default.html" %} {% block main %}
 <h3>為「{{ store.id }}」新增商品</h3>
 
 <a href="{% url 'products:index' %}">回商品首頁</a>
@@ -18,3 +19,5 @@
     <input type="submit" value="新增商品" />
   </div>
 </form>
+
+{% endblock main %}

@@ -3,11 +3,8 @@ import uuid
 from django.core.validators import RegexValidator
 from django.db import models
 
-<<<<<<< HEAD
 from stores.models import Store
-=======
 from users.models import User
->>>>>>> 4385fbb (feat: Add one-to-one relations: users-members, users-stores; add name fields)
 
 
 class Member(models.Model):
@@ -31,11 +28,9 @@ class Member(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-<<<<<<< HEAD
     ordered_stores = models.ManyToManyField(
         Store, through='orders.Order', related_name='ordering_members'
     )
-=======
+
     def __str__(self):
         return self.name
->>>>>>> 4385fbb (feat: Add one-to-one relations: users-members, users-stores; add name fields)

@@ -1,4 +1,4 @@
-{% block main %}
+{% extends "layouts/default.html" %} {% block main %}
 
 <h1>
   <h3>商品名稱: {{ product.name }}</h3>
@@ -12,8 +12,6 @@
   <p>客製化: {{ product.customize }}</p>
 </h1>
 
-{% endblock %}
-
 <a href="{% url 'products:edit' product.id %}">編輯</a>
 
 <form
@@ -26,3 +24,5 @@
 </form>
 
 <a href="{% url 'products:index' %}">回商品首頁</a>
+
+{% endblock main %}
