@@ -3,8 +3,10 @@
 <a href="{% url 'products:index' %}">回商品首頁</a>
 <a href="{% url 'stores:show' store.id %}">回店家頁面</a>
 
-<form action="{% url 'products:new' store.id %}" method="post">
-  {% csrf_token %} {% for field in form %}
+<form action="{% url 'products:index' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="store_id" value="{{ store.id }}" />
+  {% for field in form %}
   <div>
     {{ field.label_tag }} {{ field }}{% if field.errors %}
     <div style="color: red">{{ field.errors }}</div>

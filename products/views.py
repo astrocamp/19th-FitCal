@@ -6,27 +6,28 @@ from .forms import ProductForm
 from .models import Product
 
 
-# Create your views here.
 def index(request):
-    if request.POST:
+    if request.method == 'POST':
         form = ProductForm(request.POST)
-        product = form.save()
-        return redirect('products:show', product.id)
+        if form.is_valid():
+            store_id = request.POST.get('store_id')
+            store = get_object_or_404(Store, id=store_id)
+
+            product = form.save(commit=False)
+            product.store = store
+            product.save()
+
+            return redirect('stores:show', id=store.id)
+    else:
+        form = ProductForm()
+
     products = Product.objects.all()
-    return render(request, 'products/index.html', {'products': products})
+    return render(request, 'products/index.html', {'products': products, 'form': form})
 
 
 def new(request, store_id):
     store = get_object_or_404(Store, id=store_id)
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.store = store
-            product.save()
-            return redirect('stores:show', id=store.id)
-    else:
-        form = ProductForm()
+    form = ProductForm()
     return render(request, 'products/new.html', {'form': form, 'store': store})
 
 
