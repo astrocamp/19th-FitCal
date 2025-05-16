@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from members.models import Member
 from stores.models import Store
@@ -66,3 +67,25 @@ def delete(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
     return redirect('products:index')
+
+
+@require_POST
+def collections(request, id):
+    product = get_object_or_404(Product, id=id)
+    member = Member.objects.first()
+
+    collections = member.favorite_products
+
+    if collections.filter(id=product.id).exists():
+        collections.remove(product)
+    else:
+        collections.add(product)
+
+    return render(
+        request,
+        'shares/collections_btn.html',
+        {
+            'member': member,
+            'product': product,
+        },
+    )
