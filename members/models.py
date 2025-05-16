@@ -31,6 +31,16 @@ class Member(models.Model):
     ordered_stores = models.ManyToManyField(
         Store, through='orders.Order', related_name='ordering_members'
     )
+    likes = models.ManyToManyField(Store, through='Likes', related_name='likes_by')
 
-    def __str__(self):
-        return self.name
+
+class Likes(models.Model):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('member', 'store')  # 防止重複收藏
+
+    # def __str__(self):
+    #     return f"{self.member.name} 收藏了 {self.store.name}"先確認name的正確欄位名稱再加上
