@@ -10,4 +10,9 @@ urlpatterns = [
     path('<uuid:id>', views.show, name='show'),
     path('<uuid:id>/edit', views.edit, name='edit'),
     path('<uuid:id>/delete', views.delete, name='delete'),
+    path(
+        'collections/<uuid:id>/',
+        views.collections,
+        name='collections',
+    ),
 ]
