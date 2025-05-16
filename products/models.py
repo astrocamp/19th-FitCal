@@ -15,6 +15,7 @@ class Product(models.Model):
         upload_to='products/',
         null=False,
         blank=False,
+        default=''
     )
     description = models.TextField()
     calories = models.PositiveIntegerField()
