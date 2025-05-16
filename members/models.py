@@ -27,15 +27,15 @@ class Member(models.Model):
     google_id = models.CharField(max_length=64, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    ordered_stores = models.ManyToManyField(
-        Store, through='orders.Order', related_name='ordering_members'
+    favorite = models.ManyToManyField(
+        Store, through='Favorite', related_name='favorited_by'
     )
-    likes = models.ManyToManyField(Store, through='Likes', related_name='likes_by')
 
 
-class Likes(models.Model):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+class Favorite(models.Model):
+    member = models.ForeignKey(
+        Member, on_delete=models.CASCADE, related_name='favorite_records'
+    )
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
