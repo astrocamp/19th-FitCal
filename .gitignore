@@ -20,6 +20,7 @@ node_modules
 /static/assets/styles/style.css
 /static/assets/scripts/app.js
 
+# collectstatic
 staticfiles
 
 # Others
