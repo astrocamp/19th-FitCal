@@ -5,6 +5,7 @@
   "scripts": {
     "reset": "npm install && npm prune",
     "dev": "concurrently --kill-others --names \"esbuild,tailwind,django\" -c \"yellow,blue,green\" \"esbuild ./src/scripts/input.js --bundle --outfile=./static/assets/scripts/app.js --watch\" \"npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles/style.css --watch\" \"uv run manage.py runserver\"",
+    "prod": "concurrently --kill-others --names \"esbuild,tailwind,django\" -c \"yellow,blue,green\" \"esbuild ./src/scripts/input.js --bundle --outfile=./static/assets/scripts/app.js --watch\" \"npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles/style.css --watch\" \"uv run python manage.py collectstatic --noinput && DEBUG=False uv run manage.py runserver\"",
     "watch": "concurrently --kill-others --names \"esbuild,tailwind\" -c \"yellow,blue\" \"esbuild ./src/scripts/input.js --bundle --outfile=./static/assets/scripts/app.js --watch\" \"npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles/style.css --watch\"",
     "build": "esbuild ./src/scripts/input.js --bundle --outfile=./static/assets/scripts/app.js && npx @tailwindcss/cli -i ./src/styles/input.css -o ./static/assets/styles/style.css --minify"
   },

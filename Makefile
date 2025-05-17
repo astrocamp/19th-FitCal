@@ -1,6 +1,9 @@
 runserver:
 	uv run manage.py runserver
 
+runserver-prod:
+	uv run python manage.py collectstatic --noinput && DEBUG=False uv run manage.py runserver
+
 makemigrations:
 	uv run manage.py makemigrations
 
