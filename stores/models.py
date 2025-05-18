@@ -7,6 +7,7 @@ from users.models import User
 
 
 class Store(models.Model):
+    name = models.CharField(max_length=50)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100)
