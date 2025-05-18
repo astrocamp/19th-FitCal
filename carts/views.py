@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
+from members.models import Member
 from products.models import Product
 from stores.models import Store
 
@@ -41,7 +42,7 @@ def index(req):
     # member = req.user.member
     # stores = Store.objects.filter(carts__member=member).distinct()
     # carts = Cart.objects.filter(member=req.user.member)
-    member = req.user
+    member = Member.objects.first()  # 暫時先用第一個會員來執行
     stores = Store.objects.filter(carts__member=member).distinct()
     carts = Cart.objects.filter(member=member)
 

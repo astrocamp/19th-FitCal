@@ -1,6 +1,8 @@
 {% extends "layouts/default.html" %} {% block main %}
 <h2>店家：{{ cart.store }}</h2>
+
 <a href="{% url 'carts:edit' cart.id %}" class="btn">編輯購物車商品</a>
+
 {% for item in cart_item %}
 <div class="mb-2 border-2">{{ item.product.name }}：{{ item.quantity }}</div>
 <form
@@ -11,4 +13,13 @@
   {% csrf_token %}
   <button class="btn" type="submit">刪除</button>
 </form>
-{% endfor %} {% endblock main %}
+
+{% endfor %}
+
+<form action="{% url 'orders:new' %}" method="get">
+  {% csrf_token %}
+  <input type="hidden" name="cart_id" value="{{ cart.id }}" />
+  <button class="btn" type="submit">結帳</button>
+</form>
+
+{% endblock %}

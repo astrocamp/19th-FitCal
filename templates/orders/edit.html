@@ -3,7 +3,7 @@
 <h1>更新訂單</h1>
 
 <form
-  action="{% url 'orders:update' order.id %}"
+  action="{% url 'orders:show' order.id %}"
   method="post"
   onsubmit="return confirm('確定要更新？')"
 >
