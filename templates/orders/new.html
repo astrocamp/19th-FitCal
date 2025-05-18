@@ -1,31 +1,34 @@
-{% extends "layouts/default.html" %} {% block main %}
+{% extends "layouts/default.html" %} {% load order_filters %} {% block main %}
 <h1>建立訂單</h1>
 
-<h1>(需先在 products 建立商品才能測試 order-product 之間的關聯)</h1>
-<h1>(建立訂單後，商品的庫存會減少，庫存不足會無法建立訂單)</h1>
-
-<form
-  action="{% url 'orders:create' %}"
-  method="post"
-  x-data="{ quantity: 1, unitPrice: {{ product.price }} }"
->
+<form action="{% url 'orders:index' %}" method="post">
   {% csrf_token %}
+  <input type="hidden" name="cart_id" value="{{ cart.id }}" />
 
-  <h2>商品：{{ product.name }}</h2>
-  <input type="hidden" name="product_id" value="{{ product.id }}" />
+  <h2>商家：{{ cart.store.name }}</h2>
 
-  <label for="quantity">數量</label>
-  <input x-model.number="quantity" type="number" id="quantity" name="quantity" value="1" min="1" />
+  <h2>訂單項目：</h2>
+  <ul>
+    {% for item in cart_items %}
+    <li>
+      <h3>{{ item.product.name }}</h3>
+      <p>數量：{{ item.quantity }}</p>
+      <p>單價：{{ item.product.price }}</p>
+      <p>小計：{{ item.quantity|multiply:item.product.price }}</p>
+    </li>
+    {% endfor %}
+  </ul>
 
-  <!-- 單價欄位不應該綁定到 x-model，直接顯示商品價格 -->
-  <label for="unit_price">單價</label>
-  <input type="number" id="unit_price" name="unit_price" :value="unitPrice" readonly />
+  <h2>總金額：{{ cart.total_price }}</h2>
 
-  {{ form }}
+  {{ form.non_field_errors }} {% for field in form %}
+  <!-- prettier-ignore -->
+  {% if field.name != 'store' and field.name != 'total_price' %}
+  <div>{{ field.label_tag }} {{ field }} {{ field.errors }}</div>
+  {% endif %} {% endfor %}
 
-  <p>總金額：<span x-text="quantity * unitPrice"></span> 元</p>
-
-  <button type="submit">提交訂單</button>
+  <button type="submit">建立訂單</button>
 </form>
-<a href="{% url 'orders:index' %}">回上一頁</a>
+
+<a href="{% url 'carts:show' cart.id %}">返回購物車</a>
 {% endblock main %}
