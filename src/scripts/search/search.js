@@ -25,6 +25,11 @@ app.get("/api/search", (req, res) => {
   const matchedProducts = products.filter((p) =>
     p.name.toLowerCase().includes(keyword)
   );
+  if (!isNaN(maxCalories)) {
+    matchedProducts = matchedProducts.filter(
+      (p) => p.calories <= maxCalories
+    );
+  }
 
   res.json({
     stores: matchedStores,

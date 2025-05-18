@@ -1,20 +1,27 @@
-{% extends "layouts/default.html" %} {% block main %}
-<h1 class="text-xl mb-4">搜尋結果：{{ query }}</h1>
+    {% extends "layouts/default.html" %} 
+  {% block main %}
+    <h1 class="text-xl mb-4">搜尋結果：{{ query }}</h1>
 
-{% if not stores and not products %}
-<p>找不到相關的商家或餐點。</p>
-{% endif %} {% if stores %}
-<h2 class="text-lg mt-6">商家</h2>
-<ul class="list-disc pl-5">
-  {% for store in stores %}
-  <li>{{ store.name }}</li>
-  {% endfor %}
-</ul>
-{% endif %} {% if products %}
-<h2 class="text-lg mt-6">餐點</h2>
-<ul class="list-disc pl-5">
-  {% for product in products %}
-  <li>{{ product.name }}（{{ product.calories }} 大卡）</li>
-  {% endfor %}
-</ul>
-{% endif %} {% endblock %}
+    {% if not stores and not products %}
+    <p>找不到相關的商家或餐點</p>
+    {% endif %} {% if stores %}
+    <h2 class="text-lg mt-6">商家</h2>
+    <ul class="list-disc pl-5">
+      {% for store in stores %}
+      <li>
+        <a href="{% url 'stores:show' store.id %}" class="text-blue-600 hover:underline">
+          {{ store.name }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% if products %}
+    <h2 class="text-lg mt-6">商品</h2>
+    <ul class="list-disc pl-5">
+      {% for product in products %}
+      <li>
+        <a href="{% url 'products:show' product.id %}"  class="text-blue-600 hover:underline">
+        {{ product.name }}（{{ product.calories }} 大卡）${{ product.price }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endblock %}
