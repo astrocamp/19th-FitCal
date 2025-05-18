@@ -14,6 +14,10 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),
     path('accounts/', include('allauth.urls')),
     path('carts/', include('carts.urls', namespace='carts')),
+<<<<<<< HEAD
     path('search/', include('search.urls', namespace='search')),
     path('payment/', include('payment.urls', namespace='payment')),
+=======
+    path('chatbot/', include('chatbot.urls')),
+>>>>>>> 768f22a (feat:add AI customer service,unfinished)
 ]

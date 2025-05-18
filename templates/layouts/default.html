@@ -7,6 +7,7 @@
     <meta name="description" content="FitCal - 健康餐點訂購系統，提供便捷的線上點餐服務" />
     <meta name="keywords" content="健康餐點,線上訂餐,外帶,健康飲食,便當,餐廳外送,健康餐盒,FitCal" />
     <title>FitCal</title>
+<<<<<<< HEAD
 
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
@@ -21,5 +22,29 @@
       </section>
     </main>
     <footer class="bg-white-100 text-gray-700 px-6 py-10">{% include 'shared/footer.html' %}</footer>
+=======
+    <link href="{% static 'assets/styles/style.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
+    <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
+    <script src="{% static 'assets/scripts/chatbot.js' %}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <h1 class="bg-amber-500 text-gray-700">這裏是模板</h1>
+    {% include "chatbot/widget.html" %} {% include 'shared/messages.html' %}
+    <h2 class="text-blue-500 text-right">user id: {{user.id}}</h2>
+    <<<<<<< HEAD
+    <div class="flex justify-end text-blue-500">
+      {% if user.is_authenticated %}
+      <p class="flex items-center">用戶：{{ user }}</p>
+      <a class="btn" href="{% url 'carts:index' %}">查看購物車</a>
+      {% endif %}
+    </div>
+    <a class="btn" href="{% url 'products:index' %}">商品</a>
+    <a class="btn" href="{% url 'stores:index' %}">商家</a>
+    <a class="btn" href="{% url 'members:index' %}">會員</a>
+    <a class="btn" href="{% url 'orders:index' %}">訂單</a>
+    {% block main %}{% endblock main %}
+>>>>>>> 768f22a (feat:add AI customer service,unfinished)
   </body>
 </html>
