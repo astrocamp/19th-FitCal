@@ -12,6 +12,7 @@ dependencies = [
     "email-validator>=2.2.0",
     "django-storages>=1.14.6",
     "pillow>=11.2.1",
+    "geopy>=2.4.1",
     "psycopg[binary]>=3.2.7",
 ]
 
@@ -20,6 +21,8 @@ dev = [
     "django-stubs>=5.2.0",
     "ruff>=0.11.8",
     "django-debug-toolbar>=5.2.0",
+    "pdfplumber>=0.11.6",
+    "pandas>=2.2.3",
 ]
 
 # ruff設定
