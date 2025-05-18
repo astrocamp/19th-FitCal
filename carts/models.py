@@ -11,6 +11,8 @@ class Cart(models.Model):
         'members.Member',
         on_delete=models.CASCADE,
         related_name='carts',
+        null=True,
+        blank=True,
     )
     store = models.ForeignKey(
         'stores.Store', on_delete=models.CASCADE, related_name='carts'
