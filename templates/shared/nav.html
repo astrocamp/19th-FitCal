@@ -1,16 +1,3 @@
-{% comment %} <form action="{% url 'search:index' %}" method="get" class="flex gap-2">
-  <input
-    name="q"
-    type="text"
-    placeholder="搜尋商家、餐點或餐點卡路里"
-    class="input input-bordered w-52"
-    value="{{ request.GET.q }}"
-  />
-  <button type="submit" class="btn">搜尋</button>
-</form> {% endcomment %}
-
-
-
   <form
   id="searchForm"
   action="{% url 'search:index' %}"
@@ -43,13 +30,13 @@
       min="0"
       max="1000"
       step="10"
-      value="{{ request.GET.max_calories|default:"0" }}"
+      value="{{ request.GET.max_calories|default:"1000" }}"
       class="range w-56 h-3"
       oninput="document.getElementById('maxCalDisplay').textContent = this.value"
     />
   </div>
 
-  <!-- 搜尋按鈕 -->
+
   <button id="searchBtn" type="submit" class="btn w-56 mt-2">搜尋</button>
 </form>
 
@@ -71,10 +58,10 @@
     isFilterOpen = false;
   }
 
-  // 展開拉霸
+
   searchInput.addEventListener('focus', showFilter);
 
-  // 點擊頁面其他地方才收起
+
   document.addEventListener('click', (e) => {
     const isClickInsideForm = searchForm.contains(e.target);
     if (!isClickInsideForm && isFilterOpen) {
@@ -82,7 +69,7 @@
     }
   });
 
-  // 如果初始就有值，也展開
+
   window.addEventListener('DOMContentLoaded', () => {
     if (searchInput.value.trim()) {
       showFilter();
