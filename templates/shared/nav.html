@@ -1,0 +1,73 @@
+{% comment %} <!-- Navbar 裡的搜尋區塊 -->
+<div class="navbar bg-base-100 fixed top-0 left-0 w-full z-50 shadow p-2">
+  <div class="flex-1">
+    <a class="btn btn-ghost normal-case text-xl">Fitcal</a>
+  </div>
+  <div class="flex-none">
+    <div class="form-control flex flex-row">
+      <input id="searchInput" type="text" placeholder="搜尋商家、餐點或餐點卡路里" class="input input-bordered w-48" />
+      <button id="searchBtn" class="btn ml-2">搜尋</button>
+    </div>
+  </div>
+</div>
+
+<!-- 搜尋結果區 -->
+<div id="results" class="pt-24 px-4 max-w-4xl mx-auto"></div>
+
+<script>
+  const input = document.getElementById("searchInput");
+  const btn = document.getElementById("searchBtn");
+  const resultsDiv = document.getElementById("results");
+
+  btn.addEventListener("click", async () => {
+    const keyword = input.value.trim();
+    if (!keyword) {
+      alert("請輸入關鍵字");
+      return;
+    }
+
+    resultsDiv.innerHTML = "<p>搜尋中...</p>";
+
+    try {
+      const res = await fetch(`/api/search?keyword=${encodeURIComponent(keyword)}`);
+      const data = await res.json();
+
+      if (!data.merchants.length && !data.dishes.length) {
+        resultsDiv.innerHTML = "<p>找不到相關商家或餐點</p>";
+        return;
+      }
+
+      // 分類渲染
+      let html = "";
+
+      if (data.merchants.length) {
+        html += "<h2 class='text-xl font-bold mb-2'>商家</h2><ul class='mb-6'>";
+        html += data.merchants.map(m => `<li class="mb-1">${m.name}</li>`).join("");
+        html += "</ul>";
+      }
+
+      if (data.dishes.length) {
+        html += "<h2 class='text-xl font-bold mb-2'>餐點</h2><ul>";
+        html += data.dishes.map(d => `<li class="mb-1">${d.name} - ${d.price} 元</li>`).join("");
+        html += "</ul>";
+      }
+
+      resultsDiv.innerHTML = html;
+    } catch (error) {
+      resultsDiv.innerHTML = "<p>搜尋失敗，請稍後再試。</p>";
+      console.error(error);
+    }
+  });
+</script> {% endcomment %}
+
+
+<form action="{% url 'search:index' %}" method="get" class="flex gap-2">
+  <input
+    name="q"
+    type="text"
+    placeholder="搜尋商家、餐點或餐點卡路里"
+    class="input input-bordered w-48"
+    value="{{ request.GET.q }}"
+  />
+  <button type="submit" class="btn">搜尋</button>
+</form>

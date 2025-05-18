@@ -8,7 +8,8 @@
     {% include "shared/favorite_btn.html" with store=store member=user.member %}
     <a href="{% url 'stores:show' store.id %}">
       <section>
-        <h1>店家名稱：{{ store.name }}</h1>
+        <h1>店家：{{ store.name }}</h1>
+        <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
         <h1>店家地址：{{ store.address }}</h1>
         <h1>店家電話：{{ store.phone_number }}</h1>
         <h1>店家統編：{{ store.tax_id }}</h1>
