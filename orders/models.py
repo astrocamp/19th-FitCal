@@ -60,9 +60,6 @@ class Order(models.Model):
     store_phone = models.CharField(max_length=20, editable=False, null=True)
     store_address = models.CharField(max_length=200, editable=False, null=True)
 
-    class Meta:
-        unique_together = ('member', 'store')
-
     def save(self, *args, **kwargs):
         if not self.pk:  # 新訂單
             if self.payment_method == PaymentMethod.CASH:
@@ -169,7 +166,11 @@ class OrderItem(models.Model):
     )
 
     class Meta:
-        unique_together = ('order', 'product')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['order', 'product'], name='unique_order_product'
+            )
+        ]
 
     def save(self, *args, **kwargs):
         self.subtotal = self.unit_price * self.quantity
