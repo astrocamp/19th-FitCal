@@ -11,9 +11,8 @@
         <select name="status" class="form-select" onchange="this.form.submit()">
           <option value="">全部訂單</option>
           {% for status_code, status_name in order_status_choices %}
-            <!-- prettier-ignore -->
             <option value="{{ status_code }}"
-                    {% if selected_status == "status_code" %}selected{% endif %}>{{ status_name }}</option>
+                    {% if selected_status == status_code %}selected{% endif %}>{{ status_name }}</option>
           {% endfor %}
         </select>
       </form>
@@ -44,6 +43,16 @@
             </ul>
           </div>
           <div class="flex gap-2">
+            {% if order.order_status == 'PENDING' or order.order_status == 'PREPARING' %}
+              <form action="{% url 'orders:cancel' order.id %}"
+                    method="post"
+                    class="inline"
+                    onsubmit="return confirm('確定要取消訂單嗎？');">
+                {% csrf_token %}
+                <button type="submit"
+                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">取消訂單</button>
+              </form>
+            {% endif %}
             {% if order.can_prepare %}
               <form action="{% url 'orders:prepare' order.id %}"
                     method="post"
@@ -78,4 +87,4 @@
       {% endfor %}
     </div>
   </div>
-{% endblock main %}
+{% endblock %}
