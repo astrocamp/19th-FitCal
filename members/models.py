@@ -30,6 +30,9 @@ class Member(models.Model):
     favorite = models.ManyToManyField(
         Store, through='Favorite', related_name='favorited_by'
     )
+    ordered_stores = models.ManyToManyField(
+        Store, through='orders.Order', related_name='ordering_members'
+    )
 
 
 class Favorite(models.Model):
@@ -42,5 +45,5 @@ class Favorite(models.Model):
     class Meta:
         unique_together = ('member', 'store')  # 防止重複收藏
 
-    # def __str__(self):
-    #     return f"{self.member.name} 收藏了 {self.store.name}"先確認name的正確欄位名稱再加上
+    def __str__(self):
+        return f'{self.member.name} 收藏了 {self.store.name}'
