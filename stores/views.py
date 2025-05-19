@@ -22,6 +22,18 @@ def store_required(view_func):
 
     return login_required(_wrapped_view)
 
+def index(req):
+    stores = Store.objects.all()
+    if req.method == 'POST':
+        form = StoreForm(req.POST)
+        if form.is_valid():
+            store = form.save()
+            return redirect('stores:show', store.id)
+        else:
+            return render(req, 'stores/new.html', {'form': form})
+    else:
+        return render(req, 'stores/index.html', {'stores': stores})
+
 
 def new(req):
     form = StoreForm()
