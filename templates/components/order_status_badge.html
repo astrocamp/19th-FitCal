@@ -1,0 +1,9 @@
+{% load model_display %}
+<tr class="border-b">
+  <td class="py-3 px-4">訂單狀態</td>
+  <td class="py-3 px-4">
+    <span class="px-2 py-1 rounded-full text-sm {% if status == 'PENDING' %} bg-yellow-200 text-yellow-800 {% elif status == 'PREPARING' %} bg-blue-200 text-blue-800 {% elif status == 'READY' %} bg-green-200 text-green-800 {% elif status == 'COMPLETED' %} bg-green-600 text-white {% elif status == 'NO_SHOW' %} bg-red-200 text-red-800 {% elif status == 'CANCELED' %} bg-gray-200 text-gray-800 {% elif status == 'CANCELED_REFUNDED' %} bg-red-400 text-white {% endif %}">
+      {{ order|get_display:"order_status" }}
+    </span>
+  </td>
+</tr>

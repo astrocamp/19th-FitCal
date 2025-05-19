@@ -1,0 +1,18 @@
+<div class="space-y-3">
+  {% if order.can_cancel %}
+    {% include "components/action_button.html" with url_name="orders:cancel" text="取消訂單" color="red" confirm_message="確定要取消訂單嗎？" order=order %}
+  {% endif %}
+  {% if order.can_prepare %}
+    {% include "components/action_button.html" with url_name="orders:prepare" text="開始準備" color="blue" order=order %}
+  {% endif %}
+  {% if order.can_mark_ready %}
+    {% include "components/action_button.html" with url_name="orders:mark_ready" text="完成準備" color="green" order=order %}
+  {% endif %}
+  {% if order.can_complete %}
+    {% include "components/action_button.html" with url_name="orders:complete" text="完成取餐" color="green-700" order=order %}
+  {% endif %}
+  <a href="{% url 'orders:index' %}"
+     class="block w-full text-center bg-gray-500 text-white px-4 py-3 rounded-lg hover:bg-gray-600 transition-colors">
+    返回列表
+  </a>
+</div>
