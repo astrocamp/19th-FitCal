@@ -1,34 +1,34 @@
-{% extends "layouts/default.html" %} {% load order_filters %} {% block main %}
-<h1>建立訂單</h1>
-
-<form action="{% url 'orders:index' %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="cart_id" value="{{ cart.id }}" />
-
-  <h2>商家：{{ cart.store.name }}</h2>
-
-  <h2>訂單項目：</h2>
-  <ul>
-    {% for item in cart_items %}
-    <li>
-      <h3>{{ item.product.name }}</h3>
-      <p>數量：{{ item.quantity }}</p>
-      <p>單價：{{ item.product.price }}</p>
-      <p>小計：{{ item.quantity|multiply:item.product.price }}</p>
-    </li>
+{% extends "layouts/default.html" %}
+{% load order_filters %}
+{% block main %}
+  <h1>建立訂單</h1>
+  <form action="{% url 'orders:index' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="cart_id" value="{{ cart.id }}" />
+    <h2>商家：{{ cart.store.name }}</h2>
+    <h2>訂單項目：</h2>
+    <ul>
+      {% for item in cart_items %}
+        <li>
+          <h3>{{ item.product.name }}</h3>
+          <p>數量：{{ item.quantity }}</p>
+          <p>單價：{{ item.product.price }}</p>
+          <p>小計：{{ item.quantity|multiply:item.product.price }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+    <h2>總金額：{{ cart.total_price }}</h2>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <!-- prettier-ignore -->
+      {% if field.name != 'store' and field.name != 'total_price' %}
+        <div>{{ field.label_tag }} {{ field }} {{ field.errors }}</div>
+      {% endif %}
     {% endfor %}
-  </ul>
 
-  <h2>總金額：{{ cart.total_price }}</h2>
+    <button type="submit">建立訂單</button>
+  </form>
 
-  {{ form.non_field_errors }} {% for field in form %}
-  <!-- prettier-ignore -->
-  {% if field.name != 'store' and field.name != 'total_price' %}
-  <div>{{ field.label_tag }} {{ field }} {{ field.errors }}</div>
-  {% endif %} {% endfor %}
-
-  <button type="submit">建立訂單</button>
-</form>
-
-<a href="{% url 'carts:show' cart.id %}">返回購物車</a>
+  <a href="{% url 'carts:show' cart.id %}">返回購物車</a>
+  
 {% endblock main %}

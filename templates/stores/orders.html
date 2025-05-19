@@ -1,95 +1,81 @@
-{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
+{% extends "layouts/default.html" %}
+{% load datetime_format %}
+{% load model_display %}
 <!-- prettier-ignore -->
 {% block main %}
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">{{ store.name }} - 訂單管理</h1>
-
-  <div class="mb-4">
-    <h2 class="text-xl mb-2">訂單狀態篩選</h2>
-    <form method="get" class="flex gap-2">
-      <select name="status" class="form-select" onchange="this.form.submit()">
-        <option value="">全部訂單</option>
-        {% for status_code, status_name in order_status_choices %}
-        <!-- prettier-ignore -->
-        <option
-          value="{{ status_code }}"
-          {% if selected_status == "status_code" %}selected{% endif %}
-    >
-          {{ status_name }}
-        </option>
-        {% endfor %}
-      </select>
-    </form>
-  </div>
-
-  <div class="grid gap-4">
-    {% for order in orders %}
-    <div class="bg-white shadow-md rounded p-4">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="text-lg font-semibold">
-          訂單編號: {{ order.order_number }} {% if order.pickup_number %} (取餐編號: {{
-          order.pickup_number }}) {% endif %}
-        </h3>
-        <span
-          class="px-2 py-1 rounded {% if order.order_status == 'PENDING' %}bg-yellow-200 {% elif order.order_status == 'PREPARING' %}bg-blue-200 {% elif order.order_status == 'READY' %}bg-green-200 {% elif order.order_status == 'COMPLETED' %}bg-green-600 text-white {% elif order.order_status == 'NO_SHOW' %}bg-red-200 {% elif order.order_status == 'CANCELED' %}bg-gray-200 {% elif order.order_status == 'CANCELED_REFUNDED' %}bg-red-400 {% endif %}"
-        >
-          {{ order|get_display:"order_status" }}
-        </span>
-      </div>
-
-      <div class="mb-2">
-        <p>預計取餐時間: {{ order.pickup_time|datetime_format }}</p>
-        <p>付款方式: {{ order|get_display:"payment_method" }}</p>
-        <p>付款狀態: {{ order|get_display:"payment_status" }}</p>
-        <p>總金額: ${{ order.total_price }}</p>
-        {% if order.note %}
-        <p>備註: {{ order.note }}</p>
-        {% endif %}
-      </div>
-
-      <div class="mb-2">
-        <h4 class="font-medium">商品明細:</h4>
-        <ul class="ml-4">
-          {% for item in order.orderitem_set.all %}
-          <li>{{ item.product_name }} × {{ item.quantity }}</li>
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">{{ store.name }} - 訂單管理</h1>
+    <div class="mb-4">
+      <h2 class="text-xl mb-2">訂單狀態篩選</h2>
+      <form method="get" class="flex gap-2">
+        <select name="status" class="form-select" onchange="this.form.submit()">
+          <option value="">全部訂單</option>
+          {% for status_code, status_name in order_status_choices %}
+            <!-- prettier-ignore -->
+            <option value="{{ status_code }}"
+                    {% if selected_status == "status_code" %}selected{% endif %}>{{ status_name }}</option>
           {% endfor %}
-        </ul>
-      </div>
-
-      <div class="flex gap-2">
-        {% if order.can_prepare %}
-        <form action="{% url 'orders:prepare' order.id %}" method="post" class="inline">
-          {% csrf_token %}
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            開始準備
-          </button>
-        </form>
-        {% endif %} {% if order.can_mark_ready %}
-        <form action="{% url 'orders:mark_ready' order.id %}" method="post" class="inline">
-          {% csrf_token %}
-          <button
-            type="submit"
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          >
-            完成準備
-          </button>
-        </form>
-        {% endif %} {% if order.can_complete %}
-        <form action="{% url 'orders:complete' order.id %}" method="post" class="inline">
-          {% csrf_token %}
-          <button
-            type="submit"
-            class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
-          >
-            完成取餐
-          </button>
-        </form>
-        {% endif %}
-      </div>
+        </select>
+      </form>
     </div>
-    {% empty %}
-    <p class="text-gray-500">目前沒有訂單</p>
-    {% endfor %}
+    <div class="grid gap-4">
+      {% for order in orders %}
+        <div class="bg-white shadow-md rounded p-4">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold">
+              訂單編號: {{ order.order_number }}
+              {% if order.pickup_number %}(取餐編號: {{ order.pickup_number }}){% endif %}
+            </h3>
+            <span class="px-2 py-1 rounded {% if order.order_status == 'PENDING' %}bg-yellow-200 {% elif order.order_status == 'PREPARING' %}bg-blue-200 {% elif order.order_status == 'READY' %}bg-green-200 {% elif order.order_status == 'COMPLETED' %}bg-green-600 text-white {% elif order.order_status == 'NO_SHOW' %}bg-red-200 {% elif order.order_status == 'CANCELED' %}bg-gray-200 {% elif order.order_status == 'CANCELED_REFUNDED' %}bg-red-400 {% endif %}">
+              {{ order|get_display:"order_status" }}
+            </span>
+          </div>
+          <div class="mb-2">
+            <p>預計取餐時間: {{ order.pickup_time|datetime_format }}</p>
+            <p>付款方式: {{ order|get_display:"payment_method" }}</p>
+            <p>付款狀態: {{ order|get_display:"payment_status" }}</p>
+            <p>總金額: ${{ order.total_price }}</p>
+            {% if order.note %}<p>備註: {{ order.note }}</p>{% endif %}
+          </div>
+          <div class="mb-2">
+            <h4 class="font-medium">商品明細:</h4>
+            <ul class="ml-4">
+              {% for item in order.orderitem_set.all %}<li>{{ item.product_name }} × {{ item.quantity }}</li>{% endfor %}
+            </ul>
+          </div>
+          <div class="flex gap-2">
+            {% if order.can_prepare %}
+              <form action="{% url 'orders:prepare' order.id %}"
+                    method="post"
+                    class="inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">開始準備</button>
+              </form>
+            {% endif %}
+            {% if order.can_mark_ready %}
+              <form action="{% url 'orders:mark_ready' order.id %}"
+                    method="post"
+                    class="inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">完成準備</button>
+              </form>
+            {% endif %}
+            {% if order.can_complete %}
+              <form action="{% url 'orders:complete' order.id %}"
+                    method="post"
+                    class="inline">
+                {% csrf_token %}
+                <button type="submit"
+                        class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">完成取餐</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-gray-500">目前沒有訂單</p>
+      {% endfor %}
+    </div>
   </div>
-</div>
-{% endblock %}
+{% endblock main %}
