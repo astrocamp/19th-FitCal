@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
@@ -19,12 +20,15 @@ def create_user(req):
     userform = UserForm(req.POST)
     if userform.is_valid():
         userform.save()
+        to_email = userform.cleaned_data['email']
         send_mail(
-            '歡迎加入本站！',
-            '您好，感謝您的註冊，祝您使用愉快！',
-            None,  # 使用 settings.DEFAULT_FROM_EMAIL
-            [userform.cleaned_data['email']],
+            subject='歡迎加入本站！',
+            message='您好，感謝您的註冊，祝您使用愉快！',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[to_email],
+            fail_silently=False,
         )
+
         user = authenticate(
             email=userform.cleaned_data['email'],
             password=userform.cleaned_data['password2'],
@@ -59,6 +63,7 @@ def create_session(req):
         login(req, user)
         messages.success(req, '登入成功！')
         return redirect('pages:index')
+
     else:
         messages.error(req, '登入失敗，請檢查電子郵件或密碼是否正確')
         return redirect('users:sign_in')

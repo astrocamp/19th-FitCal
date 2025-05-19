@@ -215,5 +215,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'fitcal19th@gmail.com'
 EMAIL_HOST_PASSWORD = 'nhww fuab xtex dexm'
 EMAIL_USE_SSL = False
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 開發初期先用
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # 上線或正式寄信再改為
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
