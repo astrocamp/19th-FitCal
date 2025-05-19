@@ -1,0 +1,17 @@
+{% if member in product.favorited_by.all %}
+<button
+  hx-swap="outerHTML"
+  hx-post="{% url 'products:collections' product.id %}"
+  class="btn btn-sm btn-outline"
+>
+  已收藏
+</button>
+{% else %}
+<button
+  hx-swap="outerHTML"
+  hx-post="{% url 'products:collections' product.id %}"
+  class="btn btn-sm btn-neutral"
+>
+  收藏
+</button>
+{% endif %}

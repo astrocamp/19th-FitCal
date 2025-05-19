@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -18,6 +19,12 @@ def create_user(req):
     userform = UserForm(req.POST)
     if userform.is_valid():
         userform.save()
+        send_mail(
+            '歡迎加入本站！',
+            '您好，感謝您的註冊，祝您使用愉快！',
+            None,  # 使用 settings.DEFAULT_FROM_EMAIL
+            [userform.cleaned_data['email']],
+        )
         user = authenticate(
             email=userform.cleaned_data['email'],
             password=userform.cleaned_data['password2'],

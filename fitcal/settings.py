@@ -207,3 +207,13 @@ LOGIN_URL = 'users:sign_in'
 
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'fitcal19th@gmail.com'
+EMAIL_HOST_PASSWORD = 'nhww fuab xtex dexm'
+EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 開發初期先用
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # 上線或正式寄信再改為
