@@ -6,7 +6,7 @@
 <ul>
   {% for store in stores %}
   <li>
-    {% include "shares/favorite_btn.html" with store=store member=member %}
+    {% include "shared/favorite_btn.html" with store=store member=member %}
     <a href="{% url 'stores:show' store.id %}">
       <section>
         <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
