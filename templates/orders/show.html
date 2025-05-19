@@ -1,71 +1,206 @@
 {% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
-
 <!-- prettier-ignore -->
 {% block main %}
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">訂單詳情</h1>
-
-  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    <div class="mb-4">
-      <h2 class="text-xl font-semibold mb-2">基本資訊</h2>
-      <p>訂單編號: {{ order.order_number }}</p>
-      <p>取餐編號: {{ order.pickup_number }}</p>
-      <p>預計取餐時間: {{ order.pickup_time|datetime_format }}</p>
-      <p>訂單狀態: <span class="font-semibold">{{ order|get_display:"order_status" }}</span></p>
-      <p>付款方式: {{ order|get_display:"payment_method" }}</p>
-      <p>付款狀態: <span class="font-semibold">{{ order|get_display:"payment_status" }}</span></p>
-      <p>總金額: ${{ order.total_price }}</p>
-      {% if order.note %}
-      <p>備註: {{ order.note }}</p>
-      {% endif %}
+<div class="flex flex-wrap">
+  <!-- 左側訂單資訊 -->
+  <div class="w-full md:w-1/2 p-4" style="border-right: 3px dashed #ececec">
+    <!-- 店家資訊區塊 -->
+    <div class="mb-6">
+      <div class="flex items-start">
+        <div class="mr-4">
+          <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+            <span class="text-2xl">🏪</span>
+          </div>
+        </div>
+        <div>
+          <div class="mb-2">
+            <div class="inline-block px-4 py-2 bg-gray-100 rounded-md font-semibold">
+              {{ order.store.address }}
+            </div>
+          </div>
+          <ul class="space-y-2">
+            {% if order.store.phone_number %}
+            <li class="flex items-center">
+              <span class="mr-2">📞</span>
+              <a
+                href="tel:{{ order.store.phone_number }}"
+                class="text-blue-600 hover:text-blue-800"
+              >
+                {{ order.store.phone_number }}
+              </a>
+            </li>
+            {% endif %}
+            <li class="flex items-center">
+              <span class="mr-2">📍</span>
+              <a
+                href="https://www.google.com/maps/search/{{ order.store.address }}"
+                target="_blank"
+                class="text-blue-600 hover:text-blue-800"
+              >
+                {{ order.store.address }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-4">
-      <h2 class="text-xl font-semibold mb-2">商品明細</h2>
-      <ul>
+    <!-- 取餐號碼區塊 -->
+    <div class="mb-4 px-4 py-3 bg-blue-500 text-white rounded-md flex justify-between items-center">
+      <div class="font-bold">取餐號 - {{ order.pickup_number }}</div>
+    </div>
+
+    <!-- 訂單資訊表格 -->
+    <div class="bg-white rounded-lg shadow-sm">
+      <table class="w-full">
+        <tbody>
+          <tr class="border-b">
+            <td class="py-3 px-4">訂單編號</td>
+            <td class="py-3 px-4">
+              <div
+                class="text-blue-600 font-semibold cursor-pointer"
+                onclick="copyToClipboard('{{ order.order_number }}')"
+              >
+                {{ order.order_number }}&nbsp;
+                <i class="fas fa-copy text-sm"></i>
+              </div>
+            </td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">訂單狀態</td>
+            <td class="py-3 px-4">
+              <span
+                class="px-2 py-1 rounded-full text-sm {% if order.order_status == 'PENDING' %}bg-yellow-200 text-yellow-800 {% elif order.order_status == 'PREPARING' %}bg-blue-200 text-blue-800 {% elif order.order_status == 'READY' %}bg-green-200 text-green-800 {% elif order.order_status == 'COMPLETED' %}bg-green-600 text-white {% elif order.order_status == 'NO_SHOW' %}bg-red-200 text-red-800 {% elif order.order_status == 'CANCELED' %}bg-gray-200 text-gray-800 {% elif order.order_status == 'CANCELED_REFUNDED' %}bg-red-400 text-white {% endif %}"
+              >
+                {{ order|get_display:"order_status" }}
+              </span>
+            </td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">取貨時間</td>
+            <td class="py-3 px-4 text-secondary">{{ order.pickup_time|datetime_format }}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">付款金額</td>
+            <td class="py-3 px-4 text-secondary">${{ order.total_price }}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">付款方式</td>
+            <td class="py-3 px-4">{{ order|get_display:"payment_method" }}</td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-3 px-4">付款狀態</td>
+            <td class="py-3 px-4">{{ order|get_display:"payment_status" }}</td>
+          </tr>
+          {% if order.note %}
+          <tr class="border-b">
+            <td class="py-3 px-4">備註</td>
+            <td class="py-3 px-4">{{ order.note }}</td>
+          </tr>
+          {% endif %}
+          <tr class="border-b">
+            <td class="py-3 px-4">建立時間</td>
+            <td class="py-3 px-4">{{ order.created_at|datetime_format }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 右側商品明細和操作按鈕 -->
+  <div class="w-full md:w-1/2 p-4">
+    <!-- 商品明細 -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">商品明細</h2>
+      <div class="space-y-3">
         {% for item in order.orderitem_set.all %}
-        <li class="mb-2">
-          <p>{{ item.product_name }}</p>
-          <p class="ml-4">
-            數量: {{ item.quantity }} × ${{ item.unit_price }} = ${{ item.subtotal }}
-          </p>
-        </li>
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-medium">{{ item.product_name }}</div>
+              <div class="text-sm text-gray-500">
+                數量: {{ item.quantity }} × ${{ item.unit_price }}
+              </div>
+            </div>
+            <div class="font-semibold">${{ item.subtotal }}</div>
+          </div>
+        </div>
         {% endfor %}
-      </ul>
+      </div>
+      <div class="mt-4 text-right">
+        <div class="text-xl font-bold">總計: ${{ order.total_price }}</div>
+      </div>
     </div>
 
-    <div class="flex flex-wrap gap-2">
+    <!-- 操作按鈕區 -->
+    <div class="space-y-3">
       {% if order.can_cancel %}
       <form
         action="{% url 'orders:cancel' order.id %}"
         method="post"
-        class="inline"
+        class="w-full"
         onsubmit="return confirm('確定要取消訂單嗎？');"
       >
         {% csrf_token %}
-        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">取消訂單</button>
+        <button
+          type="submit"
+          class="w-full bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors"
+        >
+          取消訂單
+        </button>
       </form>
       {% endif %} {% if order.can_prepare %}
-      <form action="{% url 'orders:prepare' order.id %}" method="post" class="inline">
+      <form action="{% url 'orders:prepare' order.id %}" method="post" class="w-full">
         {% csrf_token %}
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">開始準備</button>
+        <button
+          type="submit"
+          class="w-full bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          開始準備
+        </button>
       </form>
       {% endif %} {% if order.can_mark_ready %}
-      <form action="{% url 'orders:mark_ready' order.id %}" method="post" class="inline">
+      <form action="{% url 'orders:mark_ready' order.id %}" method="post" class="w-full">
         {% csrf_token %}
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">完成準備</button>
+        <button
+          type="submit"
+          class="w-full bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-colors"
+        >
+          完成準備
+        </button>
       </form>
       {% endif %} {% if order.can_complete %}
-      <form action="{% url 'orders:complete' order.id %}" method="post" class="inline">
+      <form action="{% url 'orders:complete' order.id %}" method="post" class="w-full">
         {% csrf_token %}
-        <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded">完成取餐</button>
+        <button
+          type="submit"
+          class="w-full bg-green-700 text-white px-4 py-3 rounded-lg hover:bg-green-800 transition-colors"
+        >
+          完成取餐
+        </button>
       </form>
       {% endif %}
 
-      <a href="{% url 'orders:index' %}" class="bg-gray-500 text-white px-4 py-2 rounded"
-        >返回列表</a
+      <a
+        href="{% url 'orders:index' %}"
+        class="block w-full text-center bg-gray-500 text-white px-4 py-3 rounded-lg hover:bg-gray-600 transition-colors"
       >
+        返回列表
+      </a>
     </div>
   </div>
 </div>
+
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert('已複製訂單編號！');
+      })
+      .catch((err) => {
+        console.error('複製失敗:', err);
+      });
+  }
+</script>
 {% endblock %}
