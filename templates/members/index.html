@@ -3,12 +3,10 @@
 
 {% if member %}
 
-<li>
-  <a href="{% url 'members:show' member.id %}">
-    <p>{{ member.id }}</p>
-    <p>{{ member.phone }}</p>
-  </a>
-</li>
+<a href="{% url 'members:show' member.id %}">
+  <p>{{ member.id }}</p>
+  <p>{{ member.phone }}</p>
+</a>
 
 {% else %}
 <p>目前沒有會員資料</p>

@@ -5,7 +5,7 @@
   <div>{{ field.label_tag }} {{ field }}</div>
   {% endfor %}
   <div>
-    <button type="submit" value="新增會員">新增</button>
+    <button type="submit">新增會員</button>
     <button><a href="{% url 'members:index' %}">取消</a></button>
   </div>
   {{ form.errors }}

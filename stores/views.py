@@ -7,31 +7,26 @@ from .models import Store
 
 
 @login_required
-def index(req):
-    try:
-        store = Store.objects.get(user=req.user)
-    except Store.DoesNotExist:
-        store = None
+def index(request):
+    store = getattr(request.user, 'store', None)
 
-    if req.method == 'POST':
-        form = StoreForm(req.POST, instance=store)
+    if request.method == 'POST':
+        form = StoreForm(request.POST, instance=store)
         if form.is_valid():
             store = form.save(commit=False)
-            store.user = req.user
-            store = form.save()
+            store.user = request.user
+            store.save()
             return redirect('stores:show', store.id)
         else:
-            return render(req, 'stores/new.html', {'form': form})
+            return render(request, 'stores/new.html', {'form': form})
     else:
-        if store:
-            return render(req, 'stores/index.html', {'store': store})
-        else:
-            form = StoreForm()
-            return render(req, 'stores/new.html', {'form': form})
+        return render(request, 'stores/index.html', {'store': store})
 
 
 @login_required
 def new(req):
+    if hasattr(req.user, 'store'):
+        return redirect('stores:show', req.user.store.id)
     # todo:先提供一個預設值方便測試，上線前移除
     form = StoreForm(initial={'tax_id': '22099131'})
     return render(req, 'stores/new.html', {'form': form})

@@ -8,13 +8,16 @@ from .models import Member
 
 @login_required
 def index(request):
+    # 檢查是否已有 member（延後建立）
     try:
-        member = Member.objects.get(user=request.user)
+        member = request.user.member
+        is_create = False
     except Member.DoesNotExist:
         member = None
+        is_create = True
 
     if request.method == 'POST':
-        form = MemberForm(request.POST, instance=member, is_create=not bool(member))
+        form = MemberForm(request.POST, instance=member, is_create=is_create)
         if form.is_valid():
             member = form.save(commit=False)
             member.user = request.user
@@ -22,12 +25,12 @@ def index(request):
             return redirect('members:show', member.id)
         else:
             return render(request, 'members/new.html', {'form': form})
+
+    if is_create:
+        form = MemberForm(is_create=True)
+        return render(request, 'members/new.html', {'form': form})
     else:
-        if member:
-            return render(request, 'members/index.html', {'member': member})
-        else:
-            form = MemberForm(is_create=True)
-            return render(request, 'members/new.html', {'form': form})
+        return render(request, 'members/index.html', {'member': member})
 
 
 @login_required
