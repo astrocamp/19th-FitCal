@@ -1,0 +1,10 @@
+<form action="{% url url_name order.id %}"
+      method="post"
+      class="w-full"
+      {% if confirm_message %}onsubmit="return confirm('{{ confirm_message }}');"{% endif %}>
+  {% csrf_token %}
+  <button type="submit"
+          class="w-full bg-{{ color }}-500 text-white px-4 py-3 rounded-lg hover:bg-{{ color }}-600 transition-colors">
+    {{ text }}
+  </button>
+</form>
