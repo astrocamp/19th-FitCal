@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
+from orders.enums import OrderStatus
+from orders.models import Order
 
 from .forms import RatingForm, StoreForm
 from .models import Rating, Store
@@ -137,3 +139,26 @@ def rate_store(request, store_id):
 
     # 傳統表單提交：重新導向回 index
     return redirect('stores:index')
+
+
+@store_required
+def manage_orders(request, store_id):
+    """店家訂單管理頁面"""
+    store = get_object_or_404(Store, id=store_id)
+
+    # 獲取狀態篩選參數
+    status = request.GET.get('status')
+
+    # 查詢該店家的訂單
+    orders = Order.objects.filter(store=store).order_by('-created_at')
+    if status:
+        orders = orders.filter(order_status=status)
+
+    context = {
+        'store': store,
+        'orders': orders,
+        'order_status_choices': OrderStatus.choices,
+        'selected_status': status,
+    }
+
+    return render(request, 'stores/orders.html', context)

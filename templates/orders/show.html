@@ -1,28 +1,71 @@
-{% extends "layouts/default.html" %}{% load datetime_format %} {% load model_display %}
+{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
 
 <!-- prettier-ignore -->
 {% block main %}
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">訂單詳情</h1>
 
-<h1>訂單</h1>
+  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold mb-2">基本資訊</h2>
+      <p>訂單編號: {{ order.order_number }}</p>
+      <p>取餐編號: {{ order.pickup_number }}</p>
+      <p>預計取餐時間: {{ order.pickup_time|datetime_format }}</p>
+      <p>訂單狀態: <span class="font-semibold">{{ order|get_display:"order_status" }}</span></p>
+      <p>付款方式: {{ order|get_display:"payment_method" }}</p>
+      <p>付款狀態: <span class="font-semibold">{{ order|get_display:"payment_status" }}</span></p>
+      <p>總金額: ${{ order.total_price }}</p>
+      {% if order.note %}
+      <p>備註: {{ order.note }}</p>
+      {% endif %}
+    </div>
 
-<h2>訂單編號: {{ order.id }}</h2>
-<h2>預計取貨時間: {{ order.pickup_time|datetime_format }}</h2>
-<h2>訂單狀態: {{ order|get_display:"order_status" }}</h2>
-<h2>付款方式: {{ order|get_display:"payment_method" }}</h2>
-<h2>付款狀態: {{ order|get_display:"payment_status" }}</h2>
-<h2>總金額: {{ order.total_price }}</h2>
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold mb-2">商品明細</h2>
+      <ul>
+        {% for item in order.orderitem_set.all %}
+        <li class="mb-2">
+          <p>{{ item.product_name }}</p>
+          <p class="ml-4">
+            數量: {{ item.quantity }} × ${{ item.unit_price }} = ${{ item.subtotal }}
+          </p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
 
-<a href="{% url 'orders:index' %}">回上一頁</a>
+    <div class="flex flex-wrap gap-2">
+      {% if order.can_cancel %}
+      <form
+        action="{% url 'orders:cancel' order.id %}"
+        method="post"
+        class="inline"
+        onsubmit="return confirm('確定要取消訂單嗎？');"
+      >
+        {% csrf_token %}
+        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">取消訂單</button>
+      </form>
+      {% endif %} {% if order.can_prepare %}
+      <form action="{% url 'orders:prepare' order.id %}" method="post" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">開始準備</button>
+      </form>
+      {% endif %} {% if order.can_mark_ready %}
+      <form action="{% url 'orders:mark_ready' order.id %}" method="post" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">完成準備</button>
+      </form>
+      {% endif %} {% if order.can_complete %}
+      <form action="{% url 'orders:complete' order.id %}" method="post" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded">完成取餐</button>
+      </form>
+      {% endif %}
 
-<a href="{% url 'orders:edit' order.id %}">更新訂單狀態</a>
-
-<form
-  action="{% url 'orders:delete' order.id %}"
-  method="post"
-  onsubmit="return confirm('確定要刪除？')"
->
-  {% csrf_token %}
-  <button>刪除</button>
-</form>
-
-{% endblock main %}
+      <a href="{% url 'orders:index' %}" class="bg-gray-500 text-white px-4 py-2 rounded"
+        >返回列表</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}

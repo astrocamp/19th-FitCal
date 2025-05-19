@@ -9,6 +9,7 @@ from products.models import Product
 from stores.models import Store
 
 from .enums import OrderStatus, PaymentMethod, PaymentStatus
+from .fsm import OrderFSM
 
 
 class Order(models.Model):
@@ -63,8 +64,12 @@ class Order(models.Model):
         unique_together = ('member', 'store')
 
     def save(self, *args, **kwargs):
+        if not self.pk:  # 新訂單
+            if self.payment_method == PaymentMethod.CASH:
+                self.payment_status = PaymentStatus.PAID
+
+        # 生成訂單編號
         if not self.order_number:
-            # Generate order number: ORDYYYYMMDDnnnn
             date_str = timezone.now().strftime('%Y%m%d')
             last_order = (
                 Order.objects.filter(order_number__startswith=f'ORD{date_str}')
@@ -80,8 +85,8 @@ class Order(models.Model):
 
             self.order_number = f'ORD{date_str}{new_number}'
 
+        # 生成取餐編號
         if not self.pickup_number:
-            # Generate pickup number: 依照當天日期重新計數
             today = timezone.now().date()
             today_start = timezone.make_aware(
                 timezone.datetime.combine(today, timezone.datetime.min.time())
@@ -90,7 +95,6 @@ class Order(models.Model):
                 timezone.datetime.combine(today, timezone.datetime.max.time())
             )
 
-            # 取得今天的最後一個取餐號碼
             last_pickup = (
                 Order.objects.filter(created_at__range=(today_start, today_end))
                 .order_by('created_at')
@@ -111,7 +115,6 @@ class Order(models.Model):
         #     self.member_phone = self.member.phone_number
 
         if self.store:
-            # self.store_name = self.store.name
             self.store_phone = self.store.phone_number
             self.store_address = self.store.address
 
@@ -119,6 +122,27 @@ class Order(models.Model):
 
     def __str__(self):
         return f'訂單編號: {self.order_number}'
+
+    @property
+    def fsm(self):
+        """獲取訂單狀態機"""
+        return OrderFSM(self)
+
+    def can_cancel(self):
+        """檢查訂單是否可以取消"""
+        return self.fsm.can_cancel()
+
+    def can_prepare(self):
+        """檢查訂單是否可以開始準備"""
+        return self.fsm.can_prepare()
+
+    def can_mark_ready(self):
+        """檢查訂單是否可以標記為準備完成"""
+        return self.fsm.can_mark_ready()
+
+    def can_complete(self):
+        """檢查訂單是否可以標記為完成取餐"""
+        return self.fsm.can_complete()
 
 
 class OrderItem(models.Model):
