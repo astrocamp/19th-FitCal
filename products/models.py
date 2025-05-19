@@ -23,5 +23,4 @@ class Product(models.Model):
     price = models.PositiveIntegerField()
     customize = models.TextField(null=True, blank=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='products')
-    inventory = models.IntegerField(default=0) 
     

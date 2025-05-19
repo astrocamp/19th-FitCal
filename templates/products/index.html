@@ -6,15 +6,23 @@
   <li>
     <a href="{% url 'products:show' product.id %}">
       <section>
-        <h3>{{ product.name }}</h3>
-        <h3>{{ product.description }}</h3>
-        <h3>{{ product.calories }}</h3>
-        <h3>{{ product.quantity }}</h3>
-        <h3>{{ product.price }}</h3>
-        <h3>{{ product.customize }}</h3>
-      </section>
-    </a>
+        <h3>商品名稱：{{ product.name }}</h3>
+        <img
+          src="{{ product.image.url }}"
+          alt="{{ product.name }}"
+          style="width: 200px; height: 200px"
+        />
+        <br />
+        <h3>商品介紹{{ product.description }}</h3>
+        <h3>卡路里：{{ product.calories }}</h3>
+        <h3>可販售數量：{{ product.quantity }}</h3>
+        <h3>價格：{{ product.price }}</h3>
+        <h3>客製化：{{ product.customize }}</h3>
+      </section> </a
+    >3
   </li>
+  {% empty %}
+  <li>目前沒有商品</li>
   {% endfor %}
 </ul>
 
