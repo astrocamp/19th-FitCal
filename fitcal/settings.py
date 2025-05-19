@@ -216,8 +216,6 @@ LOGIN_REDIRECT_URL = '/users/login-redirect/'
 
 
 # AWS S3
-
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STORAGES = {
     'default': {
         'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
@@ -232,6 +230,7 @@ STORAGES = {
         },
     },
 }
+
 
 # AWS S3
 
