@@ -10,11 +10,17 @@ def select_role(req):
     return render(req, 'users/select_role.html')
 
 
-# 顯示註冊表單 (GET)
 def sign_up(req):
+    if req.user.is_authenticated:
+        messages.error(req, '你已經登入，不能註冊新帳號')
+        return redirect(
+            'members:index' if hasattr(req.user, 'member') else 'stores:index'
+        )
+
     role = req.GET.get('role')
     if role not in ['member', 'store']:
         return redirect('users:select_role')
+
     userform = UserForm()
     return render(
         req,
@@ -28,6 +34,12 @@ def sign_up(req):
 
 @require_POST
 def create_user(req):
+    if req.user.is_authenticated:
+        messages.error(req, '你已經登入，不能再建立新帳號')
+        return redirect(
+            'members:index' if hasattr(req.user, 'member') else 'stores:index'
+        )
+
     userform = UserForm(req.POST)
     role = req.POST.get('role')
 
