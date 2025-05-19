@@ -11,4 +11,7 @@ urlpatterns = [
     path('<uuid:id>/', views.show, name='show'),
     path('<uuid:id>/edit/', views.edit, name='edit'),
     path('<uuid:id>/delete/', views.delete, name='delete'),
+    path(
+        '<uuid:store_id>/orders/', views.manage_orders, name='manage_orders'
+    ),  # 新增訂單管理路由
 ]

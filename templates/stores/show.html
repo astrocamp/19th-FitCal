@@ -7,6 +7,15 @@
 <div>開店時間：{{ store.opening_time }}</div>
 <div>打烊時間：{{ store.closing_time }}</div>
 
+<div class="mt-4">
+  <a
+    href="{% url 'stores:manage_orders' store.id %}"
+    class="bg-blue-500 text-white px-4 py-2 rounded"
+  >
+    訂單管理
+  </a>
+</div>
+
 <h2>所有商品</h2>
 <ul>
   {% for product in products %}
