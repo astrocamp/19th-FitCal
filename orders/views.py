@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -5,6 +6,7 @@ from carts.models import Cart
 
 from .forms import OrderForm
 from .models import Order, OrderItem
+from .services import OrderService
 
 
 @transaction.atomic
@@ -126,3 +128,43 @@ def delete(req, id):
     order = get_object_or_404(Order, id=id)
     order.delete()
     return redirect('orders:index')
+
+
+def cancel(request, id):
+    """取消訂單"""
+    service = OrderService(id)
+    if service.cancel_order():
+        messages.success(request, '訂單已取消')
+    else:
+        messages.error(request, '此訂單無法取消')
+    return redirect('orders:show', id=id)
+
+
+def prepare(request, id):
+    """開始準備訂單"""
+    service = OrderService(id)
+    if service.prepare_order():
+        messages.success(request, '訂單開始準備中')
+    else:
+        messages.error(request, '此訂單無法開始準備')
+    return redirect('orders:show', id=id)
+
+
+def mark_ready(request, id):
+    """標記訂單準備完成"""
+    service = OrderService(id)
+    if service.mark_order_ready():
+        messages.success(request, '訂單已準備完成')
+    else:
+        messages.error(request, '此訂單無法標記為準備完成')
+    return redirect('orders:show', id=id)
+
+
+def complete(request, id):
+    """完成訂單（顧客取餐）"""
+    service = OrderService(id)
+    if service.complete_order():
+        messages.success(request, '訂單已完成')
+    else:
+        messages.error(request, '此訂單無法標記為完成')
+    return redirect('orders:show', id=id)
