@@ -73,6 +73,7 @@ def delete(request, id):
 def collections(request, id):
     product = get_object_or_404(Product, id=id)
     member = Member.objects.first()
+    # member = request.user.member #正常從user取出member
 
     collections = member.favorite_products
 
