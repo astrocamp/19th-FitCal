@@ -135,7 +135,7 @@ def favorite(req, store_id):
         favorites.remove(store)
     else:
         favorites.add(store)
-    return render(req, 'shares/favorite_btn.html', {'member': member, 'store': store})
+    return render(req, 'shared/favorite_btn.html', {'member': member, 'store': store})
 
 
 def favorite_list(req):
