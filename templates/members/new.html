@@ -1,6 +1,5 @@
 {% extends 'layouts/default.html' %} {% block main %}
-<h1>新增會員</h1>
-<form method="POST" action="{% url 'members:index' %}">
+<form method="POST" action="{% url 'members:create_member' %}">
   {% csrf_token %} {% for field in form %}
   <div>{{ field.label_tag }} {{ field }}</div>
   {% endfor %}
@@ -10,4 +9,5 @@
   </div>
   {{ form.errors }}
 </form>
+
 {% endblock main %}

@@ -1,8 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 
-# Create your views here.
-
-
-def index(req):
-    return render(req, 'pages/index.html')
+def index(request):
+    return redirect('users:sign_in')

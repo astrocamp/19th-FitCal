@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.db import transaction
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -32,7 +33,7 @@ def sign_up(req):
     )
 
 
-@require_POST
+@transaction.atomic
 def create_user(req):
     if req.user.is_authenticated:
         messages.error(req, '你已經登入，不能再建立新帳號')
@@ -54,9 +55,8 @@ def create_user(req):
         )
 
     if userform.is_valid():
-        user = userform.save()
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(req, user)
+        req.session['temp_user_data'] = req.POST
+        req.session['temp_user_role'] = role
 
         if role == 'member':
             return redirect('members:new')
