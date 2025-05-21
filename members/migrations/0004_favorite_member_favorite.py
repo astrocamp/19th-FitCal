@@ -7,9 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('members', '0002_alter_member_phone_number'),
-        ('stores', '0002_store_closing_time_store_opening_time'),
+<<<<<<<< HEAD:members/migrations/0005_favorite_member_favorite.py
+        ('members', '0004_alter_member_phone_number'),
+        ('stores', '0004_store_closing_time_store_opening_time'),
+========
         ('members', '0003_member_ordered_stores'),
+        ('stores', '0002_store_closing_time_store_opening_time'),
+>>>>>>>> c6368d9 (feat: implement store-member favorite relationship and fix logic):members/migrations/0004_favorite_member_favorite.py
     ]
 
     operations = [
