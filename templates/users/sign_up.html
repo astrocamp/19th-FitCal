@@ -1,15 +1,20 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>快速註冊</h1>
-<p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
 <form method="post" action="{% url 'users:create_user' %}">
   {% csrf_token %}
-
-  <input type="hidden" name="role" value="{{ role }}">
 
   {% if error %}
     <p style="color:red;">{{ error }}</p>
   {% endif %}
+  <label class="label cursor-pointer">
+    <span class="label-text">會員</span>
+    <input type="radio" name="role" value="member" class="radio checked:bg-blue-500" checked>
+  </label>
 
+  <label class="label cursor-pointer">
+    <span class="label-text">店家</span>
+    <input type="radio" name="role" value="store" class="radio checked:bg-blue-500">
+  </label>
   {% for field in userform %}
     <p>
       {{ field.label_tag }}<br>
@@ -23,13 +28,13 @@
  
 
 
-  <button type="submit">註冊</button>
+  <button class="btn" type="submit">註冊</button>
 </form>
 
 {% if request.user.is_authenticated %}
   <form method="POST" action="{% url 'users:delete_session' %}" style="margin-top: 1rem;">
     {% csrf_token %}
-    <button type="submit">登出</button>
+    <button class="btn" type="submit">登出</button>
   </form>
 {% endif %}
 

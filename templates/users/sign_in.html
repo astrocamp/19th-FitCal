@@ -7,11 +7,9 @@
   <p style="color: red">{{ error }}</p>
   {% endif %}
 
-  <input type="hidden" name="role" value="{{ role }}" />
-
   <p>
     <label for="email">電子郵件</label><br />
-    <input type="email" name="email" value="{{ email }}" />
+    <input type="email" name="email" />
   </p>
 
   <p>
@@ -19,11 +17,13 @@
     <input type="password" name="password" />
   </p>
 
-  <button type="submit">登入</button>
+  <button class="btn" type="submit">登入</button>
 </form>
 
-<p>還沒有帳號？<a href="{% url 'users:select_role' %}">註冊新帳號</a></p>
+<p>還沒有帳號？<a href="{% url 'users:sign_up' %}">註冊新帳號</a></p>
+{% comment %}
 <p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
+{% endcomment %}
 
 <hr />
 
