@@ -124,10 +124,9 @@ def delete(request, id):
 
 
 @require_POST
+@member_required
 def favorite(req, store_id):
-    # member = req.user.member正常從user註冊為member的找法
-    member = Member.objects.first()  # 暫時按讚都先用第一個會員來執行
-
+    member = req.user.member
     favorites = member.favorite
     store = get_object_or_404(Store, id=store_id)
 
@@ -138,9 +137,9 @@ def favorite(req, store_id):
     return render(req, 'shared/favorite_btn.html', {'member': member, 'store': store})
 
 
+@member_required
 def favorite_list(req):
-    # member = req.user.member
-    member = Member.objects.first()  # 都暫時先用第一位會員測試
+    member = req.user.member
     favorites = member.favorite.all()  # 拿到所有被收藏的店家
 
     return render(
@@ -151,3 +150,10 @@ def favorite_list(req):
             'favorites': favorites,
         },
     )
+
+
+@member_required
+def store_list(req):
+    stores = Store.objects.all()
+    member = req.user.member
+    return render(req, 'members/store_list.html', {'stores': stores, 'member': member})
