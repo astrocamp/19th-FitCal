@@ -208,7 +208,6 @@ AUTH_USER_MODEL = 'users.User'
 
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
-<<<<<<< HEAD
 LOGIN_REDIRECT_URL = '/users/login-redirect/'
 
 

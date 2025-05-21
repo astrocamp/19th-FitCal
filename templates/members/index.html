@@ -1,13 +1,10 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>會員列表</h1>
-
 {% if member %}
-
 <a href="{% url 'members:show' member.id %}">
   <p>{{ member.id }}</p>
   <p>{{ member.phone }}</p>
 </a>
-
 {% else %}
-<p>目前沒有會員資料</p>
+<a href="{% url "members:new" %}" class="btn">新增會員資料</a>
 {% endif %} {% endblock main %}
