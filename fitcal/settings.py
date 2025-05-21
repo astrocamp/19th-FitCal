@@ -218,7 +218,6 @@ LOGIN_REDIRECT_URL = '/'
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
-
 # AWS S3
 STORAGES = {
     'default': {

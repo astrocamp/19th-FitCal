@@ -2,11 +2,18 @@ import uuid
 
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import Q, UniqueConstraint
+from django.utils import timezone
 
 from products.models import Product
 from stores.models import Store
-from users.models import User
+
+
+# 重新定義添加軟刪除後的搜尋行為
+class MemberManager(models.Manager):
+    def get_queryset(self):
+        # 只回傳沒被軟刪除的 Member
+        return super().get_queryset().filter(deleted_at__isnull=True)
 
 
 class Member(models.Model):
@@ -17,7 +24,13 @@ class Member(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(
+        'users.User',
+        on_delete=models.SET_NULL,
+        related_name='member',
+        null=True,
+        blank=True,
+    )
     name = models.CharField(max_length=100)
     phone_number = models.CharField(
         max_length=20,
@@ -42,6 +55,22 @@ class Member(models.Model):
         through='Collection',  # 使用中介表
         related_name='favorited_by',  # 反向關聯名稱，讓 product.favorited_by.all() 可用
     )
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    deleted_email = models.CharField(max_length=254, null=True, blank=True)
+
+    objects = MemberManager()
+    # 用all_objects可以查看全部包含被軟刪除的資料
+    all_objects = models.Manager()
+
+    def delete(self, using=None, keep_parents=False):
+        if self.user and not self.deleted_email:
+            self.deleted_email = self.user.email
+        self.deleted_at = timezone.now()
+        self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
+        self.user.delete(using=using, keep_parents=keep_parents)
+
+    def __str__(self):
+        return f'{self.member.name} 收藏了 {self.store.name}'
 
 
 class Favorite(models.Model):
@@ -52,10 +81,13 @@ class Favorite(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('member', 'store')  # 防止重複收藏
-
-    def __str__(self):
-        return f'{self.member.name} 收藏了 {self.store.name}'
+        constraints = [
+            UniqueConstraint(
+                fields=['member', 'store'],
+                name='unique_member_store',
+                condition=Q(deleted_at__isnull=True),
+            )
+        ]
 
 
 class Collection(models.Model):
@@ -65,7 +97,11 @@ class Collection(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['member', 'product'], name='unique_member_product')
+            UniqueConstraint(
+                fields=['member', 'product'],
+                name='unique_member_product',
+                condition=Q(deleted_at__isnull=True),
+            )
         ]
 
     def __str__(self):
