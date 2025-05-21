@@ -91,7 +91,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'users.middleware.RoleGuardMiddleware',
 ]
 
 ROOT_URLCONF = 'fitcal.urls'
@@ -205,10 +204,11 @@ STATICFILES_DIRS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_URL = 'users:sign_in'
+# LOGIN_URL = 'users:sign_in'
 
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
+<<<<<<< HEAD
 LOGIN_REDIRECT_URL = '/users/login-redirect/'
 
 
