@@ -8,13 +8,14 @@ import pandas as pd
 path = (
     Path(__file__).resolve().parent.parent
 )  # 取得 FitCal 專案根目錄（manage.py 同層）
+print(path)
 sys.path.insert(0, str(path))  # 加入根目錄到 sys.path，讓 Python 找得到 fitcal 模組
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fitcal.settings')
 django.setup()
 from locations.models import Location
 
-file_path = path.parent / 'FITCAL' / 'src' / 'files' / 'geocoded_addresses.csv'
+file_path = path / 'src' / 'files' / 'geocoded_addresses.csv'
 
 init_df = pd.read_csv(file_path, encoding='utf-8-sig')
 
@@ -35,3 +36,4 @@ objs = [
 ]
 
 Location.objects.bulk_create(objs)
+print('Location資料匯入完成')

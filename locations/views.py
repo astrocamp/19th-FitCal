@@ -18,8 +18,7 @@ def index(req):
 def search_addr(req):
     if req.method == 'POST':
         address = req.POST.get('address')
-        # result = geocode_address(address)
-        result = {'latitude': 25.042422, 'longitude': 121.513897}
+        result = geocode_address(address)
         if result:
             print(f'search--------{result}----------search')
             return JsonResponse(result)
