@@ -41,6 +41,7 @@ class Store(models.Model):
             self.deleted_email = self.user.email
         self.deleted_at = timezone.now()
         self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
+        self.products.update(deleted_at=self.deleted_at)
         self.user.delete(using=using, keep_parents=keep_parents)
 
     def __str__(self):
