@@ -23,7 +23,9 @@ class Member(models.Model):
         max_length=20,
         validators=[RegexValidator(r'^09\d{8}$', message='手機號碼格式錯誤')],
     )
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    gender = models.CharField(
+        max_length=10, null=True, blank=True, choices=GENDER_CHOICES
+    )
     date_of_birth = models.DateField(null=True, blank=True)
     line_id = models.CharField(max_length=64, null=True, blank=True)
     google_id = models.CharField(max_length=64, null=True, blank=True)
