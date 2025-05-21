@@ -1,7 +1,7 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>店家列表</h1>
 
-{% if store %}
+<a href="{% url 'stores:new' %}">新增店家</a>
 
 <ul>
   {% for store in stores %}
