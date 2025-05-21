@@ -8,13 +8,11 @@
 
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <section class="max-w-5xl mx-auto">
   <body>
-    {% include 'shared/messages.html' %} {% include 'shared/nav.html' %}
+    {% include 'shared/messages.html' %} {% include 'search/search.html' %}
     <h1 class="bg-amber-500 text-gray-700">這裏是模板</h1>
     <h2 class="text-blue-500 text-right">user id: {{user.id}}</h2>
     <div class="flex justify-end text-blue-500">
