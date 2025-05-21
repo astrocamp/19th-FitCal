@@ -46,7 +46,6 @@ class MemberForm(ModelForm):
                 'invalid_choice': '性別選擇無效',
             },
             'date_of_birth': {
-                'required': '請輸入生日',
                 'invalid': '請輸入正確的日期格式',
             },
         }
@@ -58,11 +57,6 @@ class MemberForm(ModelForm):
         self.fields['name'].required = True
         self.fields['phone_number'].initial = '09'
         self.fields['phone_number'].required = True
-        self.fields['gender'].required = True
-        self.fields['date_of_birth'].required = True
-
-        self.fields['line_id'].required = False
-        self.fields['google_id'].required = False
 
         if not self.is_create:
             self.fields['date_of_birth'].widget.attrs['readonly'] = True
