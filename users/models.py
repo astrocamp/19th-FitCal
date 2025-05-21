@@ -30,11 +30,26 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = None  # 移除 username
     email = models.EmailField(unique=True, help_text='example@mail.com')
+    ROLE_CHOICES = [
+        ('member', 'Member'),
+        ('store', 'Store'),
+    ]
+    role = models.CharField(
+        max_length=10, choices=ROLE_CHOICES, default='member', blank=True
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+
+    @property
+    def is_member(self):
+        return self.role == 'member'
+
+    @property
+    def is_store(self):
+        return self.role == 'store'
 
     def __str__(self):
         return self.email
