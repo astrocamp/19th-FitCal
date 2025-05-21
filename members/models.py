@@ -2,7 +2,7 @@ import uuid
 
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Q, UniqueConstraint
+from django.db.models import UniqueConstraint
 from django.utils import timezone
 
 from products.models import Product
@@ -66,11 +66,10 @@ class Member(models.Model):
         if self.user and not self.deleted_email:
             self.deleted_email = self.user.email
         self.deleted_at = timezone.now()
+        self.favorite_records.all().delete()
+        self.collection_set.all().delete()
         self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
         self.user.delete(using=using, keep_parents=keep_parents)
-
-    def __str__(self):
-        return f'{self.member.name} 收藏了 {self.store.name}'
 
 
 class Favorite(models.Model):
@@ -84,10 +83,12 @@ class Favorite(models.Model):
         constraints = [
             UniqueConstraint(
                 fields=['member', 'store'],
-                name='unique_member_store',
-                condition=Q(deleted_at__isnull=True),
+                name='unique_member_store_favorite',
             )
         ]
+
+    def __str__(self):
+        return f'{self.member.name} 收藏了 {self.store.name}'
 
 
 class Collection(models.Model):
@@ -99,10 +100,9 @@ class Collection(models.Model):
         constraints = [
             UniqueConstraint(
                 fields=['member', 'product'],
-                name='unique_member_product',
-                condition=Q(deleted_at__isnull=True),
+                name='unique_member_product_colection',
             )
         ]
 
     def __str__(self):
-        return f'{self.member} 收藏了 {self.product}'
+        return f'{self.member.name} 收藏了 {self.product.name}'
