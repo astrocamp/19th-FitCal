@@ -12,17 +12,13 @@
   <p>客製化: {{ product.customize }}</p>
 </h1>
 
-<a href="{% url 'products:edit' product.id %}">編輯</a>
+<a href="{% url 'products:edit' product.id %}" class="btn">編輯</a>
 
-<form
-  action="{% url 'products:delete' product.id %}"
-  method="post"
-  onsubmit="return confirm('確定要刪除嗎?');"
->
+<form action="{% url 'products:delete' product.id %}" method="post" onsubmit="return confirm('確定要刪除嗎?');">
   {% csrf_token %}
-  <input type="submit" value="刪除" />
+  <input type="submit" value="刪除" class="btn" />
 </form>
 
-<a href="{% url 'products:index' %}">回商品首頁</a>
+<a href="{% url 'products:index' %}" class="btn">回商品首頁</a>
 
 {% endblock main %}

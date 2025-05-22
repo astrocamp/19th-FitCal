@@ -1,8 +1,8 @@
 {% extends "layouts/default.html" %} {% block main %}
 <h3>為「{{ store.id }}」新增商品</h3>
 
-<a href="{% url 'products:index' %}">回商品首頁</a>
-<a href="{% url 'stores:show' store.id %}">回店家頁面</a>
+<a href="{% url 'products:index' %}" class="btn">回商品首頁</a>
+<a href="{% url 'stores:show' store.id %}" class="btn">回店家頁面</a>
 
 <form action="{% url 'products:index' %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -15,7 +15,7 @@
   </div>
   {% endfor %}
   <div>
-    <input type="submit" value="新增商品" />
+    <input type="submit" value="新增商品" class="btn" />
   </div>
 </form>
 

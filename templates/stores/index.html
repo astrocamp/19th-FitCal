@@ -1,15 +1,13 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>店家列表</h1>
 
-<a href="{% url 'stores:new' %}">新增店家</a>
-
 <ul>
   {% for store in stores %}
   <li>
     {% include "shared/favorite_btn.html" with store=store member=member %}
     <a href="{% url 'stores:show' store.id %}">
       <section>
-        <h1>店家名稱(先用UUID替代)：{{ store.id }}</h1>
+        <h1>店家名稱：{{ store.name }}</h1>
         <h1>店家地址：{{ store.address }}</h1>
         <h1>店家電話：{{ store.phone_number }}</h1>
         <h1>店家統編：{{ store.tax_id }}</h1>
@@ -18,8 +16,11 @@
       </section>
     </a>
   </li>
+  {% empty %}
+  <li>無商家資訊</li>
+  {% if user.is_store %}
+  <a href="{% url "stores:new" %}" class="btn">新增店家資訊</a>
+  {% endif %}
   {% endfor %}
 </ul>
-
-<a href="{% url 'members:favorite_list' %}">我要看我按讚的所有商家</a>
 {% endblock %}
