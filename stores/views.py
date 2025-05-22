@@ -1,23 +1,11 @@
-from functools import wraps
-
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 
+from common.decorator import store_required
+
 from .forms import StoreForm
 from .models import Store
-
-
-def store_required(view_func):
-    @wraps(view_func)
-    def _wrapped_view(req, *args, **kwargs):
-        if not req.user.is_store:
-            messages.error(req, '您不是店家，無法訪問此頁面')
-            return redirect('users:index')
-        return view_func(req, *args, **kwargs)
-
-    return login_required(_wrapped_view)
 
 
 def new(req):
@@ -39,16 +27,15 @@ def create_store(request):
     return render(request, 'stores/new.html', {'form': form})
 
 
-@store_required
 @login_required
 def index(request):
+    stores = Store.objects.all()
     store = Store.objects.filter(user=request.user).first()
-    return render(request, 'stores/index.html', {'store': store})
+    return render(request, 'stores/index.html', {'stores': stores, 'store': store})
 
 
-@store_required
 def show(req, id):
-    store = get_object_or_404(Store, pk=id, user=req.user)
+    store = get_object_or_404(Store, pk=id)
     products = store.products.all()
     if req.method == 'POST':
         form = StoreForm(req.POST)

@@ -17,7 +17,7 @@
   <li>這個店家目前沒有商品。</li>
   {% endfor %}
 </ul>
-
+{% if user.is_store and store == user.store %}
 <form action="{% url 'stores:delete' store.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')">
   {% csrf_token %}
   <button type="submit" class="btn">刪除帳號</button>
@@ -31,6 +31,7 @@
 {% endif %}
 
 <a href="{% url 'stores:edit' store.id %}" class="btn">編輯</a>
-<a href="{% url 'stores:index' %}" class="btn">回上一頁</a>
 <a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a>
+{% endif %}
+<a href="{% url 'stores:index' %}" class="btn">回上一頁</a>
 {% endblock main %}

@@ -1,25 +1,12 @@
-from functools import wraps
-
-from django.contrib import messages
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
+from common.decorator import member_required
+
 from .forms import MemberForm
 from .models import Member, Store
-
-
-def member_required(view_func):
-    @wraps(view_func)
-    def _wrapped_view(req, *args, **kwargs):
-        if not req.user.is_member:
-            messages.error(req, '您不是會員，無法訪問此頁面')
-            return redirect('users:index')
-        return view_func(req, *args, **kwargs)
-
-    return login_required(_wrapped_view)
 
 
 def new(req):

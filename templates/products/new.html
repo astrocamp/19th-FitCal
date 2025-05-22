@@ -1,5 +1,5 @@
 {% extends "layouts/default.html" %} {% block main %}
-<h3>為「{{ store.id }}」新增商品</h3>
+<h3>為「{{ store.name}}」新增商品</h3>
 
 <a href="{% url 'products:index' %}" class="btn">回商品首頁</a>
 <a href="{% url 'stores:show' store.id %}" class="btn">回店家頁面</a>

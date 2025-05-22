@@ -9,16 +9,14 @@
 <ul>
   {% for product in products %}
   <!-- prettier-ignore -->
-  {% include "shared/collections_btn.html" with product=product member=member %}
+  {% if user.is_member %}
+  {% include "shared/collections_btn.html" with product=product member=user.member %}
+  {% endif %}
   <li>
     <a href="{% url 'products:show' product.id %}" class="block border-2 rounded-sm mb-2">
       <section>
         <h3>商品名稱：{{ product.name }}</h3>
-        <img
-          src="{{ product.image.url }}"
-          alt="{{ product.name }}"
-          style="width: 200px; height: 200px"
-        />
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 200px; height: 200px" />
         <br />
         <h3>商品介紹{{ product.description }}</h3>
         <h3>卡路里：{{ product.calories }}</h3>
