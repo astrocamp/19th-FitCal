@@ -2,6 +2,7 @@ import Alpine from 'alpinejs';
 import flatpickr from 'flatpickr';
 import 'htmx.org';
 import { initPickupTimePicker } from './flatpickr/main.js';
+import myGeocode from './geocoding/my_geocode.js';
 
 window.Alpine = Alpine;
 window.flatpickr = flatpickr;
@@ -12,4 +13,5 @@ initPickupTimePicker('#id_date_of_birth', 'cool_style', {
   altFormat: 'Y年m月d日',
   altInput: true,
 });
+window.myGeocode = myGeocode;
 Alpine.start();

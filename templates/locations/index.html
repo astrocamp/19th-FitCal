@@ -1,0 +1,45 @@
+{% extends "layouts/default.html" %} {% block main %}
+
+<div x-data="myGeocode" class="space-y-4">
+  <!-- 按鈕：取得位置 -->
+  <div>
+    <button @click="getLocation" class="block px-4 py-2 bg-blue-500 text-white rounded">
+      📍 取得目前位置
+    </button>
+    <div>
+      <input type="text" x-model="address" class="border-2 mr-1.5">
+      <button @click="getAddress" class="btn" data-url="{% url 'locations:search_addr' %}">取得地址位置</button>
+    </div>
+  </div>
+
+  <p x-text="type" class="block text-lg font-bold ml-2"></p>
+  <p x-text="tomtom_addr" class="block text-lg font-bold ml-2"></p>
+
+  <!-- 搜尋按鈕 -->
+<form hx-post="{% url 'locations:search_store' %}" hx-target="#results" hx-swap="innerHTML">
+  {% csrf_token %}
+  <div class="px-2">
+    <label for="longitude">經度:</label>
+    <input class="border-2 mb-2" type="number" step="any" name="longitude" x-model="longitude">
+  </div>
+  <div class="px-2">
+    <label for="latitude">緯度:</label>
+    <input class="border-2 mb-2" type="number" step="any" name="latitude" x-model="latitude">
+  </div>
+  <div class="px-2">
+    <label for="radius">搜尋範圍 (公里):</label>
+    <input class="border-2 mb-2" type="number" step="0.01" min="0" name="radius" x-model="radius">
+  </div>
+  <div class="px-2">
+    <button class="btn px-2" type="submit">搜尋</button>
+  </div>
+</form>
+    🔍 搜尋附近地址
+  </button>
+
+  <!-- 結果顯示區域 -->
+  <div id="results" class="mt-4 border p-4 rounded bg-gray-50">
+    {% include "locations/result.html" %}
+  </div>
+</div>
+{% endblock main %}

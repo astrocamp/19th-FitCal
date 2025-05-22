@@ -1,0 +1,5 @@
+{% for r in result %}
+<div>{{ r.name }} — 距離：{{ r.distance_km }} 公里</div>
+{% empty %}
+<p>沒有找到 {{ radius }} 公里內的地點</p>
+{% endfor %}
