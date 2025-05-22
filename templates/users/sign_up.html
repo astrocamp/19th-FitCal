@@ -1,41 +1,46 @@
-{% extends 'layouts/default.html' %} {% block main %}
-<h1>快速註冊</h1>
-<form method="post" action="{% url 'users:create_user' %}">
-  {% csrf_token %}
-
-  {% if error %}
-    <p style="color:red;">{{ error }}</p>
-  {% endif %}
-  <label class="label cursor-pointer">
-    <span class="label-text">會員</span>
-    <input type="radio" name="role" value="member" class="radio checked:bg-blue-500" checked>
-  </label>
-
-  <label class="label cursor-pointer">
-    <span class="label-text">店家</span>
-    <input type="radio" name="role" value="store" class="radio checked:bg-blue-500">
-  </label>
-  {% for field in userform %}
-    <p>
-      {{ field.label_tag }}<br>
-      {{ field }}
-      {% if field.errors %}
-      <div style="color:red;">{{ field.errors }}</div>
-      {% endif %}
-    </p>
-  {% endfor %}
-
- 
-
-
-  <button class="btn" type="submit">註冊</button>
-</form>
-
-{% if request.user.is_authenticated %}
-  <form method="POST" action="{% url 'users:delete_session' %}" style="margin-top: 1rem;">
+{% extends 'layouts/default.html' %} {% load socialaccount %}{% block main %}
+<main class="flex justify-center items-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-sm p-6 bg-white rounded shadow h-[550px]">
+    <h2 class="text-center text-lg font-bold mb-2">歡迎使用 Fitcal 線上點餐平台</h2>
+  
+    <p class="text-center text-sm mb-4">快速註冊</p>
+  <form method="post" action="{% url 'users:create_user' %}"  class="space-y-3">
     {% csrf_token %}
-    <button class="btn" type="submit">登出</button>
-  </form>
-{% endif %}
 
-{% endblock main %}
+    <input type="hidden" name="role" value="{{ role }}" >
+
+    {% if error %}
+      <p >{{ error }}</p>
+    {% endif %}
+
+    <div class="block text-base font-medium">{% for field in userform %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.errors %}
+        <div>{{ field.errors }}</div>
+        {% endif %}
+      </p>
+    {% endfor %}
+    </div>
+    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">註冊</button>
+  </form>
+      <p class="text-center text-sm mt-4">
+      <a href="{% url 'users:index' %}" class="text-gray-500 underline">重新選擇身份</a>
+    </p>
+
+  <div class="my-4 text-center text-sm text-gray-500">------ 使用第三方註冊 ------</div>
+    <div class="flex flex-col space-y-3">
+      <a href="{% provider_login_url 'google' %}" class="block">
+        <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">
+          Google
+        </button>
+      </a>
+      <a href="{% provider_login_url 'line' %}" class="block">
+        <button class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded">
+          LINE 
+        </button>
+      </a>
+    </div>
+
+  {% endblock main %}
