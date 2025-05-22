@@ -159,6 +159,8 @@ def store_list(req):
     return render(req, 'members/store_list.html', {'stores': stores, 'member': member})
 
 
+@login_required
+@member_required
 def collections(request):
     members = Member.objects.all()
     collections = Collection.objects.all()

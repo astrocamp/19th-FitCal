@@ -1,4 +1,5 @@
 {% if member in product.favorited_by.all %}
+
 <button
   hx-swap="outerHTML"
   hx-post="{% url 'products:collections' product.id %}"
