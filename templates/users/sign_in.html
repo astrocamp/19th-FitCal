@@ -1,40 +1,52 @@
 {% extends "layouts/default.html" %} {% load socialaccount %} {% block main %}
 
-<h1>登入頁面</h1>
+<main class="flex justify-center items-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-sm p-6 bg-white rounded shadow h-[550px]">
+    <h2 class="text-center text-lg font-bold mb-2">歡迎使用 Fitcal 線上點餐平台</h2>
 
-<form method="post" action="{% url 'users:create_session' %}">
-  {% csrf_token %} {% if error %}
-  <p style="color: red">{{ error }}</p>
-  {% endif %}
+    <p class="text-center text-sm mb-4">
+      還沒有帳號？<a href="{% url 'users:sign_up' %}" class="text-blue-600 font-semibold"
+        >註冊新帳號</a
+      >
+    </p>
 
-  <p>
-    <label for="email">電子郵件</label><br />
-    <input type="email" name="email" />
-  </p>
+    <form method="post" action="{% url 'users:create_session' %}" class="space-y-3">
+      {% csrf_token %} {% if error %}
+      <p class="text-red-500 text-sm text-center">{{ error }}</p>
+      {% endif %}
 
-  <p>
-    <label for="password">密碼</label><br />
-    <input type="password" name="password" />
-  </p>
+      <input type="hidden" name="role" value="{{ role }}" />
 
-  <button class="btn" type="submit">登入</button>
-</form>
+      <div>
+        <label for="email" class="block text-sm font-medium">電子郵件</label>
+        <input
+          type="email"
+          name="email"
+          value="{{ email }}"
+          class="w-full border px-3 py-2 rounded mt-1"
+        />
+      </div>
 
-<p>還沒有帳號？<a href="{% url 'users:sign_up' %}">註冊新帳號</a></p>
-{% comment %}
-<p><a href="{% url 'users:select_role' %}">重新選擇身份</a></p>
-{% endcomment %}
+      <div>
+        <label for="password" class="block text-sm font-medium">密碼</label>
+        <input type="password" name="password" class="w-full border px-3 py-2 rounded mt-1" />
+      </div>
 
-<hr />
+      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">
+        登入
+      </button>
+    </form>
 
-<h3>使用第三方登入</h3>
-
-<a href="{% provider_login_url 'google' %}">
-  <button style="background-color: #db4437; color: white">使用 Google 登入</button>
-</a>
-
-<a href="{% provider_login_url 'line' %}">
-  <button style="background-color: #00c300; color: white">使用 LINE 登入</button>
-</a>
+    <div class="my-4 text-center text-sm text-gray-500">------ 其他登入方式 ------</div>
+    <div class="flex flex-col space-y-3">
+      <a href="{% provider_login_url 'google' %}" class="block">
+        <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">Google</button>
+      </a>
+      <a href="{% provider_login_url 'line' %}" class="block">
+        <button class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded">LINE</button>
+      </a>
+    </div>
+  </div>
+</main>
 
 {% endblock main %}
