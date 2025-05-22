@@ -6,7 +6,6 @@ from django.db import models
 from django.utils import timezone
 
 from products.models import Product
-from stores.models import Store
 
 from .enums import OrderStatus, PaymentMethod, PaymentStatus
 from .fsm import OrderFSM
@@ -20,14 +19,13 @@ class Order(models.Model):
     pickup_number = models.CharField(max_length=20, editable=False, null=True)
 
     member = models.ForeignKey(
-        # 此處先以user測試，待user-member關聯後改為member
-        'users.User',
+        'members.Member',
         on_delete=models.SET_NULL,
         null=True,
         related_name='orders',
     )
     store = models.ForeignKey(
-        Store, on_delete=models.SET_NULL, null=True, related_name='orders'
+        'stores.Store', on_delete=models.SET_NULL, null=True, related_name='orders'
     )
     pickup_time = models.DateTimeField()
     note = models.TextField(null=True, blank=True)
@@ -54,9 +52,9 @@ class Order(models.Model):
     )
 
     # 快照
-    # member_name = models.CharField(max_length=50, editable=False, null=True)
-    # member_phone = models.CharField(max_length=20, editable=False, null=True)
-    # store_name = models.CharField(max_length=100, editable=False, null=True)
+    member_name = models.CharField(max_length=50, editable=False, null=True)
+    member_phone = models.CharField(max_length=20, editable=False, null=True)
+    store_name = models.CharField(max_length=100, editable=False, null=True)
     store_phone = models.CharField(max_length=20, editable=False, null=True)
     store_address = models.CharField(max_length=200, editable=False, null=True)
 
@@ -107,11 +105,12 @@ class Order(models.Model):
             self.pickup_number = new_number
 
         # 儲存快照資訊
-        # if self.member:
-        #     self.member_name = self.member.name
-        #     self.member_phone = self.member.phone_number
+        if self.member:
+            self.member_name = self.member.name
+            self.member_phone = self.member.phone_number
 
         if self.store:
+            self.store_name = self.store.name
             self.store_phone = self.store.phone_number
             self.store_address = self.store.address
 
