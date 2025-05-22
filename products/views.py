@@ -1,7 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
 
-from members.models import Member
 from stores.models import Store
 
 from .forms import ProductForm
@@ -22,11 +20,11 @@ def index(request):
     else:
         form = ProductForm()
     products = Product.objects.all()
-    members = Member.objects.all()
+    member = request.user.member
     return render(
         request,
         'products/index.html',
-        {'products': products, 'form': form, 'members': members},
+        {'products': products, 'form': form, 'member': member},
     )
 
 
@@ -69,11 +67,9 @@ def delete(request, id):
     return redirect('products:index')
 
 
-@require_POST
 def collections(request, id):
     product = get_object_or_404(Product, id=id)
-    member = Member.objects.first()
-    # member = request.user.member  # 正常從user取出member
+    member = request.user.member  # 正常從user取出member
 
     collections = member.favorite_products
 
@@ -84,7 +80,7 @@ def collections(request, id):
 
     return render(
         request,
-        'shares/collections_btn.html',
+        'shared/collections_btn.html',
         {
             'member': member,
             'product': product,
