@@ -9,7 +9,7 @@
 <ul>
   {% for product in products %}
   <!-- prettier-ignore -->
-  {% include "shares/collections_btn.html" with product=product member=member %}
+  {% include "shared/collections_btn.html" with product=product member=member %}
   <li>
     <a href="{% url 'products:show' product.id %}">
       <section>

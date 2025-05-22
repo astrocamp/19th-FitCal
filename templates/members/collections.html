@@ -4,9 +4,9 @@
 <ul>
   {% for collection in collections %}
   <li>
-    <p>商品名稱：{{ collection.product.name }}</p>
-    <p>商品價格：{{ collection.product.price }}</p>
-    <p>商品介紹：{{ collection.product.description }}</p>
+    <p>商品名稱：{{ collection.name }}</p>
+    <p>商品價格：{{ collection.price }}</p>
+    <p>商品介紹：{{ collection.description }}</p>
   </li>
   {% empty %}
   <li>尚未收藏任何產品</li>
