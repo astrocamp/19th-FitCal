@@ -91,6 +91,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'middleware.block_merchant_cart.BlockMerchantCartMiddleware',  # 限制/cart/相關路由只有登入的會員可以使用
 ]
 
 ROOT_URLCONF = 'fitcal.urls'

@@ -20,11 +20,10 @@ def index(request):
     else:
         form = ProductForm()
     products = Product.objects.all()
-    member = request.user.member
     return render(
         request,
         'products/index.html',
-        {'products': products, 'form': form, 'member': member},
+        {'products': products, 'form': form},
     )
 
 
