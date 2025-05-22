@@ -135,6 +135,18 @@ def show(req, id):
     return render(req, 'orders/show.html', {'order': order})
 
 
+def edit(req, id):
+    order = get_object_or_404(Order, pk=id)
+    form = OrderForm(instance=order, mode='update')
+    return render(req, 'orders/edit.html', {'form': form, 'order': order})
+
+
+def delete(req, id):
+    order = get_object_or_404(Order, id=id)
+    order.delete()
+    return redirect('orders:index')
+
+
 def cancel(request, id):
     """取消訂單"""
     service = OrderService(id)
@@ -181,3 +193,7 @@ def complete(request, id):
     else:
         messages.error(request, '此訂單無法標記為完成')
     return redirect('stores:manage_orders', store_id=order.store.id)
+
+
+def ordering_step1(req):
+    return render(req, 'orders/sites/ordering_step1.html')

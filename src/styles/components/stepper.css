@@ -1,0 +1,17 @@
+.step.step-inactive::before {
+  background-color: #9e9e9e;
+  border: none;
+  height: 0.2rem;
+}
+
+.step.step-inactive::after {
+  background-color: #9e9e9e;
+  color: #fff;
+  border: none;
+}
+
+.step.step-active::after {
+  background-color: blue;
+  color: #fff;
+  border: none;
+}

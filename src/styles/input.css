@@ -5,6 +5,8 @@
 @import './components/flatpickr.css';
 @import '@fortawesome/fontawesome-free/css/all.css';
 
+@import './components/stepper.css';
+
 @layer base {
   button {
     @apply cursor-pointer;

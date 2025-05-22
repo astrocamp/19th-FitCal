@@ -1,0 +1,93 @@
+{% extends 'layouts/default.html' %} {% block main %}
+
+<div class="flex justify-center bg-gray-100 p-4 sm:p-10">
+  <div class="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+    <h1 class="mb-10s text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+
+    <!-- Progress Steps -->
+    <ul class="steps my-4 w-full">
+      <li class="step step-active">
+        <span class="text-blue-800">確認明細</span>
+      </li>
+      <li class="step step-inactive text-gray-500">選擇付款</li>
+      <li class="step step-inactive text-gray-500">確認結帳</li>
+    </ul>
+
+    <!-- Store Information -->
+    <div class="mb-4 rounded-md border border-gray-300 p-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="font-semibold text-gray-800">能量小姐 衡陽街店</p>
+          <p class="text-sm text-gray-600">
+            台北市衡陽街111號1樓 <span><i class="fa-solid fa-location-dot"></i></span>
+          </p>
+          <p class="text-sm text-gray-600">02-28825252</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pickup Information -->
+    <div class="mb-4 flex items-center justify-between border-y border-gray-300 p-4">
+      <div>
+        <p class="text-sm text-gray-700">取貨方式：自取</p>
+        <p class="text-sm text-gray-700">預計取貨時間：今日 2025-05-20 20:50</p>
+      </div>
+      <p class="text-sm font-semibold text-gray-800">$360 / 3份</p>
+    </div>
+
+    <!-- Shopping Contents -->
+    <div class="mb-4 border-y border-gray-300">
+      <div class="bg-gray-50 px-4 py-2">
+        <p class="text-sm font-semibold text-gray-700">購物內容</p>
+      </div>
+      <div class="relative flex items-center justify-between bg-gray-100 p-4">
+        <!-- Added relative for potential arrow positioning -->
+        <div>
+          <p class="text-sm font-medium text-gray-800">嫩煎雞胸肉餐</p>
+          <p class="text-xs text-gray-600">少飯/3份</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button class="text-gray-600 hover:text-blue-800">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button class="text-gray-600 hover:text-red-600">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Billing Details -->
+    <div class="border-y border-gray-300">
+      <div class="bg-gray-50 px-4 py-2">
+        <p class="text-sm font-semibold text-gray-700">結帳明細</p>
+      </div>
+      <div class="space-y-2 p-4">
+        <div class="flex justify-between text-sm text-gray-700">
+          <span>商品 X 3</span>
+          <span>$360</span>
+        </div>
+        <div class="flex justify-between text-sm font-semibold text-gray-800">
+          <span>應付金額</span>
+          <span>$360</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div
+      class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
+    >
+      <button
+        class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto"
+      >
+        繼續加購
+      </button>
+      <button class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto">
+        下一步
+      </button>
+    </div>
+  </div>
+</div>
+
+{% endblock main %}
