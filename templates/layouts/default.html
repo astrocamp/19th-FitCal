@@ -11,7 +11,8 @@
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <section class="max-w-5xl mx-auto">
-    {% include 'shared/messages.html' %} {% include 'search/search.html' %}
+    {% include 'shared/navbar.html' %}
+    {% include 'shared/messages.html' %}
       {% if user.is_authenticated %}
       <div class="flex justify-end">
         <h2 class="text-blue-500">user email: {{ user }}</h2>
