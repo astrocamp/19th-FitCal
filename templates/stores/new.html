@@ -13,8 +13,8 @@
     {% endif %}
   </div>
   {% endfor %}
-  <input type="submit" value="新增店家" />
+  <input type="submit" value="新增店家" class="btn" />
 </form>
 
-<a href="{% url 'stores:index' %}">店家列表</a>
+<a href="{% url 'stores:index' %}" class="btn">店家列表</a>
 {% endblock main %}

@@ -9,16 +9,13 @@
 <p>建立時間：{{ member.created_at|date:'Y-m-d H:i' }}</p>
 <p>更新時間：{{ member.updated_at|date:'Y-m-d H:i' }}</p>
 <button><a href="{% url 'members:edit' member.id %}">更新資料</a></button>
-<form
-  action="{% url 'members:delete' member.id %}"
-  method="post"
-  onsubmit="return confirm(是否確認刪除帳號與會員？此操作無法復原！');"
->
+<form action="{% url 'members:delete' member.id %}" method="post" onsubmit="return confirm(是否確認刪除帳號與會員？此操作無法復原！');">
   {% csrf_token %}
 
   <button type="submit">刪除帳號與會員</button>
 </form>
 {% if request.user.is_authenticated %}
+<a href="{% url 'members:favorite_list' %}">我要看我按讚的所有商家</a>
 <form method="POST" action="{% url 'users:delete_session' %}" style="margin-top: 1rem">
   {% csrf_token %}
   <button type="submit">登出</button>

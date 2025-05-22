@@ -6,9 +6,9 @@
   <div>{{ field.label_tag }} {{ field }}</div>
   {% endfor %}
 
-  <a href="{% url 'products:index' %}">回商品首頁</a>
-  <a href="{% url 'products:show' product.id %}">回商品頁面</a>
-  <input type="submit" value="更新資料" />
+  <a href="{% url 'products:index' %}" class="btn">回商品首頁</a>
+  <a href="{% url 'products:show' product.id %}" class="btn">回商品頁面</a>
+  <input type="submit" value="更新資料" class="btn" />
 </form>
 
 {% endblock main %}
