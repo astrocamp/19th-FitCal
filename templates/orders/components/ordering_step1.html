@@ -1,20 +1,19 @@
-{% extends 'layouts/default.html' %} {% block main %}
+<div x-show="step === 1" x-transition>
+  <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
 
-<div class="flex justify-center bg-gray-100 p-4 sm:p-10">
-  <div class="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-    <h1 class="mb-10s text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+  <!-- Progress Steps -->
+  <ul class="steps my-4 w-full">
+    <li class="step step-active">
+      <span class="text-blue-800">確認明細</span>
+    </li>
+    <li class="step step-inactive text-gray-500">選擇付款</li>
+    <li class="step step-inactive text-gray-500">確認結帳</li>
+  </ul>
 
-    <!-- Progress Steps -->
-    <ul class="steps my-4 w-full">
-      <li class="step step-active">
-        <span class="text-blue-800">確認明細</span>
-      </li>
-      <li class="step step-inactive text-gray-500">選擇付款</li>
-      <li class="step step-inactive text-gray-500">確認結帳</li>
-    </ul>
-
+  <!-- Main Content Card -->
+  <div class="w-full max-w-xl m-auto mt-7">
     <!-- Store Information -->
-    <div class="mb-4 rounded-md border border-gray-300 p-4">
+    <div class="mb-4 rounded-md border border-gray-300 p-4 m-auto">
       <div class="flex items-start justify-between">
         <div>
           <p class="font-semibold text-gray-800">能量小姐 衡陽街店</p>
@@ -41,7 +40,6 @@
         <p class="text-sm font-semibold text-gray-700">購物內容</p>
       </div>
       <div class="relative flex items-center justify-between bg-gray-100 p-4">
-        <!-- Added relative for potential arrow positioning -->
         <div>
           <p class="text-sm font-medium text-gray-800">嫩煎雞胸肉餐</p>
           <p class="text-xs text-gray-600">少飯/3份</p>
@@ -84,15 +82,11 @@
         繼續加購
       </button>
       <button
+        @click="step = 2"
         class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto"
-        hx-get="{% url 'orders:ordering_step2' %}"
-        hx-redirect="true "
-        hx-push-url="true"
       >
         下一步
       </button>
     </div>
   </div>
 </div>
-
-{% endblock main %}

@@ -1,0 +1,14 @@
+{% extends 'layouts/default.html' %} {% block main %}
+<div x-data="{ step: 1 }" class="bg-gray-100 min-h-screen p-4 sm:p-10">
+  <div class="m-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-lg">
+    <!-- Step 1 -->
+    {% include 'orders/components/ordering_step1.html' %}
+
+    <!-- Step 2 -->
+    {% include 'orders/components/ordering_step2.html' %}
+
+    <!-- Step 3 -->
+    {% include 'orders/components/ordering_step3.html' %}
+  </div>
+</div>
+{% endblock main %}

@@ -197,3 +197,7 @@ def complete(request, id):
 
 def ordering_step1(req):
     return render(req, 'orders/sites/ordering_step1.html')
+
+
+def ordering_steps(req):
+    return render(req, 'orders/ordering_steps.html')

@@ -1,0 +1,64 @@
+<div x-show="step === 2" x-transition>
+  <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+
+  <!-- Progress Steps -->
+  <ul class="steps my-4 w-full">
+    <li class="step step-active">
+      <span class="text-blue-800">確認明細</span>
+    </li>
+    <li class="step step-active text-blue-800">選擇付款</li>
+    <li class="step step-inactive text-gray-500">確認結帳</li>
+  </ul>
+
+  <!-- Main Content Card -->
+  <div class="w-full max-w-xl m-auto mt-7">
+    <!-- Total Amount Bar -->
+    <div
+      class="mb-6 flex items-center justify-between rounded-md bg-blue-700 p-3 text-white m-auto mt-7"
+    >
+      <div class="flex items-center">
+        <span class="mr-3 rounded-md bg-white px-3 py-1 text-sm font-semibold text-blue-700"
+          >3份</span
+        >
+        <span class="text-base font-semibold">應付金額</span>
+      </div>
+      <span class="text-lg font-bold">$360</span>
+    </div>
+
+    <!-- Recipient Information -->
+    <div class="mb-4 rounded-md border border-gray-300 p-4">
+      <p class="mb-1 text-sm text-gray-700">取貨人姓名：王小明</p>
+      <p class="text-sm text-gray-700">聯絡電話：0912345678</p>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="mb-8 rounded-md border border-gray-300 p-4">
+      <label for="payment-method" class="mb-2 block text-sm text-gray-700">付款方式：</label>
+      <select id="payment-method" class="select-bordered select w-full">
+        <option selected>現金</option>
+        <option>信用卡</option>
+        <option>Line Pay</option>
+      </select>
+    </div>
+
+    <!-- Action Buttons -->
+    <div>
+      <div
+        class="flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
+      >
+        <button
+          @click="step = 1"
+          class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto"
+        >
+          回上一步
+        </button>
+        <button
+          @click="step = 3"
+          class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto"
+        >
+          下一步
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
