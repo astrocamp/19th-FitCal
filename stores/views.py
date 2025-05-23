@@ -38,14 +38,14 @@ def show(req, id):
     store = get_object_or_404(Store, pk=id)
     products = store.products.all()
     if req.method == 'POST':
-        form = StoreForm(req.POST)
+        form = StoreForm(req.POST, instance=store)
         if form.is_valid():
             form.save()
             return redirect('stores:show', id=store.id)
         return render(
             req,
-            'stores/show.html',
-            {'store': store, 'form': form, 'products': products},
+            'stores/edit.html',
+            {'store': store, 'form': form},
         )
     return render(
         req,
