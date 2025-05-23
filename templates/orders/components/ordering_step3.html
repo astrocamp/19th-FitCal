@@ -1,8 +1,5 @@
-{% extends 'layouts/default.html' %} {% block main %}
-
-<div class="flex justify-center bg-gray-100 p-4 sm:p-10">
-  <div class="m-auto w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-    <h1 class="mb-10s text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+<div x-show="step === 3" x-transition>
+  <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
 
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
@@ -14,7 +11,7 @@
   </ul>
 
   <!-- Main Content Card -->
-  <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-md">
+  <div class="w-full max-w-xl rounded-lg bg-white p-6 shadow-md m-auto mt-7">
     <h2 class="mb-5 text-lg font-semibold text-gray-900">確認訂單明細</h2>
 
     <div class="space-y-0">
@@ -56,6 +53,7 @@
       class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
     >
       <button
+        @click="step = 2"
         class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto"
       >
         上一步
@@ -65,6 +63,4 @@
       </button>
     </div>
   </div>
-</body>
-
-{% endblock main %}
+</div>

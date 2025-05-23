@@ -14,5 +14,5 @@ urlpatterns = [
     path('<uuid:id>/mark-ready/', views.mark_ready, name='mark_ready'),
     path('<uuid:id>/complete/', views.complete, name='complete'),
     # sites
-    path('ordering_step1', views.ordering_step1, name='ordering_step1'),
+    path('ordering_steps', views.ordering_steps, name='ordering_steps'),
 ]
