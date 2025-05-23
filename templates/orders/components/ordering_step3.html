@@ -1,66 +1,68 @@
-<div x-show="step === 3" x-transition>
-  <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+<template x-if="step === 3">
+  <div x-transition>
+    <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
 
-  <!-- Progress Steps -->
-  <ul class="steps my-4 w-full">
-    <li class="step step-active">
-      <span class="text-blue-800">確認明細</span>
-    </li>
-    <li class="step step-active text-blue-800">選擇付款</li>
-    <li class="step step-active text-blue-800">確認結帳</li>
-  </ul>
+    <!-- Progress Steps -->
+    <ul class="steps my-4 w-full">
+      <li class="step step-active">
+        <span class="text-blue-800">確認明細</span>
+      </li>
+      <li class="step step-active text-blue-800">選擇付款</li>
+      <li class="step step-active text-blue-800">確認結帳</li>
+    </ul>
 
-  <!-- Main Content Card -->
-  <div class="w-full max-w-xl rounded-lg bg-white p-6 shadow-md m-auto mt-7">
-    <h2 class="mb-5 text-lg font-semibold text-gray-900">確認訂單明細</h2>
+    <!-- Main Content Card -->
+    <div class="w-full max-w-xl rounded-lg bg-white p-6 shadow-md m-auto mt-7">
+      <h2 class="mb-5 text-lg font-semibold text-gray-900">確認訂單明細</h2>
 
-    <div class="space-y-0">
-      <!-- container for list items -->
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">訂購門市</span>
-        <span class="text-sm text-gray-900">能量小姐 衡陽街店</span>
-      </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">取貨人</span>
-        <span class="text-sm text-gray-900">王小明</span>
+      <div class="space-y-0">
+        <!-- container for list items -->
+        <div class="flex items-center justify-between border-b border-gray-200 py-3">
+          <span class="text-sm text-gray-700">訂購門市</span>
+          <span class="text-sm text-gray-900">能量小姐 衡陽街店</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-gray-200 py-3">
+          <span class="text-sm text-gray-700">取貨人</span>
+          <span class="text-sm text-gray-900">王小明</span>
+        </div>
+
+        <div class="flex items-center justify-between border-b border-gray-200 py-3">
+          <span class="text-sm text-gray-700">聯絡電話</span>
+          <span class="text-sm text-gray-900">0912345678</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-gray-200 py-3">
+          <span class="text-sm text-gray-700">取貨方式</span>
+          <span class="text-sm text-gray-900">自取</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-gray-200 py-3">
+          <span class="text-sm text-gray-700">預計取貨時間</span>
+          <span class="text-sm text-gray-900">20:00</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-gray-200 py-3">
+          <span class="text-sm text-gray-700">付款方式</span>
+          <span class="text-sm text-gray-900">現金</span>
+        </div>
+        <div class="flex items-center justify-between py-3">
+          <!-- Last item, no bottom border -->
+          <span class="text-sm text-gray-700">應付金額</span>
+          <span class="text-sm font-semibold text-gray-900">$35</span>
+        </div>
       </div>
 
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">聯絡電話</span>
-        <span class="text-sm text-gray-900">0912345678</span>
-      </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">取貨方式</span>
-        <span class="text-sm text-gray-900">自取</span>
-      </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">預計取貨時間</span>
-        <span class="text-sm text-gray-900">20:00</span>
-      </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">付款方式</span>
-        <span class="text-sm text-gray-900">現金</span>
-      </div>
-      <div class="flex items-center justify-between py-3">
-        <!-- Last item, no bottom border -->
-        <span class="text-sm text-gray-700">應付金額</span>
-        <span class="text-sm font-semibold text-gray-900">$35</span>
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div
-      class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
-    >
-      <button
-        @click="step = 2"
-        class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto"
+      <!-- Action Buttons -->
+      <div
+        class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
       >
-        上一步
-      </button>
-      <button class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto">
-        送出訂單
-      </button>
+        <button
+          @click="step = 2"
+          class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto"
+        >
+          上一步
+        </button>
+        <button class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto">
+          送出訂單
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</template>
