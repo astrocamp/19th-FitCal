@@ -83,7 +83,12 @@
       >
         繼續加購
       </button>
-      <button class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto">
+      <button
+        class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto"
+        hx-get="{% url 'orders:ordering_step2' %}"
+        hx-redirect="true "
+        hx-push-url="true"
+      >
         下一步
       </button>
     </div>

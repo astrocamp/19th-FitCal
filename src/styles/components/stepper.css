@@ -10,6 +10,12 @@
   border: none;
 }
 
+.step.step-active::before {
+  background-color: blue;
+  border: none;
+  height: 0.2rem;
+}
+
 .step.step-active::after {
   background-color: blue;
   color: #fff;
