@@ -33,15 +33,22 @@ def create_store(request):
 
 @login_required
 def index(request):
-    stores = Store.objects.all()
     user = request.user
 
-    # 只有當使用者是會員且有對應 member 才抓取評分資料
-    member = (
-        getattr(user, 'member', None)
-        if user.is_authenticated and user.is_member
-        else None
-    )
+    if user.is_store:
+        try:
+            store = user.store
+            store.avg_rating = (
+                Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg']
+                or 0
+            )
+            return render(request, 'stores/index.html', {'store': store})
+        except Store.DoesNotExist:
+            return redirect('stores:new')
+
+    # 會員邏輯
+    stores = Store.objects.all()
+    member = getattr(user, 'member', None) if user.is_member else None
 
     for store in stores:
         store.avg_rating = (
