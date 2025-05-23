@@ -38,10 +38,7 @@ def add(req):
 
 
 def index(req):
-    # member = req.user.member
-    # stores = Store.objects.filter(carts__member=member).distinct()
-    # carts = Cart.objects.filter(member=req.user.member)
-    member = req.user
+    member = req.user.member
     stores = Store.objects.filter(carts__member=member).distinct()
     carts = Cart.objects.filter(member=member)
 
@@ -81,7 +78,7 @@ def new(req):
 
 
 def show(req, id):
-    member = req.user
+    member = req.user.member
     cart = get_object_or_404(Cart, id=id)
     # cart_item = CartItem.objects.filter(cart=cart)
     # carts = Cart.objects.filter(member=req.user)

@@ -2,10 +2,6 @@ from uuid import uuid4
 
 from django.db import models
 
-# from members.models import Member
-# from stores.models import Store
-# from products.models import Product
-
 
 # Create your models here.
 class Cart(models.Model):
@@ -14,7 +10,7 @@ class Cart(models.Model):
     total_price = models.PositiveIntegerField()
     member = models.ForeignKey(
         # 此處先以user測試，待user-member關聯後改為member
-        'users.User',
+        'members.Member',
         on_delete=models.CASCADE,
         related_name='carts',
         null=True,
