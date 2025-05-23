@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'members',
     'orders',
     'products',
+    'widget_tweaks',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
