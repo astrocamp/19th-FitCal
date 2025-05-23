@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.forms import HiddenInput, ModelForm, TextInput, TimeInput
+from django.forms.widgets import RadioSelect
 
-from .models import Store
+from .models import Rating, Store
 
 
 def validate_tax_id(tax_id):
@@ -136,3 +137,15 @@ class StoreForm(ModelForm):
         if not closing_time:
             raise ValidationError('打烊時間不能空白')
         return closing_time
+
+
+class RatingForm(ModelForm):
+    class Meta:
+        model = Rating
+        fields = ['score']
+        widgets = {
+            'score': RadioSelect(choices=[(i, str(i)) for i in range(1, 6)]),
+        }
+        labels = {
+            'score': '評分（1~5 分）',
+        }
