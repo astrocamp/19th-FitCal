@@ -36,7 +36,7 @@ def create_user(req):
 
     if userform.is_valid():
         user = userform.save(commit=False)
-        user.role = req.POST.get('role', 'member')
+        user.role = 'member'
         user.save()
         return create_session(req)
     return render(req, 'users/sign_up.html', {'userform': userform})
