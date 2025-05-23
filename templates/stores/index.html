@@ -1,41 +1,72 @@
-{% extends 'layouts/default.html' %} {% block main %}
-<h1>店家列表</h1>
-<!-- 會員顯示如下 -->
+{% extends 'layouts/default.html' %}
+{% block main %}
+<h1 class="text-2xl font-bold mb-4">店家列表</h1>
+
+<!-- 如果是會員 -->
 {% if user.is_member %}
-<ul>
+<ul class="space-y-4">
   {% for store in stores %}
-  <li>
+  <li class="p-4 border rounded shadow space-y-2">
+    <!-- 收藏按鈕 -->
     {% include "shared/favorite_btn.html" with store=store member=user.member %}
-    <a href="{% url 'stores:show' store.id %}">
-      <section>
-        <h1>店家名稱：{{ store.name }}</h1>
-        <h1>店家地址：{{ store.address }}</h1>
-        <h1>店家電話：{{ store.phone_number }}</h1>
-        <h1>店家統編：{{ store.tax_id }}</h1>
-        <h1>開店時間：{{ store.opening_time }}</h1>
-        <h1>打烊時間：{{ store.closing_time }}</h1>
-      </section>
+
+    <!-- 店家資訊 -->
+    <a href="{% url 'stores:show' store.id %}" class="block hover:bg-gray-50 p-2 rounded">
+      <p>店家名稱：{{ store.name }}</p>
+      <p>店家地址：{{ store.address }}</p>
+      <p>店家電話：{{ store.phone_number }}</p>
+      <p>店家統編：{{ store.tax_id }}</p>
+      <p>開店時間：{{ store.opening_time }}</p>
+      <p>打烊時間：{{ store.closing_time }}</p>
     </a>
+
+    <!-- 平均評分 -->
+    <p>平均評分：{{ store.avg_rating|floatformat:1 }} 分</p>
+
+    <!-- 會員評分表單 -->
+<form method="POST" action="{% url 'stores:rate_store' store.id %}">
+  {% csrf_token %}
+  <label class="block mb-1">你的評分：</label>
+  <div class="rating rating-lg">
+    {% for i in "12345" %}
+      <input type="radio"
+             name="score"
+             value="{{ forloop.counter }}"
+             class="mask mask-star-2 bg-yellow-400"
+             {% if store.member_rating and store.member_rating.score == forloop.counter %}checked{% endif %}>
+    {% endfor %}
+  </div>
+  {% if store.member_rating %}
+    <button type="submit" class="btn btn-success btn-sm mt-2">
+      已評分為 {{ store.member_rating.score }} 分
+    </button>
+  {% else %}
+    <button type="submit" class="btn btn-sm mt-2 btn-neutral">送出評分</button>
+  {% endif %}
+</form>
+
   </li>
   {% empty %}
-  <li>無商家資訊</li>
+  <li>目前沒有任何店家。</li>
   {% endfor %}
 </ul>
 {% endif %}
+
+<!-- 如果是店家 -->
 {% if user.is_store %}
-{% if store %}
-  <a href="{% url 'stores:show' store.id %}">
-    <section>
-      <h1>店家名稱：{{ store.name }}</h1>
-      <h1>店家地址：{{ store.address }}</h1>
-      <h1>店家電話：{{ store.phone_number }}</h1>
-      <h1>店家統編：{{ store.tax_id }}</h1>
-      <h1>開店時間：{{ store.opening_time }}</h1>
-      <h1>打烊時間：{{ store.closing_time }}</h1>
-    </section>
-  </a>
-{% else %}
-  <a href="{% url "stores:new" %}" class="btn">新增店家資訊</a>
-{% endif %}
+  {% if store %}
+    <a href="{% url 'stores:show' store.id %}">
+      <section class="mt-6 p-4 border rounded shadow">
+        <p>店家名稱：{{ store.name }}</p>
+        <p>店家地址：{{ store.address }}</p>
+        <p>店家電話：{{ store.phone_number }}</p>
+        <p>店家統編：{{ store.tax_id }}</p>
+        <p>開店時間：{{ store.opening_time }}</p>
+        <p>打烊時間：{{ store.closing_time }}</p>
+      </section>
+    </a>
+  {% else %}
+    <a href="{% url 'stores:new' %}" class="btn mt-6">新增店家資訊</a>
+  {% endif %}
 {% endif %}
 {% endblock %}
