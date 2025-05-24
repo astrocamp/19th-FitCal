@@ -161,4 +161,4 @@ def manage_orders(request, store_id):
         'selected_status': status,
     }
 
-    return render(request, 'stores/orders.html', context)
+    return render(request, 'stores/manage_orders.html', context)
