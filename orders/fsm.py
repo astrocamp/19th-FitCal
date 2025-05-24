@@ -29,6 +29,13 @@ class OrderFSM:
         elif self.order.order_status == OrderStatus.CANCELED:
             if self.order.payment_status == PaymentStatus.PAID:
                 self.order.payment_status = PaymentStatus.REFUNDED
+        # 新增：處理現金付款且完成取餐的情況
+        elif (
+            self.order.order_status == OrderStatus.COMPLETED
+            and self.order.payment_method == PaymentMethod.CASH
+            and self.order.payment_status == PaymentStatus.UNPAID
+        ):
+            self.order.payment_status = PaymentStatus.PAID
 
     def can_cancel(self, by_store=False):
         """
