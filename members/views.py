@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from common.decorator import member_required
+from stores.models import Store
 
 from .forms import MemberForm
-from .models import Member, Store
+from .models import Member
 
 
 def new(req):
@@ -61,6 +62,7 @@ def delete(request, id):
     member = get_object_or_404(Member, pk=id, user=request.user)
     member.delete()
     return redirect('users:sign_up')
+
 
 @require_POST
 @member_required
