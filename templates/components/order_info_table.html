@@ -5,24 +5,29 @@
       <tr class="border-b">
         <td class="py-3 px-4">訂單編號</td>
         <td class="py-3 px-4">
-          <div class="text-blue-600 font-semibold cursor-pointer"
-               @click="copy('{{ order.order_number }}')">
+          <div class="text-blue-600 font-semibold cursor-pointer" @click="copy('{{ order.order_number }}')">
             {{ order.order_number }}&nbsp;
             <i class="fas fa-copy text-sm"></i>
           </div>
         </td>
       </tr>
-      {% include "components/order_status_badge.html" with order=order %}
+      <tr class="border-b">
+        <td class="py-3 px-4">取貨人姓名</td>
+        <td class="py-3 px-4">{{ order.member_name }}</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-3 px-4">聯絡電話</td>
+        <td class="py-3 px-4">{{ order.member_phone }}</td>
+      </tr>
       <tr class="border-b">
         <td class="py-3 px-4">取貨時間</td>
         <td class="py-3 px-4 text-secondary">{{ order.pickup_time|datetime_format }}</td>
       </tr>
-      {% include "components/payment_info.html" with order=order %}
-      {% if order.note %}
-        <tr class="border-b">
-          <td class="py-3 px-4">備註</td>
-          <td class="py-3 px-4">{{ order.note }}</td>
-        </tr>
+      {% include "components/payment_info.html" with order=order %} {% if order.note %}
+      <tr class="border-b">
+        <td class="py-3 px-4">備註</td>
+        <td class="py-3 px-4">{{ order.note }}</td>
+      </tr>
       {% endif %}
       <tr class="border-b">
         <td class="py-3 px-4">建立時間</td>

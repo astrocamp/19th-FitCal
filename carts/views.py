@@ -150,3 +150,13 @@ def update_preview(req, product_id):
         quantity = 1
     subtotal = product.price * quantity
     return HttpResponse(f'小計：${subtotal}')
+
+
+def delete_item_from_ordering(req, id):
+    cart_item = get_object_or_404(CartItem, id=id)
+    cart = cart_item.cart
+    cart_item.delete()
+    if cart.items.count() == 0:
+        cart.delete()
+        return redirect('carts:index')
+    return HttpResponse('', content_type='text/html')

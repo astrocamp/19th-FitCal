@@ -1,33 +1,24 @@
-{% extends "layouts/default.html" %}
-{% load datetime_format %}
-{% load model_display %}
+{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
 <!-- prettier-ignore -->
 {% block main %}
-  <div class="flex flex-wrap">
-    <!-- 左側訂單資訊 -->
-    <div class="w-full md:w-1/2 p-4 border-r-[3px] border-r-[#ececec] border-dashed">
-      {% include "components/store_info.html" with store=order.store %}
-      {% include "components/pickup_number.html" with pickup_number=order.pickup_number %}
-      {% include "components/order_info_table.html" with order=order %}
-    </div>
-    <!-- 右側商品明細和操作按鈕 -->
-    <div class="w-full md:w-1/2 p-4">
-      {% include "components/order_items.html" with items=order.orderitem_set.all total_price=order.total_price %}
-      <!-- 會員操作按鈕 -->
-      <div class="space-y-3 mt-6">
-        {% if order.order_status == 'PENDING' %}
-          <form action="{% url 'orders:cancel' order.id %}"
-                method="post"
-                class="w-full"
-                onsubmit="return confirm('確定要取消訂單嗎？');">
-            {% csrf_token %}
-            <button type="submit"
-                    class="w-full bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors">
-              取消訂單
-            </button>
-          </form>
-        {% endif %}
-      </div>
+<div class="flex flex-wrap">
+  <!-- 左側訂單資訊 -->
+  <div class="w-full md:w-1/2 p-4 border-r-[3px] border-r-[#ececec] border-dashed">
+    <div class="mb-4 px-4 py-3 bg-blue-500 text-white rounded-md flex justify-between items-center">{% include "components/order_status_badge.html" with order=order status=order.order_status %}</div>
+    {% include "components/store_info.html" with store=order.store %} {% include "components/pickup_number.html" with pickup_number=order.pickup_number %} {% include "components/order_info_table.html" with order=order %}
+  </div>
+  <!-- 右側商品明細和操作按鈕 -->
+  <div class="w-full md:w-1/2 p-4">
+    {% include "components/order_items.html" with items=order.orderitem_set.all total_price=order.total_price %}
+    <!-- 會員操作按鈕 -->
+    <div class="space-y-3 mt-6">
+      {% if order.order_status == 'PENDING' %}
+      <form action="{% url 'orders:cancel' order.id %}" method="post" class="w-full" onsubmit="return confirm('確定要取消訂單嗎？');">
+        {% csrf_token %}
+        <button type="submit" class="w-full bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition-colors">取消訂單</button>
+      </form>
+      {% endif %}
     </div>
   </div>
+</div>
 {% endblock main %}

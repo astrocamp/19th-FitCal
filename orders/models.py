@@ -105,8 +105,9 @@ class Order(models.Model):
             self.pickup_number = new_number
 
         # 儲存快照資訊
-        if self.member:
+        if self.member and not self.member_name:
             self.member_name = self.member.name
+        if self.member and not self.member_phone:
             self.member_phone = self.member.phone_number
 
         if self.store:
