@@ -10,36 +10,31 @@
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
   </head>
   <body class="min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-   <main class="flex-1">
-    <section class="max-w-5xl mx-auto">
-    <nav>{% include 'shared/navbar.html' %}</nav>
-    {% include 'shared/messages.html' %}
-      {% if user.is_authenticated %}
-      <div class="flex justify-end">
-        <h2 class="text-blue-500">user email: {{ user }}</h2>
-        <form action="{% url "users:delete_session" %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn">登出</button>
-        </form>
-      </div>
-      {% else %}
-      <a href="{% url "users:sign_in" %}" class="btn">登入/註冊</a>
-      {% endif %}
-      {% if user.is_authenticated %}
-      <div class="flex justify-end text-blue-500">
-        <a class="btn" href="{% url 'carts:index' %}">查看購物車</a>
-      </div>
-      <a class="btn" href="{% url 'products:index' %}">商品</a>
-      <a class="btn" href="{% url 'stores:index' %}">商家</a>
-      <a class="btn" href="{% url 'members:index' %}">會員</a>
-      <a class="btn" href="{% url 'orders:index' %}">訂單</a>
-      {% endif %}
-      {% block main %}{% endblock main %}
+    <main class="flex-1">
+      <section class="max-w-5xl mx-auto">
+        <nav>{% include 'shared/navbar.html' %}</nav>
+        <div id="messages-container">{% include "shared/messages.html" %}</div>
+        {% if user.is_authenticated %}
+        <div class="flex justify-end">
+          <h2 class="text-blue-500">user email: {{ user }}</h2>
+          <form action="{% url 'users:delete_session' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn">登出</button>
+          </form>
+        </div>
+        {% else %}
+        <a href="{% url 'users:sign_in' %}" class="btn">登入/註冊</a>
+        {% endif %} {% if user.is_authenticated %}
+        <div class="flex justify-end text-blue-500">
+          <a class="btn" href="{% url 'carts:index' %}"> 購物車 </a>
+        </div>
+        <a class="btn" href="{% url 'products:index' %}">商品</a>
+        <a class="btn" href="{% url 'stores:index' %}">商家</a>
+        <a class="btn" href="{% url 'members:index' %}">會員</a>
+        <a class="btn" href="{% url 'orders:index' %}">訂單</a>
+        {% endif %} {% block main %}{% endblock main %}
       </section>
-      </main>
-      <footer class="bg-white-100 text-gray-700 px-6 py-10 ">
-      {% include 'shared/footer.html' %}
-      </footer>
-     
+    </main>
+    <footer class="bg-white-100 text-gray-700 px-6 py-10">{% include 'shared/footer.html' %}</footer>
   </body>
 </html>
