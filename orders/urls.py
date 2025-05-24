@@ -13,6 +13,4 @@ urlpatterns = [
     path('<uuid:id>/prepare/', views.prepare, name='prepare'),
     path('<uuid:id>/mark-ready/', views.mark_ready, name='mark_ready'),
     path('<uuid:id>/complete/', views.complete, name='complete'),
-    # sites
-    path('ordering_steps', views.ordering_steps, name='ordering_steps'),
 ]
