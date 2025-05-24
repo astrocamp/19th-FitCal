@@ -30,12 +30,8 @@
       <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
         <div class="flex justify-between items-center">
           <div class="space-y-1">
-            <p class="text-sm text-gray-500">訂單編號</p>
-            <p class="text-lg font-semibold text-gray-900">
-              {{ order.order_number }} {% if order.pickup_number %}
-              <span class="ml-2 text-sm font-normal text-gray-500"> 取餐編號：{{ order.pickup_number }} </span>
-              {% endif %}
-            </p>
+            <p class="text-lg text-gray-500">訂單編號: {{ order.order_number }}</p>
+            <p class="text-lg text-gray-500 font-bold">取餐編號：{{ order.pickup_number }}</p>
           </div>
           <span class="inline-flex px-3 py-1 rounded-full text-sm font-medium {% if order.order_status == 'PENDING' %} bg-yellow-100 text-yellow-700 {% elif order.order_status == 'PREPARING' %} bg-blue-100 text-blue-700 {% elif order.order_status == 'READY' %} bg-emerald-100 text-emerald-700 {% elif order.order_status == 'COMPLETED' %} bg-green-100 text-green-700 {% elif order.order_status == 'NO_SHOW' %} bg-red-100 text-red-700 {% elif order.order_status == 'CANCELED' %} bg-slate-100 text-slate-600 {% elif order.order_status == 'CANCELED_REFUNDED' %} bg-red-50 text-red-600 {% endif %}"> {{ order|get_display:"order_status" }} </span>
         </div>
@@ -44,31 +40,53 @@
       <!-- Order Details -->
       <div class="px-6 py-4 space-y-4">
         <!-- Order Info -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <p class="text-sm text-gray-500">預計取餐時間</p>
-            <p class="font-medium text-gray-900">{{ order.pickup_time|datetime_format }}</p>
-          </div>
-          <div class="space-y-1">
-            <p class="text-sm text-gray-500">付款方式</p>
-            <p class="font-medium text-gray-900">{{ order|get_display:"payment_method" }}</p>
-          </div>
-          <div class="space-y-1">
-            <p class="text-sm text-gray-500">付款狀態</p>
-            <p class="font-medium text-gray-900">{{ order|get_display:"payment_status" }}</p>
-          </div>
-          <div class="space-y-1">
-            <p class="text-sm text-gray-500">總金額</p>
-            <p class="font-medium text-gray-900">${{ order.total_price }}</p>
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="font-medium text-gray-900 mb-3">訂單資訊</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">訂單建立時間</p>
+              <p class="font-medium text-gray-900">{{ order.created_at|datetime_format }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">預計取餐時間</p>
+              <p class="font-medium text-gray-900">{{ order.pickup_time|datetime_format }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">付款方式</p>
+              <p class="font-medium text-gray-900">{{ order|get_display:"payment_method" }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">付款狀態</p>
+              <p class="font-medium text-gray-900">{{ order|get_display:"payment_status" }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">總金額</p>
+              <p class="font-medium text-gray-900">${{ order.total_price }}</p>
+            </div>
           </div>
         </div>
 
         {% if order.note %}
         <div class="bg-gray-50 rounded-lg p-4">
-          <p class="text-sm text-gray-500">備註</p>
-          <p class="mt-1 text-gray-900">{{ order.note }}</p>
+          <h4 class="font-medium text-gray-900 mb-3">備註</h4>
+          <p class="text-gray-900">{{ order.note }}</p>
         </div>
         {% endif %}
+
+        <!-- Customer Info -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="font-medium text-gray-900 mb-3">訂購人資訊</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">訂購人</p>
+              <p class="font-medium text-gray-900">{{ order.member_name }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-sm text-gray-500">聯絡電話</p>
+              <p class="font-medium text-gray-900">{{ order.member_phone }}</p>
+            </div>
+          </div>
+        </div>
 
         <!-- Order Items -->
         <div class="border rounded-lg overflow-hidden">
@@ -76,12 +94,29 @@
             <h4 class="font-medium text-gray-900">商品明細</h4>
           </div>
           <div class="divide-y divide-gray-200">
+            <!-- Table Header -->
+            <div class="grid grid-cols-12 gap-2 px-4 py-2 bg-gray-50 text-sm font-medium text-gray-500">
+              <div class="col-span-5">商品名稱</div>
+              <div class="col-span-2 text-center">數量</div>
+              <div class="col-span-2 text-right">單價</div>
+              <div class="col-span-3 text-right">小計</div>
+            </div>
+
+            <!-- Table Body -->
             {% for item in order.orderitem_set.all %}
-            <div class="px-4 py-3 flex justify-between items-center">
-              <span class="text-gray-900">{{ item.product_name }}</span>
-              <span class="text-gray-600">× {{ item.quantity }}</span>
+            <div class="grid grid-cols-12 gap-2 px-4 py-3 items-center">
+              <div class="col-span-5 text-gray-900">{{ item.product_name }}</div>
+              <div class="col-span-2 text-center text-gray-600">× {{ item.quantity }}</div>
+              <div class="col-span-2 text-right text-gray-600">${{ item.unit_price }}</div>
+              <div class="col-span-3 text-right font-medium text-gray-900">${{ item.subtotal }}</div>
             </div>
             {% endfor %}
+
+            <!-- Table Footer -->
+            <div class="grid grid-cols-12 gap-2 px-4 py-3 bg-gray-50">
+              <div class="col-span-11 text-right font-medium text-gray-700">總計金額：</div>
+              <div class="col-span-1 text-right font-bold text-gray-900">${{ order.total_price }}</div>
+            </div>
           </div>
         </div>
 
