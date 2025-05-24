@@ -1,36 +1,27 @@
-{% extends "layouts/default.html" %}
-{% load datetime_format %}
-{% load model_display %}
+{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
 <!-- prettier-ignore -->
 {% block main %}
-  <a href="{% url 'orders:new' %}">建立訂單</a>
-  <h1>訂單列表</h1>
-  <ul>
-    {% for order in orders %}
-      <li>
-        <a href="{% url 'orders:show' order.id %}">
-          <h3>訂單編號: {{ order.id }}</h3>
-          {% for item in order.orderitem_set.all %}
-            <li class="order-item"
-                x-data="{ quantity: {{ item.quantity|add:'0' }}, unit_price: {{ item.unit_price|add:'0' }} }">
-              <h3>商品名稱：{{ item.product_name }}</h3>
-              <h3>
-                數量：<span x-text="quantity"></span>
-              </h3>
-              <h3>
-                單價：<span x-text="unit_price"></span>
-              </h3>
-              <h3>
-                小計：<span x-text="quantity * unit_price"></span>
-              </h3>
-            </li>
-          {% endfor %}
-          <h3>預計取貨時間: {{ order.pickup_time|datetime_format }}</h3>
-          <h3>訂單狀態: {{ order|get_display:"order_status" }}</h3>
-          <h3>付款狀態: {{ order|get_display:"payment_status" }}</h3>
-          <h3>總金額: {{ order.total_price }}</h3>
-        </a>
+
+<h1>訂單列表</h1>
+<ul>
+  {% for order in orders %}
+  <li>
+    <a href="{% url 'orders:show' order.id %}">
+      <h3>訂單編號: {{ order.id }}</h3>
+      {% for item in order.orderitem_set.all %}
+      <li class="order-item" x-data="{ quantity: {{ item.quantity|add:'0' }}, unit_price: {{ item.unit_price|add:'0' }} }">
+        <h3>商品名稱：{{ item.product_name }}</h3>
+        <h3>數量：<span x-text="quantity"></span></h3>
+        <h3>單價：<span x-text="unit_price"></span></h3>
+        <h3>小計：<span x-text="quantity * unit_price"></span></h3>
       </li>
-    {% endfor %}
-  </ul>
+      {% endfor %}
+      <h3>預計取貨時間: {{ order.pickup_time|datetime_format }}</h3>
+      <h3>訂單狀態: {{ order|get_display:"order_status" }}</h3>
+      <h3>付款狀態: {{ order|get_display:"payment_status" }}</h3>
+      <h3>總金額: {{ order.total_price }}</h3>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
 {% endblock main %}

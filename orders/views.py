@@ -12,7 +12,7 @@ from .services import OrderService
 @transaction.atomic
 def index(req):
     member = req.user.member
-    orders = Order.objects.order_by('-created_at')
+    orders = Order.objects.filter(member=req.user.member).order_by('-created_at')
 
     if req.method == 'POST':
         cart_id = req.POST.get('cart_id')
@@ -86,7 +86,7 @@ def index(req):
             },
         )
 
-    return render(req, 'orders/index.html', {'orders': orders})
+    return render(req, 'orders/order_list.html', {'orders': orders})
 
 
 def new(req):
