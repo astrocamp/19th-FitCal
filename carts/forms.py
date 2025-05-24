@@ -1,4 +1,4 @@
-from django.forms import IntegerField, ModelForm, NumberInput, inlineformset_factory
+from django.forms import IntegerField, ModelForm, NumberInput
 
 from .models import Cart, CartItem
 
@@ -6,11 +6,10 @@ from .models import Cart, CartItem
 class CartForm(ModelForm):
     class Meta:
         model = Cart
-        fields = ['store', 'note', 'total_price']
+        fields = ['store', 'note']
         labels = {
             'store': '商店',
             'note': '備註',
-            'total_price': '總金額',
         }
 
 
@@ -32,22 +31,3 @@ class CartItemForm(ModelForm):
             'quantity': '數量',
             'customize': '客製化',
         }
-
-
-NewCartItemFormSet = inlineformset_factory(
-    Cart,
-    CartItem,
-    form=CartItemForm,
-    fields=['product', 'quantity', 'customize'],
-    can_delete=False,
-    extra=1,  # 顯示一筆空白表單
-)
-
-EditCartItemFormSet = inlineformset_factory(
-    Cart,
-    CartItem,
-    form=CartItemForm,
-    fields=['product', 'quantity', 'customize'],
-    can_delete=False,
-    extra=0,
-)
