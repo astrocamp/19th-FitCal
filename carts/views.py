@@ -158,5 +158,8 @@ def delete_item_from_ordering(req, id):
     cart_item.delete()
     if cart.items.count() == 0:
         cart.delete()
-        return redirect('carts:index')
+        messages.warning(req, '購物車已清空，請重新選擇商品')
+        response = HttpResponse()
+        response['HX-Redirect'] = reverse('carts:index')  # 重要！HTMX 專用 redirect
+        return response
     return HttpResponse('', content_type='text/html')
