@@ -9,25 +9,21 @@ from stores.models import Store
 
 def index(request):
     query = request.GET.get('q', '').strip()
-    max_calories = request.GET.get('max_calories')
-    stores = []
+    max_calories = request.GET.get('max_calories', '').strip()
+
+    stores = Store.objects.all()
     products = Product.objects.all()
 
     if query:
-        stores = Store.objects.filter(name__icontains=query)
+        stores = stores.filter(name__icontains=query)
+        products = products.filter(name__icontains=query)
 
-        if query.isdigit():
-            products = products.filter(
-                Q(name__icontains=query) | Q(calories=int(query))
-            )
-        else:
-            products = products.filter(name__icontains=query)
-
-    if max_calories and max_calories.isdigit():
+    if max_calories.isdigit() and int(max_calories) > 0:
         products = products.filter(calories__lte=int(max_calories))
-
+        
     context = {
-        'query': query,
+        'query': '',
+        'max_calories': '',
         'stores': stores,
         'products': products,
     }

@@ -4,7 +4,9 @@
 
     {% if not stores and not products %}
     <p>找不到相關的商家或餐點</p>
-    {% endif %} {% if stores %}
+    {% endif %} 
+    
+    {% if stores %}
     <h2 class="text-lg mt-6">商家</h2>
     <ul class="list-disc pl-5">
       {% for store in stores %}
@@ -15,7 +17,9 @@
       </li>
       {% endfor %}
     </ul>
-    {% endif %} {% if products %}
+    {% endif %} 
+    
+    {% if products %}
     <h2 class="text-lg mt-6">商品</h2>
     <ul class="list-disc pl-5">
       {% for product in products %}
@@ -24,4 +28,6 @@
         {{ product.name }}（{{ product.calories }} 大卡）${{ product.price }}</li>
       {% endfor %}
     </ul>
-    {% endif %} {% endblock %}
+    {% endif %}
+    
+    {% endblock %}
