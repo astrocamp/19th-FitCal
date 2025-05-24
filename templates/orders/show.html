@@ -4,7 +4,7 @@
 <div class="flex flex-wrap">
   <!-- 左側訂單資訊 -->
   <div class="w-full md:w-1/2 p-4 border-r-[3px] border-r-[#ececec] border-dashed">
-    <div class="mb-4 px-4 py-3 bg-blue-500 text-white rounded-md flex justify-between items-center">{% include "components/order_status_badge.html" with order=order status=order.order_status %}</div>
+    <div class="mb-4 py-3 text-white rounded-md flex justify-between items-center">{% include "components/order_status_badge.html" with order=order status=order.order_status %}</div>
     {% include "components/store_info.html" with store=order.store %} {% include "components/pickup_number.html" with pickup_number=order.pickup_number %} {% include "components/order_info_table.html" with order=order %}
   </div>
   <!-- 右側商品明細和操作按鈕 -->

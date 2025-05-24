@@ -2,7 +2,7 @@ from django.db import models
 
 
 class OrderStatus(models.TextChoices):
-    PENDING = 'PENDING', '待付款'
+    PENDING = 'PENDING', '處理中'
     CANCELED = 'CANCELED', '已取消'
     PREPARING = 'PREPARING', '準備中'
     READY = 'READY', '餐點已備妥'
