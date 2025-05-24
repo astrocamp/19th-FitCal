@@ -43,6 +43,19 @@ def index(req):
             order = form.save(commit=False)
             order.store = cart.store
             order.member = cart.member
+
+            member_name = req.POST.get('ordering_member_name')
+            member_phone = req.POST.get('ordering_member_phone_number')
+
+            if member_name:
+                order.member_name = member_name
+            else:
+                order.member_name = cart.member.name
+            if member_phone:
+                order.member_phone = member_phone
+            else:
+                order.member_phone = cart.member.phone_number
+
             order.save()
 
             for cart_item in cart.items.all():
@@ -99,6 +112,8 @@ def new(req):
                 },
             )
 
+    total_quantity = sum(item.quantity for item in cart_items)
+
     if not cart_items.exists():
         return redirect('carts:index')
 
@@ -112,11 +127,12 @@ def new(req):
 
     return render(
         req,
-        'orders/new.html',
+        'orders/ordering_steps.html',
         {
             'form': form,
             'cart': cart,
             'cart_items': cart_items,
+            'total_quantity': total_quantity,
         },
     )
 
@@ -200,4 +216,70 @@ def ordering_step1(req):
 
 
 def ordering_steps(req):
-    return render(req, 'orders/ordering_steps.html')
+    form = OrderForm(mode='create')
+
+    if req.method == 'POST':
+        cart_id = req.POST.get('cart_id')
+        if not cart_id:
+            return redirect('carts:index')
+
+        cart = get_object_or_404(Cart, id=cart_id)
+        form = OrderForm(req.POST, mode='create')
+
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.store = cart.store
+            order.member = cart.member
+            order.save()
+
+            # 建立訂單項目
+            for cart_item in cart.items.all():
+                # 檢查庫存
+                if cart_item.product.quantity < cart_item.quantity:
+                    form.add_error(
+                        None, f'{cart_item.product.name} 庫存不足，請重新選擇數量'
+                    )
+                    return render(
+                        req,
+                        'orders/new.html',
+                        {
+                            'form': form,
+                            'cart': cart,
+                            'cart_items': cart.items.all(),
+                        },
+                    )
+
+                # 建立訂單項目
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.product,
+                    quantity=cart_item.quantity,
+                    unit_price=cart_item.product.price,
+                )
+
+                # 更新庫存
+                cart_item.product.quantity -= cart_item.quantity
+                cart_item.product.save()
+
+            # 刪除購物車
+            cart.delete()
+
+            return redirect('orders:index')
+
+        return render(
+            req,
+            'orders/new.html',
+            {
+                'form': form,
+                'cart': cart,
+                'cart_items': cart.items.all(),
+            },
+        )
+
+    return render(
+        req,
+        'orders/ordering_steps.html',
+        {
+            'form': form,
+        },
+    )

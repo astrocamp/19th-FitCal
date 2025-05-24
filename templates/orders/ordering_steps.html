@@ -1,14 +1,49 @@
 {% extends 'layouts/default.html' %} {% block main %}
-<div x-data="{ step: 1 }" class="bg-gray-100 min-h-screen p-4 sm:p-10">
+<div class="bg-gray-100 min-h-screen p-4 sm:p-10">
   <div class="m-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-lg">
-    <!-- Step 1 -->
-    {% include 'orders/components/ordering_step1.html' %}
+    <form
+      action="{% url 'orders:index' %}"
+      method="POST"
+      x-data="{
+        step: 1,
+        formData: {
+          pickup_time: '{{ form.pickup_time.value|escapejs }}',
+          payment_method: '{{ form.payment_method.value }}'
+        },
+        paymentLabels: {
+          CASH: '現金付款',
+          CREDIT_CARD: '信用卡',
+          LINE_PAY: 'LINE Pay',
+        },
+        formatDateTime(date) {
+          return new Date(date).toLocaleString('zh-TW', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          }).replace(/-/g, '年').replace(/-/g, '月').replace(/\s/g, '日 ')
+        },
+        ordering_member_name: '{{ cart.member.name }}',
+        ordering_member_phone_number: '{{ cart.member.phone_number }}',
 
-    <!-- Step 2 -->
-    {% include 'orders/components/ordering_step2.html' %}
+      }"
+    >
+      <input type="hidden" name="cart_id" value="{{ cart.id }}" />
+      {% csrf_token %}
 
-    <!-- Step 3 -->
-    {% include 'orders/components/ordering_step3.html' %}
+      <!-- Step 1 -->
+
+      {% include 'orders/components/ordering_step1.html' %}
+
+      <!-- Step 2 -->
+
+      {% include 'orders/components/ordering_step2.html' %}
+
+      <!-- Step 3 -->
+
+      {% include 'orders/components/ordering_step3.html' %}
+    </form>
   </div>
 </div>
 {% endblock main %}

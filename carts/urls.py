@@ -22,4 +22,9 @@ urlpatterns = [
     path(
         'update_preview/<uuid:product_id>/', views.update_preview, name='update_preview'
     ),
+    path(
+        '<uuid:id>/delete_item_from_ordering',
+        views.delete_item_from_ordering,
+        name='delete_item_from_ordering',
+    ),
 ]

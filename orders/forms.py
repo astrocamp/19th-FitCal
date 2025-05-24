@@ -42,6 +42,18 @@ class OrderForm(ModelForm):
         self.mode = kwargs.pop('mode', 'create')
         super().__init__(*args, **kwargs)
 
+        self.fields['pickup_time'].widget.attrs.update(
+            {
+                'x-model': 'formData.pickup_time',
+            }
+        )
+
+        self.fields['payment_method'].widget.attrs.update(
+            {
+                'x-model': 'formData.payment_method',
+            }
+        )
+
         now = timezone.localtime(timezone.now())
         rounded_time = next_10min(now)
 
