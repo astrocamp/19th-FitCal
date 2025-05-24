@@ -3,16 +3,10 @@ from uuid import uuid4
 from django.db import models
 from django.db.models import UniqueConstraint
 
-# from members.models import Member
-# from stores.models import Store
-# from products.models import Product
 
-
-# Create your models here.
 class Cart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     note = models.TextField(blank=True, null=True)
-    total_price = models.PositiveIntegerField(default=0)
     member = models.ForeignKey(
         'members.Member',
         on_delete=models.CASCADE,
@@ -27,6 +21,7 @@ class Cart(models.Model):
         constraints = [UniqueConstraint(fields=['member', 'store'], name='unique_cart')]
 
     # 計算總價
+    @property
     def calculate_total_price(self):
         # 利用 select_related 預先抓 product 避免N+1
         items = self.items.select_related('product').all()
@@ -36,11 +31,6 @@ class Cart(models.Model):
             total += item.product.price * item.quantity
 
         return total
-
-    # 更新總價
-    def update_total_price(self):
-        self.total_price = self.calculate_total_price()
-        self.save(update_fields=['total_price'])
 
 
 class CartItem(models.Model):
