@@ -8,7 +8,7 @@
 <div>打烊時間：{{ store.closing_time }}</div>
 
 <h2>所有商品</h2>
-<ul x-data="cart">
+<ul>
   {% for product in products %}
   <li class="p-1.5 border rounded mb-1 w-[30%]">
     <a href="{% url 'products:show' product.id %}">
@@ -17,7 +17,7 @@
     {% if user.is_authenticated and user.is_member %}
     <div x-data="{ qty: 1 }" class="flex justify-between">
       <input type="number" name="quantity" x-model="qty" min="1" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" />
-      <button hx-post="{% url 'carts:add_item' product.id %}" hx-include="input[name='quantity']" hx-target="#messages-container" hx-swap="innerHTML" class="btn">加入購物車</button>
+      <button hx-post="{% url 'carts:create_cart_item' product.id %}" hx-include="input[name='quantity']" hx-target="#messages-container" hx-swap="innerHTML" class="btn">加入購物車</button>
     </div>
     {% endif %}
   </li>

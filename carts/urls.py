@@ -6,11 +6,17 @@ app_name = 'carts'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('new/', views.new, name='new'),
-    path('add_item/<uuid:product_id>/', views.add_item, name='add_item'),
-    path('edit_item/<uuid:item_id>/', views.edit_item, name='edit_item'),
     path('<uuid:id>', views.show, name='show'),
-    path('<uuid:id>/edit', views.edit, name='edit'),
     path('<uuid:id>/delete_cart', views.delete_cart, name='delete_cart'),
-    path('<uuid:id>/delete_item', views.delete_item, name='delete_item'),
+    path(
+        'items/<uuid:product_id>/create/',
+        views.create_cart_item,
+        name='create_cart_item',
+    ),
+    path(
+        'items/<uuid:item_id>/update/', views.update_cart_item, name='update_cart_item'
+    ),
+    path(
+        'items/<uuid:item_id>/delete', views.delete_cart_item, name='delete_cart_item'
+    ),
 ]
