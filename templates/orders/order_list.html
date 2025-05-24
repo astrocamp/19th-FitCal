@@ -1,0 +1,41 @@
+{% extends 'layouts/default.html' %} {% block main %} "
+<div class="container mx-auto px-4 py-8 space-y-6">
+  <!-- 單筆訂單 -->
+  <div class="card shadow-md bg-base-100 border border-gray-200">
+    <div class="card-body">
+      <div class="flex justify-between items-center">
+        <div class="flex flex-col gap-3">
+          <p class="text-sm text-gray-500">訂單狀態：<span class="badge badge-success">已完成</span></p>
+          <p class="text-sm text-gray-500">店家名稱：<span class="font-medium">健康餐店 A</span></p>
+        </div>
+        <div class="text-right flex flex-col gap-3">
+          <p class="text-sm text-gray-500">建立時間：2025-05-24 14:30</p>
+          <p class="text-sm font-semibold text-[#000]">總金額：$320</p>
+        </div>
+      </div>
+
+      <!-- 商品細項：可縮放 -->
+      <div class="collapse collapse-arrow mt-4 border border-gray-200">
+        <input type="checkbox" />
+        <div class="collapse-title text-sm font-medium text-gray-700">查看商品細項</div>
+        <div class="collapse-content">
+          <ul class="space-y-2">
+            <li class="flex justify-between text-sm text-gray-600">
+              <span>雞胸沙拉 x2</span>
+              <span>$120</span>
+            </li>
+            <li class="flex justify-between text-sm text-gray-600">
+              <span>地瓜飯 x1</span>
+              <span>$60</span>
+            </li>
+            <li class="flex justify-between text-sm text-gray-600">
+              <span>無糖綠茶 x1</span>
+              <span>$40</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main %}
