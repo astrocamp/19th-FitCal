@@ -19,7 +19,6 @@ class Product(models.Model):
     price = models.PositiveIntegerField()
     customize = models.TextField(null=True, blank=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='products')
-    price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
