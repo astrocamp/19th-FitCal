@@ -1,7 +1,7 @@
 {% load static %} {% comment %} 初始資料注入 {% endcomment %}
 <script>
   window.__initialSearchKeyword = "{{ request.GET.q|default:'' }}";
-  window.__initialMaxCalories = parseInt("{{ request.GET.max_calories|default:'1000' }}");
+  window.__initialMaxCalories = parseInt("{{ request.GET.max_calories|default:'0' }}");
 </script>
 
 {% comment %} 表單 HTML {% endcomment %}

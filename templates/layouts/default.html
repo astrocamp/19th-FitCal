@@ -31,7 +31,7 @@
       <div class="flex justify-end text-blue-500">
         <a class="btn" href="{% url 'carts:index' %}">查看購物車</a>
       </div>
-      <a class="btn" href="{% url 'pages:index' %}">首頁</a>
+      {% comment %} <a class="btn" href="{% url 'pages:index' %}">首頁</a> {% endcomment %}
       <a class="btn" href="{% url 'products:index' %}">商品</a>
       <a class="btn" href="{% url 'stores:index' %}">商家</a>
       <a class="btn" href="{% url 'members:index' %}">會員</a>
