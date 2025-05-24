@@ -1,7 +1,10 @@
 {% extends "layouts/default.html" %} {% block main %}
 <h1>{{ user.member.name }}的購物車列表</h1>
 {% for cart in carts %}
-<a class="block border-2 pb-2 ml-4 mb-3" href="{% url 'carts:show' cart.id %}">{{ cart.store.name }}</a>
+<a class="flex justify-between border-2 pb-2 ml-4 mb-3" href="{% url 'carts:show' cart.id %}">
+  <div>{{ cart.store.name }}</div>
+  <div>總金額：{{ cart.calculate_total_price }}</div>
+</a>
 <form action="{% url 'carts:delete_cart' cart.id %}" method="post" onsubmit="return confirm('是否要刪除？')">
   {% csrf_token %}
   <button class="btn" type="submit">刪除</button>

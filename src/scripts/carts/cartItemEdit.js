@@ -1,29 +1,34 @@
-export default function cartItem(initQuantity, itemId) {
+export default function cartItem(initQuantity, itemId, editUrl) {
   return {
+    // 取得csrf token
+    csrfToken: document.querySelector('input[name="csrfmiddlewaretoken"]')?.value,
+    type: '我的目前位置',
     qty: initQuantity,
     initQty: initQuantity,
-    isDelete() {
-      if (this.qty < 1) {
-        if (confirm('確認要刪除這個品相嗎？')) {
-          htmx.ajax('POST', `/carts/edit_item/${itemId}/`, {
-            target: `#cart-item-${itemId}`,
-            swap: 'outerHTML',
+    async isDelete() {
+      if (this.qty !== this.initQty) {
+        if (this.qty < 1) {
+          if (confirm('確認要刪除這個品相嗎？')) {
+            htmx.ajax('POST', `${editUrl}`, {
+              swap: 'innerHTML',
+              values: {
+                quantity: this.qty,
+              },
+            });
+          } else {
+            this.qty = this.initQty;
+          }
+        } else {
+          htmx.ajax('POST', `${editUrl}`, {
+            target: '#totalPrice',
+            swap: 'innerHTML',
             values: {
               quantity: this.qty,
             },
           });
-        } else {
-          this.qty = initQty;
         }
-      } else {
-        htmx.ajax('POST', `/carts/edit_item/${itemId}/`, {
-          target: '#messages-container',
-          swap: 'innerHTML',
-          values: {
-            quantity: this.qty,
-          },
-        });
       }
+      this.initQty = this.qty;
     },
   };
 }
