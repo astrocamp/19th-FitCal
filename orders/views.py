@@ -39,6 +39,21 @@ def index(req):
                     },
                 )
 
+        for cart_item in cart.items.all():
+            # 檢查庫存
+            if cart_item.product.quantity < cart_item.quantity:
+                messages.error(req, '庫存不足，請重新選擇數量')
+
+                return render(
+                    req,
+                    'orders/ordering_steps.html',
+                    {
+                        'form': form,
+                        'cart': cart,
+                        'cart_items': cart.items.all(),
+                    },
+                )
+
         if form.is_valid():
             order = form.save(commit=False)
             order.store = cart.store
