@@ -1,14 +1,16 @@
 {% extends "layouts/default.html" %} {% block main %}
-<h2>店家：{{ cart.store }}</h2>
+<h2>店家：{{ cart.store.name }}</h2>
 <a href="{% url 'carts:edit' cart.id %}" class="btn">編輯購物車商品</a>
 {% for item in cart_item %}
-<div class="mb-2 border-2">{{ item.product.name }}：{{ item.quantity }}</div>
-<form
-  action="{% url 'carts:delete_item' item.id %}"
-  method="post"
-  onsubmit="return confirm('確認刪除商品？')"
->
-  {% csrf_token %}
-  <button class="btn" type="submit">刪除</button>
-</form>
+<div id="cart-item-{{ item.id }}" x-data="cartItem({{ item.quantity }}, '{{ item.id }}')" class="border p-2 mb-2">
+  <div>
+    {{ item.product.name }}
+    <input type="number" min="1" x-model.number="qty" @blur="isDelete" class="border rounded px-2 py-1 w-20" />
+  </div>
+
+  <form action="{% url 'carts:delete_item' item.id %}" method="post" onsubmit="return confirm('確認刪除商品？')">
+    {% csrf_token %}
+    <button class="btn" type="submit">刪除</button>
+  </form>
+</div>
 {% endfor %} {% endblock main %}

@@ -1,10 +1,12 @@
 import Alpine from 'alpinejs';
 import flatpickr from 'flatpickr';
-import 'htmx.org';
+import htmx from 'htmx.org';
+import cartItem from './carts/cartItemEdit.js';
 import { initPickupTimePicker } from './flatpickr/main.js';
 import { searchFormComponent } from './searchForm.js';
 
 window.Alpine = Alpine;
+window.htmx = htmx;
 window.flatpickr = flatpickr;
 window.searchFormComponent = searchFormComponent;
 initPickupTimePicker('#id_pickup_time', 'healthy_style');
@@ -14,4 +16,7 @@ initPickupTimePicker('#id_date_of_birth', 'cool_style', {
   altFormat: 'Y年m月d日',
   altInput: true,
 });
+
+window.cartItem = cartItem;
+
 Alpine.start();

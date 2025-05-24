@@ -1,7 +1,11 @@
-from django.http import JsonResponse
+from django.contrib import messages
+from django.contrib.messages import get_messages
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
+from common.decorator import member_required
 from products.models import Product
 from stores.models import Store
 
@@ -10,38 +14,62 @@ from .models import Cart, CartItem
 from .utils import add_to_cart
 
 
-# 這裏是後續以member關聯的購物車的相關功能
+@member_required
 @require_POST
-def add(req):
-    product_id = req.POST.get('product_id')
+def add_item(req, product_id):
     quantity = req.POST.get('quantity')
-    print(product_id, quantity)
-
-    try:
-        product = Product.objects.get(id=product_id)
-    except Product.DoesNotExist:
-        return JsonResponse({'success': False, 'message': '商品不存在'})
-
-    cart, created = Cart.objects.get_or_create(
-        member=req.user.member, store=product.store, total_price=0
-    )
+    member = req.user.member
+    product = get_object_or_404(Product, id=product_id)
+    store = product.store
+    cart, _ = Cart.objects.get_or_create(member=member, store=store)
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    try:
+        if created:
+            cart_item.quantity = int(quantity)
+            cart_item.save()
+        else:
+            cart_item.quantity += int(quantity)
+            cart_item.save()
+        cart.update_total_price()
+        messages.success(req, '購物車已更新')
+    except Exception:
+        messages.error(req, '購物車更新失敗')
+    return render(req, 'shared/messages.html')
 
-    if created:
-        return JsonResponse({'success': True, 'message': '商品已成功加入購物車'})
-    else:
-        cart_item.quantity += int(quantity)
-        cart_item.save()
-        return JsonResponse(
-            {'success': True, 'message': '購物車中已存在該商品，數量+1'}
-        )
+
+@member_required
+@require_POST
+def edit_item(req, item_id):
+    quantity = int(req.POST.get('quantity'))
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    cart = cart_item.cart
+    try:
+        if quantity < 1:
+            cart_item.delete()
+            messages.success(req, f'{cart_item.product.name}已從購物車中刪除')
+            messages_html = render_to_string(
+                'shared/messages.html', {'messages': get_messages(req)}
+            )
+            return HttpResponse(
+                ''  # 空字串讓商品區塊被清空
+                + f"""
+                <template hx-swap-oob="true">
+                    {messages_html}
+                </template>
+                """
+            )
+        else:
+            cart_item.quantity = quantity
+            cart_item.save()
+            messages.success(req, '購物車已更新')
+        cart.update_total_price()
+    except Exception:
+        messages.error(req, '購物車更新失敗')
+    return render(req, 'shared/messages.html')
 
 
 def index(req):
-    # member = req.user.member
-    # stores = Store.objects.filter(carts__member=member).distinct()
-    # carts = Cart.objects.filter(member=req.user.member)
-    member = req.user
+    member = req.user.member
     stores = Store.objects.filter(carts__member=member).distinct()
     carts = Cart.objects.filter(member=member)
 
@@ -81,7 +109,7 @@ def new(req):
 
 
 def show(req, id):
-    member = req.user
+    member = req.user.member
     cart = get_object_or_404(Cart, id=id)
     # cart_item = CartItem.objects.filter(cart=cart)
     # carts = Cart.objects.filter(member=req.user)
