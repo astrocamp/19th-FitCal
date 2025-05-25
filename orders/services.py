@@ -12,9 +12,16 @@ class OrderService:
         self.fsm = OrderFSM(self.order)
 
     @transaction.atomic
-    def cancel_order(self):
-        """取消訂單"""
-        return self.fsm.cancel()
+    def cancel_order(self, by_store=False):
+        """取消訂單並回補庫存"""
+        if self.fsm.cancel(by_store=by_store):
+            # 回補庫存
+            for order_item in self.order.orderitem_set.all():
+                product = order_item.product
+                product.quantity += order_item.quantity
+                product.save()
+            return True
+        return False
 
     @transaction.atomic
     def prepare_order(self):
