@@ -138,7 +138,12 @@ def show(req, id):
 def cancel(request, id):
     """取消訂單"""
     service = OrderService(id)
-    if service.cancel_order():
+
+    by_store = False
+    if hasattr(request.user, 'store') and request.user.store:
+        by_store = True
+
+    if service.cancel_order(by_store=by_store):
         messages.success(request, '訂單已取消')
     else:
         messages.error(request, '此訂單無法取消')
