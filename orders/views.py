@@ -11,6 +11,7 @@ from .services import OrderService
 
 @transaction.atomic
 def index(req):
+    member = req.user.member
     orders = Order.objects.order_by('-created_at')
 
     if req.method == 'POST':
@@ -20,6 +21,23 @@ def index(req):
 
         cart = get_object_or_404(Cart, id=cart_id)
         form = OrderForm(req.POST, mode='create')
+        cart_items = cart.items.all()
+
+        for cart_item in cart.items.all():
+            # 檢查庫存
+            if cart_item.product.quantity < cart_item.quantity:
+                messages.error(
+                    req, f'{cart_item.product.name} 庫存不足，請重新選擇數量'
+                )
+                return render(
+                    req,
+                    'carts/show.html',
+                    {
+                        'member': member,
+                        'cart': cart,
+                        'cart_item': cart_items,
+                    },
+                )
 
         if form.is_valid():
             order = form.save(commit=False)
@@ -27,23 +45,7 @@ def index(req):
             order.member = cart.member
             order.save()
 
-            # 建立訂單項目
             for cart_item in cart.items.all():
-                # 檢查庫存
-                if cart_item.product.quantity < cart_item.quantity:
-                    form.add_error(
-                        None, f'{cart_item.product.name} 庫存不足，請重新選擇數量'
-                    )
-                    return render(
-                        req,
-                        'orders/new.html',
-                        {
-                            'form': form,
-                            'cart': cart,
-                            'cart_items': cart.items.all(),
-                        },
-                    )
-
                 # 建立訂單項目
                 OrderItem.objects.create(
                     order=order,
@@ -75,12 +77,27 @@ def index(req):
 
 
 def new(req):
+    member = req.user.member
     cart_id = req.GET.get('cart_id')
     if not cart_id:
         return redirect('carts:index')
 
     cart = get_object_or_404(Cart, id=cart_id)
     cart_items = cart.items.all()
+
+    for cart_item in cart.items.all():
+        # 檢查庫存
+        if cart_item.product.quantity < cart_item.quantity:
+            messages.error(req, f'{cart_item.product.name} 庫存不足，請重新選擇數量')
+            return render(
+                req,
+                'carts/show.html',
+                {
+                    'member': member,
+                    'cart': cart,
+                    'cart_item': cart_items,
+                },
+            )
 
     if not cart_items.exists():
         return redirect('carts:index')
@@ -116,18 +133,6 @@ def show(req, id):
             return render(req, 'orders/edit.html', {'form': form, 'order': order})
 
     return render(req, 'orders/show.html', {'order': order})
-
-
-def edit(req, id):
-    order = get_object_or_404(Order, pk=id)
-    form = OrderForm(instance=order, mode='update')
-    return render(req, 'orders/edit.html', {'form': form, 'order': order})
-
-
-def delete(req, id):
-    order = get_object_or_404(Order, id=id)
-    order.delete()
-    return redirect('orders:index')
 
 
 def cancel(request, id):
