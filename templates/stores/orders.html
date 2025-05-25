@@ -41,8 +41,8 @@
         </ul>
       </div>
       <div class="flex gap-2">
-        {% if order.order_status == 'PENDING' or order.order_status == 'PREPARING' %}
-        <form action="{% url 'orders:cancel' order.id %}" method="post" class="inline" onsubmit="return confirm('確定要取消訂單嗎？');">
+        {% if order.can_cancel_by_store %}
+        <form action="{% url 'orders:cancel' order.id %}" method="post" class="inline" onsubmit="return confirm('確定要取消此訂單？這個動作無法復原，且會回補商品庫存');">
           {% csrf_token %}
           <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">取消訂單</button>
         </form>

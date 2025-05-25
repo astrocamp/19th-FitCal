@@ -30,13 +30,28 @@ class OrderFSM:
             if self.order.payment_status == PaymentStatus.PAID:
                 self.order.payment_status = PaymentStatus.REFUNDED
 
-    def can_cancel(self):
-        """檢查是否可以取消訂單"""
-        return self._can_transition([OrderStatus.PENDING], OrderStatus.CANCELED)
+    def can_cancel(self, by_store=False):
+        """
+        檢查是否可以取消訂單
 
-    def cancel(self):
-        """取消訂單"""
-        if self.can_cancel():
+        Args:
+            by_store (bool): True if cancellation is initiated by store, False if by member
+        """
+        allowed_states = (
+            [OrderStatus.PENDING, OrderStatus.PREPARING]
+            if by_store
+            else [OrderStatus.PENDING]
+        )
+        return self._can_transition(allowed_states, OrderStatus.CANCELED)
+
+    def cancel(self, by_store=False):
+        """
+        取消訂單
+
+        Args:
+            by_store (bool): True if cancellation is initiated by store, False if by member
+        """
+        if self.can_cancel(by_store):
             self.transition(OrderStatus.CANCELED)
             return True
         return False

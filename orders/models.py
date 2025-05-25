@@ -124,18 +124,27 @@ class Order(models.Model):
         """獲取訂單狀態機"""
         return OrderFSM(self)
 
+    @property
     def can_cancel(self):
         """檢查訂單是否可以取消"""
         return self.fsm.can_cancel()
 
+    @property
+    def can_cancel_by_store(self):
+        """檢查商家是否可以取消訂單"""
+        return self.fsm.can_cancel(by_store=True)
+
+    @property
     def can_prepare(self):
         """檢查訂單是否可以開始準備"""
         return self.fsm.can_prepare()
 
+    @property
     def can_mark_ready(self):
         """檢查訂單是否可以標記為準備完成"""
         return self.fsm.can_mark_ready()
 
+    @property
     def can_complete(self):
         """檢查訂單是否可以標記為完成取餐"""
         return self.fsm.can_complete()
