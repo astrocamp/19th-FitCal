@@ -88,8 +88,8 @@ def index(req):
 
             # 刪除購物車
             cart.delete()
-
-            return redirect('orders:index')
+            messages.success(req, '訂單建立成功')
+            return redirect('orders:show', id=order.id)
 
         return render(
             req,
@@ -164,18 +164,6 @@ def show(req, id):
             return render(req, 'orders/edit.html', {'form': form, 'order': order})
 
     return render(req, 'orders/show.html', {'order': order})
-
-
-def edit(req, id):
-    order = get_object_or_404(Order, pk=id)
-    form = OrderForm(instance=order, mode='update')
-    return render(req, 'orders/edit.html', {'form': form, 'order': order})
-
-
-def delete(req, id):
-    order = get_object_or_404(Order, id=id)
-    order.delete()
-    return redirect('orders:index')
 
 
 def cancel(request, id):
