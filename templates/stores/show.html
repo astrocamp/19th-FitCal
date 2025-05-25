@@ -15,10 +15,12 @@
       <section>商品名稱：{{ product.name }} - 價錢：{{ product.price }}</section>
     </a>
     {% if user.is_authenticated and user.is_member %}
-    <div x-data="{ qty: 1 }" class="flex justify-between">
-      <input type="number" name="quantity" x-model="qty" min="1" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" />
-      <button hx-post="{% url 'carts:create_cart_item' product.id %}" hx-include="input[name='quantity']" hx-target="#messages-container" hx-swap="innerHTML" class="btn">加入購物車</button>
-    </div>
+    <form hx-post="{% url 'carts:create_cart_item' product.id %}" hx-target="this" hx-swap="none">
+      <div class="flex justify-between">
+        <input id="{{ product.id }}_added_qty" type="number" name="quantity" value="1" min="1" max="{{ product.quantity }}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" />
+        <button type="submit" class="btn">加入購物車</button>
+      </div>
+    </form>
     {% endif %}
   </li>
   {% empty %}
