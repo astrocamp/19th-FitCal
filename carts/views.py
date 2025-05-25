@@ -13,26 +13,55 @@ from stores.models import Store
 from .models import Cart, CartItem
 
 
+# 庫存確認
+def check_stock(req, product, quantity, item_quantity=0):
+    if quantity + item_quantity > product.quantity:
+        messages.error(
+            req,
+            f'商品庫存不足，僅剩 {product.quantity} 件, 您最多可加購 {product.quantity - item_quantity} 件',
+        )
+        return False
+    return True
+
+
 @member_required
 @require_POST
 def create_cart_item(req, product_id):
-    quantity = req.POST.get('quantity')
+    quantity = int(req.POST.get('quantity'))
     member = req.user.member
     product = get_object_or_404(Product, id=product_id)
-    store = product.store
-    cart, _ = Cart.objects.get_or_create(member=member, store=store)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
     try:
-        if created:
-            cart_item.quantity = int(quantity)
-            cart_item.save()
+        cart, _ = Cart.objects.get_or_create(member=member, store=product.store)
+        cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+        if cart_item:
+            if not check_stock(
+                req, product, quantity, item_quantity=cart_item.quantity
+            ):
+                quantity = product.quantity - cart_item.quantity
+            else:
+                cart_item.quantity += quantity
+                cart_item.save()
+                messages.success(req, '購物車已更新')
         else:
-            cart_item.quantity += int(quantity)
-            cart_item.save()
-        messages.success(req, '購物車已更新')
+            if check_stock(req, product, quantity):
+                CartItem.objects.create(cart=cart, product=product, quantity=quantity)
+                messages.success(req, '購物車已新增')
+            else:
+                quantity = product.quantity
     except Exception:
         messages.error(req, '購物車更新失敗')
-    return render(req, 'shared/messages.html')
+    messages_html = render_to_string(
+        'shared/messages.html', {'messages': get_messages(req)}
+    )
+    print(f'\n\n%%%%%%%%%%%%%%%%quantity: {quantity}%%%%%%%%%%%%%%%%%%%%%%%\n\n')
+    return HttpResponse(
+        f'<input id="{product.id}_added_qty" type="number" name="quantity" value="{quantity}" min="1" max="{product.quantity}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" hx-swap-oob="true" />'
+        + f"""
+        <div id="messages-container" hx-swap-oob="true">
+            {messages_html}
+        </div>
+        """
+    )
 
 
 @member_required
@@ -45,13 +74,15 @@ def update_cart_item(req, item_id):
     try:
         if quantity < 1:
             return delete_cart_item(req, item_id)
+        elif not check_stock(req, cart_item.product, quantity):
+            pass
         else:
             cart_item.quantity = quantity
-            cart_item.save()
             messages.success(req, '購物車已更新')
-            innertext = f'{cart.calculate_total_price}'
+            cart_item.save()
     except Exception:
         messages.error(req, '購物車更新失敗')
+    innertext = f'{cart.calculate_total_price}'
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )

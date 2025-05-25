@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
+from common.decorator import member_required
 from stores.models import Store
 
 from .forms import ProductForm
@@ -66,6 +67,7 @@ def delete(request, id):
     return redirect('products:index')
 
 
+@member_required
 def collections(request, id):
     product = get_object_or_404(Product, id=id)
     member = request.user.member  # 正常從user取出member

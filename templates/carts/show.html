@@ -1,13 +1,13 @@
 {% extends "layouts/default.html" %} {% block main %}
 <h2>店家：{{ cart.store.name }}</h2>
 {% for item in cart_item %}
-<div id="cart-item-{{ item.id }}" x-data="cartItem({{ item.quantity }}, '{{ item.id }}', '{% url 'carts:update_cart_item' item.id %}')" class="border rounded-xl p-2 mb-2 w-[40%] flex">
+<div id="cart-item-{{ item.id }}" x-data="cartItem({{ item.quantity }}, '{{ item.id }}', '{% url 'carts:update_cart_item' item.id %}', {{ item.product.quantity }})" class="border rounded-xl p-2 mb-2 w-[40%] flex">
   <div class="flex justify-between items-center w-full">
     <p>品名：{{ item.product.name }}</p>
     <div class="flex justify-between items-center">
       <p class="mr-2">$&nbsp;{{ item.product.price }}</p>
       X
-      <input type="number" min="1" x-model.number="qty" @blur="isDelete" @keydown.enter.prevent="isDelete" class="border rounded px-2 py-1 w-15 ml-3" />
+      <input id="{{ item.id }}_edit_qty" type="number" min="1" x-model.number="qty" @blur="isDelete" @keydown.enter.prevent="isDelete" class="border rounded px-2 py-1 w-15 ml-3" />
     </div>
   </div>
   <form action="{% url 'carts:delete_cart_item' item.id %}" method="post" onsubmit="return confirm('確認刪除商品？')">
