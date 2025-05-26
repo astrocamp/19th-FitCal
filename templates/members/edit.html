@@ -1,14 +1,14 @@
 {% extends 'layouts/default.html' %} {% block main %}
 {% load widget_tweaks %}
 
-<form method="POST" action="{% url 'members:edit' member.id %}" class="max-w-xl mx-auto bg-white text-black p-6 mt-10 rounded-2xl shadow-lg">
+<form method="POST" action="{% url 'members:show' member.id %}" class="max-w-xl mx-auto bg-white text-black p-6 mt-10 rounded-2xl shadow-lg">
   {% csrf_token %}
 
   <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">編輯會員資料</h2>
 
   <div class="flex flex-col items-center mb-6">
     <img src="https://i.pinimg.com/736x/43/14/0a/43140a3803e5f1b39c1ffac1a35a3ec7.jpg" alt="頭像" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
-    <p class="text-sm text-gray-500">ID：{{ member.id }}</p>
+    
   </div>
 
   <div class="space-y-4">
@@ -27,7 +27,7 @@
 
   <div class="flex gap-4 mt-6">
     <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">更新</button>
-    <a href="{% url 'members:show' member.id %}" class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">取消</a>
+    <a href="{% url 'members:index' %}" class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">取消</a>
   </div>
 </form>
 
