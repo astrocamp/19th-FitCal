@@ -55,7 +55,7 @@ def create_cart_item(req, product_id):
     )
     print(f'\n\n%%%%%%%%%%%%%%%%quantity: {quantity}%%%%%%%%%%%%%%%%%%%%%%%\n\n')
     return HttpResponse(
-        f'<input id="added_qty_{product.id}" type="number" name="quantity" value="{quantity}" min="1" max="{product.quantity}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" hx-swap-oob="true" />'
+        f'<input id="added_qty_{product.id}" type="number" name="quantity" min="1" max="{product.quantity}" :value={quantity} x-model.number="quantity" class="w-16 rounded border border-[#5a855a] px-3 py-2 text-center text-base text-[#3a643a] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] select-none" style="appearance: none; -moz-appearance: textfield; -webkit-appearance: none" @focus="$el.select()" />'
         + f"""
         <div id="messages-container" hx-swap-oob="true">
             {messages_html}
