@@ -1,10 +1,10 @@
-<footer class="bg-white-100 text-gray-700 px-6 py-10 ">
+{% load static %}
   <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     
     <!-- LOGO + 聯絡方式 -->
     <div>
       <div class="mb-4">
-        <img src="https://cdn.discordapp.com/attachments/1374737960129400983/1375031157502120006/46c05b887d9a00e0.png?ex=6830ddce&is=682f8c4e&hm=81950de48e2328f4dcdf961ebc82a97dddb5bedc59cebe6e829047629b5a2589&" alt="FITCAL" class="h-12">
+        <img src="{% static 'images/logo.png' %}" alt="FITCAL" class="h-40">
       </div>
       <div class="text-sm space-y-1">
         <p>電話：<a href="tel:+886-123456789" class="hover:underline">+886-123-456-789</a></p>
@@ -20,19 +20,15 @@
    <div class="lg:text-right">
       <h3 class="font-semibold mb-2">網站資訊</h3>
       <ul class="space-y-1 text-sm">
-        <li>關於我們</li>
-        <li>聯絡我們</li>
-        <li>常見問題</li>
+        <li><a href=" # " class="hover:underline">關於我們</a></li>
+        <li><a href=" # "  class="hover:underline">聯絡我們</a></li>
+        <li><a href=" # " class="hover:underline">常見問題</a></li>
       </ul>
     </div>
   </div>
 
   <!-- 版權 -->
   <div class="mt-8 text-center text-xs text-gray-500">
-    © <span id="year"></span> FITCAL. All rights reserved.
+    © {% now "Y" %} FITCAL. All rights reserved.
   </div>
-</footer>
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
