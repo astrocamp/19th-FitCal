@@ -1,29 +1,31 @@
-{% extends 'layouts/default.html' %} {% block main %}
-<h1 class="text-2xl font-bold mb-4">店家列表</h1>
+{% extends 'layouts/default.html' %} {% block main %} {% if user.is_member %}
+<div class="container mx-auto p-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for store in stores %}
+    <div class="bg-white rounded-xl shadow-md overflow-hidden relative">
+      <a href="{% url 'stores:show' store.id %}">
+        <!-- 商家圖片 -->
+        <div class="relative">
+          <img src="{{ store.cover_url|default:'https://fakeimg.pl/400x250' }}" alt="店家封面" class="w-full h-48 object-cover" />
 
-<!-- 如果是會員 -->
-{% if user.is_member %}
-<ul class="space-y-4">
-  {% for store in stores %}
-  <li class="p-4 border rounded shadow space-y-2">
-    <!-- 收藏按鈕 -->
-    {% include "shared/favorite_btn.html" with store=store member=user.member %}
+          <!-- Logo -->
+          <img src="{{ store.logo_url|default:'https://fakeimg.pl/50x50/' }}" alt="Logo" class="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white" />
 
-    <!-- 店家資訊 -->
-    <a href="{% url 'stores:show' store.id %}" class="block hover:bg-gray-50 p-2 rounded">
-      <p>店家名稱：{{ store.name }}</p>
-      <p>店家地址：{{ store.address }}</p>
-      <p>店家電話：{{ store.phone_number }}</p>
-      <p>店家統編：{{ store.tax_id }}</p>
-      <p>開店時間：{{ store.opening_time }}</p>
-      <p>打烊時間：{{ store.closing_time }}</p>
-    </a>
+          <!-- 愛心，待補充store.is_favorite，這個可以用annotate操作，一次查詢全部的店家是否有被該會員收藏 -->
+          <div x-data class="absolute top-2 right-2 p-1.5 rounded-full hover:bg-red-50 cursor-pointer flex items-center" @click.stop>{% include "shared/favorite_btn.html" with store=store member=user.member %}</div>
+        </div>
 
-    <!-- 平均評分 -->
-    <p>平均評分：{{ store.avg_rating|floatformat:1 }} 分</p>
-
-    <!-- 會員評分表單 -->
-    <form method="POST" action="{% url 'stores:rate_store' store.id %}">
+        <!-- 商家資訊 -->
+        <div class="p-4">
+          <h2 class="text-lg font-semibold">{{ store.name }}</h2>
+          <p class="text-sm text-gray-600">{{ store.address }}</p>
+          <p class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</p>
+          <div class="flex items-center justify-between mt-2 text-sm text-gray-500">
+            <!-- 功能尚未導入
+            <span>距離：{{ store.distance }} 公里</span>
+            -->
+            <span>⭐ {{ store.avg_rating|floatformat:1 }}</span>
+                <form method="POST" action="{% url 'stores:rate_store' store.id %}">
       {% csrf_token %}
       <label class="block mb-1">你的評分：</label>
       <div class="rating rating-lg">
@@ -39,10 +41,11 @@
       <button type="submit" class="btn btn-sm mt-2 btn-neutral">送出評分</button>
       {% endif %}
     </form>
-  </li>
-  {% empty %}
-  <li>目前沒有任何店家。</li>
-  {% endfor %}
+          </div>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
 </ul>
 {% endif %}
 
