@@ -1,12 +1,10 @@
-{% extends "layouts/default.html" %} {% block main %}
-
-<div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true">
+<div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true" @click="open = false">
   <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
     <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
       <div class="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
-        <div class="relative flex w-full items-center overflow-hidden bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
-          <button type="button" @click="history.back()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
+        <div class="relative flex w-full items-center overflow-hidden rounded-2xl bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8" @click.stop>
+          <button type="button" @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
             <span class="sr-only">Close</span>
             <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -38,27 +36,30 @@
                     <label for="rice-less" class="ml-2 block text-sm text-gray-700">不要那麼多</label>
                   </div>
                   <div class="flex items-center mb-4">
-                    <input id="rice-mini" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <input id="rice-mini" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                     <label for="rice-mini" class="ml-2 block text-sm text-gray-700">迷你飯</label>
                   </div>
                 </fieldset>
 
-                <form action="{% url 'carts:create_cart_item' product.id %}" method="POST" x-data="{ quantity: 1 }" hx-post="{% url 'carts:update_preview' product.id %}" hx-trigger="change from:#quantity, keyup delay:300ms" hx-target="#preview" hx-include="[name='quantity']">
+                <form action="{% url 'carts:create_cart_item' product.id %}" method="POST" x-data="{ quantity: 1 }" hx-post="{% url 'carts:create_cart_item' product.id %}" hx-target="this" hx-swap="none">
                   {% csrf_token %}
 
                   <div class="mt-6">
                     <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">數量</label>
 
-                    <!-- 可輸入 + 可選擇 -->
-                    <input type="number" min="1" max="100" name="quantity" id="quantity" x-model="quantity" list="quantity-options" class="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                    <datalist id="quantity-options">
-                      {% for i in quantity_range %}
-                      <option value="{{ i }}"></option>
-                      {% endfor %}
-                    </datalist>
+                    <div class="flex items-center space-x-2">
+                      <!-- 減號按鈕 -->
+                      <button type="button" @click="if(quantity > 1) quantity--" class="inline-flex h-8 w-8 items-center justify-center rounded border border-[#5a855a] bg-[#5a855a] text-white hover:bg-[#2e4e2e] hover:border-[#2e4e2e] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] active:scale-95 active:bg-[#264023] active:border-[#264023] select-none transition-transform duration-150" style="-webkit-tap-highlight-color: transparent">-</button>
+
+                      <!-- 數量輸入框 -->
+                      <input id="added_qty_{{ product.id }}" type="number" name="quantity" min="1" max="{{ product.quantity }}" :value="quantity" x-model.number="quantity" class="w-16 rounded border border-[#5a855a] px-3 py-2 text-center text-base text-[#3a643a] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] select-none" style="appearance: none; -moz-appearance: textfield; -webkit-appearance: none" @focus="$el.select()" />
+
+                      <!-- 加號按鈕 -->
+                      <button type="button" @click="quantity++" class="inline-flex h-8 w-8 items-center justify-center rounded border border-[#5a855a] bg-[#5a855a] text-white hover:bg-[#2e4e2e] hover:border-[#2e4e2e] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] active:scale-95 active:bg-[#264023] active:border-[#264023] select-none transition-transform duration-150" style="-webkit-tap-highlight-color: transparent">+</button>
+                    </div>
                   </div>
 
-                  <button type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden">加入購物車</button>
+                  <button type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-[#5a855a] px-8 py-3 text-base font-medium text-white hover:bg-[#2e4e2e] focus:bg-[#2e4e2e] focus:ring-2 focus:ring-[#2e4e2e] focus:ring-offset-2 focus:outline-none">加入購物車</button>
                 </form>
 
                 {% if user.is_store and user.store == product.store %}
@@ -78,5 +79,3 @@
     </div>
   </div>
 </div>
-
-{% endblock main %}
