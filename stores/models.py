@@ -26,7 +26,6 @@ class Store(models.Model):
 
 
 class Rating(models.Model):
-    id = models.BigAutoField(primary_key=True)
     member = models.ForeignKey('members.Member', on_delete=models.CASCADE)
     store = models.ForeignKey('Store', on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField(
@@ -36,7 +35,11 @@ class Rating(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('member', 'store')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['member', 'store'], name='unique_member_store'
+            )
+        ]
 
     def __str__(self):
         return f'{self.member.name} 給 {self.store.name} 的評分：{self.score} 分'
