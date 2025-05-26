@@ -154,12 +154,35 @@ def update_preview(req, product_id):
 
 def delete_item_from_ordering(req, id):
     cart_item = get_object_or_404(CartItem, id=id)
+    product_name = cart_item.product.name
     cart = cart_item.cart
+
+    # 刪除該商品
     cart_item.delete()
+
     if cart.items.count() == 0:
         cart.delete()
         messages.warning(req, '購物車已清空，請重新選擇商品')
         response = HttpResponse()
-        response['HX-Redirect'] = reverse('carts:index')  # 重要！HTMX 專用 redirect
+        response['HX-Redirect'] = reverse('carts:index')  # HTMX Redirect
         return response
-    return HttpResponse('', content_type='text/html')
+
+    # 若還有商品，則更新總數與金額
+    total_quantity = sum(item.quantity for item in cart.items.all())
+    total_price = cart.calculate_total_price
+
+    messages.success(req, f'成功刪除 {product_name}')
+    messages_html = render_to_string(
+        'shared/messages.html', {'messages': get_messages(req)}
+    )
+
+    return HttpResponse(
+        ''
+        + f"""
+        <div id="messages-container" hx-swap-oob="true">{messages_html}</div>
+        <span id="ordering_total_quantity" hx-swap-oob="true">商品 X {total_quantity}</span>
+        <span id="ordering_total_price_brief" hx-swap-oob="true">$ {total_price}</span>
+        <span id="ordering_total_price_final" hx-swap-oob="true">$ {total_price}</span>
+        """,
+        content_type='text/html',
+    )
