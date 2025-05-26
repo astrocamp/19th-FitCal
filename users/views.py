@@ -81,4 +81,4 @@ def create_session(req):
 def delete_session(req):
     logout(req)
     messages.success(req, '已登出！')
-    return redirect('users:sign_in')
+    return redirect('users:index')
