@@ -1,47 +1,53 @@
 {% extends 'layouts/default.html' %} {% block main %}
-<h1>店家資訊</h1>
-<div>店家名稱：{{ store.name }}</div>
-<div>店家地址：{{ store.address }}</div>
-<div>店家電話：{{ store.phone_number }}</div>
-<div>店家統編：{{ store.tax_id }}</div>
-<div>開店時間：{{ store.opening_time }}</div>
-<div>打烊時間：{{ store.closing_time }}</div>
+<div class="p-4 space-y-6">
+  <!-- 店家資訊區塊 -->
+  <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <!-- LOGO -->
+    <img src="{{ store.logo_url|default:'https://fakeimg.pl/50x50/' }}" alt="店家 Logo" class="w-24 h-24 rounded-lg object-cover border" />
 
-<h2>所有商品</h2>
-<ul>
-  {% for product in products %}
-  <li class="p-1.5 border rounded mb-1 w-[30%]">
-    <a href="{% url 'products:show' product.id %}">
-      <section>商品名稱：{{ product.name }} - 價錢：{{ product.price }}</section>
-    </a>
-    {% if user.is_authenticated and user.is_member %}
-    <form hx-post="{% url 'carts:create_cart_item' product.id %}" hx-target="this" hx-swap="none">
-      <div class="flex justify-between">
-        <input id="added_qty_{{ product.id }}" type="number" name="quantity" value="1" min="1" max="{{ product.quantity }}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" />
-        <button type="submit" class="btn">加入購物車</button>
+    <!-- 商家詳細資訊 -->
+    <div class="space-y-1 mb-7">
+      <div class="flex items-center gap-2 text-xl font-bold">
+        <span>{{ store.name }}</span>
+        <span class="text-yellow-500">⭐ {{ store.rating }}</span>
       </div>
-    </form>
-    {% endif %}
-  </li>
-  {% empty %}
-  <li>這個店家目前沒有商品。</li>
-  {% endfor %}
-</ul>
-{% if user.is_store and store == user.store %}
-<form action="{% url 'stores:delete' store.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')">
-  {% csrf_token %}
-  <button type="submit" class="btn">刪除帳號</button>
-</form>
+      <div class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
+      <div class="text-sm text-gray-600">
+        <span>距離：2.1 公里</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
+        <a href="tel:{{ store.phone_number|cut:'-' }}" class="font-bold text-blue-600 hover:underline">{{ store.phone_number }}</a>
+      </div>
+    </div>
+  </div>
+  {% if user.is_store and store == user.store %}
+  <form action="{% url 'stores:delete' store.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')">
+    {% csrf_token %}
+    <button type="submit" class="btn">刪除帳號</button>
+  </form>
+  {% endif %}
+  <!-- 商品列表 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for product in products %}
+    <a href="{% url 'products:show' product.id %}">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden relative">
+        <!-- 商品圖片 -->
+        <div class="relative">
+          <img src="{{ product.image.url|default:'https://fakeimg.pl/400x250' }}" alt="商品圖片" class="w-full h-48 object-cover" />
 
-{% if request.user.is_authenticated %}
-<form method="POST" action="{% url 'users:delete_session' %}" style="margin-top: 1rem">
-  {% csrf_token %}
-  <button type="submit" class="btn">登出</button>
-</form>
-{% endif %}
+          <!-- 收藏按鈕 -->
+          <div x-data class="absolute top-2 right-2 p-1.5 rounded-full hover:bg-red-50 cursor-pointer flex items-center" @click.stop>{% include "shared/collections_btn.html" with store=store member=user.member %}</div>
+        </div>
 
-<a href="{% url 'stores:edit' store.id %}" class="btn">編輯</a>
-<a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a>
-{% endif %}
-<a href="{% url 'stores:index' %}" class="btn">回上一頁</a>
+        <!-- 商品資訊 -->
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">{{ product.name }}</h3>
+          <p class="text-sm text-gray-600">價格：${{ product.price }}</p>
+          <p class="text-sm text-gray-600">卡路里：{{ product.calories }} kcal</p>
+          <!-- 目前是假按鈕，待後續整合 -->
+          <button class="mt-2 w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded-md text-sm">加入購物車</button>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
 {% endblock main %}
