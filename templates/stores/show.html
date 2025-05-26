@@ -23,6 +23,7 @@
     {% csrf_token %}
     <button type="submit" class="btn">刪除帳號</button>
   </form>
+  <a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a>
   {% endif %}
   <!-- 商品列表 -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
