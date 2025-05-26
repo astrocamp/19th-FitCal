@@ -23,7 +23,7 @@ def create_member(request):
             member = form.save(commit=False)
             member.user = request.user
             member.save()
-            return redirect('members:show', member.id)
+            return redirect('members:index')
         else:
             messages.error(request, '請檢查輸入內容')
             return render(request, 'members/new.html', {'form': form}, status=400)
@@ -44,9 +44,9 @@ def show(request, id):
         form = MemberForm(request.POST, instance=member)
         if form.is_valid():
             form.save()
-            return redirect('members:show', member.id)
+            return redirect('members:show')
         return render(request, 'members/edit.html', {'member': member, 'form': form})
-    return render(request, 'members/show.html', {'member': member})
+    return render(request, 'members/index.html', {'member': member})
 
 
 @member_required
