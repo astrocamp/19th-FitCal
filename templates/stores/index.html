@@ -1,5 +1,4 @@
-{% extends 'layouts/default.html' %}
-{% block main %}
+{% extends 'layouts/default.html' %} {% block main %}
 <h1 class="text-2xl font-bold mb-4">店家列表</h1>
 
 <!-- 如果是會員 -->
@@ -24,27 +23,22 @@
     <p>平均評分：{{ store.avg_rating|floatformat:1 }} 分</p>
 
     <!-- 會員評分表單 -->
-<form method="POST" action="{% url 'stores:rate_store' store.id %}">
-  {% csrf_token %}
-  <label class="block mb-1">你的評分：</label>
-  <div class="rating rating-lg">
-    {% for i in "12345" %}
-      <input type="radio"
-             name="score"
-             value="{{ forloop.counter }}"
-             class="mask mask-star-2 bg-yellow-400"
-             {% if store.member_rating and store.member_rating.score == forloop.counter %}checked{% endif %}>
-    {% endfor %}
-  </div>
-  {% if store.member_rating %}
-    <button type="submit" class="btn btn-success btn-sm mt-2">
-      已評分為 {{ store.member_rating.score }} 分
-    </button>
-  {% else %}
-    <button type="submit" class="btn btn-sm mt-2 btn-neutral">送出評分</button>
-  {% endif %}
-</form>
-
+    <form method="POST" action="{% url 'stores:rate_store' store.id %}">
+      {% csrf_token %}
+      <label class="block mb-1">你的評分：</label>
+      <div class="rating rating-lg">
+        {% for i in "12345" %}
+        <!-- prettier-ignore -->
+        <input type="radio" name="score" value="{{ forloop.counter }}" class="mask mask-star-2 bg-yellow-400" 
+        {% if store.member_rating and store.member_rating.score == forloop.counter %}checked{% endif %} />
+        {% endfor %}
+      </div>
+      {% if store.member_rating %}
+      <button type="submit" class="btn btn-success btn-sm mt-2">已評分為 {{ store.member_rating.score }} 分</button>
+      {% else %}
+      <button type="submit" class="btn btn-sm mt-2 btn-neutral">送出評分</button>
+      {% endif %}
+    </form>
   </li>
   {% empty %}
   <li>目前沒有任何店家。</li>
@@ -53,25 +47,22 @@
 {% endif %}
 
 <!-- 如果是店家 -->
-{% if user.is_store %}
-  {% if store %}
-    <section class="mt-6 p-4 border rounded shadow">
-      <p class="font-bold text-lg">您的店家資訊：</p>
-      <p>店家名稱：{{ store.name }}</p>
-      <p>店家地址：{{ store.address }}</p>
-      <p>店家電話：{{ store.phone_number }}</p>
-      <p>店家統編：{{ store.tax_id }}</p>
-      <p>開店時間：{{ store.opening_time }}</p>
-      <p>打烊時間：{{ store.closing_time }}</p>
-      <p class="mt-2 font-semibold">平均評分：{{ store.avg_rating|floatformat:1 }} 分</p>
+{% if user.is_store %} {% if store %}
+<section class="mt-6 p-4 border rounded shadow">
+  <p class="font-bold text-lg">您的店家資訊：</p>
+  <p>店家名稱：{{ store.name }}</p>
+  <p>店家地址：{{ store.address }}</p>
+  <p>店家電話：{{ store.phone_number }}</p>
+  <p>店家統編：{{ store.tax_id }}</p>
+  <p>開店時間：{{ store.opening_time }}</p>
+  <p>打烊時間：{{ store.closing_time }}</p>
+  <p class="mt-2 font-semibold">平均評分：{{ store.avg_rating|floatformat:1 }} 分</p>
 
-      <div class="mt-4 space-x-2">
-        <a href="{% url 'stores:edit' store.id %}" class="btn btn-outline">編輯店家資料</a>
-        <a href="{% url 'stores:show' store.id %}" class="btn btn-secondary">前往店家頁面</a>
-      </div>
-    </section>
-  {% else %}
-    <a href="{% url 'stores:new' %}" class="btn mt-6">新增店家資訊</a>
-  {% endif %}
-{% endif %}
-{% endblock %}
+  <div class="mt-4 space-x-2">
+    <a href="{% url 'stores:edit' store.id %}" class="btn btn-outline">編輯店家資料</a>
+    <a href="{% url 'stores:show' store.id %}" class="btn btn-secondary">前往店家頁面</a>
+  </div>
+</section>
+{% else %}
+<a href="{% url 'stores:new' %}" class="btn mt-6">新增店家資訊</a>
+{% endif %} {% endif %} {% endblock %}

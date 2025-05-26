@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Avg
@@ -106,6 +107,7 @@ def delete(req, id):
 def rate_store(request, store_id):
     member = getattr(request.user, 'member', None)
     if not member:
+        messages.error(request, '請先填寫會員資料')
         return redirect('members:new')
 
     store = get_object_or_404(Store, id=store_id)
