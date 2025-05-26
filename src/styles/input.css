@@ -3,6 +3,7 @@
 
 @import 'flatpickr/dist/flatpickr.min.css';
 @import './components/flatpickr.css';
+@import '@fortawesome/fontawesome-free/css/all.css';
 
 @layer base {
   button {
