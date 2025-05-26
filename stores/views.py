@@ -106,7 +106,7 @@ def delete(req, id):
 def rate_store(request, store_id):
     member = getattr(request.user, 'member', None)
     if not member:
-        return HttpResponse('只有會員可以評分', status=403)
+        return redirect('members:new')
 
     store = get_object_or_404(Store, id=store_id)
     rating = Rating.objects.filter(store=store, member=member).first()
