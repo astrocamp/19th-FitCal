@@ -204,6 +204,9 @@ STATICFILES_DIRS = [
 
 AUTH_USER_MODEL = 'users.User'
 
+# 未登入狀態下的轉址
+LOGIN_URL = 'users:sign_in'
+
 # 所有登入後的轉址地址
 LOGIN_REDIRECT_URL = '/'
 
