@@ -12,7 +12,7 @@
   <body class="min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
    <main class="flex-1">
     <section class="max-w-5xl mx-auto">
-    {% include 'shared/navbar.html' %}
+    <nav>{% include 'shared/navbar.html' %}</nav>
     {% include 'shared/messages.html' %}
       {% if user.is_authenticated %}
       <div class="flex justify-end">
