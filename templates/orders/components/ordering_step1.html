@@ -68,7 +68,7 @@
             <a href="{% url 'carts:show' cart.id %}" class="text-gray-600 hover:text-blue-800">
               <i class="fa-solid fa-pen"></i>
             </a>
-            <button hx-delete="{% url 'carts:delete_item_from_ordering' item.id %}" hx-target="#item-{{ item.id }}" hx-swap="delete" hx-confirm="確定要刪除嗎？" class="text-gray-600 hover:text-red-600">
+            <button hx-delete="{% url 'carts:delete_item_from_ordering' item.id %}" hx-target="#item-{{ item.id }}" hx-swap="outerHTML" hx-confirm="確定要刪除 {{ item.product.name }} 嗎？" class="text-gray-600 hover:text-red-600">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -87,12 +87,12 @@
       </div>
       <div id="cart-summary-section" class="space-y-2 p-4">
         <div class="flex justify-between text-sm text-gray-700">
-          <span>商品 X {{ total_quantity }}</span>
-          <span>$ {{ cart.total_price }}</span>
+          <span id="ordering_total_quantity">商品 X {{ total_quantity }}</span>
+          <span id="ordering_total_price_brief">$ {{ total_price }}</span>
         </div>
         <div class="flex justify-between text-sm font-semibold text-gray-800">
           <span>應付金額</span>
-          <span>$ {{ cart.total_price }}</span>
+          <span id="ordering_total_price_final">$ {{ total_price }}</span>
         </div>
       </div>
     </div>
