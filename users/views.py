@@ -66,15 +66,14 @@ def create_session(req):
 
     if user.is_member:
         messages.success(req, '會員登入成功！')
-        return redirect('members:index')
     elif user.is_store:
         messages.success(req, '店家登入成功！')
-        return redirect('stores:index')
     else:
         logout(req)
         user.delete()
         messages.error(req, '帳號存在異常，請重新註冊')
         return redirect('users:sign_up')
+    return redirect('stores:index')
 
 
 # 處理登出 (POST)

@@ -1,6 +1,6 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h1>編輯會員資料</h1>
-<form method="POST" action="{% url 'members:edit' member.id %}">
+<form method="POST" action="{% url 'members:show' member.id %}">
   {% csrf_token %} {% for field in form %}
   <div>
     {{ field.label_tag }} {{ field }} {% if field.help_text %}
