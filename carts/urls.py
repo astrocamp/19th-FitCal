@@ -19,4 +19,7 @@ urlpatterns = [
     path(
         'items/<uuid:item_id>/delete', views.delete_cart_item, name='delete_cart_item'
     ),
+    path(
+        'update_preview/<uuid:product_id>/', views.update_preview, name='update_preview'
+    ),
 ]
