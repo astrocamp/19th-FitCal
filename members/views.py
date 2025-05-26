@@ -52,7 +52,15 @@ def show(request, id):
 @member_required
 def edit(request, id):
     member = get_object_or_404(Member, pk=id, user=request.user)
-    form = MemberForm(instance=member)
+
+    if request.method == 'POST':
+        form = MemberForm(request.POST, instance=member)  # <--- 加上 POST 處理
+        if form.is_valid():
+            form.save()  # <--- 資料寫進資料庫
+            return redirect('members:show', member.id)  # <--- 更新完跳回詳細頁
+    else:
+        form = MemberForm(instance=member)  # GET 載入表單
+
     return render(request, 'members/edit.html', {'form': form, 'member': member})
 
 
