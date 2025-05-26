@@ -1,18 +1,5 @@
 {% if member in product.favorited_by.all %}
-
-<button
-  hx-swap="outerHTML"
-  hx-post="{% url 'products:collections' product.id %}"
-  class="btn btn-sm btn-outline"
->
-  已收藏
-</button>
+<i hx-swap="outerHTML" hx-post="{% url 'products:collections' product.id %}" @click.prevent.stop class="fa-solid fa-heart text-red-500 text-3xl"></i>
 {% else %}
-<button
-  hx-swap="outerHTML"
-  hx-post="{% url 'products:collections' product.id %}"
-  class="btn btn-sm btn-neutral"
->
-  收藏
-</button>
+<i hx-swap="outerHTML" hx-post="{% url 'products:collections' product.id %}" @click.prevent.stop class="fa-regular fa-heart text-gray-400 text-3xl"></i>
 {% endif %}
