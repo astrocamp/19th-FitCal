@@ -34,6 +34,18 @@ class Cart(models.Model):
 
         return total
 
+    # 計算總價
+    @property
+    def calculate_total_price(self):
+        # 利用 select_related 預先抓 product 避免N+1
+        items = self.items.select_related('product').all()
+
+        total = 0
+        for item in items:
+            total += item.product.price * item.quantity
+
+        return total
+
 
 class CartItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
