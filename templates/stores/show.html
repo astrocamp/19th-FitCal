@@ -17,7 +17,7 @@
     {% if user.is_authenticated and user.is_member %}
     <form hx-post="{% url 'carts:create_cart_item' product.id %}" hx-target="this" hx-swap="none">
       <div class="flex justify-between">
-        <input id="{{ product.id }}_added_qty" type="number" name="quantity" value="1" min="1" max="{{ product.quantity }}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" />
+        <input id="added_qty_{{ product.id }}" type="number" name="quantity" value="1" min="1" max="{{ product.quantity }}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" />
         <button type="submit" class="btn">加入購物車</button>
       </div>
     </form>
