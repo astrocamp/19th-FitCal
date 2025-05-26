@@ -2,12 +2,13 @@
 <form method="POST" action="{% url 'members:create_member' %}">
   {% csrf_token %} {% for field in form %}
   <div>{{ field.label_tag }} {{ field }}</div>
-  {% endfor %}
+  {% for error in field.errors %}
+  <div class="text-red-500">{{ error }}</div>
+  {% endfor %} {% endfor %}
   <div>
     <button class="btn" type="submit">新增會員</button>
     <a href="{% url 'members:index' %}" class="btn">取消</a>
   </div>
-  {{ form.errors }}
 </form>
 
 {% endblock main %}

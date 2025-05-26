@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -15,41 +15,40 @@ def new(req):
     return render(req, 'members/new.html', {'form': form})
 
 
-@member_required
 @transaction.atomic
 def create_member(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_member:
         form = MemberForm(request.POST)
         if form.is_valid():
             member = form.save(commit=False)
             member.user = request.user
             member.save()
             return redirect('members:show', member.id)
-    form = MemberForm()
-    return render(request, 'members/new.html', {'form': form}, status=400)
+        else:
+            messages.error(request, '請檢查輸入內容')
+            return render(request, 'members/new.html', {'form': form}, status=400)
+    messages.error(request, '沒有權限')
+    return redirect('stores:index')
 
 
-@login_required
 @member_required
 def index(request):
     member = Member.objects.filter(user=request.user).first()
     return render(request, 'members/index.html', {'member': member})
 
 
-@login_required
 @member_required
 def show(request, id):
     member = get_object_or_404(Member, pk=id, user=request.user)
     if request.method == 'POST':
-        form = MemberForm(request.POST)
+        form = MemberForm(request.POST, instance=member)
         if form.is_valid():
             form.save()
             return redirect('members:show', member.id)
-        return render(request, 'members/show.html', {'member': member, 'form': form})
+        return render(request, 'members/edit.html', {'member': member, 'form': form})
     return render(request, 'members/show.html', {'member': member})
 
 
-@login_required
 @member_required
 def edit(request, id):
     member = get_object_or_404(Member, pk=id, user=request.user)
