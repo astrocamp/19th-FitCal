@@ -9,7 +9,7 @@
     <div class="space-y-1 mb-7">
       <div class="flex items-center gap-2 text-xl font-bold">
         <span>{{ store.name }}</span>
-        <span class="text-yellow-500">⭐ {{ store.rating }}</span>
+        <span class="text-yellow-500">{{ store.avg_rating|floatformat:1 }} ⭐ </span>
       </div>
       <div class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
       <div class="text-sm text-gray-600">
@@ -26,29 +26,6 @@
   <a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a>
   {% endif %}
   <!-- 商品列表 -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    {% for product in products %}
-    <a href="{% url 'products:show' product.id %}">
-      <div class="bg-white rounded-xl shadow-md overflow-hidden relative">
-        <!-- 商品圖片 -->
-        <div class="relative">
-          <img src="{{ product.image.url|default:'https://fakeimg.pl/400x250' }}" alt="商品圖片" class="w-full h-48 object-cover" />
-
-          <!-- 收藏按鈕 -->
-          <div x-data class="absolute top-2 right-2 p-1.5 rounded-full hover:bg-red-50 cursor-pointer flex items-center" @click.stop>{% include "shared/collections_btn.html" with store=store member=user.member %}</div>
-        </div>
-
-        <!-- 商品資訊 -->
-        <div class="p-4">
-          <h3 class="text-lg font-semibold">{{ product.name }}</h3>
-          <p class="text-sm text-gray-600">價格：${{ product.price }}</p>
-          <p class="text-sm text-gray-600">卡路里：{{ product.calories }} kcal</p>
-          <!-- 目前是假按鈕，待後續整合 -->
-          <button class="mt-2 w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded-md text-sm">加入購物車</button>
-        </div>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{% for product in products %} {% include "products/product_card.html" %} {% endfor %}</div>
 </div>
 {% endblock main %}
