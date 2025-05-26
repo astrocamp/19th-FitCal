@@ -55,7 +55,7 @@ def create_cart_item(req, product_id):
     )
     print(f'\n\n%%%%%%%%%%%%%%%%quantity: {quantity}%%%%%%%%%%%%%%%%%%%%%%%\n\n')
     return HttpResponse(
-        f'<input id="{product.id}_added_qty" type="number" name="quantity" value="{quantity}" min="1" max="{product.quantity}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" hx-swap-oob="true" />'
+        f'<input id="added_qty_{product.id}" type="number" name="quantity" value="{quantity}" min="1" max="{product.quantity}" class="w-16 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500" hx-swap-oob="true" />'
         + f"""
         <div id="messages-container" hx-swap-oob="true">
             {messages_html}
