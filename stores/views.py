@@ -71,6 +71,9 @@ def index(request):
 def show(req, id):
     store = get_object_or_404(Store, pk=id)
     products = store.products.all()
+    store.avg_rating = (
+        Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg'] or 0
+    )
     if req.method == 'POST':
         form = StoreForm(req.POST, instance=store)
         if form.is_valid():
