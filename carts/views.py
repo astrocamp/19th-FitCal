@@ -140,3 +140,13 @@ def delete_cart_item(req, item_id):
         return redirect('carts:index')
     messages.success(req, f'{cart_item.product.name}已從購物車中刪除')
     return redirect('carts:show', id=cart_item.cart.id)
+
+
+def update_preview(req, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    try:
+        quantity = int(req.POST.get('quantity', 1))
+    except ValueError:
+        quantity = 1
+    subtotal = product.price * quantity
+    return HttpResponse(f'小計：${subtotal}')

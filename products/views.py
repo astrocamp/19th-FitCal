@@ -52,7 +52,14 @@ def show(request, id):
         if form.is_valid():
             form.save()
             return redirect('products:show', product.id)
-    return render(request, 'products/show.html', {'product': product})
+    return render(
+        request,
+        'products/show.html',
+        {
+            'product': product,
+            'quantity_range': range(1, 101),
+        },
+    )
 
 
 def edit(request, id):
