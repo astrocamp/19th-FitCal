@@ -1,15 +1,74 @@
+{% load static %}
 <div class="navbar bg-base-100 shadow-sm">
   <div class="flex-1">
-    <a href="/" class="btn btn-ghost text-3xl">FITCAL</a>
+    <a href="/" class="btn btn-ghost text-3xl text-[#3A643A]">FITCAL
+    </a>
   </div>
-  <div class="flex-none flex items-center gap-0">
-    <!-- search bar -->
-    <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
+  <div class="flex-none flex items-center gap-3">
+    <!--- search bar -->
+    {% load static %} {% comment %} 初始資料注入 {% endcomment %}
+    <script>
+      window.__initialSearchKeyword = "{{ request.GET.q|default:'' }}";
+      window.__initialMaxCalories = parseInt("{{ request.GET.max_calories|default:'0' }}");
+    </script>
 
-    <!-- 已登入購物車和個人資料狀態 -->
+    {% comment %} 表單 HTML {% endcomment %}
+    <form
+      x-data="searchFormComponent()"
+      id="searchForm"
+      action="{% url 'search:index' %}"
+      method="get"
+      class="relative w-full max-w-lg"
+      @click.away="showFilter = false"
+    >
+      <!--- 上排搜尋欄 -->
+      <div class="flex gap-3 items-center">
+        <input
+          id="searchInput"
+          name="q"
+          type="text"
+          placeholder="搜尋商家、餐點或餐點卡路里"
+          class="input input-bordered w-53"
+          value="{{ request.GET.q }}"
+          @focus="showFilter = true"
+        />
+
+        <button id="searchBtn" type="submit" class="btn">
+        搜尋
+        </button>
+      </div>
+
+      <!-- 下排：拉霸，使用絕對定位 -->
+      <div
+        id="calorieFilter"
+        class="absolute left-0 w-full bg-white shadow-lg rounded mt-1 z-10 transition-all duration-300 overflow-hidden"
+        x-ref="filter"
+        x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'"
+      >
+        <div class="p-2">
+          <label for="max_calories" class="block text-xs mb-1">
+            最多卡路里(非必填)：<span x-text="maxCalories"></span>
+          </label>
+          <input
+            type="range"
+            id="max_calories"
+            name="max_calories"
+            min="0"
+            max="1000"
+            step="10"
+            x-model="maxCalories"
+            class="range w-full"
+          />
+        </div>
+      </div>
+    </form>
+
+{% comment %} 引入打包後 JS {% endcomment %}
+<script type="module" src="{% static 'assets/scripts/app.js' %}"></script> 
+
+    <!--- 已登入購物車和個人資料狀態 -->
     {% if user.is_authenticated %}
-
-    <!-- cart -->
+    <!--- 購物車 -->
     <a href="{% url 'carts:index' %}" class="btn btn-ghost btn-circle avatar" tabindex="0">
       <div class="indicator">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -52,8 +111,7 @@
     </div>
     {% else %}
     <!-- 未登入狀態：登入/註冊按鈕 -->
-    <a href="{% url 'users:sign_in' %}" class="btn bg-black text-white hover:bg-gray-800">登入</a>
-    <a href="{% url 'users:sign_up' %}" class="btn bg-black text-white hover:bg-gray-800">註冊</a>
+    <a href="{% url 'users:sign_in' %}" class="btn">登入/註冊</a>
     {% endif %}
   </div>
 </div>
