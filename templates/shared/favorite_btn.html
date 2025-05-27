@@ -1,5 +1,5 @@
 {% if member in store.favorited_by.all %}
-<i id="favorite-btn-{{ product.id }}" hx-swap="outerHTML" hx-post="{% url 'members:favorite' store.id %}" hx-target="#favorite-btn-{{ product.id }}" @click.prevent.stop class="fa-solid fa-heart text-red-500 text-3xl"></i>
+<i id="favorite-btn-{{ store.id }}" hx-swap="outerHTML" hx-post="{% url 'members:favorite' store.id %}" hx-target="#favorite-btn-{{ store.id }}" @click.prevent.stop class="fa-solid fa-heart text-red-500 text-3xl"></i>
 {% else %}
-<i id="favorite-btn-{{ product.id }}" hx-swap="outerHTML" hx-post="{% url 'members:favorite' store.id %}" hx-target="#favorite-btn-{{ product.id }}" @click.prevent.stop class="fa-regular fa-heart text-gray-400 text-3xl"></i>
+<i id="favorite-btn-{{ store.id }}" hx-swap="outerHTML" hx-post="{% url 'members:favorite' store.id %}" hx-target="#favorite-btn-{{ store.id }}" @click.prevent.stop class="fa-regular fa-heart text-gray-400 text-3xl"></i>
 {% endif %}
