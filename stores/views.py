@@ -20,7 +20,7 @@ def new(req):
     return render(req, 'stores/new.html', {'form': form})
 
 
-@store_required
+@login_required
 @transaction.atomic
 def create_store(request):
     if request.method == 'POST':

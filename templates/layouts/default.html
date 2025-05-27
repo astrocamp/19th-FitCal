@@ -22,7 +22,9 @@
       <section class="max-w-7xl mx-auto">
         <nav>{% include 'shared/navbar.html' %}</nav>
         <div id="messages-container">{% include "shared/messages.html" %}</div>
-        {% block main %}{% endblock main %}
+        {% if user.is_store %}
+        <h1>後臺管理</h1>
+        {% endif %} {% block main %}{% endblock main %}
       </section>
     </main>
     <footer class="bg-white-100 text-gray-700 px-6 py-10">{% include 'shared/footer.html' %}</footer>
