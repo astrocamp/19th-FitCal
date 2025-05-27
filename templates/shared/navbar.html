@@ -91,18 +91,18 @@
       <!--- 子選單 -->
       <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-72 p-4 shadow gap-6">
         <li>
-          <a href="{% url 'members:index' %}">帳號設定(編輯會員資料)</a>
+          <a href="{% url 'members:index' %}">會員資料</a>
         </li>
         <li>
           <!--- 補上連結 -->
-          <a>收藏商家</a>
+          <a href="{% url 'members:favorite_list' %}">收藏商家</a>
         </li>
         <li>
           <!--- 補上連結 -->
-          <a>收藏商品</a>
+          <a href="{% url 'members:collections' %}">收藏商品</a>
         </li>
         <li>
-          <a>訂單管理</a>
+          <a href="{% url 'orders:index' %}">歷史訂單</a>
         </li>
         <li>
           <form action="{% url "users:delete_session" %}" method="post">
