@@ -13,41 +13,10 @@ def index(req):
     return render(req, 'pages/index.html')
 
 
-# 顯示會員註冊頁面
 def sign_up(req):
     if req.user.is_authenticated:
-        messages.error(req, '你已登入')
-        return redirect('members:index')
-    return render(
-        req,
-        'users/sign_up.html',
-        {
-            'userform': UserForm(),
-        },
-    )
-
-
-# 顯示店家註冊頁面
-def sign_up_store(req):
-    if req.user.is_authenticated:
-        messages.error(req, '你已登入')
-        return redirect('stores:index')
-    return render(
-        req,
-        'users/sign_up_store.html',
-        {
-            'userform': UserForm(),
-            'storeform': StoreForm(),
-        },
-    )
-
-
-# 建立會員帳號
-@transaction.atomic
-def create_user(req):
-    if req.user.is_authenticated:
-        messages.error(req, '你已登入，不能再建立帳號')
-        return redirect('members:index')
+        messages.error(req, '你已經登入，不能註冊新帳號')
+        return redirect('members:new' if req.user.is_member else 'stores:new')
 
     userform = UserForm(req.POST)
     if userform.is_valid():
