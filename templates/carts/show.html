@@ -75,7 +75,7 @@
 
       // 稍等 300ms 再跳轉
       setTimeout(() => {
-        window.location.href = '{% url "orders:create" %}';
+        window.location.href = '{% url "orders:create" %}?cart_id={{ cart.id }}';
       }, 300);
     }
   }">
