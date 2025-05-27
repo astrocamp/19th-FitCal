@@ -127,9 +127,6 @@ def new(req):
                 },
             )
 
-    total_quantity = sum(item.quantity for item in cart_items)
-    total_price = cart.calculate_total_price
-
     if not cart_items.exists():
         return redirect('carts:index')
 
@@ -148,8 +145,6 @@ def new(req):
             'form': form,
             'cart': cart,
             'cart_items': cart_items,
-            'total_quantity': total_quantity,
-            'total_price': total_price,
         },
     )
 

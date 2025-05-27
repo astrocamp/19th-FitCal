@@ -32,15 +32,15 @@ class Cart(models.Model):
 
         return total
 
-    # 計算總價
+    # 計算總量
     @property
-    def calculate_total_price(self):
+    def calculate_total_quantity(self):
         # 利用 select_related 預先抓 product 避免N+1
         items = self.items.select_related('product').all()
 
         total = 0
         for item in items:
-            total += item.product.price * item.quantity
+            total += item.quantity
 
         return total
 

@@ -168,7 +168,7 @@ def delete_item_from_ordering(req, id):
         return response
 
     # 若還有商品，則更新總數與金額
-    total_quantity = sum(item.quantity for item in cart.items.all())
+    total_quantity = cart.calculate_total_quantity
     total_price = cart.calculate_total_price
 
     messages.success(req, f'成功刪除 {product_name}')
