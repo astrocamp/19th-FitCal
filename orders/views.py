@@ -171,41 +171,65 @@ def cancel(request, id):
     if hasattr(request.user, 'store') and request.user.store:
         by_store = True
 
-    if service.cancel_order(by_store=by_store):
+    success = service.cancel_order(by_store=by_store)
+    order = get_object_or_404(Order, id=id)
+
+    if success:
         messages.success(request, '訂單已取消')
     else:
         messages.error(request, '此訂單無法取消')
-    return redirect('orders:show', id=id)
+
+    return render(
+        request, 'shared/order/partial_order_status_response.html', {'order': order}
+    )
 
 
 def prepare(request, id):
     """開始準備訂單"""
-    order = get_object_or_404(Order, id=id)
     service = OrderService(id)
-    if service.prepare_order():
+
+    success = service.prepare_order()
+    order = get_object_or_404(Order, id=id)
+
+    if success:
         messages.success(request, '訂單開始準備中')
     else:
         messages.error(request, '此訂單無法開始準備')
-    return redirect('stores:manage_orders', store_id=order.store.id)
+
+    return render(
+        request, 'shared/order/partial_order_status_response.html', {'order': order}
+    )
 
 
 def mark_ready(request, id):
     """標記訂單準備完成"""
-    order = get_object_or_404(Order, id=id)
     service = OrderService(id)
-    if service.mark_order_ready():
+
+    success = service.mark_order_ready()
+    order = get_object_or_404(Order, id=id)
+
+    if success:
         messages.success(request, '訂單已準備完成')
     else:
         messages.error(request, '此訂單無法標記為準備完成')
-    return redirect('stores:manage_orders', store_id=order.store.id)
+
+    return render(
+        request, 'shared/order/partial_order_status_response.html', {'order': order}
+    )
 
 
 def complete(request, id):
     """完成訂單（顧客取餐）"""
-    order = get_object_or_404(Order, id=id)
     service = OrderService(id)
-    if service.complete_order():
+
+    success = service.complete_order()
+    order = get_object_or_404(Order, id=id)
+
+    if success:
         messages.success(request, '訂單已完成')
     else:
         messages.error(request, '此訂單無法標記為完成')
-    return redirect('stores:manage_orders', store_id=order.store.id)
+
+    return render(
+        request, 'shared/order/partial_order_status_response.html', {'order': order}
+    )
