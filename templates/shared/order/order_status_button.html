@@ -1,0 +1,13 @@
+{% if request.user.is_authenticated and request.user.store %} {% if order.order_status == 'PENDING' or order.order_status == 'PREPARING' %}
+<button hx-post="{% url 'orders:cancel' order.id %}" hx-target="#order_status_button_{{ order.id }}" hx-swap="innerHTML" hx-confirm="確定要取消訂單嗎？" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">取消訂單</button>
+{% endif %} {% if order.can_prepare %}
+<button hx-post="{% url 'orders:prepare' order.id %}" hx-target="#order_status_button_{{ order.id }}" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">開始準備</button>
+{% endif %} {% if order.can_mark_ready %}
+<button hx-post="{% url 'orders:mark_ready' order.id %}" hx-target="#order_status_button_{{ order.id }}" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">完成準備</button>
+{% endif %} {% if order.can_complete %}
+<button hx-post="{% url 'orders:complete' order.id %}" hx-target="#order_status_button_{{ order.id }}" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-800 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700">完成取餐</button>
+{% endif %} {% endif %}
+<!-- prettier-ignore -->
+{% if request.user.is_authenticated and request.user.member %} {% if order.order_status == 'PENDING' %}
+<button hx-post="{% url 'orders:cancel' order.id %}" hx-target="#order_status_button_{{ order.id }}" hx-swap="innerHTML" hx-confirm="確定要取消訂單嗎？" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">取消訂單</button>
+{% endif %} {% endif %}
