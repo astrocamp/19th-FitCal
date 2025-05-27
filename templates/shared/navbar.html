@@ -114,7 +114,13 @@
     </div>
     {% else %}
     <!-- 未登入狀態：登入/註冊按鈕 -->
-    <a href="{% url 'users:sign_in' %}" class="btn">登入/註冊</a>
+    <!-- 按鈕：打開 modal -->
+    {% include "users/sign_in.html" %}
+    <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入
+    </button>
+    {% include "users/sign_up.html" %}
+    <button type="button" onclick="document.getElementById('signupModal').classList.remove('hidden')" class="btn btn-primary">註冊
+    </button>
     {% endif %}
   </div>
 </div>
