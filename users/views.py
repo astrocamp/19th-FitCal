@@ -15,8 +15,38 @@ def index(req):
 
 def sign_up(req):
     if req.user.is_authenticated:
-        messages.error(req, '你已經登入，不能註冊新帳號')
-        return redirect('members:new' if req.user.is_member else 'stores:new')
+        messages.error(req, '你已登入')
+        return redirect('users:index')
+    return render(
+        req,
+        'users/index.html',
+        {
+            'userform': UserForm(),
+        },
+    )
+
+
+# 顯示店家註冊
+def sign_up_store(req):
+    if req.user.is_authenticated:
+        messages.error(req, '你已登入')
+        return redirect('stores:index')
+    return render(
+        req,
+        'users/sign_up_store.html',
+        {
+            'userform': UserForm(),
+            'storeform': StoreForm(),  # 這應該是不用
+        },
+    )
+
+
+# 建立會員帳號
+@transaction.atomic
+def create_user(req):
+    if req.user.is_authenticated:
+        messages.error(req, '你已登入，不能再建立帳號')
+        return redirect('users:index')
 
     userform = UserForm(req.POST)
     if userform.is_valid():
@@ -33,7 +63,6 @@ def sign_up(req):
         'users/sign_up.html',
         {
             'userform': userform,
-            'is_hidden': False,
         },
     )
 

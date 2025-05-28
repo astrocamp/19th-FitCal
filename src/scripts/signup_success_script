@@ -1,6 +1,0 @@
-document.getElementById('signupModal')?.classList.add('hidden');
-
-  htmx.ajax('GET', '{% url "shared:navbar" %}', {
-    target: '#navbar-container',
-    swap: 'outerHTML'
-  });
