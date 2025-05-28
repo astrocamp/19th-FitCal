@@ -1,0 +1,51 @@
+{% extends "layouts/default.html" %} {% load widget_tweaks %} {% block main %}
+<div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+      <div class="transform text-left text-base transition md:my-8 max-w-md w-full mx-auto px-4">
+        <div class="relative flex w-full items-center overflow-hidden bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-lg">
+          <!-- 關閉按鈕 -->
+          <button type="button" onclick="window.location.href = '/'" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-6 sm:right-6">
+            <span class="sr-only">Close</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- 登入表單 -->
+          <div class="w-full">
+            <h2 class="text-center text-2xl font-bold text-gray-900 mb-2">Fit Your Calories, Fit Your Life.</h2>
+            <h2 class="text-center text-xl font-bold text-gray-900 mb-2">歡迎回來</h2>
+
+            <form method="post" action="{% url 'users:create_session_store' %}" class="space-y-4">
+              {% csrf_token %} {% if error %}
+              <p class="text-red-500 text-sm text-center">{{ error }}</p>
+              {% endif %}
+
+              <input type="hidden" name="role" value="store" />
+
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">電子郵件：</label>
+                <input type="email" name="email" value="{{ email }}" placeholder="example@gmail.com" class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:ring focus:ring-blue-200 focus:outline-none" required />
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">密碼：</label>
+                <input type="password" name="password" placeholder="請輸入密碼" class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:ring focus:ring-blue-200 focus:outline-none" required />
+              </div>
+
+              <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold transition">登入</button>
+            </form>
+            <br />
+            <p class="text-center text-sm text-gray-600 mb-4">
+              還不是店家？
+              <a href="{% url 'users:sign_up_store' %}" class="text-blue-600 font-semibold hover:underline">先來註冊</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock main %}
+</div>

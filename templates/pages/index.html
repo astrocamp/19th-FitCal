@@ -20,7 +20,7 @@
   <img src="https://images.unsplash.com/photo-1556742031-c6961e8560b0" alt="商家後台範例圖" class="rounded-lg shadow-md mb-6 w-full max-w-md" />
   <div class="flex justify-center space-x-4 mt-6">
     <a href="{% url 'users:sign_in' %}" class="btn bg-[#f9bc60] hover:bg-[#f9bc60] text-white mt-4"> 開始線上點餐</a>
-    <a href="{% url 'stores:index' %}" class="btn bg-[#f9bc60] hover:bg-[#f9bc60] text-white mt-4"> 申請成為商家</a>
+    <a href="{% url 'users:sign_in_store' %}" class="btn bg-[#f9bc60] hover:bg-[#f9bc60] text-white mt-4"> 申請成為商家</a>
   </div>
 </section>
 {% endblock main %}
