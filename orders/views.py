@@ -249,7 +249,7 @@ def partial_status(request, id):
 
     response = render(
         request,
-        'shared/order/order_status_display.html',
+        'shared/order/order_status_content.html',
         {
             'order': order,
         },
