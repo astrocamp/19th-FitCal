@@ -1,0 +1,84 @@
+{% extends "layouts/default.html" %} {% load widget_tweaks %} {% block main %}
+<div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+      <div class="transform text-left text-base transition md:my-8 max-w-md w-full mx-auto px-4">
+        <div class="relative flex w-full items-center overflow-hidden bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-lg">
+          <!-- 關閉按鈕 -->
+          <button type="button" @click="window.location.href = '/'" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-6 sm:right-6">
+            <span class="sr-only">Close</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- 註冊表單 -->
+          <div class="w-full">
+            <h2 class="text-center text-2xl font-bold text-gray-900 mb-2">Fit Your Calories, Fit Your Life.</h2>
+            <h2 class="text-center text-xl font-bold text-gray-900 mb-2">註冊店家</h2>
+
+            <form method="POST" action="{% url 'users:create_user_store' %}" class="space-y-4">
+              {% csrf_token %}
+
+              <!-- 使用者帳號欄位 -->
+              <div>
+                <label for="{{ userform.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">電子郵件</label>
+                {{ userform.email.errors }} {{ userform.email|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ userform.password1.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">密碼</label>
+                {{ userform.password1.errors }} {{ userform.password1|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ userform.password2.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">確認密碼</label>
+                {{ userform.password2.errors }} {{ userform.password2|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <!-- 店家資料欄位 -->
+              <div>
+                <label for="{{ storeform.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">店家名稱</label>
+                {{ storeform.name.errors }} {{ storeform.name|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ storeform.address.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">店家地址</label>
+                {{ storeform.address.errors }} {{ storeform.address|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ storeform.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">聯絡電話</label>
+                {{ storeform.phone_number.errors }} {{ storeform.phone_number|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ storeform.tax_id.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">統一編號</label>
+                {{ storeform.tax_id.errors }} {{ storeform.tax_id|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ storeform.opening_time.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">開店時間</label>
+                {{ storeform.opening_time.errors }} {{ storeform.opening_time|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <div>
+                <label for="{{ storeform.closing_time.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">打烊時間</label>
+                {{ storeform.closing_time.errors }} {{ storeform.closing_time|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
+              </div>
+
+              <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold transition">註冊店家</button>
+            </form>
+            <br />
+            <p class="text-center text-sm mt-4 text-gray-600">
+              已有店家帳號？
+              <a href="{% url 'users:sign_in_store' %}" class="text-blue-600 font-semibold hover:underline">前往登入</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main %}
