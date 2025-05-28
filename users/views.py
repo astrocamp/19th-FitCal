@@ -33,6 +33,7 @@ def sign_up(req):
         'users/sign_up.html',
         {
             'userform': userform,
+            'is_hidden': False,
         },
     )
 

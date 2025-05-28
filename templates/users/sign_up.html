@@ -1,7 +1,7 @@
 {% load socialaccount %}
 {% load widget_tweaks %}
 <!-- Modal 視窗遮罩區域我要讓這區變透明 -->
-<div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+<div id="signupModal" class="{% if is_hidden|default:True %}hidden {% endif %} fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
      onclick="this.classList.add('hidden')">
   <!--卡片-->
   <div class="w-full max-w-sm p-6 bg-white rounded shadow h-[600px]" onclick="event.stopPropagation()">
@@ -17,7 +17,7 @@
           hx-target="#signupModal"
           hx-swap="outerHTML"
           class="space-y-3">
-      <div class="mb-1">
+      <div class="mb-1">url
         <label for="email" class="block text-sm font-medium">電子郵件：</label>
         <input
           type="email"
