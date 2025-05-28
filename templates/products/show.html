@@ -1,10 +1,10 @@
-<div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true" @click="open = false">
+<div id="productModal" x-data class="relative z-10" role="dialog" aria-modal="true" @click="$el.remove()">
   <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
     <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
       <div class="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
         <div class="relative flex w-full items-center overflow-hidden rounded-2xl bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8" @click.stop>
-          <button type="button" @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
+          <button type="button" @click="$el.closest('#productModal').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
             <span class="sr-only">Close</span>
             <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
