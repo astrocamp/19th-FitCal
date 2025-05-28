@@ -1,0 +1,14 @@
+
+<div
+  id="order_status_wrapper_{{ order.id }}"
+  hx-get="{% url 'orders:partial_status' order.id %}"
+  {% if not order.order_status in 'COMPLETED CANCELED NO_SHOW CANCELED_REFUNDED' %}
+    hx-trigger="every 30s"
+  {% endif %}
+  hx-swap="outerHTML"
+  hx-target="this"
+>
+  <div id="order_status_display_{{ order.id }}">
+    {% include "shared/order/order_status_display.html" with order=order %}
+  </div>
+</div>
