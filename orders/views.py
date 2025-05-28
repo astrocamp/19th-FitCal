@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import condition
 
 from carts.models import Cart
 
@@ -233,3 +234,25 @@ def complete(request, id):
     return render(
         request, 'shared/order/partial_order_status_response.html', {'order': order}
     )
+
+
+# Last-Modified 判斷條件
+def last_modified_func(request, id):
+    order = get_object_or_404(Order, id=id)
+    return order.updated_at
+
+
+# 局部載入訂單狀態（適用於 HTMX polling）
+@condition(last_modified_func=last_modified_func)
+def partial_status(request, id):
+    order = get_object_or_404(Order, id=id)
+
+    response = render(
+        request,
+        'shared/order/order_status_display.html',
+        {
+            'order': order,
+        },
+    )
+
+    return response
