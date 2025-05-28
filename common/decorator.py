@@ -29,9 +29,20 @@ def member_required(view_func):
             except Exception:
                 return redirect_with_message(req, 'members:new', '請先補充會員資料')
         else:
-            return redirect_with_message('users:index', '您不是會員，無法訪問此頁面')
+            return redirect_with_message(
+                req, 'users:index', '您不是會員，無法訪問此頁面'
+            )
 
-        return view_func(req, *args, **kwargs)
+        member_id = kwargs.get('id')
+
+        if member_id is not None and str(getattr(req.user.member, 'id', '')) == str(
+            member_id
+        ):
+            return view_func(req, *args, **kwargs)
+        else:
+            return redirect_with_message(
+                req, 'users:index', '你沒有權限存取其他會員後台的權限'
+            )
 
     return _wrapped_view
 
@@ -46,8 +57,21 @@ def store_required(view_func):
             except Exception:
                 return redirect_with_message(req, 'stores:new', '請先補充會員資料')
         else:
-            return redirect_with_message('users:index', '您不是會員，無法訪問此頁面')
+            return redirect_with_message(
+                req, 'users:index', '您不是會員，無法訪問此頁面'
+            )
 
-        return view_func(req, *args, **kwargs)
+        # return view_func(req, *args, **kwargs)
+
+        store_id = kwargs.get('id')  # 或 store_id，視你的 urls.py 而定
+
+        if store_id is not None and str(getattr(req.user.store, 'id', '')) == str(
+            store_id
+        ):
+            return view_func(req, *args, **kwargs)
+        else:
+            return redirect_with_message(
+                req, 'stores:index', '你沒有權限存取這個商家後台'
+            )
 
     return _wrapped_view
