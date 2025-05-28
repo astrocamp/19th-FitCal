@@ -13,4 +13,9 @@ urlpatterns = [
     path('<uuid:id>/delete/', views.delete, name='delete'),
     path('<uuid:store_id>/rate/', views.rate_store, name='rate_store'),
     path('<uuid:store_id>/orders/', views.manage_orders, name='manage_orders'),
+    path(
+        'store_management/',
+        views.store_management,
+        name='store_management',
+    ),
 ]

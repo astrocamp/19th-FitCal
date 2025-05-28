@@ -162,3 +162,28 @@ def manage_orders(request, store_id):
     }
 
     return render(request, 'stores/manage_orders.html', context)
+
+
+@login_required
+def store_management(request):
+    """商家管理頁面"""
+    if not hasattr(request.user, 'store'):
+        messages.error(request, '您尚未創建商家，請先創建商家。')
+        return redirect('stores:new')  # 假設有一個創建商家的頁面
+
+    store = request.user.store
+
+    stats = {
+        'total_amount': 36520,
+        'average_order_price': 166,
+        'order_count': 222,
+    }
+
+    return render(
+        request,
+        'stores/store_management.html',
+        {
+            'store': store,
+            'stats': stats,
+        },
+    )
