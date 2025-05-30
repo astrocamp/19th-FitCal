@@ -2,15 +2,17 @@
 {% include "shared/messages.html" %}
 
 <!--卡片-->
-<div class="w-full max-w-sm p-6 bg-white rounded shadow h-[600px]" onclick="event.stopPropagation()">
+<div class="w-full max-w-sm p-6 bg-white rounded shadow h-[550px]" onclick="event.stopPropagation()">
   <div class="flex justify-end">
-  <button onclick="document.getElementById('signinModal').classList.add('hidden')" class="btn btn-sm">X
+  <button onclick="document.getElementById('signinModal').classList.add('hidden')">X
   </button>
   </div>
   <h2 class="text-center text-lg font-bold mb-2">歡迎使用 Fitcal 線上點餐平台</h2>
 
-  <p class="text-center text-sm mb-4">還沒有帳號？<a href="{% url 'users:sign_up' %}" class="text-blue-600 font-semibold">註冊新帳號</a>
+  <p class="text-center text-sm mb-4">還沒有帳號？<button type="button" onclick="document.getElementById('signupModal').classList.remove('hidden')" class="btn-active text-blue-600 font-semibold">前往註冊
+    </button>
   </p>
+  
     <form method="post" hx-post="{% url 'users:create_session' %}" hx-swap="innerHTML" hx-target="#signinModal" class="space-y-3">
       {% csrf_token %} {% if error %}
       <p class="text-red-500 text-sm text-center">{{ error }}</p>
