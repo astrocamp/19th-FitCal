@@ -2,14 +2,14 @@
 {% load widget_tweaks %}
 
 <!--卡片-->
-<div class="w-full max-w-sm p-6 bg-white rounded shadow h-[600px]" onclick="event.stopPropagation()">
+<div class="w-full max-w-sm p-6 bg-white rounded shadow h-[550px]" onclick="event.stopPropagation()">
   <div class="flex justify-end">
-    <button onclick="document.getElementById('signupModal').classList.add('hidden')" class="btn btn-sm">X
+    <button onclick="document.getElementById('signupModal').classList.add('hidden')">X
     </button>
   </div>
   <h2 class="text-center text-lg font-bold mb-2">歡迎使用 Fitcal 線上點餐平台</h2>
 
-  <p class="text-center text-sm mb-4">快速註冊</p>
+  <p class="text-center text-sm ">快速註冊</p>
   <form method="post"
         hx-post="{% url 'users:create_user' %}" 
         hx-target="#signupModal"
@@ -22,7 +22,7 @@
         name="email"
         value="{{ userform.email.value }}"
         placeholder="example@gmail.com"
-        class="w-full border px-3 py-2 rounded mt-1"/>
+        class="w-full border px-3 py-1.5 rounded mt-1"/>
         {% if userform.errors.email %}
           <div class="absolute flex items-center text-red-500 text-xs mt-1">
             <span>*</span>
@@ -31,12 +31,12 @@
         {% endif %}
     </div>
     <div class="mb-1 relative">
-      <label for="password1" class="block text-sm font-medium mt-6">密碼：</label>
+      <label for="password1" class="block text-sm font-medium mt-5">密碼：</label>
       <input 
       type="password"
       name="password1" 
       placeholder="請輸入密碼"
-      class="w-full border px-3 py-2 rounded mt-1" />
+      class="w-full border px-3 py-1.5 rounded mt-1" />
       {% if userform.errors.password1 %}
         <div class="flex items-center text-red-500 text-xs absolute mt-1">
           <span>*</span>
@@ -45,12 +45,12 @@
       {% endif %}
     </div>
     <div class="mb-1 relative">
-      <label for="password2" class="block text-sm font-medium mt-6">密碼：</label>
+      <label for="password2" class="block text-sm font-medium mt-5">密碼：</label>
       <input 
       type="password"
       name="password2" 
       placeholder="請再次輸入密碼"
-      class="w-full border px-3 py-2 rounded mt-1" />
+      class="w-full border px-3 py-1.5 rounded mt-1" />
       {% if userform.errors.password2 %}
         <div class="flex items-center text-red-500 text-xs mt-1 absolute">
           <span>*</span>
@@ -61,8 +61,8 @@
     <br>
     <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">註冊</button>
   </form>
-
-  <div class="my-4 text-center text-sm text-gray-500">------ 使用第三方註冊 ------</div>
+  <br/>
+  <div class="my-4 text-center text-sm text-gray-500">------ 其他註冊方式 ------</div>
 
   <div class="flex items-center justify-center gap-2">
     <a href="{% provider_login_url 'google' %}" class="flex items-center">
