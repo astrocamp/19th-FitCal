@@ -46,9 +46,9 @@ def linepay_request(request):
                 'confirmUrl': request.build_absolute_uri(
                     reverse('payment:linepay_confirm')
                 ),
-                # 'cancelUrl': request.build_absolute_uri(
-                #     reverse('payment:linepay_cancel')
-                # ),
+                'cancelUrl': request.build_absolute_uri(
+                    reverse('payment:linepay_cancel')
+                ),
             },
         }
 
@@ -125,3 +125,7 @@ def linepay_confirm(request):
         fail_message = data.get('returnMessage', 'Unknown error')
         print(data['returnMessage'])
         return render(request, 'payment/fail.html', {'message': fail_message})
+
+
+def linepay_cancel(request):
+    return render(request, 'payment/cancel.html')
