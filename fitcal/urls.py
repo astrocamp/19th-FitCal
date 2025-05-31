@@ -15,4 +15,5 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('carts/', include('carts.urls', namespace='carts')),
     path('search/', include('search.urls', namespace='search')),
+    path('payment/', include('payment.urls', namespace='payment')),
 ]

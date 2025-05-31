@@ -1,0 +1,4 @@
+<form method="post" action="{% url 'payment:linepay_request' %}">
+  {% csrf_token %}
+  <button type="submit">使用 LINE Pay 付款</button>
+</form>

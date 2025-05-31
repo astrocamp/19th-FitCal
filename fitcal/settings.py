@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'stores',
     'storages',
     'search',
+    'payment',
 ]
 
 AUTHENTICATION_BACKENDS = [
