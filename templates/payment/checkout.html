@@ -1,4 +1,8 @@
+{% extends 'layouts/default.html' %} {% block main %}
 <form method="post" action="{% url 'payment:linepay_request' %}">
   {% csrf_token %}
-  <button type="submit">使用 LINE Pay 付款</button>
+  <button class="btn btn-primary mb-3 mt-3" type="submit">使用 LINE Pay 付款</button>
 </form>
+
+<a href="{% url 'payment:linepay_cancel' %}" class="btn btn-outline-danger">取消付款</a>
+{% endblock main %}
