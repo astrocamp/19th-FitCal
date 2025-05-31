@@ -24,7 +24,7 @@ def new(req):
 @transaction.atomic
 def create_store(request):
     if request.method == 'POST':
-        form = StoreForm(request.POST)
+        form = StoreForm(request.POST, request.FILES)
         if form.is_valid():
             store = form.save(commit=False)
             store.user = request.user
@@ -77,7 +77,7 @@ def show(req, id):
         Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg'] or 0
     )
     if req.method == 'POST':
-        form = StoreForm(req.POST, instance=store)
+        form = StoreForm(req.POST, req.FILES, instance=store)
         if form.is_valid():
             form.save()
             return redirect('stores:show', id=store.id)
@@ -96,7 +96,7 @@ def show(req, id):
 @store_required
 def edit(req, id):
     store = get_object_or_404(Store, pk=id, user=req.user)
-    form = StoreForm(instance=store)
+    form = StoreForm(req.FILES, instance=store)
     return render(req, 'stores/edit.html', {'form': form, 'store': store})
 
 

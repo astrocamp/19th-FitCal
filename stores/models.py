@@ -15,10 +15,11 @@ class StoreManager(models.Manager):
 
 
 class Store(models.Model):
-    name = models.CharField(max_length=50)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    cover_image = models.ImageField(upload_to='store_covers/', blank=True, null=True)
+    logo_image = models.ImageField(upload_to='store_logos/', blank=True, null=True)
     address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     opening_time = models.TimeField(default='06:00')
@@ -46,6 +47,18 @@ class Store(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def cover_url(self):
+        if self.cover_image:
+            return self.cover_image.url
+        return 'https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/store_covers/default-cover.png'  # S3的網址
+
+    @property
+    def logo_url(self):
+        if self.logo_image:
+            return self.logo_image.url
+        return 'https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/store_logos/default-logo.png'  # S3的網址
 
 
 class Rating(models.Model):

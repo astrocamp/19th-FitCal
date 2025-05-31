@@ -1,4 +1,5 @@
 {% extends 'layouts/default.html' %} {% block main %} {% if user.is_member %}
+
 <div class="container mx-auto p-4">
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     {% for store in stores %}
@@ -11,6 +12,7 @@
 <!-- 如果是店家 -->
 {% if user.is_store %} {% if store %}
 <section class="mt-6 p-4 border rounded shadow">
+  <img src="{{ store.logo_url }}" alt="{{ store.name }}LOGO" style="width: 200px; height: 200px" />
   <p class="font-bold text-lg">您的店家資訊：</p>
   <p>店家名稱：{{ store.name }}</p>
   <p>店家地址：{{ store.address }}</p>
