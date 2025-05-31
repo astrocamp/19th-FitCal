@@ -2,10 +2,10 @@
   <a href="{% url 'stores:show' store.id %}">
     <!-- 商家圖片 -->
     <div class="relative">
-      <img src="{{ store.cover_url|default:'https://fakeimg.pl/400x250' }}" alt="店家封面" class="w-full h-48 object-cover" />
+      <img src="{{ store.cover_url }}" alt="店家封面" class="w-full h-48 object-cover" />
 
       <!-- Logo -->
-      <img src="{{ store.logo_url|default:'https://fakeimg.pl/50x50/' }}" alt="Logo" class="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white" />
+      <img src="{{  store.logo_url }}" alt="Logo" class="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white" />
 
       <!-- 愛心，後續這個可以用annotate操作，一次查詢全部的店家是否有被該會員收藏 -->
       <div x-data class="absolute top-2 right-2 p-1.5 rounded-full hover:bg-red-50 cursor-pointer flex items-center" @click.stop>{% include "shared/favorite_btn.html" with store=store member=user.member %}</div>

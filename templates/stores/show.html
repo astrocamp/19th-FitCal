@@ -1,9 +1,10 @@
 {% extends 'layouts/default.html' %} {% block main %}
+<img src="{{  store.cover_url }}" alt="店家封面" class="w-full h-48 object-cover" />
 <div class="p-4 space-y-6">
   <!-- 店家資訊區塊 -->
   <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
     <!-- LOGO -->
-    <img src="{{ store.logo_url|default:'https://fakeimg.pl/50x50/' }}" alt="店家 Logo" class="w-24 h-24 rounded-lg object-cover border" />
+    <img src="{{  store.logo_url }}" alt="店家 Logo" class="w-24 h-24 rounded-lg object-cover border" />
 
     <!-- 商家詳細資訊 -->
     <div class="space-y-1 mb-7">
