@@ -1,3 +1,4 @@
+from anymail.message import AnymailMessage
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
@@ -58,6 +59,17 @@ def create_user(req):
         user = userform.save(commit=False)
         user.role = 'member'
         user.save()
+        # ✅ 發送 Mailgun 歡迎信
+        message = AnymailMessage(
+            subject='歡迎加入 FitCal',
+            to=[user.email],  # 使用者的 email
+            # to=['你自己的 email'],  # 若你要測試
+        )
+        message.template_id = 'welcome_email'  # Mailgun 後台的 template 名稱
+        message.merge_global_data = {
+            'username': user.username,  # 對應 template 的變數
+        }
+        message.send()
         return create_session(req)
     else:
         return render(
