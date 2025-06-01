@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -13,20 +14,24 @@ def index(req):
     return render(req, 'pages/index.html')
 
 
+# 顯示註冊頁面(會員)
 def sign_up(req):
     if req.user.is_authenticated:
-        messages.error(req, '你已登入')
+        messages.error(req, '你已經登入，不能註冊新帳號')
         return redirect('users:index')
+
+    userform = UserForm()
     return render(
         req,
-        'users/index.html',
+        'users/sign_up.html',
         {
-            'userform': UserForm(),
+            'userform': userform,
+            'is_hidden': False,
         },
     )
 
 
-# 顯示店家註冊
+# 顯示註冊頁面(店家)
 def sign_up_store(req):
     if req.user.is_authenticated:
         messages.error(req, '你已登入')
@@ -36,7 +41,7 @@ def sign_up_store(req):
         'users/sign_up_store.html',
         {
             'userform': UserForm(),
-            'storeform': StoreForm(),  # 這應該是不用
+            'storeform': StoreForm(),
         },
     )
 
@@ -45,26 +50,24 @@ def sign_up_store(req):
 @transaction.atomic
 def create_user(req):
     if req.user.is_authenticated:
-        messages.error(req, '你已登入，不能再建立帳號')
-        return redirect('users:index')
+        messages.error(req, '你已經登入，不能再建立新帳號')
+        return redirect('members:index' if req.user.is_member else 'stores:index')
 
     userform = UserForm(req.POST)
+
     if userform.is_valid():
         user = userform.save(commit=False)
         user.role = 'member'
-        user.set_password(userform.cleaned_data['password1'])
         user.save()
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(req, user)
-        return redirect('members:index')
-
-    return render(
-        req,
-        'users/sign_up.html',
-        {
-            'userform': userform,
-        },
-    )
+        return create_session(req)
+    else:
+        return render(
+            req,
+            'users/sign_up.html',
+            {
+                'userform': userform,
+            },
+        )
 
 
 # 建立店家帳號（包含 Store 資料）
@@ -105,7 +108,7 @@ def create_user_store(req):
 def sign_in(req):
     if req.user.is_authenticated:
         messages.error(req, '你已登入')
-        return redirect('members:index')
+        return redirect('users:index')
     return render(req, 'users/sign_in.html')
 
 
@@ -122,21 +125,21 @@ def sign_in_store(req):
 def create_session(req):
     email = req.POST.get('email')
     password = req.POST.get('password')
+    # 因為上方create_user有用到這隻function，但是在註冊的時候沒有‘password’欄位，
+    # 所以在這裏額外判斷是否有‘password2’
+    if not password:
+        password = req.POST.get('password2')
+
     user = authenticate(email=email, password=password)
 
-    if user is None or user.role != 'member':
-        messages.error(req, '帳號或密碼錯誤，或此帳號非會員')
-        return render(
-            req,
-            'users/sign_in.html',
-            {
-                'email': email,
-            },
-        )
+    if user is None:
+        messages.error(req, '帳號或密碼錯誤，請再試一次。')
+        return render(req, 'users/sign_in.html')
 
     login(req, user)
-    messages.success(req, '會員登入成功！')
-    return redirect('members:index')
+    if user.is_member:
+        messages.success(req, '會員登入成功！')
+    return HttpResponse('<script>window.location.href = "/stores/";</script>')
 
 
 # 登入處理（店家）

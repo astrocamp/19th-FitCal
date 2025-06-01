@@ -16,58 +16,25 @@
     </script>
 
     {% comment %} 表單 HTML {% endcomment %}
-    <form
-      x-data="searchFormComponent()"
-      id="searchForm"
-      action="{% url 'search:index' %}"
-      method="get"
-      class="relative w-full max-w-lg"
-      @click.away="showFilter = false"
-    >
+    <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
       <!--- 上排搜尋欄 -->
       <div class="flex gap-3 items-center">
-        <input
-          id="searchInput"
-          name="q"
-          type="text"
-          placeholder="搜尋商家、餐點或餐點卡路里"
-          class="input input-bordered w-53"
-          value="{{ request.GET.q }}"
-          @focus="showFilter = true"
-        />
+        <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點或餐點卡路里" class="input input-bordered w-53" value="{{ request.GET.q }}" @focus="showFilter = true" />
 
-        <button id="searchBtn" type="submit" class="btn">
-        搜尋
-        </button>
+        <button id="searchBtn" type="submit" class="btn">搜尋</button>
       </div>
 
       <!-- 下排：拉霸，使用絕對定位 -->
-      <div
-        id="calorieFilter"
-        class="absolute left-0 w-full bg-white shadow-lg rounded mt-1 z-10 transition-all duration-300 overflow-hidden"
-        x-ref="filter"
-        x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'"
-      >
+      <div id="calorieFilter" class="absolute left-0 w-full bg-white shadow-lg rounded mt-1 z-10 transition-all duration-300 overflow-hidden" x-ref="filter" x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
         <div class="p-2">
-          <label for="max_calories" class="block text-xs mb-1">
-            最多卡路里(非必填)：<span x-text="maxCalories"></span>
-          </label>
-          <input
-            type="range"
-            id="max_calories"
-            name="max_calories"
-            min="0"
-            max="1000"
-            step="10"
-            x-model="maxCalories"
-            class="range w-full"
-          />
+          <label for="max_calories" class="block text-xs mb-1"> 最多卡路里(非必填)：<span x-text="maxCalories"></span> </label>
+          <input type="range" id="max_calories" name="max_calories" min="0" max="1000" step="10" x-model="maxCalories" class="range w-full" />
         </div>
       </div>
     </form>
 
-{% comment %} 引入打包後 JS {% endcomment %}
-<script type="module" src="{% static 'assets/scripts/app.js' %}"></script> 
+    {% comment %} 引入打包後 JS {% endcomment %}
+    <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
 
     <!--- 已登入購物車和個人資料狀態 -->
     {% if user.is_authenticated %}
@@ -106,8 +73,8 @@
         </li>
         <li>
           <form action="{% url 'users:delete_session' %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="btn">登出</button>
+            {% csrf_token %}
+            <button type="submit" class="btn">登出</button>
           </form>
         </li>
       </ul>
@@ -115,18 +82,11 @@
     {% else %}
     <!-- 未登入狀態：登入/註冊按鈕 -->
     <!-- 按鈕：打開 modal -->
-    <div id="signinModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">
-    {% include "users/sign_in.html" %}
-    </div>
-    <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入
-    </button>
-    <div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-     onclick="this.classList.add('hidden')">
-    {% include "users/sign_up.html" %}
-  </div>
-    <button type="button" onclick="document.getElementById('signupModal').classList.remove('hidden')" class="btn btn-primary">註冊
-    </button>
+    <div id="signinModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_in.html" %}</div>
+    <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入</button>
+    <br />
+    <div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_up.html" %}</div>
+    <button type="button" onclick="document.getElementById('signupModal').classList.remove('hidden')" class="btn btn-primary">註冊</button>
     {% endif %}
   </div>
 </div>
-
