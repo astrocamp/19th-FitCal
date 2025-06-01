@@ -7,13 +7,14 @@ from django.db.models import Avg, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
 from orders.models import Order
 
 from .forms import RatingForm, StoreForm
-from .models import Rating, Store
+from .models import Category, Rating, Store
 
 
 def new(req):
@@ -79,6 +80,7 @@ def index(request):
 def show(req, id):
     store = get_object_or_404(Store, pk=id)
     products = store.products.all()
+    categories = store.categories.all()
     store.avg_rating = (
         Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg'] or 0
     )
@@ -95,7 +97,7 @@ def show(req, id):
     return render(
         req,
         'stores/show.html',
-        {'store': store, 'products': products},
+        {'store': store, 'products': products, 'categories': categories},
     )
 
 
@@ -213,3 +215,69 @@ def order_list(request, id):
         )
 
     return render(request, 'stores/orders.html', {'orders': orders, 'tab': tab})
+def new_category(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    return render(
+        request,
+        'shared/stores/business/new_category.html',
+        {'store': store},
+    )
+
+
+def show_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    return render(
+        request,
+        'shared/stores/business/show_category.html',
+        {'category': category},
+    )
+
+
+@store_required
+@require_POST
+def category_create(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    name = request.POST.get('name')
+    if not name:
+        messages.error(request, '類別名稱不能為空')
+        return render(request, 'shared/messages.html')
+    if store.categories.filter(name=name).exists():
+        messages.error(request, '此類別已存在')
+        return render(request, 'shared/messages.html')
+
+    store.categories.create(name=name)
+    messages.success(request, '類別創建成功')
+    response = HttpResponse()
+    response['HX-Redirect'] = reverse('stores:show', args=[store_id])
+    return response
+
+
+@store_required
+def category_edit(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    new_name = request.POST.get('name')
+    if request.method == 'POST':
+        if new_name:
+            if category.store.categories.filter(name=new_name).exists():
+                messages.error(request, '此類別名稱已存在')
+                return render(request, 'shared/messages.html')
+            elif new_name != category.name:
+                category.name = new_name
+                category.save()
+                messages.success(request, '類別名稱已更新')
+        else:
+            messages.error(request, '請輸入有效的類別名稱')
+    response = HttpResponse()
+    response['HX-Redirect'] = reverse('stores:show', args=[category.store.id])
+    return response
+
+
+@store_required
+@require_POST
+def category_delete(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    store = category.store
+
+    category.delete()
+    messages.success(request, '類別已刪除')
+    return redirect('stores:show', store.id)

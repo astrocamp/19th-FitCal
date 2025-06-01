@@ -18,4 +18,29 @@ urlpatterns = [
         name='store_management',
     ),
     path('<uuid:id>/orders/', views.order_list, name='order_list'),
+    path(
+        '<uuid:store_id>/category/new/',
+        views.new_category,
+        name='new_category',
+    ),
+    path(
+        'category/<int:category_id>/',
+        views.show_category,
+        name='show_category',
+    ),
+    path(
+        '<uuid:store_id>/category/create/',
+        views.category_create,
+        name='category_create',
+    ),
+    path(
+        'category/<int:category_id>/edit/',
+        views.category_edit,
+        name='category_edit',
+    ),
+    path(
+        'category/<int:category_id>/delete/',
+        views.category_delete,
+        name='category_delete',
+    ),
 ]

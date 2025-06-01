@@ -44,6 +44,7 @@ class Store(models.Model):
         self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
         self.products.update(deleted_at=self.deleted_at)
         self.user.delete(using=using, keep_parents=keep_parents)
+        self.categories.delete(using=using, keep_parents=keep_parents)
 
     def __str__(self):
         return self.name
@@ -79,3 +80,20 @@ class Rating(models.Model):
 
     def __str__(self):
         return f'{self.member.name} 給 {self.store.name} 的評分：{self.score} 分'
+
+
+class Category(models.Model):
+    store = models.ForeignKey(
+        Store, on_delete=models.CASCADE, related_name='categories'
+    )
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['store', 'name'], name='unique_category_store'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.name}'
