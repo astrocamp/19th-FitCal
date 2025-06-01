@@ -32,6 +32,13 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+    category = models.ForeignKey(
+        'stores.Category',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='products',
+    )
 
     objects = ProductManager()
     # 用all_objects可以查看全部包含被軟刪除的資料

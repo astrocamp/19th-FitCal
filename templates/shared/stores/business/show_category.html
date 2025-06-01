@@ -1,0 +1,39 @@
+<div id="categoryModal" x-data class="relative z-10" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="flex min-h-full items-center justify-center px-4 text-center">
+      <div class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all" @click.stop>
+        <div class="relative px-4 pt-14 pb-6 sm:px-6 sm:pt-8 md:p-6 lg:p-6">
+          <!-- 關閉按鈕 -->
+          <button type="button" @click="$el.closest('#categoryModal').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500">
+            <span class="sr-only">Close</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">修改類別</h2>
+
+          <!-- 表單區域 -->
+          <div class="w-full space-y-4 md:space-y-0 md:flex md:items-end md:gap-4">
+            <!-- 修改 form -->
+            <form hx-post="{% url 'stores:category_edit' category.id %}" hx-target="#messages-container" hx-swap="innerHTML" method="POST" class="flex-1">
+              {% csrf_token %}
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-1">類別名稱</label>
+              <input type="text" name="name" id="name" value="{{ category.name }}" required class="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:border-[#5a855a] focus:ring-[#5a855a] sm:text-sm" />
+              <button type="submit" class="mt-4 w-full rounded-md bg-[#5a855a] px-4 py-2 text-white font-medium hover:bg-[#2e4e2e] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] focus:ring-offset-2">修改</button>
+            </form>
+
+            <!-- 刪除 form -->
+            <form action="{% url 'stores:category_delete' category.id %}" method="POST" onsubmit="return confirm('確定要刪除這個類別嗎？');" class="md:mb-2">
+              {% csrf_token %}
+              <button type="submit" title="刪除類別" class="mt-1 md:mt-6 w-full md:w-auto rounded-md bg-red-600 p-3 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
