@@ -1,10 +1,13 @@
 import Alpine from 'alpinejs';
+import { Chart, registerables } from 'chart.js';
 import flatpickr from 'flatpickr';
 import htmx from 'htmx.org';
 import cartItem from './carts/cartItemEdit.js';
 import { initPickupTimePicker } from './flatpickr/main.js';
 import { searchFormComponent } from './searchForm.js';
 import { copyToClipboard } from './utils/clipboard.js';
+Chart.register(...registerables);
+window.Chart = Chart;
 
 window.Alpine = Alpine;
 window.htmx = htmx;

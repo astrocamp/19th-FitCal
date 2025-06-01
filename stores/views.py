@@ -1,17 +1,22 @@
+import json
 from datetime import date
+from decimal import ROUND_HALF_UP, Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Avg, Count, Sum
+from django.db.models import Avg, Count, F, Sum
+from django.db.models.functions import TruncDate
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.timezone import now, timedelta
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
 from orders.models import Order
+from products.models import Product
 
 from .forms import RatingForm, StoreForm
 from .models import Category, Rating, Store
@@ -215,6 +220,8 @@ def order_list(request, id):
         )
 
     return render(request, 'stores/orders.html', {'orders': orders, 'tab': tab})
+
+
 def new_category(request, store_id):
     store = get_object_or_404(Store, id=store_id)
     return render(
@@ -304,4 +311,149 @@ def category_products(request, store_id, category_id):
         request,
         'stores/business/product_list.html',
         {'store': store, 'category': category, 'products': products},
+    )
+
+
+def businesses_dashboard(request, store_id):
+    store = request.user.store
+    orders = Order.objects.filter(store=store, order_status='COMPLETED')
+    ratings = Rating.objects.filter(store=store)
+    today = now().date()
+
+    # 熱銷商品排行（Top 5）
+    top_products = (
+        orders.values('orderitem__product_name')
+        .annotate(
+            name=F('orderitem__product_name'),
+            quantity=Sum('orderitem__quantity'),
+            sales=Sum('orderitem__subtotal'),
+        )
+        .order_by('-quantity')[:5]
+    )
+
+    # 銷售明細（總量）+ 收藏數
+    product_sales = list(
+        orders.values('orderitem__product_name', 'orderitem__product_id')
+        .annotate(
+            name=F('orderitem__product_name'),
+            total_quantity=Sum('orderitem__quantity'),
+            total_revenue=Sum('orderitem__subtotal'),
+        )
+        .order_by('orderitem__product_name')
+    )
+
+    for item in product_sales:
+        product = Product.objects.filter(id=item['orderitem__product_id']).first()
+        item['collection_count'] = product.collections.count() if product else 0
+
+    # 加入「今日銷售數量 / 營收」
+    today_orders = orders.filter(created_at__date=today)
+    today_product_sales = today_orders.values(
+        'orderitem__product_id', 'orderitem__product_name'
+    ).annotate(
+        today_quantity=Sum('orderitem__quantity'),
+        today_revenue=Sum('orderitem__subtotal'),
+    )
+    today_sales_map = {
+        p['orderitem__product_id']: {
+            'today_quantity': p['today_quantity'],
+            'today_revenue': p['today_revenue'],
+        }
+        for p in today_product_sales
+    }
+
+    for item in product_sales:
+        pid = item['orderitem__product_id']
+        item['today_quantity'] = today_sales_map.get(pid, {}).get('today_quantity', 0)
+        item['today_revenue'] = today_sales_map.get(pid, {}).get('today_revenue', 0)
+
+    # 評分平均與總表
+    avg_rating = round(ratings.aggregate(avg=Avg('score'))['avg'] or 0, 1)
+    rating_count = ratings.count()
+    store_ratings = ratings.values(
+        member_name=F('member__name'),
+        rating_score=F('score'),
+        rating_time=F('created_at'),
+    ).order_by('-created_at')
+
+    # 圖表資料（近30日）
+    start_date = today - timedelta(days=29)
+    daily_orders = (
+        orders.filter(created_at__date__gte=start_date)
+        .annotate(day=TruncDate('created_at'))
+        .values('day')
+        .annotate(total_sales=Sum('total_price'), order_count=Count('id'))
+        .order_by('day')
+    )
+    daily_ratings = (
+        ratings.filter(created_at__date__gte=start_date)
+        .annotate(day=TruncDate('created_at'))
+        .values('day')
+        .annotate(avg_rating_score=Avg('score'))
+        .order_by('day')
+    )
+    rating_dict = {
+        r['day']: round(r['avg_rating_score'] or 0, 2) for r in daily_ratings
+    }
+
+    # ⬇️ 判斷今天是否有資料
+    use_today_data = today_orders.exists()
+    pie_orders = today_orders if use_today_data else orders
+
+    # 圓餅圖：商品營收佔比
+    pie_product_revenue = (
+        pie_orders.values('orderitem__product_name')
+        .annotate(name=F('orderitem__product_name'), revenue=Sum('orderitem__subtotal'))
+        .order_by('-revenue')
+    )
+    chart_pie_data = [float(p['revenue']) for p in pie_product_revenue]
+    total_revenue = sum(Decimal(p['revenue']) for p in pie_product_revenue) or 1
+    chart_pie_labels = [
+        f'{p["name"]} ({(Decimal(p["revenue"]) / total_revenue * Decimal("100")).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)}%)'
+        for p in pie_product_revenue
+    ]
+
+    # 圓餅圖：商品數量佔比
+    pie_product_orders = (
+        pie_orders.values('orderitem__product_name')
+        .annotate(name=F('orderitem__product_name'), count=Sum('orderitem__quantity'))
+        .order_by('-count')
+    )
+    chart_order_data = [int(p['count']) for p in pie_product_orders]
+    total_count = sum(chart_order_data) or 1
+    chart_order_labels = [
+        f'{p["name"]} ({round(p["count"] / total_count * 100, 1)}%)'
+        for p in pie_product_orders
+    ]
+
+    # 折線圖資料
+    chart_labels = [d['day'].strftime('%Y-%m-%d') for d in daily_orders]
+    chart_sales = [float(d['total_sales'] or 0) for d in daily_orders]
+    chart_orders = [d['order_count'] for d in daily_orders]
+    chart_avg_ratings = [rating_dict.get(d['day'], 0) for d in daily_orders]
+    chart_top_names = [p['name'] for p in top_products]
+    chart_top_sales = [p['quantity'] for p in top_products]
+
+    return render(
+        request,
+        'stores/businesses_dashboard.html',
+        {
+            'top_products': top_products,
+            'avg_rating': avg_rating,
+            'rating_count': rating_count,
+            'store_ratings': store_ratings,
+            'product_sales': product_sales,
+            'chart_labels': json.dumps(chart_labels),
+            'chart_sales': json.dumps(chart_sales),
+            'chart_orders': json.dumps(chart_orders),
+            'chart_avg_ratings': json.dumps(chart_avg_ratings),
+            'chart_top_names': json.dumps(chart_top_names),
+            'chart_top_sales': json.dumps(chart_top_sales),
+            'today': today,
+            'chart_pie_labels': json.dumps(chart_pie_labels),
+            'chart_pie_data': json.dumps(chart_pie_data),
+            'chart_order_labels': json.dumps(chart_order_labels),
+            'chart_order_data': json.dumps(chart_order_data),
+            'is_today_data': use_today_data,
+        },
     )
