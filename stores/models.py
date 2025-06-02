@@ -52,13 +52,13 @@ class Store(models.Model):
     def cover_url(self):
         if self.cover_image:
             return self.cover_image.url
-        return 'https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/store_covers/default-cover.png'  # S3的網址
+        return 'https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/store_covers/default-cover.webp'  # S3的網址
 
     @property
     def logo_url(self):
         if self.logo_image:
             return self.logo_image.url
-        return 'https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/store_logos/default-logo.png'  # S3的網址
+        return 'https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/store_logos/default-logo.webp'  # S3的網址
 
 
 class Rating(models.Model):
