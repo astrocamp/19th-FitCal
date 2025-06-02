@@ -16,12 +16,12 @@ COPY pyproject.toml uv.lock ./
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # 安裝套件
-# RUN uv export --no-dev > requirements.txt && \
-#     uv pip install --system -r requirements.txt
+RUN uv export --no-dev > requirements.txt && \
+    uv pip install --system -r requirements.txt
 # ^測試使用！！！！！
 # ^實際上線需要改用--no-dev版本
-RUN uv export > requirements.txt && \
-    uv pip install --system -r requirements.txt
+# RUN uv export > requirements.txt && \
+#     uv pip install --system -r requirements.txt
 
 # 再複製其他程式碼
 COPY . .

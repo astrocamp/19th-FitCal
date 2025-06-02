@@ -1,6 +1,6 @@
 services:
   web:
-    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v1.0
+    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v1.1
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -12,6 +12,9 @@ services:
     expose:
       - 8000
     restart: on-failure
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn fitcal.wsgi:application --bind 0.0.0.0:8000 --workers=3"
 
   db:
     image: postgis/postgis:17-3.4
@@ -32,7 +35,7 @@ services:
     restart: on-failure
 
   celery:
-    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-celery:v1.0
+    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-celery:v1.1
     build:
       context: .
       dockerfile: docker/Dockerfile
