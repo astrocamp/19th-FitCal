@@ -18,7 +18,7 @@ def index(req):
 def sign_up(req):
     if req.user.is_authenticated:
         messages.error(req, '你已經登入，不能註冊新帳號')
-        return redirect('users:index')
+        return redirect('stores:index')
 
     userform = UserForm()
     return render(
@@ -26,7 +26,6 @@ def sign_up(req):
         'users/sign_up.html',
         {
             'userform': userform,
-            'is_hidden': False,
         },
     )
 
@@ -51,7 +50,7 @@ def sign_up_store(req):
 def create_user(req):
     if req.user.is_authenticated:
         messages.error(req, '你已經登入，不能再建立新帳號')
-        return redirect('members:index' if req.user.is_member else 'stores:index')
+        return redirect('stores:index')
 
     userform = UserForm(req.POST)
 
@@ -139,7 +138,9 @@ def create_session(req):
     login(req, user)
     if user.is_member:
         messages.success(req, '會員登入成功！')
-    return HttpResponse('<script>window.location.href = "/stores/";</script>')
+    response = HttpResponse()
+    response['HX-Redirect'] = '/stores/'
+    return response
 
 
 # 登入處理（店家）
