@@ -1,7 +1,9 @@
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Avg, Count, Sum
+from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -181,24 +183,24 @@ def manage_orders(request, store_id):
     return render(request, 'stores/manage_orders.html', context)
 
 
-@login_required
-def store_management(request):
-    """商家管理頁面"""
-    store = request.user.store
+@store_required
+def order_list(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
 
-    order_queryset = store.orders.all()  # 透過 related_name='orders'
+    tab = request.GET.get('tab', 'today')
+    today = date.today()
 
-    stats = order_queryset.aggregate(
-        total_amount=Sum('total_price'),
-        average_order_price=Avg('total_price'),
-        order_count=Count('id'),
-    )
+    if tab == 'reservation':
+        orders = Order.objects.filter(
+            store=store, pickup_time__date__gt=today
+        ).order_by('-created_at')
+    elif tab == 'history':
+        orders = Order.objects.filter(
+            store=store, pickup_time__date__lt=today
+        ).order_by('-created_at')
+    else:  # today
+        orders = Order.objects.filter(store=store, pickup_time__date=today).order_by(
+            '-created_at'
+        )
 
-    # 預設為 0 或顯示友善數字（處理 None）
-    stats = {
-        'total_amount': stats['total_amount'] or 0,
-        'average_order_price': round(stats['average_order_price'] or 0),
-        'order_count': stats['order_count'] or 0,
-    }
-
-    return stats
+    return render(request, 'stores/orders.html', {'orders': orders, 'tab': tab})

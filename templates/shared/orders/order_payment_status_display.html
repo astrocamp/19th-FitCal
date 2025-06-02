@@ -1,0 +1,2 @@
+{% load model_display %}
+<span class="inline-flex px-3 py-1 rounded-full text-sm font-medium {% if order.payment_status == 'UNPAID' %} bg-yellow-100 text-yellow-700 {% elif order.payment_status == 'PAID' %} bg-green-100 text-green-700 {% elif order.payment_status == 'FAILED' %} bg-red-100 text-red-700 {% elif order.payment_status == 'REFUNDED' %} bg-blue-100 text-blue-700 {% elif order.payment_status == 'CANCELED' %} bg-slate-100 text-slate-600 {% endif %}"> {{ order|get_display:"payment_status" }} </span>
