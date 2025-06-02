@@ -63,7 +63,7 @@ def create_user(req):
         message = AnymailMessage(
             subject='歡迎加入 FitCal',
             to=[user.email],  # 使用者的 email
-            # to=['你自己的 email'],  # 若你要測試
+            # to=['@gmail.com'],  # 若你要測試用 Mailgun 的測試功能，可以使用這個
         )
         message.template_id = 'welcome_email'  # Mailgun 後台的 template 名稱
         message.merge_global_data = {
