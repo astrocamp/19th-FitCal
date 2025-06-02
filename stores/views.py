@@ -96,8 +96,20 @@ def show(req, id):
 @store_required
 def edit(req, id):
     store = get_object_or_404(Store, pk=id, user=req.user)
-    form = StoreForm(req.FILES, instance=store)
-    return render(req, 'stores/edit.html', {'form': form, 'store': store})
+    if req.method == 'POST':
+        form = StoreForm(req.POST, req.FILES, instance=store)
+        if form.is_valid():
+            form.save()
+            return redirect('stores:show', store_id=store.id)
+    form = StoreForm(instance=store)
+    return render(
+        req,
+        'stores/edit.html',
+        {
+            'form': form,
+            'store': store,
+        },
+    )
 
 
 @store_required

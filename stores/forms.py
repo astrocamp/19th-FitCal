@@ -74,6 +74,8 @@ class StoreForm(ModelForm):
             'tax_id': '統編',
             'opening_time': '開店時間',
             'closing_time': '打烊時間',
+            'cover_image': '上傳店家封面',
+            'logo_image': '上傳店家 Logo',
         }
 
         widgets = {
