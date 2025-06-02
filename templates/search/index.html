@@ -1,33 +1,29 @@
-    {% extends "layouts/default.html" %} 
-  {% block main %}
-    <h1 class="text-xl mb-4">搜尋結果：{{ query }}</h1>
+{% extends "layouts/default.html" %} {% block main %}
+<div class="p-4 space-y-6">
+  <!-- 搜尋結果標題 -->
+  <h1 class="text-2xl font-semibold text-gray-800 border-b pb-2">🔍 搜尋結果：<span class="text-blue-600">{{ query }}</span></h1>
+  {% if not stores and not products %}
+  <p class="text-gray-500 italic">找不到相關的商家或餐點</p>
+  {% endif %}
 
-    {% if not stores and not products %}
-    <p>找不到相關的商家或餐點</p>
-    {% endif %} 
-    
-    {% if stores %}
-    <h2 class="text-lg mt-6">商家</h2>
-    <ul class="list-disc pl-5">
+  <!-- 商家搜尋結果 -->
+  {% if stores %}
+  <h2 class="text-xl font-bold text-green-700 mt-8 border-l-4 border-green-300 pl-3">🏪 相關商家</h2>
+  <div class="container mx-auto p-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {% for store in stores %}
-      <li>
-        <a href="{% url 'stores:show' store.id %}" class="text-blue-600 hover:underline">
-          {{ store.name }}
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-    {% endif %} 
-    
-    {% if products %}
-    <h2 class="text-lg mt-6">商品</h2>
-    <ul class="list-disc pl-5">
-      {% for product in products %}
-      <li>
-        <a href="{% url 'products:show' product.id %}"  class="text-blue-600 hover:underline">
-        {{ product.name }}（{{ product.calories }} 大卡）${{ product.price }}</a></li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    
-    {% endblock %}
+      <!-- 商家卡片 -->
+      {% include "stores/store_card.html" with store=store %} {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 商品搜尋結果 -->
+  {% if products %}
+  <h2 class="text-xl font-bold text-orange-700 mt-8 border-l-4 border-orange-300 pl-3">🍱 相關商品</h2>
+  <div class="w-full max-w-screen-2xl mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{% for product in products %} {% include "products/product_card.html" %} {% endfor %}</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
