@@ -26,13 +26,11 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField()
     customize = models.TextField(null=True, blank=True)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='products')
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
     store = models.ForeignKey(
         Store, on_delete=models.SET_NULL, null=True, blank=True, related_name='products'
     )
-
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
     objects = ProductManager()
