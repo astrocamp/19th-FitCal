@@ -17,7 +17,7 @@
   <body class="min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="flex-1">
       <section class="max-w-7xl mx-auto">
-        <nav>{% if user.is_store %} {% include 'shared/business/navbar.html' %} {% elif user.is_member %} {% include 'shared/navbar.html' %} {% else %} {% include 'shared/navbar.html' %} {% endif %}</nav>
+        <nav>{% include 'shared/business/navbar.html' %}</nav>
         <div id="messages-container">{% include "shared/messages.html" %}</div>
         {% block main %}{% endblock main %}
       </section>
