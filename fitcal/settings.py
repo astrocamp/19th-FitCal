@@ -32,8 +32,11 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
+CSRF_TRUSTED_ORIGINS = ['https://fitcal-life.com', 'https://www.fitcal-life.com']
+CSRF_COOKIE_SECURE = env('CSRF_COOKIE_SECURE')
+SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
 
 # Application definition
 
@@ -246,3 +249,5 @@ AWS_DEFAULT_ACL = None
 
 USE_I18N = True
 LANGUAGE_CODE = 'zh-hant'
+
+CELERY_BROKER_URL = env('REDIS_URL')
