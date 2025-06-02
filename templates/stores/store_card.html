@@ -20,7 +20,7 @@
         <!-- 功能尚未導入
             <span>距離：{{ store.distance }} 公里</span>
             -->
-        <span>⭐ {{ store.avg_rating|floatformat:1 }}</span>
+        <span>⭐ {{ store.avg_rating|floatformat:1 }}</span>  
       </div>
       <form method="POST" action="{% url 'stores:rate_store' store.id %}">
         {% csrf_token %}
