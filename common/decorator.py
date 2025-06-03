@@ -33,21 +33,14 @@ def member_required(view_func):
                 req, 'users:index', '您不是會員，無法訪問此頁面'
             )
 
-        print('\n--- DEBUG: 權限檢查開始 ---')
-        print(
-            'DEBUG: 傳入的 kwargs:', kwargs
-        )  # <--- **新增這行，直接看 kwargs 裡有什麼**
 
         # 從 kwargs 獲取 'id'
         member_id_from_url = kwargs.get('id')
 
-        print("DEBUG: 從 kwargs.get('id') 獲取到的 member_id:", member_id_from_url)
-        print('DEBUG: 類型為:', type(member_id_from_url))
 
         if member_id_from_url is None or str(getattr(req.user.member, 'id', '')) == str(member_id_from_url):
             return view_func(req, *args, **kwargs)
         else:
-            print('DEBUG: 權限檢查失敗！')
             return redirect_with_message(
                 req, 'users:index', '你沒有權限存取其他會員後台的權限'
             )
