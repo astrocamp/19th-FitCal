@@ -181,7 +181,7 @@ def cancel(request, id):
         messages.error(request, '此訂單無法取消')
 
     return render(
-        request, 'shared/order/partial_order_status_response.html', {'order': order}
+        request, 'shared/orders/partial_order_status_response.html', {'order': order}
     )
 
 
@@ -198,7 +198,7 @@ def prepare(request, id):
         messages.error(request, '此訂單無法開始準備')
 
     return render(
-        request, 'shared/order/partial_order_status_response.html', {'order': order}
+        request, 'shared/orders/partial_order_status_response.html', {'order': order}
     )
 
 
@@ -215,7 +215,7 @@ def mark_ready(request, id):
         messages.error(request, '此訂單無法標記為準備完成')
 
     return render(
-        request, 'shared/order/partial_order_status_response.html', {'order': order}
+        request, 'shared/orders/partial_order_status_response.html', {'order': order}
     )
 
 
@@ -232,7 +232,7 @@ def complete(request, id):
         messages.error(request, '此訂單無法標記為完成')
 
     return render(
-        request, 'shared/order/partial_order_status_response.html', {'order': order}
+        request, 'shared/orders/partial_order_status_response.html', {'order': order}
     )
 
 
@@ -249,7 +249,7 @@ def partial_status(request, id):
 
     response = render(
         request,
-        'shared/order/order_status_content.html',
+        'shared/orders/order_status_content.html',
         {
             'order': order,
         },
