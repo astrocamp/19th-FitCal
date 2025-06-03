@@ -1,0 +1,8 @@
+<!-- 更新 flash message -->
+<div id="messages-container" hx-swap-oob="true">{% include "shared/messages.html" %}</div>
+
+<!-- 更新 order_status_display -->
+<div id="order_status_display_{{ order.id }}" hx-swap-oob="true">{% include "shared/orders/order_status_display.html" with order=order %}</div>
+
+<!-- 更新 order_status_button -->
+<div id="order_status_button_{{ order.id }}" hx-swap-oob="true">{% include "shared/orders/order_status_button.html" with order=order %}</div>

@@ -33,7 +33,7 @@
             <p class="text-lg text-gray-500">訂單編號: {{ order.order_number }}</p>
             <p class="text-lg text-gray-500 font-bold">取餐編號: {{ order.pickup_number }}</p>
           </div>
-          <div id="order_status_display_{{ order.id }}">{% include 'shared/order/order_status_display.html' with order=order %}</div>
+          <div id="order_status_display_{{ order.id }}">{% include 'shared/orders/order_status_display.html' with order=order %}</div>
         </div>
       </div>
 
@@ -121,7 +121,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div id="order_status_button_{{ order.id }}" class="flex gap-2 pt-2">{% include "shared/order/order_status_button.html" with order=order %}</div>
+        <div id="order_status_button_{{ order.id }}" class="flex gap-2 pt-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
       </div>
     </div>
     {% empty %}
