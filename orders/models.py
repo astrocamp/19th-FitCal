@@ -207,3 +207,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f'{self.product_name} ({self.quantity} x ${self.unit_price})'
+
+
+class PendingOrder(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    member_name = models.CharField(max_length=100)
+    member_phone = models.CharField(max_length=20)
+    pickup_time = models.DateTimeField()
+    note = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_processed = models.BooleanField(default=False)
