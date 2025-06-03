@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Avg
+from django.db.models import Avg, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -174,3 +174,37 @@ def manage_orders(request, store_id):
     }
 
     return render(request, 'stores/manage_orders.html', context)
+
+
+@login_required
+def store_management(request):
+    """商家管理頁面"""
+    # if not hasattr(request.user, 'store'):
+    #     messages.error(request, '您尚未創建商家，請先創建商家。')
+    #     return redirect('stores:new')  # 假設有一個創建商家的頁面
+
+    store = request.user.store
+
+    order_queryset = store.orders.all()  # 透過 related_name='orders'
+
+    stats = order_queryset.aggregate(
+        total_amount=Sum('total_price'),
+        average_order_price=Avg('total_price'),
+        order_count=Count('id'),
+    )
+
+    # 預設為 0 或顯示友善數字（處理 None）
+    stats = {
+        'total_amount': stats['total_amount'] or 0,
+        'average_order_price': round(stats['average_order_price'] or 0),
+        'order_count': stats['order_count'] or 0,
+    }
+
+    return render(
+        request,
+        'stores/store_management.html',
+        {
+            'store': store,
+            'stats': stats,
+        },
+    )
