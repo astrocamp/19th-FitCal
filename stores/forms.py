@@ -11,20 +11,25 @@ def validate_tax_id(tax_id):
 
     weights = [1, 2, 1, 2, 1, 2, 4, 1]
     total = 0
+    split_7th = False
 
     for i in range(8):
-        products = int(tax_id[i]) * weights[i]
-        if products >= 10:
-            products = (products // 10) + (products % 10)
-        total += products
+        product = int(tax_id[i]) * weights[i]
+        if i == 6 and tax_id[i] == '7':
+            split_7th = True
+        if product >= 10:
+            product = product // 10 + product % 10
+        total += product
 
-    # 特例：第七碼是 7 時
-    if total % 10 == 0:
+    if total % 5 == 0:
         return True
-    elif tax_id[6] == '7' and (total + 1) % 10 == 0:
-        return True
-    else:
-        return False
+
+    if split_7th:
+        total_adjusted = total - 7 + (1 + 2)
+        if total_adjusted % 5 == 0:
+            return True
+
+    return False
 
 
 class StoreForm(ModelForm):
