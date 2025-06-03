@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import condition
 
 from carts.models import Cart
 
 from .forms import OrderForm
-from .models import Order, OrderItem
+from .models import Order, OrderItem, PendingOrder
 from .services import OrderService
 
 
@@ -40,25 +41,27 @@ def index(req):
                     },
                 )
 
-        for cart_item in cart.items.all():
-            # 檢查庫存
-            if cart_item.product.quantity < cart_item.quantity:
-                messages.error(req, '庫存不足，請重新選擇數量')
-
-                return render(
-                    req,
-                    'orders/ordering_steps.html',
-                    {
-                        'form': form,
-                        'cart': cart,
-                        'cart_items': cart.items.all(),
-                    },
-                )
-
         if form.is_valid():
             order = form.save(commit=False)
             order.store = cart.store
             order.member = cart.member
+
+            payment_method = form.cleaned_data['payment_method']
+
+            # 如果是 LINE Pay，先不儲存訂單
+            if payment_method == 'LINE_PAY':
+                pending_order = PendingOrder.objects.create(
+                    member_name=req.POST.get('ordering_member_name'),
+                    member_phone=req.POST.get('ordering_member_phone_number'),
+                    pickup_time=form.cleaned_data['pickup_time'],
+                    note=form.cleaned_data.get('note', ''),
+                )
+
+                # 導向 linepay_request 並傳送 pending_order_id
+                return redirect(
+                    reverse('payment:linepay_request')
+                    + f'?pending_order_id={pending_order.id}&cart_id={cart.id}'
+                )
 
             member_name = req.POST.get('ordering_member_name')
             member_phone = req.POST.get('ordering_member_phone_number')
@@ -94,7 +97,7 @@ def index(req):
 
         return render(
             req,
-            'orders/new.html',
+            'orders/ordering_steps.html',
             {
                 'form': form,
                 'cart': cart,
