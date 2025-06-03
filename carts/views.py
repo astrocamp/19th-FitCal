@@ -30,6 +30,7 @@ def create_cart_item(req, product_id):
     quantity = int(req.POST.get('quantity'))
     member = req.user.member
     product = get_object_or_404(Product, id=product_id)
+    default_block = ''
     try:
         cart, _ = Cart.objects.get_or_create(member=member, store=product.store)
         cart_item = CartItem.objects.filter(cart=cart, product=product).first()
@@ -42,10 +43,12 @@ def create_cart_item(req, product_id):
                 cart_item.quantity += quantity
                 cart_item.save()
                 messages.success(req, '購物車已更新')
+                default_block = '<div id="productModal" hx-swap-oob="true"></div>'
         else:
             if check_stock(req, product, quantity):
                 CartItem.objects.create(cart=cart, product=product, quantity=quantity)
                 messages.success(req, '購物車已新增')
+                default_block = '<div id="productModal" hx-swap-oob="true"></div>'
             else:
                 quantity = product.quantity
     except Exception:
@@ -53,9 +56,8 @@ def create_cart_item(req, product_id):
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
-    print(f'\n\n%%%%%%%%%%%%%%%%quantity: {quantity}%%%%%%%%%%%%%%%%%%%%%%%\n\n')
     return HttpResponse(
-        f'<input id="added_qty_{product.id}" type="number" name="quantity" min="1" max="{product.quantity}" :value={quantity} x-model.number="quantity" class="w-16 rounded border border-[#5a855a] px-3 py-2 text-center text-base text-[#3a643a] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] select-none" style="appearance: none; -moz-appearance: textfield; -webkit-appearance: none" @focus="$el.select()" />'
+        default_block
         + f"""
         <div id="messages-container" hx-swap-oob="true">
             {messages_html}
