@@ -1,34 +1,18 @@
 {% load static %}
-  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    
-    <!-- LOGO + 聯絡方式 -->
-    <div>
-      <div class="mb-4">
-        <img src="{% static 'images/logo.png' %}" alt="FITCAL" class="h-40">
-      </div>
-      <div class="text-sm space-y-1">
-        <p>電話：<a href="tel:+886-123456789" class="hover:underline">+886-123-456-789</a></p>
-        <p>地址：五倍紅寶石學院</p>
-        <p>Email：<a href="mailto:fitcal19th@gmail.com" class="hover:underline">fitcal19th@gmail.com</a></p>
-      </div>
+<div class="footer flex flex-col sm:flex-col md:flex-row justify-between pl-10 pr-10 text-base">
+  <nav>
+    <img src="{% static 'images/logo.png' %}" alt="FITCAL" class="h-50 relative" />
+    <div class="absolute mt-40">
+      <p>電話：<a href="tel:+886-123456789" class="link link-hover">+886-123-456-789</a></p>
+      <p>地址：五倍紅寶石學院</p>
+      <p>Email：<a href="mailto:fitcal19th@gmail.com" class="link link-hover">fitcal19th@gmail.com</a></p>
     </div>
-
-    <!-- 空區（只在桌機上佔位，讓右邊靠右） -->
-    <div class="hidden lg:block"></div>
-
-    <!-- 網站連結 -->
-   <div class="lg:text-right">
-      <h3 class="font-semibold mb-2">網站資訊</h3>
-      <ul class="space-y-1 text-sm">
-        <li><a href=" # " class="hover:underline">關於我們</a></li>
-        <li><a href=" # "  class="hover:underline">聯絡我們</a></li>
-        <li><a href=" # " class="hover:underline">常見問題</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 版權 -->
-  <div class="mt-8 text-center text-xs text-gray-500">
-    © {% now "Y" %} FITCAL. All rights reserved.
-  </div>
-
+  </nav>
+  <nav class="flex flex-col justify-self-end mt-10 mr-10">
+    <h6 class="footer-title">網站資訊</h6>
+    <a href=" # " class="link link-hover"> <i class="fa-solid fa-house fa-fw mr-1"></i>關於我們</a>
+    <a href=" # " class="link link-hover"> <i class="fa-brands fa-line mr-1"></i>聯絡我們</a>
+    <a href=" # " class="link link-hover"> <i class="fa-regular fa-circle-question mr-1"></i>常見問題</a>
+  </nav>
+</div>
+<div class="mt-8 text-center text-xs text-gray-500">© {% now "Y" %} FITCAL. All rights reserved.</div>
