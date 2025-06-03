@@ -83,10 +83,9 @@
     <!-- 未登入狀態：登入/註冊按鈕 -->
     <!-- 按鈕：打開 modal -->
     <div id="signinModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_in.html" %}</div>
-    <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入</button>
+    <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入 / 註冊</button>
     <br />
     <div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_up.html" %}</div>
-    <button type="button" onclick="document.getElementById('signupModal').classList.remove('hidden')" class="btn btn-primary">註冊</button>
     {% endif %}
   </div>
 </div>
