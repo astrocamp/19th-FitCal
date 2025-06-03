@@ -144,11 +144,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
-# OAUTH_PKCE_ENABLED: True
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
-    'http://127.0.0.1:8000/accounts/google/login/callback/'
-    'http://localhost:8000/accounts/google/login/callback/'
-)
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 
 # Database
