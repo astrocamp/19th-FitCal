@@ -1,5 +1,5 @@
 {% extends 'layouts/default.html' %} {% block main %}
-<h2 class="text-xl md:text-2xl lg:text-3xl font-bold">{{ member.name }} 喜愛的商店</h2>
+<h2 class="text-xl md:text-2xl lg:text-3xl font-bold mt-10">{{ member.name }}收藏的商家</h2>
 <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   {% for store in favorites %}
 
@@ -12,5 +12,4 @@
   {% endfor %}
 </ul>
 
-<a href="{% url 'members:store_list' %}" class="btn btn-active">回到店家列表</a>
 {% endblock main %}
