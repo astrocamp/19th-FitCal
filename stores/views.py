@@ -203,4 +203,14 @@ def order_list(request, store_id):
             '-created_at'
         )
 
+    if request.headers.get('HX-Request') == 'true':
+        return render(
+            request,
+            'shared/orders/_order_list.html',
+            {
+                'orders': orders,
+                'tab': tab,
+            },
+        )
+
     return render(request, 'stores/orders.html', {'orders': orders, 'tab': tab})
