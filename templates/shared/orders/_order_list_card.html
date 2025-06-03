@@ -1,0 +1,48 @@
+<!-- 訂單清單 -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-3">
+  {% for order in orders %}
+  <div class="bg-white shadow-md rounded-xl p-4 border border-gray-200 hover:shadow-lg transition flex flex-col">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-2">
+      <div class="text-lg font-semibold text-gray-800">{% include "components/pickup_number.html" with pickup_number=order.pickup_number %}</div>
+      <div class="text-xs text-gray-500 text-right">
+        建立：{{ order.created_at|date:"Y-m-d H:i" }}<br />
+        取貨：{{ order.pickup_time|date:"Y-m-d H:i" }}
+      </div>
+    </div>
+
+    <hr class="my-2" />
+
+    <!-- Order Body：左右排列 -->
+    <div class="flex flex-col md:flex-row justify-between gap-4 flex-grow">
+      <!-- 左側：訂單資訊 -->
+      <div class="flex-1 space-y-1 text-sm text-gray-700">
+        <p>👤 顧客：<span class="font-medium">{{ order.member_name }}</span></p>
+        <p>💰 金額：<span class="font-medium">${{ order.total_price }}</span></p>
+        <p>
+          📦 訂單狀態：
+          <span id="order_status_display_{{ order.id }}"> {% include 'shared/orders/order_status_display.html' with order=order %} </span>
+        </p>
+        <p>
+          💳 付款狀態：
+          <span id="order_payment_status_display_{{ order.id }}"> {% include 'shared/orders/order_payment_status_display.html' with order=order %} </span>
+        </p>
+      </div>
+
+      <!-- 右側：按鈕區塊（固定寬度）-->
+      <div id="order_status_button_{{ order.id }}" class="mt-5 md:mt-0 flex gap-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
+    </div>
+
+    <!-- Footer：訂單項目 -->
+    <div class="mt-4 text-sm text-gray-800 border-t pt-3">{% include "shared/orders/order_item_detail.html" with order=order %}</div>
+  </div>
+  {% empty %}
+  <div class="col-span-full text-center py-12 bg-white rounded-lg border border-gray-200">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">目前沒有訂單</h3>
+    <p class="mt-1 text-sm text-gray-500">新的訂單會顯示在這裡</p>
+  </div>
+  {% endfor %}
+</div>
