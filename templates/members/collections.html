@@ -2,7 +2,7 @@
 <h2 class="text-xl md:text-2xl lg:text-3xl font-bold mt-10">{{ member.name }}收藏的商品</h3>
 <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   {% for product in collections %}
-  <li class="rounded-lg p-4 relative">
+  <li class="rounded-lg relative">
     <a href="{% url 'products:show' product.id %}">
       {% include 'products/product_card.html'%}
     </a>
