@@ -19,9 +19,16 @@
     <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
       <!--- 上排搜尋欄 -->
       <div class="flex gap-3 items-center">
-        <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點或餐點卡路里" class="input input-bordered w-53" value="{{ request.GET.q }}" @focus="showFilter = true" />
+        <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-53 pl-10" value="{{ request.GET.q }}"  />
 
+        <!-- 🔘 篩選 icon button -->
+        <button type="button" @click="showFilter = !showFilter" class="btn">
+          <i class="fa-solid fa-sliders "></i>
+        </button>
+        
+        <!-- 🔘 搜尋按鈕 -->
         <button id="searchBtn" type="submit" class="btn">搜尋</button>
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-20 pointer-events-none"></i>
       </div>
 
       <!-- 下排：拉霸，使用絕對定位 -->
