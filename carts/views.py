@@ -56,12 +56,19 @@ def create_cart_item(req, product_id):
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
+    cart_count = render_to_string(
+        'shared/cart_count.html', {'cart_count': member.carts.count() if member else 0}
+    )
+    print(cart_count)
     return HttpResponse(
         default_block
         + f"""
         <div id="messages-container" hx-swap-oob="true">
             {messages_html}
         </div>
+        <span id="cart-count" hx-swap-oob="innerHTML">
+            {cart_count}
+        </span>
         """
     )
 

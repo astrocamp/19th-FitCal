@@ -111,6 +111,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'carts.context_processors.cart_count',  # 加入購物車上下文處理器
             ],
         },
     },
