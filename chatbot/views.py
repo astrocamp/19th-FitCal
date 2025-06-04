@@ -1,75 +1,72 @@
-import json
 import os
 
-from django.conf import settings
+import openai
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from openai import OpenAI
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+from chatbot.models import FAQ
+from products.models import Product
+from stores.models import Store
 
-
-# 自動讀取 knowledge 資料夾所有 .txt 檔案
-def load_knowledge():
-    folder = os.path.join(os.path.dirname(__file__), 'knowledge')
-    content = ''
-    for filename in os.listdir(folder):
-        if filename.endswith('.txt'):
-            path = os.path.join(folder, filename)
-            with open(path, 'r', encoding='utf-8') as f:
-                content += f'\n\n### {filename.replace(".txt", "")}\n'
-                content += f.read()
-    return content.strip()
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 
-# 預先讀入所有知識
-knowledge_text = load_knowledge()
+# 處裡使用者的訊息
+def chatbot_api(request):
+    user_input = request.GET.get('message', '')
+    reply = generate_chatbot_reply(user_input)
+    return JsonResponse({'reply': reply})
 
 
-@csrf_exempt
-def chat(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            message = data.get('message', '')
+# 從資料庫抓關鍵字比對再回應
+def get_faq_answer_from_db(user_input):
+    # 簡易關鍵字查詢（還可進一步優化為語意搜尋）
+    for faq in FAQ.objects.all():
+        if faq.question_keyword in user_input:
+            return faq.answer
+    return None
 
-            response = client.chat.completions.create(
-                model='gpt-3.5-turbo',
-                messages=[
-                    {
-                        'role': 'system',
-                        'content': (
-                            '你是一位溫柔有禮貌、善於解釋的網站客服助理，'
-                            '你的任務是**根據以下提供的知識資料，協助使用者解答問題**。\n\n'
-                            '如果問題與知識資料無關，請務必回答：\n'
-                            '「這個問題目前無法提供進一步回應，'
-                            '建議您洽詢客服 fitcal@gmail.com。」\n\n'
-                            '請記住：\n'
-                            '- 不要根據你自己的常識、推測或過去的訓練知識作答\n'
-                            '- 不要補充資料，不要延伸解釋未提供的內容\n'
-                            '- 僅能根據提供的內容回答\n\n'
-                            '請使用簡單、親切、易懂的語氣回答問題。\n\n'
-                            '以下是知識資料：\n' + knowledge_text
-                        ),
-                    },
-                    {
-                        'role': 'user',
-                        'content': (
-                            '請根據上方知識資料回答以下問題：\n\n'
-                            f'{message}\n\n'
-                            '如果無法從知識資料中找到明確答案，請不要猜測，'
-                            '而是回應：「這個問題目前無法提供進一步回應，'
-                            '建議您洽詢客服 fitcal@gmail.com。」'
-                        ),
-                    },
-                ],
-            )
 
-            reply = response.choices[0].message.content
-            return JsonResponse({'reply': reply})
+# 設定AI助理
+def generate_chatbot_reply(user_input):
+    db_answer = get_faq_answer_from_db(user_input)
+    if db_answer:
+        return db_answer
 
-        except Exception as e:
-            print('發生錯誤：', e)
-            return JsonResponse({'reply': f'伺服器錯誤：{str(e)}'}, status=500)
+    # 如果資料庫沒有找到答案，就用 OpenAI 輔助回答
+    # 這會向 OpenAI 發送一個「聊天請求」，並回傳一個字典（Python 的 dict）
+    response = openai.ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=[
+            {
+                'role': 'system',
+                'content': '你是一位溫柔有禮貌、善於解釋的網站客服助理，'
+                '你的任務是根據以下提供的知識資料，協助使用者解答問題。\n\n'
+                '請遵守以下規則：\n'
+                '- 只能根據提供的知識資料作答\n'
+                '- 不要依據常識、個人推測或未提供的背景知識作答\n'
+                '- 不要補充或延伸未提及的內容\n\n'
+                '若使用者的問題與知識資料無關，請回答：\n'
+                '「這個問題目前無法提供進一步回應，建議您洽詢客服 fitcal@gmail.com。」\n\n'
+                '請使用簡單、親切、易懂的語氣回答。\n\n'
+                '以下是知識資料：\n' + db_answer,
+            },
+            {'role': 'user', 'content': user_input},
+        ],
+        temperature=0,  # 越低越不會亂發揮，只有0跟1的選項
+    )
+    # choices 是 OpenAI 回傳的 JSON 結構中固定會出現的欄位之一
+    return response['choices'][0]['message']['content']  # 選擇第一個回答
 
-    return JsonResponse({'error': '僅支援 POST 請求'}, status=405)
+
+def fetch_latest_store_product_info():
+    stores = Store.objects.all()
+    products = Product.objects.all()
+
+    info = ''
+    for store in stores:
+        info += f'店家：{store.name}\n地址：{store.address}\n電話：{store.phone_number}\n營業時間：{store.opening_time}~{store.closing_time}\n'
+
+    for product in products:
+        info += f'所屬店家：{product.store}\n商品：{product.name}\n價格：{product.price}元\n卡路里：{product.calories}\n商品介紹：{product.description}\n現有庫存量：{product.quantity}'
+
+    return info
