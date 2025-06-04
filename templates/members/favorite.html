@@ -1,11 +1,9 @@
 {% extends 'layouts/default.html' %} {% block main %}
 <h2 class="text-xl md:text-2xl lg:text-3xl font-bold mt-10">{{ member.name }}收藏的商家</h2>
-<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-2">
   {% for store in favorites %}
 
-  <li class="rounded-lg relative">
-    <a href="{% url 'stores:show' store.id %}"> {% include 'stores/store_card.html'%} </a>
-  </li>
+  <li class="rounded-lg relative">{% include 'stores/store_card.html'%}</li>
 
   {% empty %}
   <li>目前尚未收藏任何店家。</li>
