@@ -1,13 +1,7 @@
 {% if messages %}
-<div class="toast toast-top toast-end">
+<div class="fixed top-5 left-1/2 -translate-x-1/2 z-20 w-fit max-w-sm px-4">
   {% for message in messages %}
-  <div
-    x-data="{show: true}"
-    x-init="setTimeout(() => show = false, 2000)"
-    x-show="show"
-    x-transition
-    class="alert alert-{{ message.tags }}"
-  >
+  <div x-data="{show: true}" x-init="setTimeout(() => show = false, 2000)" x-show="show" x-transition class="alert alert-{{ message.tags }}">
     <span>{{ message }}</span>
   </div>
   {% endfor %}
