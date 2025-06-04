@@ -16,9 +16,17 @@ def index(request):
     stores = Store.objects.all()
     products = Product.objects.select_related('store').order_by('store__name', 'name')
 
-    if query:
-        stores = stores.filter(name__icontains=query)
-        products = products.filter(name__icontains=query)
+    if query or (max_calories.isdigit() and int(max_calories) > 0):
+        stores = Store.objects.all()
+        products = Product.objects.all()
+
+        if query:
+            stores = stores.filter(name__icontains=query)
+            products = products.filter(name__icontains=query)
+
+        if max_calories.isdigit() and int(max_calories) > 0:
+            products = products.filter(calories__lte=int(max_calories))
+            stores = None
 
     if max_calories.isdigit() and int(max_calories) > 0:
         products = products.filter(calories__lte=int(max_calories))
