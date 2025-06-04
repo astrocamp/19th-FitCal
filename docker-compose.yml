@@ -1,6 +1,6 @@
 services:
   web:
-    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v1.2
+    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v1.3
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -9,11 +9,14 @@ services:
     depends_on:
       - db
       - redis
+    volumes:
+      - static_volume:/app/staticfiles
     expose:
       - 8000
     restart: on-failure
     command: >
       sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
              gunicorn fitcal.wsgi:application --bind 0.0.0.0:8000 --workers=3"
 
   db:
@@ -35,7 +38,7 @@ services:
     restart: on-failure
 
   celery:
-    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-celery:v1.2
+    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-celery:v1.3
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -54,7 +57,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./staticfiles:/staticfiles
+      - static_volume:/staticfiles
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - web
@@ -62,3 +65,4 @@ services:
 
 volumes:
   pgdata:
+  static_volume:

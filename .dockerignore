@@ -30,7 +30,6 @@ Thumbs.db
 
 # frontend
 /src
-/static
 
 # Docker-related artifacts
 docker*.yml

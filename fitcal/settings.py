@@ -194,9 +194,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 # 開發階段放前端打包檔的資料夾
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'static',
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 # collectstatic 收集到此資料夾
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
