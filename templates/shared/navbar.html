@@ -2,9 +2,9 @@
 <div class="navbar bg-base-100 shadow-sm">
   <div class="flex-1">
     {% if user.is_authenticated %}
-    <a href="{% url 'stores:index' %}" class="btn btn-ghost text-3xl text-[#3A643A]">FITCAL</a>
+    <a href="{% url 'stores:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12" /></a>
     {% else %}
-    <a href="{% url 'users:index' %}" class="btn btn-ghost text-3xl text-[#3A643A]">FITCAL</a>
+    <a href="{% url 'users:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" /></a>
     {% endif %}
   </div>
   <div class="flex-none flex items-center gap-3">
