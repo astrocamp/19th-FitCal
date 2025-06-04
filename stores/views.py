@@ -45,7 +45,7 @@ def index(request):
                 Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg']
                 or 0
             )
-            return render(request, 'stores/index.html', {'store': store})
+            return render(request, 'stores/store_management.html', {'store': store})
         except Store.DoesNotExist:
             return redirect('stores:new')
 
