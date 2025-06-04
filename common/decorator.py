@@ -33,12 +33,12 @@ def member_required(view_func):
                 req, 'users:index', '您不是會員，無法訪問此頁面'
             )
 
-
         # 從 kwargs 獲取 'id'
-        member_id_from_url = kwargs.get('id')
+        member_id_from_url = kwargs.get('member_id') or kwargs.get('id')
 
-
-        if member_id_from_url is None or str(getattr(req.user.member, 'id', '')) == str(member_id_from_url):
+        if member_id_from_url is None or str(getattr(req.user.member, 'id', '')) == str(
+            member_id_from_url
+        ):
             return view_func(req, *args, **kwargs)
         else:
             return redirect_with_message(
@@ -64,7 +64,9 @@ def store_required(view_func):
 
         # return view_func(req, *args, **kwargs)
 
-        store_id = kwargs.get('id')  # 或 store_id，視你的 urls.py 而定
+        store_id = kwargs.get('store_id') or kwargs.get(
+            'id'
+        )  # 或 store_id，視你的 urls.py 而定
 
         if store_id is not None and str(getattr(req.user.store, 'id', '')) == str(
             store_id
