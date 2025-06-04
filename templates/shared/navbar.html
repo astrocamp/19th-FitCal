@@ -4,7 +4,7 @@
     {% if user.is_authenticated %}
     <a href="{% url 'stores:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12" /></a>
     {% else %}
-    <a href="{% url 'users:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" /></a>
+    <a href="{% url 'users:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12" /></a>
     {% endif %}
   </div>
   <div class="flex-none flex items-center gap-3">
