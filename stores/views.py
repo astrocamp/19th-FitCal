@@ -268,7 +268,9 @@ def category_edit(request, category_id):
         else:
             messages.error(request, '請輸入有效的類別名稱')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse('stores:show', args=[category.store.id])
+    response['HX-Redirect'] = reverse(
+        'stores:category_products', args=[category.store.id, category.id]
+    )
     return response
 
 
@@ -281,3 +283,34 @@ def category_delete(request, category_id):
     category.delete()
     messages.success(request, '類別已刪除')
     return redirect('stores:show', store.id)
+
+
+@store_required
+def management(request, store_id):
+    store = get_object_or_404(Store, id=store_id)
+    categories = store.categories.all()
+    products = store.products.all()
+    return render(
+        request,
+        'stores/business/product_management.html',
+        {'store': store, 'categories': categories, 'products': products},
+    )
+
+
+@store_required
+def category_products(request, store_id, category_id):
+    store = get_object_or_404(Store, id=store_id)
+    category = get_object_or_404(Category, id=category_id, store=store)
+    products = category.products.all()
+    print(
+        f'######  Category: {category.id}\nStore: {category.store.user.email}\nProducts: {products.count()}'
+    )
+    print(f'######  categories: {store.categories.count()}\n')
+    for c in category.store.categories.all():
+        print(f'Category: {c.name} (ID: {c.id})')
+        print(f'Product: {c.products}')
+    return render(
+        request,
+        'stores/business/product_list.html',
+        {'store': store, 'category': category, 'products': products},
+    )
