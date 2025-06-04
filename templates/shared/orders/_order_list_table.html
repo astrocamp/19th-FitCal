@@ -2,7 +2,7 @@
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50 text-sm font-semibold text-gray-700">
       <tr>
-        <th class="px-4 py-3 text-left">取貨編號</th>
+        <th class="px-4 py-3 text-left">訂單編號</th>
         <th class="px-4 py-3 text-left">取貨時間</th>
         <th class="px-4 py-3 text-left">顧客</th>
         <th class="px-4 py-3 text-left">金額</th>
@@ -14,7 +14,7 @@
     <tbody class="divide-y divide-gray-100 text-sm text-gray-800">
       {% for order in orders %}
       <tr>
-        <td class="px-4 py-3 font-semibold">{% include "components/pickup_number.html" with pickup_number=order.pickup_number %}</td>
+        <td class="px-4 py-3 font-semibold">{{ order.order_number }}</td>
         <td class="px-4 py-3">{{ order.pickup_time|date:"Y-m-d H:i" }}</td>
         <td class="px-4 py-3">{{ order.member_name }}</td>
         <td class="px-4 py-3">${{ order.total_price }}</td>
