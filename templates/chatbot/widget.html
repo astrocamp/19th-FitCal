@@ -12,11 +12,19 @@
   </div>
 
   <!-- 訊息區 -->
-  <div id="chatbot-messages" class="h-[300px] flex-1 overflow-y-auto px-4 py-2 text-sm space-y-2 bg-gray-50"><div class="inline-block bg-gray-200 px-3 py-2 rounded-lg my-1 max-w-[70%]">👋您好，我是 FitCal 智慧客服，有什麼可以幫您？</div></div>
+  <div id="chatbot-messages" class="h-[300px] flex-1 overflow-y-auto px-4 py-2 text-sm space-y-2 bg-gray-50">
+    <div class="inline-block bg-gray-200 px-3 py-2 rounded-lg my-1 max-w-[70%]">👋您好，我是 FitCal 智慧客服，有什麼可以幫您？</div>
+  </div>
 
   <!-- 輸入區 -->
   <div class="border-t px-3 py-2 bg-white flex items-center gap-2">
-    <input id="chatbot-input" type="text" placeholder="輸入訊息..." class="flex-1 border rounded px-3 py-1 text-sm focus:outline-none" onkeydown="if(event.key==='Enter'){sendMessage()}" />
-    <button onclick="sendMessage()" class="bg-green-700 hover:bg-green-800 px-3 py-1 rounded text-sm">送出</button>
+    <form id="chatbot-form" onsubmit="sendMessage(event)" class="flex items-center gap-2 w-full">
+      <!-- CSRF token -->
+      {% csrf_token %}
+
+      <!-- 輸入訊息 -->
+      <input type="text" name="message" id="chatbot-input" class="flex-1 border rounded px-3 py-1 text-sm focus:outline-none" placeholder="輸入訊息..." required />
+      <button type="submit" class="bg-green-700 hover:bg-green-800 px-3 py-1 rounded text-sm text-white">送出</button>
+    </form>
   </div>
 </div>
