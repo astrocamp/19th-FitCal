@@ -7,7 +7,6 @@ client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 import json
 
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 from products.models import Product
 from stores.models import Store
@@ -29,7 +28,7 @@ def fetch_latest_store_product_info():
 
 
 # 處裡使用者的訊息
-@csrf_exempt
+# @csrf_exempt
 def chatbot_api(request):
     if request.method == 'POST':
         data = json.loads(request.body)
