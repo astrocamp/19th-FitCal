@@ -219,7 +219,7 @@ def new_category(request, store_id):
     store = get_object_or_404(Store, id=store_id)
     return render(
         request,
-        'shared/stores/business/new_category.html',
+        'shared/business/stores/new_category.html',
         {'store': store},
     )
 
@@ -228,7 +228,7 @@ def show_category(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     return render(
         request,
-        'shared/stores/business/show_category.html',
+        'shared/business/stores/show_category.html',
         {'category': category},
     )
 
@@ -248,29 +248,27 @@ def category_create(request, store_id):
     store.categories.create(name=name)
     messages.success(request, '類別創建成功')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse('stores:show', args=[store_id])
+    response['HX-Redirect'] = reverse('stores:management', args=[store_id])
     return response
 
 
 @store_required
+@require_POST
 def category_edit(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     new_name = request.POST.get('name')
-    if request.method == 'POST':
-        if new_name:
-            if category.store.categories.filter(name=new_name).exists():
-                messages.error(request, '此類別名稱已存在')
-                return render(request, 'shared/messages.html')
-            elif new_name != category.name:
-                category.name = new_name
-                category.save()
-                messages.success(request, '類別名稱已更新')
-        else:
-            messages.error(request, '請輸入有效的類別名稱')
+    if new_name:
+        if category.store.categories.filter(name=new_name).exists():
+            messages.error(request, '此類別名稱已存在')
+            return render(request, 'shared/messages.html')
+        elif new_name != category.name:
+            category.name = new_name
+            category.save()
+            messages.success(request, '類別名稱已更新')
+    else:
+        messages.error(request, '請輸入有效的類別名稱')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse(
-        'stores:category_products', args=[category.store.id, category.id]
-    )
+    response['HX-Redirect'] = reverse('stores:management', args=[category.store.id])
     return response
 
 
@@ -282,7 +280,7 @@ def category_delete(request, category_id):
 
     category.delete()
     messages.success(request, '類別已刪除')
-    return redirect('stores:show', store.id)
+    return redirect('stores:management', store.id)
 
 
 @store_required
@@ -302,13 +300,6 @@ def category_products(request, store_id, category_id):
     store = get_object_or_404(Store, id=store_id)
     category = get_object_or_404(Category, id=category_id, store=store)
     products = category.products.all()
-    print(
-        f'######  Category: {category.id}\nStore: {category.store.user.email}\nProducts: {products.count()}'
-    )
-    print(f'######  categories: {store.categories.count()}\n')
-    for c in category.store.categories.all():
-        print(f'Category: {c.name} (ID: {c.id})')
-        print(f'Product: {c.products}')
     return render(
         request,
         'stores/business/product_list.html',
