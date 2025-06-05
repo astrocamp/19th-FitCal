@@ -3,12 +3,12 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.utils import timezone
 
 from products.models import Product
 
 from .enums import OrderStatus, PaymentMethod, PaymentStatus
 from .fsm import OrderFSM
+from .utils import get_order_number, get_pickup_number
 
 
 class Order(models.Model):
@@ -63,46 +63,12 @@ class Order(models.Model):
             if self.payment_method == PaymentMethod.CASH:
                 self.payment_status = PaymentStatus.PAID
 
-        # 生成訂單編號
+        # 生成訂單編號)
         if not self.order_number:
-            date_str = timezone.now().strftime('%Y%m%d')
-            last_order = (
-                Order.objects.filter(order_number__startswith=f'ORD{date_str}')
-                .order_by('order_number')
-                .last()
-            )
-
-            if last_order:
-                last_number = int(last_order.order_number[-4:])
-                new_number = str(last_number + 1).zfill(4)
-            else:
-                new_number = '0001'
-
-            self.order_number = f'ORD{date_str}{new_number}'
-
+            self.order_number = get_order_number()
         # 生成取餐編號
         if not self.pickup_number:
-            today = timezone.now().date()
-            today_start = timezone.make_aware(
-                timezone.datetime.combine(today, timezone.datetime.min.time())
-            )
-            today_end = timezone.make_aware(
-                timezone.datetime.combine(today, timezone.datetime.max.time())
-            )
-
-            last_pickup = (
-                Order.objects.filter(created_at__range=(today_start, today_end))
-                .order_by('created_at')
-                .last()
-            )
-
-            if last_pickup:
-                last_number = int(last_pickup.pickup_number)
-                new_number = str(last_number + 1).zfill(4)
-            else:
-                new_number = '0001'
-
-            self.pickup_number = new_number
+            self.pickup_number = get_pickup_number(self.store.id)
 
         # 儲存快照資訊
         if self.member and not self.member_name:
