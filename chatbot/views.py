@@ -6,6 +6,7 @@ client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
 import json
 
+from django.db.models import Prefetch
 from django.http import JsonResponse
 
 from products.models import Product
@@ -14,21 +15,22 @@ from stores.models import Store
 
 # 從資料庫抓最新資料
 def fetch_latest_store_product_info():
-    stores = Store.objects.all()
-    products = Product.objects.all()
+    # 預先抓出每間店對應的商品，避免 N+1 問題
+    stores = Store.objects.prefetch_related(
+        Prefetch('products', queryset=Product.objects.all())
+    )
 
     info = ''
     for store in stores:
         info += f'店家：{store.name}\n地址：{store.address}\n電話：{store.phone_number}\n營業時間：{store.opening_time}~{store.closing_time}\n'
 
-    for product in products:
-        info += f'所屬店家：{product.store}\n商品：{product.name}\n價格：{product.price}元\n卡路里：{product.calories}\n商品介紹：{product.description}\n現有庫存量：{product.quantity}'
+        for product in store.products.all():  # 不會重新查資料庫
+            info += f'所屬店家：{store.name}\n商品：{product.name}\n價格：{product.price}元\n卡路里：{product.calories}\n商品介紹：{product.description}\n現有庫存量：{product.quantity}'
 
     return info
 
 
 # 處裡使用者的訊息
-# @csrf_exempt
 def chatbot_api(request):
     if request.method == 'POST':
         data = json.loads(request.body)
