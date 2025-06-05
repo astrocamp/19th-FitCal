@@ -1,12 +1,15 @@
+// 控制訊息框的顯示與隱藏
 function toggleChatbox() {
   const box = document.getElementById('chatbox');
   box.classList.toggle('hidden');
 }
 
-async function sendMessage() {
+// 處理送出訊息的功能
+async function sendMessage(event) {
+  event.preventDefault();
   const input = document.getElementById('chatbot-input');
   const messages = document.getElementById('chatbot-messages');
-  const text = input.value.trim();
+  const text = input.value.trim(); //去除開頭及結尾
   if (!text) return;
 
   messages.innerHTML += `
@@ -18,7 +21,7 @@ async function sendMessage() {
   const res = await fetch('/chatbot/chat/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: text }),
+    body: JSON.stringify({ message: text }), //在 fetch() 中發送 HTTP 請求的「請求內容（body）」，並將它轉換成 JSON 字串格式。
   });
 
   const data = await res.json();
@@ -28,3 +31,32 @@ async function sendMessage() {
     </div>`;
   messages.scrollTop = messages.scrollHeight;
 }
+
+// function handleSubmit(event) {
+//   event.preventDefault();
+
+//   const text = document.getElementById('chatbot-input').value.trim();
+//   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+//   fetch('/chatbot/chat/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'X-CSRFToken': csrfToken, // ✅ 關鍵
+//     },
+//     body: JSON.stringify({ message: text }),
+//   })
+//     .then(async (res) => {
+//       if (!res.ok) {
+//         const errorText = await res.text();
+//         console.error('❌ 錯誤頁面：', errorText); // ← 你會看到 HTML 頁面
+//         return;
+//       }
+//       return res.json();
+//     })
+//     .then((data) => {
+//       if (data) {
+//         console.log('✅ 回覆：', data.reply);
+//       }
+//     });
+// }
