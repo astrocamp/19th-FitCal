@@ -84,6 +84,7 @@
 
   <!-- 銷售趨勢圖表 -->
   <div class="mt-6" x-show="tab === 'charts'">
+    {% if chart_labels_raw and chart_labels_raw|length > 0 %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
         <h3 class="text-md font-semibold text-gray-800 dark:text-white mb-4">{% if is_today_data %}今日{% else %}歷史{% endif %}訂單各商品佔比</h3>
@@ -110,6 +111,7 @@
         <canvas id="topProductsChart" class="w-full h-64"></canvas>
       </div>
     </div>
+
     <script>
       document.addEventListener('alpine:init', () => {
         const renderChart = (id, type, label, labels, data, color, extraOptions = {}) => {
@@ -263,6 +265,9 @@
         );
       });
     </script>
+    {% else %}
+    <div class="text-center text-gray-500 dark:text-gray-400 text-sm mt-12">目前無資料可供分析，請稍後再試或確認是否已有訂單。</div>
+    {% endif %}
   </div>
 </section>
 
