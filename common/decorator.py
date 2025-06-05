@@ -49,21 +49,18 @@ def store_required(view_func):
     @login_required
     @wraps(view_func)
     def _wrapped_view(req, *args, **kwargs):
-        if req.user.is_store:
-            try:
-                _ = req.user.store
-            except Exception:
-                return redirect_with_message(req, 'stores:new', '請先補充會員資料')
-        else:
+        if not req.user.is_store:
             return redirect_with_message(
                 req, 'users:index', '您不是會員，無法訪問此頁面'
             )
-
-        # return view_func(req, *args, **kwargs)
+        try:
+            _ = req.user.store
+        except Exception:
+            return redirect_with_message(req, 'stores:new', '請先補充會員資料')
 
         store_id = kwargs.get('store_id') or kwargs.get(
             'id'
-        )  # 或 store_id，視你的 urls.py 而定
+        )  
 
         if store_id is not None and str(getattr(req.user.store, 'id', '')) == str(
             store_id
