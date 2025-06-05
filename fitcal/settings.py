@@ -46,11 +46,8 @@ INSTALLED_APPS = [
     'members',
     'orders',
     'products',
-<<<<<<< HEAD
     'widget_tweaks',
-=======
     'chatbot',
->>>>>>> 768f22a (feat:add AI customer service,unfinished)
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -226,7 +223,6 @@ LOGIN_REDIRECT_URL = '/'
 # Debug Toolbar
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
-<<<<<<< HEAD
 # AWS S3
 STORAGES = {
     'default': {
@@ -257,7 +253,5 @@ USE_I18N = True
 LANGUAGE_CODE = 'zh-hant'
 
 CELERY_BROKER_URL = env('REDIS_URL')
-=======
 # OPENAI KEY CHATBOT
 OPENAI_API_KEY = env('OPENAI_API_KEY')
->>>>>>> 768f22a (feat:add AI customer service,unfinished)
