@@ -11,14 +11,11 @@
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
 
-    <!-- CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
   <body class="min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="flex-1">
       <nav class="shadow-sm">{% include 'shared/navbar.html' %}</nav>
       <section class="max-w-7xl mx-auto">
-        <nav>{% include 'shared/navbar.html' %}</nav>
         <div id="messages-container">{% include "shared/messages.html" %}</div>
         {% block main %}{% endblock main %}
       </section>
