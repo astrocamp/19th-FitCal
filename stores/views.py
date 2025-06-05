@@ -444,6 +444,7 @@ def businesses_dashboard(request, store_id):
             'store_ratings': store_ratings,
             'product_sales': product_sales,
             'chart_labels': json.dumps(chart_labels),
+            'chart_labels_raw': chart_labels,
             'chart_sales': json.dumps(chart_sales),
             'chart_orders': json.dumps(chart_orders),
             'chart_avg_ratings': json.dumps(chart_avg_ratings),
