@@ -45,7 +45,12 @@ def index(request):
                 Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg']
                 or 0
             )
-            return render(request, 'stores/store_management.html', {'store': store})
+            stats = store_management(request)
+            return render(
+                request,
+                'stores/store_management.html',
+                {'store': store, 'stats': stats},
+            )
         except Store.DoesNotExist:
             return redirect('stores:new')
 
@@ -179,10 +184,6 @@ def manage_orders(request, store_id):
 @login_required
 def store_management(request):
     """商家管理頁面"""
-    # if not hasattr(request.user, 'store'):
-    #     messages.error(request, '您尚未創建商家，請先創建商家。')
-    #     return redirect('stores:new')  # 假設有一個創建商家的頁面
-
     store = request.user.store
 
     order_queryset = store.orders.all()  # 透過 related_name='orders'
@@ -200,11 +201,4 @@ def store_management(request):
         'order_count': stats['order_count'] or 0,
     }
 
-    return render(
-        request,
-        'stores/store_management.html',
-        {
-            'store': store,
-            'stats': stats,
-        },
-    )
+    return stats

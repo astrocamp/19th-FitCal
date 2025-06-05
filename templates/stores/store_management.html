@@ -4,7 +4,9 @@
   <main class="p-8">
     <!-- Merchant Info -->
     <section class="flex items-center mb-10">
-      <div class="w-28 h-28 border-2 border-gray-300 rounded-full flex items-center justify-center text-gray-600 text-lg mr-6">{{ store.logo_url }}</div>
+      <div class="w-28 h-28 border-4 border-[#3A643A] rounded-full flex items-center justify-center mr-6 overflow-hidden">
+        <img src="{{ store.logo_url }}" alt="Store Logo" class="w-full h-full object-cover rounded-full" />
+      </div>
       <h1 class="text-3xl font-semibold text-gray-800">{{ store.name }}</h1>
     </section>
 
