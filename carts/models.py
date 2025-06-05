@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import F, Sum, UniqueConstraint
 
 
 class Cart(models.Model):
@@ -22,27 +22,18 @@ class Cart(models.Model):
 
     # 計算總價
     @property
-    def calculate_total_price(self):
-        # 利用 select_related 預先抓 product 避免N+1
-        items = self.items.select_related('product').all()
-
-        total = 0
-        for item in items:
-            total += item.product.price * item.quantity
-
-        return total
+    def total_price(self):
+        return (
+            self.items.aggregate(total=Sum(F('quantity') * F('product__price')))[
+                'total'
+            ]
+            or 0
+        )
 
     # 計算總量
     @property
-    def calculate_total_quantity(self):
-        # 利用 select_related 預先抓 product 避免N+1
-        items = self.items.select_related('product').all()
-
-        total = 0
-        for item in items:
-            total += item.quantity
-
-        return total
+    def total_quantity(self):
+        return self.items.aggregate(total=Sum('quantity'))['total'] or 0
 
 
 class CartItem(models.Model):

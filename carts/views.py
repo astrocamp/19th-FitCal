@@ -91,7 +91,7 @@ def update_cart_item(req, item_id):
             cart_item.save()
     except Exception:
         messages.error(req, '購物車更新失敗')
-    innertext = f'{cart.calculate_total_price}'
+    innertext = f'{cart.total_price}'
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
@@ -177,8 +177,8 @@ def delete_item_from_ordering(req, id):
         return response
 
     # 若還有商品，則更新總數與金額
-    total_quantity = cart.calculate_total_quantity
-    total_price = cart.calculate_total_price
+    total_quantity = cart.total_quantity
+    total_price = cart.total_price
 
     messages.success(req, f'成功刪除 {product_name}')
     messages_html = render_to_string(
