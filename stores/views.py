@@ -184,8 +184,8 @@ def manage_orders(request, store_id):
 
 
 @store_required
-def order_list(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
+def order_list(request, id):
+    store = get_object_or_404(Store, id=id)
 
     tab = request.GET.get('tab', 'today')
     today = date.today()
