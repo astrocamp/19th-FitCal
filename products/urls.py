@@ -6,10 +6,12 @@ app_name = 'products'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('new/<uuid:store_id>/', views.new, name='new'),
+    path('new/<int:category_id>/', views.new, name='new'),
     path('<uuid:id>', views.show, name='show'),
-    path('<uuid:id>/edit', views.edit, name='edit'),
-    path('<uuid:id>/delete', views.delete, name='delete'),
+    path('<int:category_id>/create/', views.create, name='create'),
+    path('<uuid:id>/edit/', views.edit, name='edit'),
+    path('<uuid:id>/update/', views.update, name='update'),
+    path('<uuid:id>/delete/', views.delete, name='delete'),
     path(
         'collections/<uuid:id>/',
         views.collections,

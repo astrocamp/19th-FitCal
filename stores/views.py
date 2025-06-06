@@ -5,7 +5,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Avg, Count, F, Sum
+from django.db.models import Avg, Count, F, Prefetch, Sum
 from django.db.models.functions import TruncDate
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -266,7 +266,7 @@ def category_create(request, store_id):
     store.categories.create(name=name)
     messages.success(request, '類別創建成功')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse('stores:management', args=[store_id])
+    response['HX-Redirect'] = reverse('stores:management')
     return response
 
 
@@ -286,7 +286,7 @@ def category_edit(request, category_id):
     else:
         messages.error(request, '請輸入有效的類別名稱')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse('stores:management', args=[category.store.id])
+    response['HX-Redirect'] = reverse('stores:management')
     return response
 
 
@@ -298,18 +298,32 @@ def category_delete(request, category_id):
 
     category.delete()
     messages.success(request, '類別已刪除')
-    return redirect('stores:management', store.id)
+    return redirect('stores:management')
 
 
 @store_required
-def management(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
-    categories = store.categories.all()
-    products = store.products.all()
+def management(request):
+    store = request.user.store
+    store = Store.objects.prefetch_related(  # 對 Store 的 related objects 預抓
+        Prefetch(
+            'categories',  # related_name='categories' 的欄位（Category FK Store）
+            queryset=Category.objects.prefetch_related(
+                'products'
+            ),  # 對每個 Category 預抓 products
+        )
+    ).get(id=store.id)
+    categories = store.categories.order_by('name')
+    selected_category = categories.first() if categories.exists() else None
+    products = selected_category.products.all() if selected_category else []
     return render(
         request,
         'stores/business/product_management.html',
-        {'store': store, 'categories': categories, 'products': products},
+        {
+            'store': store,
+            'selected_category': selected_category,
+            'categories': categories,
+            'products': products,
+        },
     )
 
 

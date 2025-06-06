@@ -43,7 +43,7 @@ urlpatterns = [
         views.category_delete,
         name='category_delete',
     ),
-    path('<uuid:store_id>/management/', views.management, name='management'),
+    path('management/', views.management, name='management'),
     path(
         '<uuid:store_id>/<int:category_id>/products',
         views.category_products,
