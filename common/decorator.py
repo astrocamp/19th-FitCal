@@ -51,24 +51,21 @@ def store_required(view_func):
     def _wrapped_view(req, *args, **kwargs):
         if not req.user.is_store:
             return redirect_with_message(
-                req, 'users:index', '您不是會員，無法訪問此頁面'
+                req, 'users:index', '您不是商家，無法訪問此頁面'
             )
         try:
             _ = req.user.store
         except Exception:
-            return redirect_with_message(req, 'stores:new', '請先補充會員資料')
+            return redirect_with_message(req, 'stores:new', '請先補充商家資料')
 
-        store_id = kwargs.get('store_id') or kwargs.get(
-            'id'
-        )  
+        store_id_from_url = kwargs.get('store_id')
 
-        if store_id is not None and str(getattr(req.user.store, 'id', '')) == str(
-            store_id
-        ):
-            return view_func(req, *args, **kwargs)
-        else:
+        if store_id_from_url is not None and str(
+            getattr(req.user.store, 'id', '')
+        ) != str(store_id_from_url):
             return redirect_with_message(
                 req, 'stores:index', '你沒有權限存取這個商家後台'
             )
+        return view_func(req, *args, **kwargs)
 
     return _wrapped_view
