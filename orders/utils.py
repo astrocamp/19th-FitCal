@@ -7,6 +7,8 @@ import requests
 from django.db import connection
 from django.utils.timezone import localtime, now
 
+from .enums import OrderStatus
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -106,7 +108,7 @@ def push_line_message(line_user_id, message_text):
     return response.json()
 
 
-def build_line_order_message(order):
+def build_line_order_created_message(order):
     lines = [
         f'✅ 您的訂單 #{order.order_number} 已建立，感謝使用 FitCal！',
         '',
@@ -127,5 +129,32 @@ def build_line_order_message(order):
 
     lines.append('')
     lines.append(f'💰 訂單總金額：{total:.0f} 元')
+
+    return '\n'.join(lines)
+
+
+def build_line_order_status_message(order):
+    lines = []
+
+    if order.order_status == OrderStatus.CANCELED:
+        lines.extend([f'❌ 您的訂單 #{order.order_number} 已取消'])
+
+    elif order.order_status == OrderStatus.READY:
+        lines.extend(
+            [
+                f'✅ 您的訂單 #{order.order_number} 已準備完成',
+                f'🏪 店家：{order.store_name}',
+                f'🔢 取餐號碼：{order.pickup_number}',
+                '請盡快前往取餐，謝謝！',
+            ]
+        )
+
+    elif order.order_status == OrderStatus.COMPLETED:
+        lines.extend(
+            [
+                f'🎉 您的訂單 #{order.order_number} 已完成取餐',
+                '感謝您的光臨，歡迎再次訂購！',
+            ]
+        )
 
     return '\n'.join(lines)
