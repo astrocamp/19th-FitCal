@@ -1,3 +1,18 @@
 {% extends 'layouts/default.html' %} {% block main %}
-<h1>付款已取消</h1>
+<div class="min-h-[50vh] flex items-center justify-center">
+  <div class="max-w-md w-full mx-auto p-8 bg-white rounded-xl shadow-lg text-center">
+    <div class="mb-6">
+      <div class="h-20 w-20 mx-auto mb-4">
+        <svg class="h-full w-full text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">付款已取消</h1>
+    </div>
+
+    <div class="space-y-4">
+      <a href="{% url 'carts:index' %}" class="block w-full py-3 px-4 text-center rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-medium transition-colors"> 返回購物車 </a>
+    </div>
+  </div>
+</div>
 {% endblock main %}
