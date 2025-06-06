@@ -12,5 +12,10 @@ urlpatterns = [
     path('<uuid:id>/edit/', views.edit, name='edit'),
     path('<uuid:id>/delete/', views.delete, name='delete'),
     path('<uuid:store_id>/rate/', views.rate_store, name='rate_store'),
+    path(
+        'store_management/',
+        views.store_management,
+        name='store_management',
+    ),
     path('<uuid:id>/orders/', views.order_list, name='order_list'),
 ]
