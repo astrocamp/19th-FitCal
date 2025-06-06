@@ -67,5 +67,4 @@ def store_required(view_func):
                 req, 'stores:index', '你沒有權限存取這個商家後台'
             )
         return view_func(req, *args, **kwargs)
-
     return _wrapped_view
