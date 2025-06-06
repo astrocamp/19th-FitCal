@@ -3,14 +3,13 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Avg
+from django.db.models import Avg, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
-from orders.enums import OrderStatus
 from orders.models import Order
 
 from .forms import RatingForm, StoreForm
@@ -160,27 +159,27 @@ def rate_store(request, store_id):
     return redirect('stores:index')
 
 
-@store_required
-def manage_orders(request, store_id):
-    """店家訂單管理頁面"""
-    store = get_object_or_404(Store, id=store_id)
+@login_required
+def store_management(request):
+    """商家管理頁面"""
+    store = request.user.store
 
-    # 獲取狀態篩選參數
-    status = request.GET.get('status')
+    order_queryset = store.orders.all()  # 透過 related_name='orders'
 
-    # 查詢該店家的訂單
-    orders = Order.objects.filter(store=store).order_by('-created_at')
-    if status:
-        orders = orders.filter(order_status=status)
+    stats = order_queryset.aggregate(
+        total_amount=Sum('total_price'),
+        average_order_price=Avg('total_price'),
+        order_count=Count('id'),
+    )
 
-    context = {
-        'store': store,
-        'orders': orders,
-        'order_status_choices': OrderStatus.choices,
-        'selected_status': status,
+    # 預設為 0 或顯示友善數字（處理 None）
+    stats = {
+        'total_amount': stats['total_amount'] or 0,
+        'average_order_price': round(stats['average_order_price'] or 0),
+        'order_count': stats['order_count'] or 0,
     }
 
-    return render(request, 'stores/manage_orders.html', context)
+    return stats
 
 
 @store_required
