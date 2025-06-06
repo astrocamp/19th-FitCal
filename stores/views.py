@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.timezone import now, timedelta
+from django.utils.timezone import now
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
@@ -171,7 +171,14 @@ def store_management(request):
     """商家管理頁面"""
     store = request.user.store
 
-    order_queryset = store.orders.all()  # 透過 related_name='orders'
+    today = now().date()  # 取得今天日期（含時區）
+
+    # 篩選今天的「已完成」訂單
+    order_queryset = store.orders.filter(
+        created_at__date=today,
+        order_status='COMPLETED',
+    )
+    Order.objects.values_list('order_status', flat=True).distinct()
 
     stats = order_queryset.aggregate(
         total_amount=Sum('total_price'),
