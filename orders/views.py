@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.db import transaction
+from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import condition
@@ -75,8 +76,6 @@ def index(req):
             else:
                 order.member_phone = cart.member.phone_number
 
-            order.save()
-
             for cart_item in cart.items.all():
                 # 建立訂單項目
                 OrderItem.objects.create(
@@ -89,6 +88,17 @@ def index(req):
                 # 更新庫存
                 cart_item.product.quantity -= cart_item.quantity
                 cart_item.product.save()
+
+            # 計算總價
+            total = (
+                order.orderitem_set.aggregate(
+                    total_price=Sum(F('unit_price') * F('quantity'))
+                )['total_price']
+                or 0
+            )
+
+            order.total_price = total
+            order.save()
 
             # 刪除購物車
             cart.delete()
