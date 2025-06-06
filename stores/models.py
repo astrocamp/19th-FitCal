@@ -65,6 +65,7 @@ class Store(models.Model):
 class Rating(models.Model):
     member = models.ForeignKey('members.Member', on_delete=models.CASCADE)
     store = models.ForeignKey('Store', on_delete=models.CASCADE)
+    order = models.OneToOneField('orders.Order', on_delete=models.CASCADE, default=0)
     score = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
@@ -73,13 +74,11 @@ class Rating(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(
-                fields=['member', 'store'], name='unique_member_store_rating'
-            )
+            models.UniqueConstraint(fields=['order'], name='unique_rating_per_order')
         ]
 
     def __str__(self):
-        return f'{self.member.name} 給 {self.store.name} 的評分：{self.score} 分'
+        return f'{self.member.name} 評分訂單 {self.order.order_number} 的 {self.store.name}：{self.score} 分'
 
 
 class Category(models.Model):
