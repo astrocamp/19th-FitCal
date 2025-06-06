@@ -5,7 +5,11 @@ from django.utils import timezone
 
 from .enums import OrderStatus
 from .models import Order
-from .utils import build_line_order_message, push_line_message
+from .utils import (
+    build_line_order_created_message,
+    build_line_order_status_message,
+    push_line_message,
+)
 
 
 @receiver(pre_save, sender=Order)
@@ -53,7 +57,30 @@ def send_line_message_when_order_created(sender, instance, created, **kwargs):
     try:
         account = SocialAccount.objects.get(user=user, provider='line')
         line_user_id = account.uid
-        msg = build_line_order_message(instance)
+        msg = build_line_order_created_message(instance)
         push_line_message(line_user_id, msg)
     except SocialAccount.DoesNotExist:
         pass  # 沒有 LINE 帳號的就跳過
+
+
+@receiver(post_save, sender=Order)
+def handle_order_notifications(sender, instance, created, **kwargs):
+    """處理訂單通知"""
+    if created:  # 新訂單由另一個 signal 處理
+        return
+
+    try:
+        user = instance.member.user
+        account = SocialAccount.objects.get(user=user, provider='line')
+        line_user_id = account.uid
+
+        if instance.order_status in [
+            OrderStatus.CANCELED,
+            OrderStatus.READY,
+            OrderStatus.COMPLETED,
+        ]:
+            message = build_line_order_status_message(instance)
+            push_line_message(line_user_id, message)
+
+    except SocialAccount.DoesNotExist:
+        pass
