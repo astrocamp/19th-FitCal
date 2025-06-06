@@ -37,7 +37,7 @@ def linepay_request(request):
         messages.error(request, '找不到購物車資訊')
         return redirect('carts:index')
 
-    total_price = cart.calculate_total_price
+    total_price = cart.total_price
 
     order_id = pending_order_id or str(uuid.uuid4())
     package_id = f'package_{str(uuid.uuid4())}'
@@ -140,7 +140,7 @@ def linepay_confirm(request):
         messages.error(request, '找不到購物車資訊')
         return redirect('carts:index')
 
-    total_price = cart.calculate_total_price
+    total_price = cart.total_price
 
     if not transaction_id:
         return HttpResponse('Missing transaction ID', status=400)
@@ -170,6 +170,7 @@ def linepay_confirm(request):
                 note=pending_order.note,
                 payment_status='PAID',
                 payment_method='LINE_PAY',
+                total_price=total_price,
             )
 
             for cart_item in cart.items.all():
@@ -184,6 +185,10 @@ def linepay_confirm(request):
                 # 更新庫存
                 cart_item.product.quantity -= cart_item.quantity
                 cart_item.product.save()
+
+            # 標記 PendingOrder 為已處理
+            pending_order.is_processed = True
+            pending_order.save()
 
             # 刪除購物車
             cart.delete()
