@@ -30,6 +30,24 @@
 
       <!-- 商品細項：可縮放 -->
       {% include "shared/orders/order_item_detail.html" with order=order %}
+
+      <div class="border-t border-gray-200 p-4" id="rating-section-{{ order.id }}">
+        {% if order.order_status == "COMPLETED" %} {% if not order.rating %}
+        <form hx-post="{% url 'stores:rate_store' order.id %}" hx-target="#rating-section-{{ order.id }}" hx-swap="outerHTML" method="POST" class="space-y-2">
+          {% csrf_token %}
+          <label class="block text-sm font-medium text-gray-700">對本次訂單的評分：</label>
+          <div class="rating rating-sm">
+            {% for i in "12345" %}
+            <input type="radio" name="score" value="{{ forloop.counter }}" class="mask mask-star-2 bg-yellow-400" required />
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-sm btn-primary mt-1">送出評分</button>
+        </form>
+
+        {% else %}
+        <div class="text-sm text-gray-600">✅ 已評分：<strong>{{ order.rating.score }} 分</strong></div>
+        {% endif %} {% endif %}
+      </div>
     </div>
   </div>
   {% endfor %}

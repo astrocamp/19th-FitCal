@@ -7,9 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Avg, Count, F, Sum
 from django.db.models.functions import TruncDate
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now, timedelta
 from django.views.decorators.http import require_POST
@@ -134,36 +133,41 @@ def delete(req, id):
 
 @require_POST
 @login_required
-def rate_store(request, store_id):
-    member = getattr(request.user, 'member', None)
-    if not member:
-        messages.error(request, '請先填寫會員資料')
-        return redirect('members:new')
+def rate_store(request, order_id):
+    try:
+        order = get_object_or_404(Order, id=order_id, member=request.user.member)
 
-    store = get_object_or_404(Store, id=store_id)
-    rating = Rating.objects.filter(store=store, member=member).first()
-    form = RatingForm(request.POST, instance=rating)
+        if order.order_status != 'COMPLETED':
+            return HttpResponseBadRequest('訂單尚未完成，無法評分')
 
-    if form.is_valid():
-        new_rating = form.save(commit=False)
-        new_rating.member = member
-        new_rating.store = store
-        new_rating.save()
+        if hasattr(order, 'rating'):
+            return HttpResponseBadRequest('此訂單已評分')
 
-        # 如果是 HTMX 請求：回傳一個更新後的按鈕區塊
-        if request.headers.get('Hx-Request') == 'true':
-            html = render_to_string(
-                'stores/_rating_button.html',
-                {
-                    'store': store,
-                    'member_rating': new_rating,
-                },
-                request=request,
-            )
-            return HttpResponse(html)
+        try:
+            score = int(request.POST.get('score', 0))
+        except (TypeError, ValueError):
+            return HttpResponseBadRequest('請提供有效的分數')
 
-    # 傳統表單提交：重新導向回 index
-    return redirect('stores:index')
+        if score < 1 or score > 5:
+            return HttpResponseBadRequest('分數必須在 1 到 5 分之間')
+
+        Rating.objects.create(
+            member=request.user.member,
+            store=order.store,
+            order=order,
+            score=score,
+        )
+
+        return HttpResponse(f"""
+            <div class="text-sm text-gray-600">
+                ✅ 已評分：<strong>{score} 分</strong>
+            </div>
+        """)
+
+    except Exception as e:
+        return JsonResponse(
+            {'error': '伺服器發生錯誤，請稍後再試', 'debug': str(e)}, status=500
+        )
 
 
 @login_required
