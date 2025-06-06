@@ -12,7 +12,7 @@
       <!-- Navigation -->
       <nav class="flex space-x-1">
         <a href=" # " class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">基本設定</a>
-        <a href=" # " class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">商品/庫存管理</a>
+        <a href="{% url 'stores:show' store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">商品/庫存管理</a>
         <a href="{% url 'stores:order_list' user.store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">訂單</a>
         <a href=" # " class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">分析報告</a>
       </nav>
