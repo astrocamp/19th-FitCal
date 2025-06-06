@@ -1,9 +1,11 @@
-from django.db.models.signals import pre_save
+from allauth.socialaccount.models import SocialAccount
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 
 from .enums import OrderStatus
 from .models import Order
+from .utils import build_line_order_message, push_line_message
 
 
 @receiver(pre_save, sender=Order)
@@ -40,3 +42,18 @@ def handle_order_status_change(sender, instance, **kwargs):
         and instance.pickup_time < timezone.now() - timezone.timedelta(hours=24)
     ):
         instance.order_status = OrderStatus.CANCELED
+
+
+@receiver(post_save, sender=Order)
+def send_line_message_when_order_created(sender, instance, created, **kwargs):
+    if not created:
+        return  # 只推播新建立的訂單
+
+    user = instance.member.user
+    try:
+        account = SocialAccount.objects.get(user=user, provider='line')
+        line_user_id = account.uid
+        msg = build_line_order_message(instance)
+        push_line_message(line_user_id, msg)
+    except SocialAccount.DoesNotExist:
+        pass  # 沒有 LINE 帳號的就跳過
