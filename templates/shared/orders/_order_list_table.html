@@ -1,44 +1,50 @@
-<div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
-  <table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50 text-sm font-semibold text-gray-700">
-      <tr>
-        <th class="px-4 py-3 text-left">訂單編號</th>
-        <th class="px-4 py-3 text-left">取貨時間</th>
-        <th class="px-4 py-3 text-left">顧客</th>
-        <th class="px-4 py-3 text-left">金額</th>
-        <th class="px-4 py-3 text-left">訂單狀態</th>
-        <th class="px-4 py-3 text-left">付款狀態</th>
-        <th class="px-4 py-3 text-left">操作</th>
-        <th class="px-4 py-3 text-left">詳細</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-100 text-sm text-gray-800">
-      {% for order in orders %}
-      <tr>
-        <td class="px-4 py-3 font-semibold">{{ order.order_number }}</td>
-        <td class="px-4 py-3">{{ order.pickup_time|date:"Y-m-d H:i" }}</td>
-        <td class="px-4 py-3">{{ order.member_name }}</td>
-        <td class="px-4 py-3">${{ order.total_price }}</td>
-        <td class="px-4 py-3">
-          <span id="order_status_display_{{ order.id }}"> {% include 'shared/orders/order_status_display.html' with order=order %} </span>
-        </td>
-        <td class="px-4 py-3">
-          <span id="order_payment_status_display_{{ order.id }}"> {% include 'shared/orders/order_payment_status_display.html' with order=order %} </span>
-        </td>
-        <td class="px-4 py-3">
-          <div id="order_status_button_{{ order.id }}" class="flex gap-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
-        </td>
-        <td class="px-4 py-3">
-          <button onclick="document.querySelector('#order_detail_modal_{{ order.id }}').showModal()" class="text-blue-600 hover:text-blue-800 font-medium">查看詳細</button>
+<div class="relative">
+  <!-- Table wrapper with horizontal scroll -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200 whitespace-nowrap lg:whitespace-normal">
+      <thead class="bg-gray-50 text-sm font-semibold text-gray-700">
+        <tr class="text-center">
+          <th class="px-4 py-3 sticky left-0 bg-gray-50 w-36">訂單編號</th>
+          <th class="px-4 py-3 hidden sm:table-cell w-40">取貨時間</th>
+          <th class="px-4 py-3 w-28">顧客</th>
+          <th class="px-4 py-3 hidden sm:table-cell w-24">金額</th>
+          <th class="px-4 py-3 w-35">訂單狀態</th>
+          <th class="px-4 py-3 hidden md:table-cell w-35">付款狀態</th>
+          <th class="px-4 py-3 w-48">操作</th>
+          <th class="px-4 py-3 sticky right-0 bg-gray-50 w-24">詳細</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 text-sm text-gray-800">
+        {% for order in orders %}
+        <tr class="hover:bg-gray-50 text-center">
+          <td class="px-4 py-3 font-semibold sticky left-0 bg-white">{{ order.order_number }}</td>
+          <td class="px-4 py-3 hidden sm:table-cell">{{ order.pickup_time|date:"Y-m-d H:i" }}</td>
+          <td class="px-4 py-3">{{ order.member_name }}</td>
+          <td class="px-4 py-3 hidden sm:table-cell">${{ order.total_price }}</td>
+          <td class="px-4 py-3">
+            <span id="order_status_display_{{ order.id }}" class="inline-block min-w-[100px]"> {% include 'shared/orders/order_status_display.html' with order=order %} </span>
+          </td>
+          <td class="px-4 py-3 hidden md:table-cell">
+            <span id="order_payment_status_display_{{ order.id }}"> {% include 'shared/orders/order_payment_status_display.html' with order=order %} </span>
+          </td>
+          <td class="px-4 py-3">
+            <div id="order_status_button_{{ order.id }}" class="flex gap-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
+          </td>
+          <td class="px-4 py-3 sticky right-0 bg-white">
+            <button onclick="document.querySelector('#order_detail_modal_{{ order.id }}').showModal()" class="text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap">查看詳細</button>
+            <div class="text-left">{% include "shared/orders/_order_detail_modal.html" with order=order %}</div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-6 text-gray-500">目前沒有符合的訂單</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-          {% include "shared/orders/_order_detail_modal.html" with order=order %}
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="7" class="text-center py-6 text-gray-500">目前沒有符合的訂單</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <!-- Scroll indicators -->
+  <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none md:hidden"></div>
+  <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none md:hidden"></div>
 </div>
