@@ -9,6 +9,7 @@
         <th class="px-4 py-3 text-left">訂單狀態</th>
         <th class="px-4 py-3 text-left">付款狀態</th>
         <th class="px-4 py-3 text-left">操作</th>
+        <th class="px-4 py-3 text-left">詳細</th>
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-100 text-sm text-gray-800">
@@ -26,6 +27,11 @@
         </td>
         <td class="px-4 py-3">
           <div id="order_status_button_{{ order.id }}" class="flex gap-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
+        </td>
+        <td class="px-4 py-3">
+          <button onclick="document.querySelector('#order_detail_modal_{{ order.id }}').showModal()" class="text-blue-600 hover:text-blue-800 font-medium">查看詳細</button>
+
+          {% include "shared/orders/_order_detail_modal.html" with order=order %}
         </td>
       </tr>
       {% empty %}
