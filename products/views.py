@@ -3,11 +3,12 @@ import json
 import os
 import re
 
+import vertexai
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-from google.cloud import aiplatform
+from vertexai.generative_models import GenerativeModel, Part
 
 from common.decorator import member_required, store_required
 from stores.models import Category, Store
@@ -18,12 +19,12 @@ from .models import Product
 PROJECT_ID = os.environ.get('GOOGLE_CLOUD_PROJECT_ID', 'fitcal19-th-50691')
 LOCATION = os.environ.get('GOOGLE_CLOUD_LOCATION', 'asia-east1')
 
-# 初始化 Gemini AI Platform 客戶端 (確保此代碼只執行一次)
-aiplatform.init(project=PROJECT_ID, location=LOCATION)
+# 初始化 Vertex AI (使用 vertexai 模組)
+vertexai.init(project=PROJECT_ID, location=LOCATION)
 
 # 載入 Gemini 模型
 # 建議使用 gemini-1.5-flash，因為它速度快、成本低，且免費額度高
-gemini_model = aiplatform.preview.generative_models.GenerativeModel('gemini-1.5-flash')
+gemini_model = GenerativeModel('gemini-1.5-flash')
 
 
 def index(request):
@@ -190,9 +191,7 @@ def estimate_calories_from_image(request):
         # 將 Base64 字串解碼回圖片位元組數據
         image_bytes = base64.b64decode(image_base64)
         # 建立 Gemini 可讀的圖片 Part
-        image_part = aiplatform.preview.generative_models.Part.from_data(
-            image_bytes, mime_type=mime_type
-        )
+        image_part = Part.from_data(image_bytes, mime_type=mime_type)
 
         # 定義給 Gemini 的提示詞 (Prompt)
         # 我們會明確要求 Gemini 估算卡路里並提供數字，並提醒它這是估算值

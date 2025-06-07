@@ -22,7 +22,7 @@ class Product(models.Model):
         upload_to='products/', null=False, blank=False, default=''
     )
     description = models.TextField()
-    calories = models.PositiveIntegerField()
+    calories = models.PositiveIntegerField(null=True, blank=True)
     quantity = models.PositiveIntegerField(default=0)
     price = models.PositiveIntegerField()
     customize = models.TextField(null=True, blank=True)
