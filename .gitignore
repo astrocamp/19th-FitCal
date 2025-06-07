@@ -25,3 +25,6 @@ staticfiles
 
 # Others
 .DS_Store
+
+# Google Cloud Gemini API Key
+gemini-key.json
