@@ -1,3 +1,11 @@
+<!-- Status filter -->
+<div class="mb-4 flex flex-wrap gap-2">
+  <a href="?tab={{ tab }}&status=ALL" class="px-4 py-2 text-sm font-medium rounded-md {% if not current_status %}bg-blue-100 text-blue-700{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"> 全部 </a>
+  {% for status_value, status_label in status_choices %}
+  <a href="?tab={{ tab }}&status={{ status_value }}" class="px-4 py-2 text-sm font-medium rounded-md {% if current_status == status_value %}bg-blue-100 text-blue-700{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"> {{ status_label }} </a>
+  {% endfor %}
+</div>
+
 <!-- 訂單清單 -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-3">
   {% for order in orders %}
