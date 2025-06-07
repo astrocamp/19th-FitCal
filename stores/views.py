@@ -15,6 +15,7 @@ from django.utils.timezone import now
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
+from orders.enums import OrderStatus
 from orders.models import Order
 from products.models import Product
 
@@ -205,6 +206,7 @@ def store_management(request):
 def order_list(request, id):
     store = get_object_or_404(Store, id=id)
 
+    status = request.GET.get('status', '')
     tab = request.GET.get('tab', 'today')
     today = date.today()
 
@@ -221,6 +223,10 @@ def order_list(request, id):
             '-created_at'
         )
 
+    # Apply status filter after tab filter
+    if status and status != 'ALL':
+        orders = orders.filter(order_status=status)
+
     # Pagination
     paginator = Paginator(orders, 10)  # 每頁10筆
     page_number = request.GET.get('page', 1)
@@ -229,6 +235,8 @@ def order_list(request, id):
     context = {
         'orders': page_obj,
         'tab': tab,
+        'current_status': status,
+        'status_choices': OrderStatus.choices,
         'paginator': paginator,
         'page_obj': page_obj,
     }
