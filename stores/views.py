@@ -4,6 +4,7 @@ from decimal import ROUND_HALF_UP, Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Avg, Count, F, Prefetch, Sum
 from django.db.models.functions import TruncDate
@@ -220,17 +221,22 @@ def order_list(request, id):
             '-created_at'
         )
 
-    if request.headers.get('HX-Request') == 'true':
-        return render(
-            request,
-            'shared/orders/_order_list.html',
-            {
-                'orders': orders,
-                'tab': tab,
-            },
-        )
+    # Pagination
+    paginator = Paginator(orders, 10)  # 每頁10筆
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
 
-    return render(request, 'stores/orders.html', {'orders': orders, 'tab': tab})
+    context = {
+        'orders': page_obj,
+        'tab': tab,
+        'paginator': paginator,
+        'page_obj': page_obj,
+    }
+
+    if request.headers.get('HX-Request') == 'true':
+        return render(request, 'shared/orders/_order_list.html', context)
+
+    return render(request, 'stores/orders.html', context)
 
 
 def new_category(request, store_id):

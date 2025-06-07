@@ -47,4 +47,28 @@
   <!-- Scroll indicators -->
   <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none md:hidden"></div>
   <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none md:hidden"></div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+  <div class="flex items-center justify-between bg-white px-4 py-3 sm:px-6 mt-4 rounded-lg shadow">
+    <div>
+      <p class="text-sm text-gray-700">
+        顯示第
+        <span class="font-medium">{{ page_obj.start_index }}</span>
+        至
+        <span class="font-medium">{{ page_obj.end_index }}</span>
+        筆，共
+        <span class="font-medium">{{ paginator.count }}</span>
+        筆訂單
+      </p>
+    </div>
+    <div class="flex gap-2">
+      {% if page_obj.has_previous %}
+      <a href="?tab={{ tab }}&page={{ page_obj.previous_page_number }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"> 上一頁 </a>
+      {% endif %} {% if page_obj.has_next %}
+      <a href="?tab={{ tab }}&page={{ page_obj.next_page_number }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"> 下一頁 </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
 </div>
