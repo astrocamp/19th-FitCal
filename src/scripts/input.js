@@ -4,6 +4,7 @@ import flatpickr from 'flatpickr';
 import htmx from 'htmx.org';
 import cartItem from './carts/cartItemEdit.js';
 import { initPickupTimePicker } from './flatpickr/main.js';
+import storeDistance from './geocoding/storeDistance.js';
 import { searchFormComponent } from './searchForm.js';
 import { copyToClipboard } from './utils/clipboard.js';
 Chart.register(...registerables);
@@ -26,5 +27,5 @@ initPickupTimePicker('#id_date_of_birth', 'cool_style', {
 });
 
 window.cartItem = cartItem;
-
+Alpine.data('storeDistance', storeDistance);
 Alpine.start();

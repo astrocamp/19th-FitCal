@@ -17,4 +17,5 @@ urlpatterns = [
     path('search/', include('search.urls', namespace='search')),
     path('payment/', include('payment.urls', namespace='payment')),
     path('chatbot/', include('chatbot.urls', namespace='chatbot')),
+    path('locations/', include('locations.urls', namespace='locations')),
 ]

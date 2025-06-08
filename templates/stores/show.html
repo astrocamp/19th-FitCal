@@ -13,8 +13,8 @@
         <span class="text-yellow-500">{{ store.avg_rating|floatformat:1 }} ⭐ </span>
       </div>
       <div class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
-      <div class="text-sm text-gray-600">
-        <span>距離：2.1 公里</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
+      <div class="text-sm text-gray-600" x-data="storeDistance('{{ store.id }}','{% url 'locations:store_distance' %}')" x-init="fetchDistance()">
+        <span x-text="displayText"></span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.address }}+{{ store.name }}" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
         <a href="tel:{{ store.phone_number|cut:'-' }}" class="font-bold text-blue-600 hover:underline">{{ store.phone_number }}</a>
       </div>
     </div>
@@ -27,18 +27,4 @@
   {% csrf_token %}
   <button type="submit" class="btn">刪除帳號</button>
 </form>
-<a hx-get="{% url 'stores:new_category' store.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="btn btn-primary">新增類別</a>
-
-{% for c in categories %}
-<a hx-get="{% url 'stores:show_category' c.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="cursor-pointer">
-  <span class="p-1 border-2 border-green-500 rounded-sm m-2">
-    <i class="fa-solid fa-tags" style="color: #22c55e"></i>
-    {{ c }}
-  </span>
-</a>
-{% empty %}
-<span>暫無分類</span>
-{% endfor %}
-<hr />
-<a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a><br />
 {% endif %} {% endblock main %}

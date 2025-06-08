@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
+from locations.views import add_location
 from stores.forms import StoreForm
 
 from .forms import UserForm
@@ -102,7 +103,7 @@ def create_user_store(req):
         store = storeform.save(commit=False)
         store.user = user
         store.save()
-
+        add_location(store, store.address)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(req, user)
         return redirect('stores:index')
