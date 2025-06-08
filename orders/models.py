@@ -6,7 +6,7 @@ from django.db import models
 
 from products.models import Product
 
-from .enums import OrderStatus, PaymentMethod, PaymentStatus
+from .enums import CancelBy, OrderStatus, PaymentMethod, PaymentStatus
 from .fsm import OrderFSM
 from .utils import get_order_number, get_pickup_number
 
@@ -49,6 +49,10 @@ class Order(models.Model):
 
     products = models.ManyToManyField(
         Product, through='orders.OrderItem', related_name='ordered_in'
+    )
+
+    canceled_by = models.CharField(
+        max_length=10, choices=CancelBy.choices, null=True, blank=True
     )
 
     # 快照

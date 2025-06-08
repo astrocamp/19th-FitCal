@@ -21,3 +21,9 @@ class PaymentStatus(models.TextChoices):
     UNPAID = 'UNPAID', '未付款'
     PAID = 'PAID', '已付款'
     REFUNDED = 'REFUNDED', '已退款'
+
+
+class CancelBy(models.TextChoices):
+    MEMBER = 'MEMBER', '會員取消'
+    STORE = 'STORE', '店家取消'
+    SYSTEM = 'SYSTEM', '系統自動取消'

@@ -7,7 +7,7 @@ import requests
 from django.db import connection
 from django.utils.timezone import localtime, now
 
-from .enums import OrderStatus
+from .enums import CancelBy, OrderStatus
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -137,7 +137,23 @@ def build_line_order_status_message(order):
     lines = []
 
     if order.order_status == OrderStatus.CANCELED:
-        lines.extend([f'❌ 您的訂單 #{order.order_number} 已取消'])
+        # 根據取消來源建立不同訊息
+        if order.canceled_by == CancelBy.MEMBER:
+            lines.extend([f'❌ 您已取消訂單 #{order.order_number}'])
+        elif order.canceled_by == CancelBy.STORE:
+            lines.extend(
+                [
+                    f'❌ 很抱歉，店家已取消您的訂單 #{order.order_number}\n'
+                    '如有疑問請直接聯繫店家'
+                ]
+            )
+        elif order.canceled_by == CancelBy.SYSTEM:
+            lines.extend(
+                [
+                    f'❌ 您的訂單 #{order.order_number} 已被系統自動取消\n'
+                    '原因：超過取餐時間未取餐',
+                ]
+            )
 
     elif order.order_status == OrderStatus.READY:
         lines.extend(

@@ -7,6 +7,7 @@ from django.views.decorators.http import condition
 
 from carts.models import Cart
 
+from .enums import CancelBy, OrderStatus
 from .forms import OrderForm
 from .models import Order, OrderItem, PendingOrder
 from .services import OrderService
@@ -180,18 +181,26 @@ def show(req, id):
 def cancel(request, id):
     """取消訂單"""
     service = OrderService(id)
+    order = get_object_or_404(Order, id=id)
 
     by_store = False
     if hasattr(request.user, 'store') and request.user.store:
         by_store = True
+        order.canceled_by = CancelBy.STORE
+    elif hasattr(request.user, 'member') and request.user.member:
+        order.canceled_by = CancelBy.MEMBER
 
     success = service.cancel_order(by_store=by_store)
-    order = get_object_or_404(Order, id=id)
 
     if success:
+        order.order_status = OrderStatus.CANCELED
+        order.save()
         messages.success(request, '訂單已取消')
     else:
         messages.error(request, '此訂單無法取消')
+
+    # 重新獲取訂單以確保狀態正確
+    order.refresh_from_db()
 
     return render(
         request, 'shared/orders/partial_order_status_response.html', {'order': order}
