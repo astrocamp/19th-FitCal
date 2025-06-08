@@ -26,7 +26,7 @@ def index(request):
 
         if max_calories.isdigit() and int(max_calories) > 0:
             products = products.filter(calories__lte=int(max_calories))
-            stores = None
+            stores = Store.objects.none()
 
     if max_calories.isdigit() and int(max_calories) > 0:
         products = products.filter(calories__lte=int(max_calories))
