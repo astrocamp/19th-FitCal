@@ -3,7 +3,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-from .enums import OrderStatus
+from .enums import CancelBy, OrderStatus
 from .models import Order
 from .utils import (
     build_line_order_created_message,
@@ -46,6 +46,7 @@ def handle_order_status_change(sender, instance, **kwargs):
         and instance.pickup_time < timezone.now() - timezone.timedelta(hours=24)
     ):
         instance.order_status = OrderStatus.CANCELED
+        instance.canceled_by = CancelBy.SYSTEM
 
 
 @receiver(post_save, sender=Order)
@@ -74,11 +75,14 @@ def handle_order_notifications(sender, instance, created, **kwargs):
         account = SocialAccount.objects.get(user=user, provider='line')
         line_user_id = account.uid
 
-        if instance.order_status in [
-            OrderStatus.CANCELED,
-            OrderStatus.READY,
-            OrderStatus.COMPLETED,
-        ]:
+        # 如果是取消狀態，只在有明確的取消來源時才發送通知
+        if instance.order_status == OrderStatus.CANCELED:
+            if instance.canceled_by:  # 只有在有取消來源時才發送
+                message = build_line_order_status_message(instance)
+                push_line_message(line_user_id, message)
+
+        # 其他狀態正常發送
+        elif instance.order_status in [OrderStatus.READY, OrderStatus.COMPLETED]:
             message = build_line_order_status_message(instance)
             push_line_message(line_user_id, message)
 
