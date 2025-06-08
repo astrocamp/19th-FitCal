@@ -7,16 +7,49 @@
 <form action="{% url 'products:index' %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <input type="hidden" name="store_id" value="{{ store.id }}" />
-  {% for field in form %}
-  <div>
-    {{ field.label_tag }} {{ field }}{% if field.errors %}
-    <div style="color: red">{{ field.errors }}</div>
-    {% endif %}
-  </div>
-  {% endfor %}
-  <div>
-    <input type="submit" value="新增商品" class="btn" />
+
+  {# 將整個表單內容包裝在 Alpine.js 的 x-data 中 #}
+  <div x-data="formLogic()">
+    {% for field in form %}
+    <div>
+      {{ field.label_tag }} {# 特殊處理 'calories' 欄位，使其能與 AI 估算結果互動 #} {% if field.name == 'calories' %} {# 使用 Alpine.js 的 :value 綁定 AI 估算結果，並允許手動修改 #} {# id="{{ field.id_for_label }}" 和 name="{{ field.name }}" 確保它保持 Django 表單預期的 ID 和名稱 #} {# :value="estimatedCalories || '{{ field.value|default:'' }}'" 讓輸入框優先顯示 AI 估算值，若無則顯示 Django 表單的預設值 #} {# @input="estimatedCalories = $event.target.value" 讓手動修改時，Alpine.js 的 estimatedCalories 狀態也能同步更新 #}
+      <input type="number" id="{{ field.id_for_label }}" name="{{ field.name }}" :value="estimatedCalories || '{{ field.value|default:'' }}'" @input="estimatedCalories = $event.target.value" class="{{ field.css_classes }}" /> {# 保持原本的 CSS class #} {# 特殊處理 'image' 欄位，整合圖片預覽和卡路里估算按鈕 #} {% elif field.name == 'image' %} {# 這裡放 Django 渲染的圖片輸入框本身 #} {{ field }} {# 將圖片預覽和估算按鈕放在圖片輸入框下方或旁邊 #}
+      <div class="mt-1 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md" @dragover.prevent @drop="handleFileDrop($event)">
+        <template x-if="imagePreview">
+          <img :src="imagePreview" alt="圖片預覽" class="mx-auto h-48 w-48 object-cover rounded-md mb-4" />
+        </template>
+        <template x-if="!imagePreview">
+          <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </template>
+        <div class="flex text-sm text-gray-600 mt-2">
+          <p class="pl-1" x-text="fileName ? '已選擇: ' + fileName : '拖放檔案到這裡'"></p>
+        </div>
+        <p class="text-xs text-gray-500">PNG, JPG, GIF 最高 10MB</p>
+      </div>
+
+      {# 卡路里估算按鈕，放在圖片上傳區塊內部 #}
+      <button type="button" class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" x-show="imagePreview && !loadingEstimation" @click="estimateCalories()" x-text="loadingEstimation ? '估算中...' : '估算卡路里'" :disabled="loadingEstimation"></button>
+      <p x-show="loadingEstimation" class="mt-2 text-green-600">AI 正在努力估算中，請稍候...</p>
+
+      {# 錯誤或提示訊息 #}
+      <p x-show="estimatedCalories === 0 && !loadingEstimation && imageFile" class="mt-2 text-red-600">未能從圖片中估算出卡路里，請手動輸入或嘗試其他圖片。</p>
+      {% else %} {# 其他欄位照常渲染 #} {{ field }} {% endif %} {% if field.errors %}
+      <div style="color: red">{{ field.errors }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    <div>
+      <input type="submit" value="新增商品" class="btn" />
+    </div>
   </div>
 </form>
 
-{% endblock main %}
+{% endblock main %} {% block extra_js %}
+<script>
+  // 定義一個全域變數來儲存 API 的 URL
+  const ESTIMATE_CALORIES_API_URL = "{% url 'estimate_calories_api' %}";
+</script>
+{% endblock extra_js %}
