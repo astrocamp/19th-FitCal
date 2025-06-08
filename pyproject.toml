@@ -13,11 +13,13 @@ dependencies = [
     "django-storages>=1.14.6",
     "pillow>=11.2.1",
     "openai>=1.79.0",
+    "geopy>=2.4.1",
     "psycopg[binary]>=3.2.7",
     "django-widget-tweaks>=1.5.0",
     "celery>=5.5.2",
     "redis>=6.2.0",
     "django-anymail[mailgun]>=13.0",
+    "gdal>=3.10.2",
 ]
 
 [dependency-groups]
@@ -27,6 +29,22 @@ dev = [
     "django-debug-toolbar>=5.2.0",
     "whitenoise>=6.9.0",
 ]
+
+[tool.uv.sources]
+gdal = [
+  { index = "gdal-wheels", marker = "sys_platform == 'linux'" },
+  { index = "geospatial_wheels", marker = "sys_platform == 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "geospatial_wheels"
+url = "https://nathanjmcdougall.github.io/geospatial-wheels-index/"
+explicit = true
+
+[[tool.uv.index]]
+name = "gdal-wheels"
+url = "https://gitlab.com/api/v4/projects/61637378/packages/pypi/simple"
+explicit = true
 
 # ruff設定
 [tool.ruff]
