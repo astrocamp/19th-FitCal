@@ -3,6 +3,7 @@ from django.contrib.auth.password_validation import (
     UserAttributeSimilarityValidator,
 )
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomCommonPasswordValidator(CommonPasswordValidator):
@@ -10,7 +11,7 @@ class CustomCommonPasswordValidator(CommonPasswordValidator):
         try:
             super().validate(password, user)
         except ValidationError:
-            raise ValidationError('這個密碼太常見，駭客都會背了~請換一組密碼！')
+            raise ValidationError(_('這個密碼太常見，駭客都會背了~請換一組密碼！'))
 
 
 class CustomUserAttributeSimilarityValidator(UserAttributeSimilarityValidator):
@@ -18,4 +19,4 @@ class CustomUserAttributeSimilarityValidator(UserAttributeSimilarityValidator):
         try:
             super().validate(password, user)
         except ValidationError:
-            raise ValidationError('密碼與你的email帳號太相似了~請換一組')
+            raise ValidationError(_('密碼與你的email帳號太相似了~請換一組'))
