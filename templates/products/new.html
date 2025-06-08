@@ -1,4 +1,4 @@
-{% extends "layouts/default.html" %} {% block main %}
+{% extends "layouts/default.html" %} {% load static %} {% block main %}
 <h3>為「{{ store.name}}」新增商品</h3>
 
 <a href="{% url 'products:index' %}" class="btn">回商品首頁</a>
@@ -12,8 +12,8 @@
   <div x-data="formLogic()">
     {% for field in form %}
     <div>
-      {{ field.label_tag }} {# 特殊處理 'calories' 欄位，使其能與 AI 估算結果互動 #} {% if field.name == 'calories' %} {# 使用 Alpine.js 的 :value 綁定 AI 估算結果，並允許手動修改 #} {# id="{{ field.id_for_label }}" 和 name="{{ field.name }}" 確保它保持 Django 表單預期的 ID 和名稱 #} {# :value="estimatedCalories || '{{ field.value|default:'' }}'" 讓輸入框優先顯示 AI 估算值，若無則顯示 Django 表單的預設值 #} {# @input="estimatedCalories = $event.target.value" 讓手動修改時，Alpine.js 的 estimatedCalories 狀態也能同步更新 #}
-      <input type="number" id="{{ field.id_for_label }}" name="{{ field.name }}" :value="estimatedCalories || '{{ field.value|default:'' }}'" @input="estimatedCalories = $event.target.value" class="{{ field.css_classes }}" /> {# 保持原本的 CSS class #} {# 特殊處理 'image' 欄位，整合圖片預覽和卡路里估算按鈕 #} {% elif field.name == 'image' %} {# 這裡放 Django 渲染的圖片輸入框本身 #} {{ field }} {# 將圖片預覽和估算按鈕放在圖片輸入框下方或旁邊 #}
+      {{ field.label_tag }} {# 特殊處理 'calories' 欄位，使其能與 AI 估算結果互動 #} {% if field.name == 'calories' %} {# 使用 Alpine.js 的 :value 綁定 AI 估算結果，並允許手動修改 #} {# id="{{ field.id_for_label }}" 和 name="{{ field.name }}" 確保它保持 Django 表單預期的 ID 和名稱 #} {# :value="estimatedCalories === null ? '{{ field.value|default:'' }}' : estimatedCalories" 讓輸入框優先顯示 AI 估算值 (若有)，若無則顯示 Django 表單的預設值 #} {# @input="estimatedCalories = $event.target.value" 讓手動修改時，Alpine.js 的 estimatedCalories 狀態也能同步更新 #}
+      <input type="number" id="{{ field.id_for_label }}" name="{{ field.name }}" :value="estimatedCalories === null ? '{{ field.value|default:'' }}' : estimatedCalories" @input="estimatedCalories = $event.target.value" class="{{ field.css_classes }}" /> {# 保持原本的 CSS class #} {# 特殊處理 'image' 欄位，整合圖片預覽和卡路里估算按鈕 #} {% elif field.name == 'image' %} {# 這裡放 Django 渲染的圖片輸入框本身 #} {{ field }} {# 將圖片預覽和估算按鈕放在圖片輸入框下方或旁邊 #}
       <div class="mt-1 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md" @dragover.prevent @drop="handleFileDrop($event)">
         <template x-if="imagePreview">
           <img :src="imagePreview" alt="圖片預覽" class="mx-auto h-48 w-48 object-cover rounded-md mb-4" />
@@ -33,8 +33,9 @@
       <button type="button" class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" x-show="imagePreview && !loadingEstimation" @click="estimateCalories()" x-text="loadingEstimation ? '估算中...' : '估算卡路里'" :disabled="loadingEstimation"></button>
       <p x-show="loadingEstimation" class="mt-2 text-green-600">AI 正在努力估算中，請稍候...</p>
 
-      {# 錯誤或提示訊息 #}
-      <p x-show="estimatedCalories === 0 && !loadingEstimation && imageFile" class="mt-2 text-red-600">未能從圖片中估算出卡路里，請手動輸入或嘗試其他圖片。</p>
+      {# 錯誤或提示訊息 #} {# 調整 x-show 條件，使其在 estimatedCalories 為 null 且非載入中時顯示「未能估算」 #}
+      <p x-show="estimatedCalories === null && !loadingEstimation && imageFile" class="mt-2 text-red-600">未能從圖片中估算出卡路里，請手動輸入或嘗試其他圖片。</p>
+
       {% else %} {# 其他欄位照常渲染 #} {{ field }} {% endif %} {% if field.errors %}
       <div style="color: red">{{ field.errors }}</div>
       {% endif %}
@@ -52,4 +53,6 @@
   // 定義一個全域變數來儲存 API 的 URL
   const ESTIMATE_CALORIES_API_URL = "{% url 'estimate_calories_api' %}";
 </script>
+{# 載入您的 form_logic.js 檔案，確保它在 ESTIMATE_CALORIES_API_URL 定義之後 #}
+<script src="{% static 'assets/scripts/form_logic.js' %}"></script>
 {% endblock extra_js %}

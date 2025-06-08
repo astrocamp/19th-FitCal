@@ -2,17 +2,18 @@
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('formLogic', () => ({
-    // ... (其他狀態變數和 init 函數保持不變) ...
     imagePreview: '',
     imageFile: null,
     loadingEstimation: false,
-    estimatedCalories: '',
+    estimatedCalories: null,
     fileName: '',
 
     init() {
+      console.log('formLogic: init() 函式被呼叫'); // --- 添加此日誌 ---
+
       const caloriesInput = document.getElementById('id_calories');
       if (caloriesInput && caloriesInput.value) {
-        this.estimatedCalories = caloriesInput.value;
+        this.estimatedCalories = parseFloat(caloriesInput.value) || null;
       }
 
       const imageInput = document.getElementById('id_image');
@@ -23,26 +24,52 @@ document.addEventListener('alpine:init', () => {
           this.fileName = urlParts[urlParts.length - 1];
         }
 
+        // 檢查監聽器是否已經存在（儘管 Alpine 通常會處理這個）
+        // 如果 init() 執行多次，這行程式碼是重複監聽器的常見原因。
         imageInput.addEventListener('change', (event) => {
-          this.handleFileChange(event.target.files[0]);
+          console.log('formLogic: imageInput change 事件被觸發'); // --- 添加此日誌 ---
+          this.handleFileChange(event.target.files[0], imageInput);
         });
       }
     },
 
-    handleFileChange(file) {
+    handleFileChange(file, inputElement = null) {
+      console.log('formLogic: handleFileChange() 函式被呼叫，檔案:', file ? file.name : 'null'); // --- 添加此日誌 ---
       if (file) {
         this.imageFile = file;
         this.fileName = file.name;
+
+        let targetInput = inputElement;
+        if (!targetInput) {
+          targetInput = document.getElementById('id_image');
+        }
+
+        if (targetInput) {
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          targetInput.files = dataTransfer.files;
+        }
+
         const reader = new FileReader();
         reader.onload = (e) => {
           this.imagePreview = e.target.result;
         };
         reader.readAsDataURL(file);
+        this.estimatedCalories = null;
       } else {
         this.imageFile = null;
         this.imagePreview = '';
         this.fileName = '';
-        this.estimatedCalories = '';
+        this.estimatedCalories = null;
+
+        let targetInput = inputElement;
+        if (!targetInput) {
+          targetInput = document.getElementById('id_image');
+        }
+        if (targetInput) {
+          targetInput.value = '';
+        }
+
         const caloriesInput = document.getElementById('id_calories');
         if (caloriesInput) caloriesInput.value = '';
       }
@@ -50,47 +77,41 @@ document.addEventListener('alpine:init', () => {
 
     handleFileDrop(event) {
       event.preventDefault();
+      console.log('formLogic: handleFileDrop() 函式被呼叫'); // --- 添加此日誌 ---
       const file = event.dataTransfer.files[0];
       if (file) {
-        this.handleFileChange(file);
+        const imageInput = document.getElementById('id_image');
+        this.handleFileChange(file, imageInput);
       }
     },
 
-    /**
-     * 執行卡路里估算，透過 Fetch API 與後端 AI 服務互動
-     */
     async estimateCalories() {
+      console.log('formLogic: estimateCalories() 函式被呼叫'); // --- 添加此關鍵日誌 ---
+
       if (!this.imageFile) {
         alert('請先選擇一張圖片才能估算卡路里！');
         return;
       }
 
       this.loadingEstimation = true;
-      this.estimatedCalories = '';
+      this.estimatedCalories = null;
 
       try {
-        // --- 關鍵修改從這裡開始 ---
         const base64Image = await new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = (e) => {
-            // 當讀取完成時，解析 Base64 字串並 resolve Promise
             const result = e.target.result;
-            // 從完整的 Data URL 中提取純粹的 Base64 字串
             const pureBase64 = result.split(',')[1];
             resolve(pureBase64);
           };
           reader.onerror = (error) => {
-            // 如果讀取失敗，reject Promise
             reject(error);
           };
-          reader.readAsDataURL(this.imageFile); // 開始讀取檔案
+          reader.readAsDataURL(this.imageFile);
         });
-        // --- 關鍵修改到這裡結束 ---
 
-        const mimeType = this.imageFile.type; // 獲取圖片的 MIME 類型
+        const mimeType = this.imageFile.type;
 
-        // 使用原生的 Fetch API 發送 POST 請求到後端 API
-        // ESTIMATE_CALORIES_API_URL 變數應在 HTML 模板中定義 (請確保其存在)
         const response = await fetch(ESTIMATE_CALORIES_API_URL, {
           method: 'POST',
           headers: {
@@ -99,7 +120,7 @@ document.addEventListener('alpine:init', () => {
             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
           },
           body: JSON.stringify({
-            image_base64: base64Image, // 現在這裡的 base64Image 確定會有值
+            image_base64: base64Image,
             mime_type: mimeType,
           }),
         });
@@ -107,28 +128,32 @@ document.addEventListener('alpine:init', () => {
         const responseData = await response.json();
 
         if (response.ok && responseData.success) {
-          this.estimatedCalories = responseData.estimated_calories;
+          const estimatedValue = parseFloat(responseData.estimated_calories);
+          this.estimatedCalories = isNaN(estimatedValue) ? null : estimatedValue;
+
           const caloriesInput = document.getElementById('id_calories');
           if (caloriesInput) {
-            caloriesInput.value = responseData.estimated_calories;
+            caloriesInput.value = this.estimatedCalories !== null ? this.estimatedCalories : '';
           }
-          alert('卡路里估算完成！估算值：' + responseData.estimated_calories + ' kcal');
+          console.log('formLogic: API 估算成功，結果:', this.estimatedCalories); // --- 添加此日誌 ---
+          alert('卡路里估算完成！估算值：' + (this.estimatedCalories !== null ? this.estimatedCalories : 'N/A') + ' kcal');
         } else {
           const errorMessage = responseData.message || responseData.error || '未知錯誤。';
           console.error('API 估算失敗:', responseData);
           alert('卡路里估算失敗：' + errorMessage);
-          this.estimatedCalories = '';
+          this.estimatedCalories = null;
           const caloriesInput = document.getElementById('id_calories');
           if (caloriesInput) caloriesInput.value = '';
         }
       } catch (error) {
         console.error('估算卡路里時發生錯誤:', error);
         alert('卡路里估算服務暫時不可用，請稍後再試。');
-        this.estimatedCalories = '';
+        this.estimatedCalories = null;
         const caloriesInput = document.getElementById('id_calories');
         if (caloriesInput) caloriesInput.value = '';
       } finally {
         this.loadingEstimation = false;
+        console.log('formLogic: estimateCalories() 執行完畢'); // --- 添加此日誌 ---
       }
     },
   }));
