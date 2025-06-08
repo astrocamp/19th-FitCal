@@ -28,11 +28,8 @@
 
     {# --- 將共用腳本放在這裡，確保在 DOM 載入後執行 --- #}
     <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQGfgrR6EQK8TbtNDYg7HQePmcWMKvCQkTMkHTKfhtXMHT5xQZkOL/lmbGCdXzowuoxB9YfX4KrvB9YfX4KrvB/s" crossorigin="anonymous"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.14.4/dist/cdn.min.js"></script>
 
-    {# 這裡放頁面特定的 JS 變數或其他腳本，確保它們在 form_logic.js 之前載入 #} {% block extra_js %}{% endblock extra_js %} {# 載入 form_logic.js 一次就好 #}
-    <script src="{% static 'assets/scripts/form_logic.js' %}"></script>
-
-    {# 載入其他需要在所有頁面載入的通用腳本 #} {% block body_extra_scripts %}{% endblock %}
+    {# 這裡放頁面特定的 JS 變數或其他腳本，確保它們在 form_logic.js 之前載入 #} {% block extra_js %}{% endblock extra_js %} {# 載入其他需要在所有頁面載入的通用腳本 #} {% block body_extra_scripts %}{% endblock %}
   </body>
 </html>
