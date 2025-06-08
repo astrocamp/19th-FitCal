@@ -93,6 +93,7 @@ SOCIALACCOUNT_ADAPTER = 'users.adapters.MySocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGN = True
 
 MIDDLEWARE = [
+    'django.middleware.locale.LocaleMiddleware',  # 語言中介軟體
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -115,6 +116,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.i18n',  # 在模板中自動提供與多國語言（i18n）相關的變數與功能
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -203,13 +205,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
 
 USE_TZ = True
+
+LANGUAGE_CODE = 'zh-hant'
+
+USE_L10N = True
+
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -268,6 +276,7 @@ USE_I18N = True
 LANGUAGE_CODE = 'zh-hant'
 
 CELERY_BROKER_URL = env('REDIS_URL')
+
 # OPENAI KEY CHATBOT
 OPENAI_API_KEY = env('OPENAI_API_KEY')
 CELERY_BROKER_URL = env('REDIS_URL')
