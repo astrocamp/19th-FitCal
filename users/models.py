@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
@@ -23,13 +24,23 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser 必須設 is_superuser=True')
 
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(
+            email, password, **extra_fields
+        )  # 不影響運作可刪 create_superuser()
 
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        verbose_name=_('使用者的ID'),
+    )
     username = None  # 移除 username
-    email = models.EmailField(unique=True, help_text='example@mail.com')
+    email = models.EmailField(
+        unique=True, help_text='example@mail.com', verbose_name=_('電子郵件地址')
+    )
+
     ROLE_CHOICES = [
         ('member', 'Member'),
         ('store', 'Store'),
