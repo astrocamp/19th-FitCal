@@ -211,6 +211,7 @@ def store_management(request):
 
 @store_required
 def order_list(request, id):
+    # 確保從 URL 傳入的 id 獲取到 Store 物件
     store = get_object_or_404(Store, id=id)
 
     status = request.GET.get('status', '')
