@@ -22,6 +22,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
+from locations.views import add_location
 from orders.enums import OrderStatus
 from orders.models import Order
 from products.models import Product
@@ -108,6 +109,20 @@ def handle_public_view(request):
     return render(request, 'stores/index.html', context)
 
 
+@store_required
+def info(request):
+    store = request.user.store
+    form = StoreForm(instance=store)
+    return render(
+        request,
+        'stores/business/index.html',
+        {
+            'store': store,
+            'form': form,
+        },
+    )
+
+
 def show(req, id):
     store = get_object_or_404(Store, pk=id)
 
@@ -141,6 +156,7 @@ def show(req, id):
         form = StoreForm(req.POST, req.FILES, instance=store)
         if form.is_valid():
             form.save()
+            add_location(store, store.address)
             return redirect('stores:show', id=store.id)
         return render(req, 'stores/edit.html', {'store': store, 'form': form})
 

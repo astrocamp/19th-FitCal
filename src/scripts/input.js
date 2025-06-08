@@ -4,6 +4,7 @@ import flatpickr from 'flatpickr';
 import htmx from 'htmx.org';
 import cartItem from './carts/cartItemEdit.js';
 import { DatePicker } from './datePicker.js';
+import storeDistance from './geocoding/storeDistance.js';
 import { searchFormComponent } from './searchForm.js';
 import { initCategorySort } from './stores/categorySort.js';
 import { initProductSort } from './stores/productSort.js';
@@ -27,4 +28,5 @@ initCategorySort();
 initTabs();
 initCategorySidebarActive();
 
+Alpine.data('storeDistance', storeDistance);
 Alpine.start();

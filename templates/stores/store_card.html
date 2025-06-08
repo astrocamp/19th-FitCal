@@ -18,10 +18,8 @@
       <h2 class="text-lg font-semibold">{{ store.name }}</h2>
       <p class="text-sm text-gray-600">{{ store.address }}</p>
       <p class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</p>
-      <div class="flex items-center justify-between mt-2 text-sm text-gray-500">
-        <!-- 功能尚未導入
-            <span>距離：{{ store.distance }} 公里</span>
-            -->
+      <div class="flex items-center justify-between mt-2 text-sm text-gray-500" x-data="storeDistance('{{ store.id }}','{% url 'locations:store_distance' %}')" x-init="fetchDistance()">
+        <span x-text="displayText"></span>
         <span>⭐ {{ store.avg_rating|floatformat:1 }}</span>
       </div>
     </div>
