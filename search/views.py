@@ -13,12 +13,14 @@ def index(request):
     query = request.GET.get('q', '').strip()
     max_calories = request.GET.get('max_calories', '').strip()
 
-    stores = Store.objects.all()
-    products = Product.objects.select_related('store').order_by('store__name', 'name')
+    products = Store.objects.none()
+    stores = Store.objects.none()
 
     if query or (max_calories.isdigit() and int(max_calories) > 0):
         stores = Store.objects.all()
-        products = Product.objects.all()
+        products = Product.objects.select_related('store').order_by(
+            'store__name', 'name'
+        )
 
         if query:
             stores = stores.filter(name__icontains=query)
@@ -27,9 +29,6 @@ def index(request):
         if max_calories.isdigit() and int(max_calories) > 0:
             products = products.filter(calories__lte=int(max_calories))
             stores = Store.objects.none()
-
-    if max_calories.isdigit() and int(max_calories) > 0:
-        products = products.filter(calories__lte=int(max_calories))
 
     grouped_by_store = defaultdict(list)
     for product in products:
