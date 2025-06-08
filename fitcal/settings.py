@@ -86,6 +86,9 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 
+SOCIALACCOUNT_ADAPTER = 'users.adapters.MySocialAccountAdapter'
+SOCIALACCOUNT_AUTO_SIGN = True
+
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -144,7 +147,16 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': env('SOCIAL_AUTH_LINE_CHANNEL_ID'),
             'secret': env('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
         },
-        'SCOPE': ['profile', 'openid', 'email'],
+        'SCOPE': [
+            'profile',
+            'openid',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'response_type': 'code',
+            'prompt': 'consent',
+        },
+        'REDIRECT_URI': '/',  # 必要時填
     },
 }
 
@@ -152,7 +164,6 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 # OAUTH_PKCE_ENABLED: True
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
     'http://127.0.0.1:8000/accounts/google/login/callback/'
-    'http://localhost:8000/accounts/google/login/callback/'
 )
 
 
