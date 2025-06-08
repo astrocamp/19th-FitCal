@@ -21,6 +21,9 @@
           <i class="fas fa-chevron-right text-gray-500"></i>
         </li>
         {% endfor %}
+        <li hx-get="{% url 'stores:non_category_products' store.id %}" hx-target="#product-list" hx-swap="innerHTML" class="flex justify-between items-center bg-white px-3 py-2 rounded border hover:bg-gray-100 cursor-pointer">
+          <span class="text-gray-800 font-medium">待分類</span>
+        </li>
       </ul>
     </div>
 

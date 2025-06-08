@@ -68,7 +68,7 @@ def create(request, category_id):
         category = get_object_or_404(
             Category.objects.prefetch_related('products'), id=category_id
         )
-        products = category.products.all()
+        products = category.products.filter(store=request.user.store)
         return render(
             request,
             'shared/business/products/create_success.html',
@@ -97,11 +97,11 @@ def update(request, id):
     form = ProductForm(request.POST, request.FILES, instance=product)
     if form.is_valid():
         form = form.save(commit=False)
-        form.store = request.user.store
+        # form.store = request.user.store
         form.save()
         category = product.category
         products = Product.objects.prefetch_related('category').filter(
-            category=category
+            category=category, store=request.user.store
         )
         return render(
             request,
@@ -119,7 +119,9 @@ def delete(request, id):
     product = get_object_or_404(Product, pk=id)
     category = product.category
     product.delete()
-    products = Product.objects.prefetch_related('category').filter(category=category)
+    products = Product.objects.prefetch_related('category').filter(
+        category=category, store=request.user.store
+    )
     return render(
         request,
         'stores/business/product_list.html',

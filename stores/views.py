@@ -310,7 +310,7 @@ def management(request):
             queryset=Category.objects.prefetch_related(
                 'products'
             ),  # 對每個 Category 預抓 products
-        )
+        ),
     ).get(id=store.id)
     categories = store.categories.order_by('name')
     selected_category = categories.first() if categories.exists() else None
@@ -328,15 +328,29 @@ def management(request):
 
 
 @store_required
-def category_products(request, store_id, category_id):
+def category_products(request, store_id, category_id=None):
     store = get_object_or_404(Store, id=store_id)
-    category = get_object_or_404(Category, id=category_id, store=store)
-    products = category.products.all()
-    return render(
-        request,
-        'stores/business/product_list.html',
-        {'store': store, 'category': category, 'products': products},
-    )
+    # 空類別商品的篩選
+    uncategorized_products = Product.objects.filter(store=store, category__isnull=True)
+    # 用 prefetch_related 搭配 Prefetch 並指定 to_attr 給 store 一個屬性存這筆資料
+    store = Store.objects.prefetch_related(
+        Prefetch('products', queryset=uncategorized_products, to_attr='uncat_products')
+    ).get(id=store.id)
+    if category_id:
+        category = get_object_or_404(Category, id=category_id, store=store)
+        products = store.products.filter(category=category)
+        return render(
+            request,
+            'stores/business/product_list.html',
+            {'category': category, 'products': products},
+        )
+    else:
+        products = store.uncat_products
+        return render(
+            request,
+            'stores/business/product_list.html',
+            {'category': '', 'products': products},
+        )
 
 
 def businesses_dashboard(request, store_id):

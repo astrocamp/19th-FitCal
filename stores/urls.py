@@ -49,4 +49,9 @@ urlpatterns = [
         views.category_products,
         name='category_products',
     ),
+    path(
+        '<uuid:store_id>/products',
+        views.category_products,
+        name='non_category_products',
+    ),
 ]
