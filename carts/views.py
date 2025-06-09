@@ -92,12 +92,14 @@ def update_cart_item(req, item_id):
     except Exception:
         messages.error(req, '購物車更新失敗')
     innertext = f'{cart.total_price}'
+    total_calories = cart.total_calories
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
     return HttpResponse(
         f'{innertext}'
         + f"""
+        <span id="totalCalories" hx-swap-oob="true">{total_calories}</span>
         <div id="messages-container" hx-swap-oob="true">
             {messages_html}
         </div>

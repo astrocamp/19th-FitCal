@@ -35,6 +35,16 @@ class Cart(models.Model):
     def total_quantity(self):
         return self.items.aggregate(total=Sum('quantity'))['total'] or 0
 
+    # 計算總卡路里
+    @property
+    def total_calories(self):
+        return (
+            self.items.aggregate(total=Sum(F('quantity') * F('product__calories')))[
+                'total'
+            ]
+            or 0
+        )
+
 
 class CartItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
