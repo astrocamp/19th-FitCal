@@ -181,6 +181,7 @@ def delete_item_from_ordering(req, id):
     # 若還有商品，則更新總數與金額
     total_quantity = cart.total_quantity
     total_price = cart.total_price
+    total_calories = cart.total_calories
 
     messages.success(req, f'成功刪除 {product_name}')
     messages_html = render_to_string(
@@ -191,6 +192,7 @@ def delete_item_from_ordering(req, id):
         ''
         + f"""
         <div id="messages-container" hx-swap-oob="true">{messages_html}</div>
+        <span id="ordering_total_calories" hx-swap-oob="true">{total_calories} kcal</span>
         <span id="ordering_total_quantity" hx-swap-oob="true">商品 X {total_quantity}</span>
         <span id="ordering_total_price_brief" hx-swap-oob="true">$ {total_price}</span>
         <span id="ordering_total_price_final" hx-swap-oob="true">$ {total_price}</span>

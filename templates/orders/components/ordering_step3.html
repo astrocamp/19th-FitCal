@@ -42,7 +42,10 @@
         <span class="text-sm text-gray-900" x-text="paymentLabels[formData.payment_method]"></span>
       </div>
       <div class="flex items-center justify-between py-3">
-        <!-- Last item, no bottom border -->
+        <span class="text-sm text-gray-700">總卡路里</span>
+        <span class="text-sm font-semibold text-gray-900">{{ cart.total_calories }} kcal</span>
+      </div>
+      <div class="flex items-center justify-between py-3">
         <span class="text-sm text-gray-700">應付金額</span>
         <span class="text-sm font-semibold text-gray-900">$ {{ cart.total_price }}</span>
       </div>
