@@ -1,7 +1,8 @@
+{% load i18n %}
 <div hx-get="{% url 'products:show' product.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="bg-white rounded-xl shadow-md overflow-hidden relative cursor-pointer">
   <!-- 商品圖片 -->
   <div class="relative">
-    <img src="{{ product.image.url|default:'https://fakeimg.pl/400x250' }}" alt="商品圖片" class="w-full h-48 object-cover" />
+    <img src="{{ product.image.url|default:'https://fakeimg.pl/400x250' }}" alt="{% trans '商品圖片' %}" class="w-full h-48 object-cover" />
 
     <!-- 收藏按鈕 -->
     {% if user.is_authenticated %}
@@ -12,7 +13,7 @@
   <!-- 商品資訊 -->
   <div class="p-4">
     <h3 class="text-lg font-semibold">{{ product.name }}</h3>
-    <p class="text-sm text-gray-600">價格：${{ product.price }}</p>
-    <p class="text-sm text-gray-600">卡路里：{{ product.calories }} kcal</p>
+    <p class="text-sm text-gray-600">{% trans "價格：" %}${{ product.price }}</p>
+    <p class="text-sm text-gray-600">{% trans "卡路里：" %}{{ product.calories }} kcal</p>
   </div>
 </div>

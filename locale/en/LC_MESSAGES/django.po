@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 00:09+0800\n"
+"POT-Creation-Date: 2025-06-09 15:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,7 @@ msgstr ""
 msgid "商店"
 msgstr "Store"
 
-#: .\carts\forms.py:13 .\carts\models.py:13 .\orders\forms.py:26
-#: .\orders\models.py:45 .\orders\models.py:268
+#: .\carts\forms.py:13 .\orders\forms.py:26
 #: .\templates\components\order_info_table.html:28
 msgid "備註"
 msgstr "Note"
@@ -40,100 +39,22 @@ msgstr "Please enter a positive integer"
 msgid "產品"
 msgstr "Product"
 
-#: .\carts\forms.py:32 .\carts\models.py:68 .\orders\forms.py:136
-#: .\orders\models.py:214 .\templates\carts\show.html:44
+#: .\carts\forms.py:32 .\orders\forms.py:136 .\templates\carts\show.html:44
+#: .\templates\products\show.html:49
 msgid "數量"
 msgstr "Quantity"
 
-#: .\carts\forms.py:33 .\carts\models.py:69 .\products\forms.py:35
+#: .\carts\forms.py:33 .\products\forms.py:35 .\templates\products\show.html:25
 msgid "客製化"
 msgstr "Customization"
 
-#: .\carts\models.py:10
-msgid "購物車UUID"
-msgstr "Cart UUID"
-
-#: .\carts\models.py:12 .\members\models.py:57 .\orders\models.py:71
-#: .\orders\models.py:269 .\products\models.py:45 .\stores\models.py:84
-#: .\templates\components\order_info_table.html:33
-msgid "建立時間"
-msgstr "Created At"
-
-#: .\carts\models.py:18 .\members\models.py:101 .\members\models.py:119
-#: .\stores\models.py:78
-msgid "會員"
-msgstr "Member"
-
-#: .\carts\models.py:24 .\members\models.py:103 .\products\models.py:42
-#: .\stores\models.py:80 .\stores\models.py:103
-msgid "店家"
-msgstr "Store"
-
-#: .\carts\models.py:30
-msgid "購物車商品"
-msgstr "Cart Item"
-
-#: .\carts\models.py:57
-msgid "購物車商品UUID"
-msgstr "Cart Item UUID"
-
-#: .\carts\models.py:60
-msgid "購物車"
-msgstr "Cart"
-
-#: .\carts\models.py:66 .\members\models.py:121 .\orders\models.py:200
-msgid "商品"
-msgstr "Product"
-
-#: .\carts\views.py:22
-#, python-format
-msgid "商品庫存不足，僅剩 %(stock)d 件，您最多可加購 %(can_add)d 件"
-msgstr "Insufficient stock: only %(stock)d left. You can add up to %(can_add)d more."
-
-#: .\carts\views.py:50 .\carts\views.py:95
-msgid "購物車已更新"
-msgstr "Cart updated"
-
-#: .\carts\views.py:55
-msgid "購物車已新增"
-msgstr "Item added to cart"
-
-#: .\carts\views.py:60 .\carts\views.py:98
-msgid "購物車更新失敗"
-msgstr "Failed to update cart"
-
-#: .\carts\views.py:149
+#: .\carts\views.py:145
 msgid "購物車已清空"
 msgstr "Cart has been emptied"
 
-#: .\carts\views.py:156
-#, python-format
-msgid "%(product)s 已從購物車中刪除"
-msgstr "%(product)s has been removed from the cart"
-
-#: .\carts\views.py:168
-#, python-format
-msgid "小計：$%(subtotal)s"
-msgstr "Subtotal: $%(subtotal)s"
-
-#: .\carts\views.py:181
+#: .\carts\views.py:175
 msgid "購物車已清空，請重新選擇商品"
 msgstr "Cart is empty. Please select your items again"
-
-#: .\carts\views.py:190
-#, python-format
-msgid "成功刪除 %(product)s"
-msgstr "Successfully removed %(product)s"
-
-#: .\carts\views.py:199
-#, python-format
-msgid "商品 X %(quantity)s"
-msgstr "Item × %(quantity)s"
-
-#: .\carts\views.py:200 .\carts\views.py:201
-#, python-format
-msgid "$ %(price)s"
-msgstr "$%(price)s"
 
 #: .\common\decorator.py:29
 msgid "您不是會員，無法訪問此頁面"
@@ -159,15 +80,15 @@ msgstr "Please complete your store profile first"
 msgid "你沒有權限存取這個店家後台"
 msgstr "You do not have permission to access this store's dashboard"
 
-#: .\members\forms.py:22 .\members\models.py:38
+#: .\members\forms.py:22
 msgid "姓名"
 msgstr "Name"
 
-#: .\members\forms.py:23 .\stores\models.py:33
+#: .\members\forms.py:23
 msgid "電話"
 msgstr "Phone"
 
-#: .\members\forms.py:24 .\members\models.py:48
+#: .\members\forms.py:24
 msgid "性別"
 msgstr "Gender"
 
@@ -175,11 +96,11 @@ msgstr "Gender"
 msgid "生日"
 msgstr "Date of Birth"
 
-#: .\members\forms.py:26 .\members\models.py:52
+#: .\members\forms.py:26
 msgid "LINE ID"
 msgstr "LINE ID"
 
-#: .\members\forms.py:27 .\members\models.py:55
+#: .\members\forms.py:27
 msgid "Google ID"
 msgstr "Google ID"
 
@@ -231,50 +152,9 @@ msgstr "Female"
 msgid "不提供"
 msgstr "Prefer not to say"
 
-#: .\members\models.py:28
-msgid "會員UUID"
-msgstr "Member UUID"
-
-#: .\members\models.py:36
-msgid "使用者帳號"
-msgstr "User Account"
-
-#: .\members\models.py:41
+#: .\members\models.py:38
 msgid "手機號碼格式錯誤"
 msgstr "Invalid phone number format"
-
-#: .\members\models.py:50
-msgid "出生日期"
-msgstr "Date of Birth"
-
-#: .\members\models.py:58 .\orders\models.py:72 .\products\models.py:48
-#: .\stores\models.py:85
-msgid "更新時間"
-msgstr "Updated At"
-
-#: .\members\models.py:63 .\templates\members\favorite.html:2
-msgid "收藏的店家"
-msgstr "Favorited Stores"
-
-#: .\members\models.py:69
-msgid "訂購的店家"
-msgstr "Stores Ordered From"
-
-#: .\members\models.py:75 .\templates\members\collections.html:2
-msgid "收藏的商品"
-msgstr "Favorited Products"
-
-#: .\members\models.py:77 .\products\models.py:50 .\stores\models.py:42
-msgid "刪除時間"
-msgstr "Deleted At"
-
-#: .\members\models.py:79 .\stores\models.py:44
-msgid "刪除時的電子郵件"
-msgstr "Email at Deletion"
-
-#: .\members\models.py:104 .\members\models.py:123
-msgid "收藏時間"
-msgstr "Favorited At"
 
 #: .\members\views.py:29
 msgid "請檢查輸入內容"
@@ -345,22 +225,20 @@ msgstr "Refunded"
 msgid "預計取貨時間"
 msgstr "Estimated Pickup Time"
 
-#: .\orders\forms.py:27 .\orders\models.py:50
+#: .\orders\forms.py:27
 msgid "訂單狀態"
 msgstr "Order Status"
 
-#: .\orders\forms.py:28 .\orders\models.py:56
-#: .\templates\components\payment_info.html:7
+#: .\orders\forms.py:28 .\templates\components\payment_info.html:7
 #: .\templates\orders\components\ordering_step3.html:42
 msgid "付款方式"
 msgstr "Payment Method"
 
-#: .\orders\forms.py:29 .\orders\models.py:62
-#: .\templates\components\payment_info.html:11
+#: .\orders\forms.py:29 .\templates\components\payment_info.html:11
 msgid "付款狀態"
 msgstr "Payment Status"
 
-#: .\orders\forms.py:30 .\orders\models.py:69
+#: .\orders\forms.py:30
 msgid "總金額"
 msgstr "Total Amount"
 
@@ -380,112 +258,9 @@ msgstr "Pickup time cannot be more than 7 days from now"
 msgid "請選擇在原訂時間後2小時內的時間"
 msgstr "Please select a time within 2 hours after the original pickup time"
 
-#: .\orders\forms.py:135 .\orders\models.py:212
+#: .\orders\forms.py:135
 msgid "單價"
 msgstr "Unit Price"
-
-#: .\orders\models.py:17
-msgid "訂單UUID"
-msgstr "Order UUID"
-
-#: .\orders\models.py:24 .\orders\models.py:35 .\orders\models.py:83
-#: .\orders\models.py:265
-msgid "訂購者名稱"
-msgstr "Customer Name"
-
-#: .\orders\models.py:27
-msgid "取餐人員名稱"
-msgstr "Pickup Person Name"
-
-#: .\orders\models.py:42 .\orders\models.py:89 .\stores\forms.py:77
-#: .\stores\models.py:22 .\templates\users\sign_up_store.html:42
-msgid "店家名稱"
-msgstr "Store Name"
-
-#: .\orders\models.py:44 .\orders\models.py:267
-msgid "取餐時間"
-msgstr "Pickup Time"
-
-#: .\orders\models.py:74
-msgid "完成時間"
-msgstr "Completion Time"
-
-#: .\orders\models.py:86 .\orders\models.py:266
-msgid "訂購者電話"
-msgstr "Customer Phone"
-
-#: .\orders\models.py:92
-msgid "店家電話"
-msgstr "Store Phone"
-
-#: .\orders\models.py:95 .\templates\users\sign_up_store.html:47
-msgid "店家地址"
-msgstr "Store Address"
-
-#: .\orders\models.py:196
-msgid "訂單項目UUID"
-msgstr "Order Item UUID"
-
-#: .\orders\models.py:198
-msgid "訂單"
-msgstr "Order"
-
-#: .\orders\models.py:205 .\products\forms.py:28 .\products\models.py:23
-msgid "商品名稱"
-msgstr "Product Name"
-
-#: .\orders\models.py:220
-msgid "小計"
-msgstr "Subtotal"
-
-#: .\orders\models.py:263
-msgid "待處理訂單UUID"
-msgstr "Pending Order UUID"
-
-#: .\orders\models.py:270
-msgid "是否已處理"
-msgstr "Is Processed"
-
-#: .\orders\views.py:33 .\orders\views.py:124
-#, python-brace-format
-msgid "{cart_item.product.name} 庫存不足，請重新選擇數量"
-msgstr "{cart_item.product.name} is out of stock. Please select a different quantity."
-
-#: .\orders\views.py:96
-msgid "訂單建立成功"
-msgstr "Order created successfully"
-
-#: .\orders\views.py:183
-msgid "訂單已取消"
-msgstr "Order canceled"
-
-#: .\orders\views.py:185
-msgid "此訂單無法取消"
-msgstr "This order cannot be canceled"
-
-#: .\orders\views.py:200
-msgid "訂單開始準備中"
-msgstr "Order is now being prepared"
-
-#: .\orders\views.py:202
-msgid "此訂單無法開始準備"
-msgstr "This order cannot be prepared"
-
-#: .\orders\views.py:217
-msgid "訂單已準備完成"
-msgstr "Order marked as ready"
-
-#: .\orders\views.py:219
-msgid "此訂單無法標記為準備完成"
-msgstr "This order cannot be marked as ready"
-
-#: .\orders\views.py:234
-msgid "訂單已完成"
-msgstr "Order completed"
-
-#: .\orders\views.py:236
-msgid "此訂單無法標記為完成"
-msgstr "This order cannot be marked as completed"
 
 #: .\payment\views.py:30
 msgid "找不到訂單資訊"
@@ -531,11 +306,15 @@ msgstr "Current file"
 msgid "更新檔案"
 msgstr "Update file"
 
-#: .\products\forms.py:29 .\products\models.py:57
+#: .\products\forms.py:28
+msgid "商品名稱"
+msgstr "Product Name"
+
+#: .\products\forms.py:29
 msgid "商品類別"
 msgstr "Product category"
 
-#: .\products\forms.py:30 .\products\models.py:29
+#: .\products\forms.py:30 .\templates\products\product_card.html:5
 msgid "商品圖片"
 msgstr "Product image"
 
@@ -543,33 +322,18 @@ msgstr "Product image"
 msgid "商品介紹"
 msgstr "Product description"
 
-#: .\products\forms.py:32 .\products\models.py:32
+#: .\products\forms.py:32 .\templates\products\product_card.html:15
+#: .\templates\products\show.html:23
 msgid "卡路里"
 msgstr "Calories"
 
-#: .\products\forms.py:33
+#: .\products\forms.py:33 .\templates\products\show.html:24
 msgid "可販售數量"
 msgstr "Available quantity"
 
-#: .\products\forms.py:34 .\products\models.py:34
+#: .\products\forms.py:34 .\templates\products\product_card.html:14
 msgid "價格"
 msgstr "Price"
-
-#: .\products\models.py:21
-msgid "商品UUID"
-msgstr "Product UUID"
-
-#: .\products\models.py:31
-msgid "商品描述"
-msgstr "Product Description"
-
-#: .\products\models.py:33
-msgid "庫存數量"
-msgstr "Stock Quantity"
-
-#: .\products\models.py:35
-msgid "自訂選項"
-msgstr "Customization Options"
 
 #: .\products\views.py:22 .\products\views.py:45
 msgid "新增成功"
@@ -607,7 +371,11 @@ msgstr "Opening time cannot be empty"
 msgid "打烊時間不能空白"
 msgstr "Closing time cannot be empty"
 
-#: .\stores\forms.py:78 .\stores\models.py:32
+#: .\stores\forms.py:77 .\templates\users\sign_up_store.html:42
+msgid "店家名稱"
+msgstr "Store Name"
+
+#: .\stores\forms.py:78
 msgid "地址"
 msgstr "Address"
 
@@ -619,13 +387,11 @@ msgstr "Mobile number"
 msgid "統編"
 msgstr "Unified Business Number"
 
-#: .\stores\forms.py:81 .\stores\models.py:34
-#: .\templates\users\sign_up_store.html:62
+#: .\stores\forms.py:81 .\templates\users\sign_up_store.html:62
 msgid "開店時間"
 msgstr "Opening Time"
 
-#: .\stores\forms.py:82 .\stores\models.py:35
-#: .\templates\users\sign_up_store.html:67
+#: .\stores\forms.py:82 .\templates\users\sign_up_store.html:67
 msgid "打烊時間"
 msgstr "Closing Time"
 
@@ -669,33 +435,9 @@ msgstr "Please enter a valid Unified Business Number"
 msgid "評分（1~5 分）"
 msgstr "Rating (1–5 points)"
 
-#: .\stores\models.py:20
-msgid "使用者"
-msgstr "User"
-
-#: .\stores\models.py:24
-msgid "店家UUID"
-msgstr "Store UUID"
-
-#: .\stores\models.py:27
-msgid "封面圖片"
-msgstr "Cover Image"
-
 #: .\stores\models.py:30
-msgid "Logo圖片"
-msgstr "Logo Image"
-
-#: .\stores\models.py:38
 msgid "統編必須為8位數字"
 msgstr "Unified Business Number must be 8 digits"
-
-#: .\stores\models.py:82
-msgid "評分"
-msgstr "Rating"
-
-#: .\stores\models.py:105
-msgid "類別名稱"
-msgstr "Category Name"
 
 #: .\stores\views.py:35
 msgid "創建成功"
@@ -777,7 +519,7 @@ msgstr "View Details"
 msgid "是否要刪除？"
 msgstr "Are you sure you want to delete?"
 
-#: .\templates\carts\index.html:32
+#: .\templates\carts\index.html:32 .\templates\products\show.html:71
 msgid "刪除"
 msgstr "Delete"
 
@@ -789,7 +531,7 @@ msgstr "There are no items in your cart."
 msgid "新增商品到購物車"
 msgstr "Add Item to Cart"
 
-#: .\templates\carts\new.html:21
+#: .\templates\carts\new.html:21 .\templates\products\show.html:63
 msgid "加入購物車"
 msgstr "Add to Cart"
 
@@ -868,6 +610,10 @@ msgstr "Contact Number"
 msgid "取貨時間"
 msgstr "Pickup Time"
 
+#: .\templates\components\order_info_table.html:33
+msgid "建立時間"
+msgstr "Created At"
+
 #: .\templates\components\order_items.html:3
 msgid "商品明細"
 msgstr "Order Details"
@@ -907,7 +653,11 @@ msgstr "FitCal - Healthy Meal Ordering System Offering Convenient Online Orderin
 #: .\templates\layouts\business\default.html:8
 #: .\templates\layouts\default.html:8
 msgid "健康餐點,線上訂餐,外帶,健康飲食,便當,餐廳外送,健康餐盒,FitCal"
-msgstr "Healthy Meals, Online Ordering, Takeout, Healthy Diet, Bento, Restaurant,Delivery, Healthy Meal Boxes, FitCal"
+msgstr "Healthy Meals, Online Ordering, Takeout, Healthy Diet,Bento,Restaurant,Delivery, Healthy Meal Boxes, FitCal "
+
+#: .\templates\members\collections.html:2
+msgid "收藏的商品"
+msgstr "Favorited Products"
 
 #: .\templates\members\collections.html:8
 msgid "尚未收藏任何商品"
@@ -929,6 +679,10 @@ msgstr "Update"
 #: .\templates\members\edit.html:25 .\templates\members\new.html:25
 msgid "取消"
 msgstr "Cancel"
+
+#: .\templates\members\favorite.html:2
+msgid "收藏的店家"
+msgstr "Favorited Stores"
 
 #: .\templates\members\favorite.html:9
 msgid "目前尚未收藏任何店家。"
@@ -1130,7 +884,9 @@ msgid "不只能自由選餐、掌握每一口的卡路里，還能收藏最愛�
 msgstr "Customize your meals, track every calorie, save your favorite stores, and leave honest reviews."
 
 #: .\templates\pages\index.html:16
-msgid "店家也能靠後台報表看清賺錢關鍵，輕鬆管理菜單與訂單。從今天起，吃得聰明、活得漂亮！"
+msgid ""
+"店家也能靠後台報表看清賺錢關鍵，輕鬆管理菜單與訂單。從今天起，吃得聰明、活得"
+"漂亮！"
 msgstr "Merchants can gain insights from backend reports, easily manage menus and orders. From today,eat smart and live beautifully!"
 
 #: .\templates\pages\index.html:20
@@ -1140,6 +896,40 @@ msgstr "Start Exploring Meals"
 #: .\templates\pages\index.html:21
 msgid "商家加入"
 msgstr "Join as a Merchant"
+
+#: .\templates\products\show.html:30
+msgid "飯量"
+msgstr "Rice portion"
+
+#: .\templates\products\show.html:33
+msgid "吃飽飽"
+msgstr "Full portion"
+
+#: .\templates\products\show.html:37
+msgid "不要那麼多"
+msgstr "Less rice"
+
+#: .\templates\products\show.html:41
+msgid "迷你飯"
+msgstr "Mini rice"
+
+#: .\templates\products\show.html:68
+#, fuzzy
+#| msgid "編輯："
+msgid "編輯"
+msgstr "Edit"
+
+#: .\templates\shared\footer.html:13
+msgid "關於我們"
+msgstr "About Us"
+
+#: .\templates\shared\footer.html:14
+msgid "聯絡我們"
+msgstr "Contact Us"
+
+#: .\templates\shared\footer.html:15
+msgid "常見問題"
+msgstr "FAQ"
 
 #: .\templates\stores\business\index.html:3 .\templates\stores\index.html:16
 msgid "您的店家資訊："
@@ -1355,6 +1145,10 @@ msgstr "Password"
 msgid "確認密碼"
 msgstr "Confirm Password"
 
+#: .\templates\users\sign_up_store.html:47
+msgid "店家地址"
+msgstr "Store Address"
+
 #: .\templates\users\sign_up_store.html:57
 msgid "統一編號"
 msgstr "Unified Business Number"
@@ -1407,10 +1201,6 @@ msgstr "You must provide an email address"
 msgid "使用者的ID"
 msgstr "User ID"
 
-#: .\users\models.py:41
-msgid "電子郵件地址"
-msgstr "Email Address"
-
 #: .\users\validators.py:14
 msgid "這個密碼太常見，駭客都會背了~請換一組密碼！"
 msgstr "This password is too common. Hackers could guess it,please choose another one!"
@@ -1418,6 +1208,7 @@ msgstr "This password is too common. Hackers could guess it,please choose anothe
 #: .\users\validators.py:22
 msgid "密碼與你的email帳號太相似了~請換一組"
 msgstr "The password is too similar to your email address,please choose a different one."
+
 
 #: .\users\views.py:21
 msgid "你已經登入，不能註冊新帳號"
@@ -1454,3 +1245,173 @@ msgstr "Store login successful!"
 #: .\users\views.py:173
 msgid "已登出！"
 msgstr "You have been logged out."
+
+#~ msgid "購物車已更新"
+#~ msgstr "Cart updated"
+
+#~ msgid "購物車已新增"
+#~ msgstr "Item added to cart"
+
+#~ msgid "購物車更新失敗"
+#~ msgstr "Failed to update cart"
+
+#, python-format
+#~ msgid "%(product)s 已從購物車中刪除"
+#~ msgstr "%(product)s has been removed from the cart"
+
+#, python-format
+#~ msgid "小計：$%(subtotal)s"
+#~ msgstr "Subtotal: $%(subtotal)s"
+
+#, python-format
+#~ msgid "成功刪除 %(product)s"
+#~ msgstr "Successfully removed %(product)s"
+
+#, python-format
+#~ msgid "商品 X %(quantity)s"
+#~ msgstr "Item × %(quantity)s"
+
+#, python-format
+#~ msgid "$ %(price)s"
+#~ msgstr "$%(price)s"
+
+#~ msgid "訂單建立成功"
+#~ msgstr "Order created successfully"
+
+#~ msgid "訂單已取消"
+#~ msgstr "Order canceled"
+
+#~ msgid "此訂單無法取消"
+#~ msgstr "This order cannot be canceled"
+
+#~ msgid "訂單開始準備中"
+#~ msgstr "Order is now being prepared"
+
+#~ msgid "此訂單無法開始準備"
+#~ msgstr "This order cannot be prepared"
+
+#~ msgid "訂單已準備完成"
+#~ msgstr "Order marked as ready"
+
+#~ msgid "此訂單無法標記為準備完成"
+#~ msgstr "This order cannot be marked as ready"
+
+#~ msgid "訂單已完成"
+#~ msgstr "Order completed"
+
+#~ msgid "此訂單無法標記為完成"
+#~ msgstr "This order cannot be marked as completed"
+
+#~ msgid "購物車UUID"
+#~ msgstr "Cart UUID"
+
+#~ msgid "會員"
+#~ msgstr "Member"
+
+#~ msgid "店家"
+#~ msgstr "Store"
+
+#~ msgid "購物車商品"
+#~ msgstr "Cart Item"
+
+#~ msgid "購物車商品UUID"
+#~ msgstr "Cart Item UUID"
+
+#~ msgid "購物車"
+#~ msgstr "Cart"
+
+#~ msgid "商品"
+#~ msgstr "Product"
+
+#~ msgid "會員UUID"
+#~ msgstr "Member UUID"
+
+#~ msgid "使用者帳號"
+#~ msgstr "User Account"
+
+#~ msgid "出生日期"
+#~ msgstr "Date of Birth"
+
+#~ msgid "更新時間"
+#~ msgstr "Updated At"
+
+#~ msgid "訂購的店家"
+#~ msgstr "Stores Ordered From"
+
+#~ msgid "刪除時間"
+#~ msgstr "Deleted At"
+
+#~ msgid "刪除時的電子郵件"
+#~ msgstr "Email at Deletion"
+
+#~ msgid "收藏時間"
+#~ msgstr "Favorited At"
+
+#~ msgid "訂單UUID"
+#~ msgstr "Order UUID"
+
+#~ msgid "訂購者名稱"
+#~ msgstr "Customer Name"
+
+#~ msgid "取餐人員名稱"
+#~ msgstr "Pickup Person Name"
+
+#~ msgid "取餐時間"
+#~ msgstr "Pickup Time"
+
+#~ msgid "完成時間"
+#~ msgstr "Completion Time"
+
+#~ msgid "訂購者電話"
+#~ msgstr "Customer Phone"
+
+#~ msgid "店家電話"
+#~ msgstr "Store Phone"
+
+#~ msgid "訂單項目UUID"
+#~ msgstr "Order Item UUID"
+
+#~ msgid "訂單"
+#~ msgstr "Order"
+
+#~ msgid "小計"
+#~ msgstr "Subtotal"
+
+#~ msgid "待處理訂單UUID"
+#~ msgstr "Pending Order UUID"
+
+#~ msgid "是否已處理"
+#~ msgstr "Is Processed"
+
+#~ msgid "商品UUID"
+#~ msgstr "Product UUID"
+
+#~ msgid "商品描述"
+#~ msgstr "Product Description"
+
+#~ msgid "庫存數量"
+#~ msgstr "Stock Quantity"
+
+#~ msgid "自訂選項"
+#~ msgstr "Customization Options"
+
+#~ msgid "使用者"
+#~ msgstr "User"
+
+#~ msgid "店家UUID"
+#~ msgstr "Store UUID"
+
+#~ msgid "封面圖片"
+#~ msgstr "Cover Image"
+
+#~ msgid "Logo圖片"
+#~ msgstr "Logo Image"
+
+#~ msgid "評分"
+#~ msgstr "Rating"
+
+#~ msgid "類別名稱"
+#~ msgstr "Category Name"
+
+#~ msgid "電子郵件地址"
+#~ msgstr "Email Address"

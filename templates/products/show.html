@@ -21,8 +21,8 @@
           <section class="text-sm text-gray-700 space-y-1">
             <p class="text-base text-gray-900 font-medium">${{ product.price }}</p>
             <p>{{ product.description }}</p>
-            <p>卡路里: {{ product.calories }}</p>
-            <p>可販售數量: {{ product.quantity }}</p>
+            <p>{% trans "卡路里: " %}{{ product.calories }}</p>
+            <p>{% trans "可販售數量:" %} {{ product.quantity }}</p>
           </section>
 
           <!-- 加入購物車表單 -->
@@ -30,7 +30,7 @@
             {% csrf_token %}
 
             <div>
-              <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">數量</label>
+              <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">{% trans "數量" %}</label>
               <div class="flex items-center gap-2">
                 <button type="button" @click="if(quantity > 1) quantity--" class="h-8 w-8 rounded bg-[#5a855a] text-white hover:bg-[#2e4e2e]">-</button>
                 <input id="added_qty_{{ product.id }}" name="quantity" type="number" min="1" max="{{ product.quantity }}" x-model.number="quantity" class="w-14 text-center border rounded" />
@@ -38,12 +38,12 @@
               </div>
             </div>
 
-            <button {% if user.is_authenticated and user.is_member %} type="submit" {% else %} type="button" @click="document.getElementById('signinModal').classList.remove('hidden'); $el.closest('#productModal').remove()" {% endif %} class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-[#5a855a] px-8 py-3 text-base font-medium text-white hover:bg-[#2e4e2e] focus:bg-[#2e4e2e] focus:ring-2 focus:ring-[#2e4e2e] focus:ring-offset-2 focus:outline-none">加入購物車</button>
+            <button {% if user.is_authenticated and user.is_member %} type="submit" {% else %} type="button" @click="document.getElementById('signinModal').classList.remove('hidden'); $el.closest('#productModal').remove()" {% endif %} class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-[#5a855a] px-8 py-3 text-base font-medium text-white hover:bg-[#2e4e2e] focus:bg-[#2e4e2e] focus:ring-2 focus:ring-[#2e4e2e] focus:ring-offset-2 focus:outline-none">{% trans "加入購物車" %}</button>
           </form>
 
           {% if user.is_store and user.store == product.store %}
           <div class="mt-4 flex gap-3">
-            <a href="{% url 'products:edit' product.id %}" class="btn text-sm">編輯</a>
+            <a href="{% url 'products:edit' product.id %}" class="btn text-sm">{% trans "編輯" %}</a>
             <form action="{% url 'products:delete' product.id %}" method="post" onsubmit="return confirm('確定要刪除嗎?');">
               {% csrf_token %}
               <input type="submit" value="刪除" class="btn text-sm" />

@@ -1,11 +1,11 @@
-{% load static %}
+{% load static %} {% load i18n %}
 <div class="max-w-7xl mx-auto footer flex flex-col sm:flex-col md:flex-row justify-between pl-10 pr-10 text-base">
   <nav>
     <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" alt="FitCal" class="w-30" />
   </nav>
   <nav class="flex flex-col justify-self-end mr-10">
-    <h6 class="footer-title">網站資訊</h6>
-    <a href="{% url 'pages:about_us' %}" class="link link-hover"> <i class="fa-solid fa-house fa-fw mr-1"></i>關於我們</a>
+    <h6 class="footer-title">{% trans "網站資訊" %}</h6>
+    <a href="{% url 'pages:about_us' %}" class="link link-hover"> <i class="fa-solid fa-house fa-fw mr-1"></i>{% trans "關於我們" %}</a>
     <p>Email：<a href="mailto:fitcal19th@gmail.com" class="link link-hover">fitcal19th@gmail.com</a></p>
   </nav>
 </div>
