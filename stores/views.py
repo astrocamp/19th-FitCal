@@ -641,6 +641,7 @@ def export_sales_csv(request):
 def api_category_sort(request):
     ids = request.POST.getlist('ids')
     store = request.user.store
+    print('Received category ids:', ids)
     for index, cid in enumerate(ids):
         Category.objects.filter(id=cid, store=store).update(sort_order=index)
     messages.success(request, '分類排序已更新')
