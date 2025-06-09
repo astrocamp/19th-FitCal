@@ -5,9 +5,9 @@ FROM python:3.13-slim
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
-    gdal-bin \
-    libgdal-dev \
-    libgeos-dev \
+    # gdal-bin \
+    # libgdal-dev \
+    # libgeos-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # 設定工作目錄
