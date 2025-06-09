@@ -19,11 +19,6 @@ from stores.models import Category, Store
 from .forms import ProductForm
 from .models import Product
 
-# --- 舊的 Vertex AI 相關變數，現在已不再需要，可以註釋或移除 ---
-# PROJECT_ID = os.environ.get('GOOGLE_CLOUD_PROJECT_ID', 'fitcal19-th-50691')
-# LOCATION = os.environ.get('GOOGLE_CLOUD_LOCATION', 'us-central1')
-
-# 設定 Google Generative AI 的 API Key
 # 請確保您已在環境變數中設置 GOOGLE_API_KEY (從 .env 檔案載入)
 API_KEY = os.environ.get('GOOGLE_API_KEY')
 if not API_KEY:
@@ -40,9 +35,7 @@ try:
     if API_KEY:
         genai.configure(api_key=API_KEY)
         # 載入 Gemini 模型。這裡不需要 location 參數。
-        gemini_model = genai.GenerativeModel(
-            'gemini-1.5-flash'
-        )  # 建議改用 vision 模型，對圖片處理更好
+        gemini_model = genai.GenerativeModel('gemini-1.5-flash')
         print(
             'Gemini model "gemini-pro-vision" loaded successfully with google-generativeai.'
         )
@@ -50,9 +43,6 @@ try:
         print('錯誤：API Key 未設置，無法初始化 Gemini 模型。')
 except Exception as e:
     print(f'Error initializing or loading Gemini model with google-generativeai: {e}')
-    # 在實際應用中，您可能需要更健壯的錯誤處理，例如日誌記錄或發送警報
-
-# --- 以下是您的原有的視圖函式，沒有修改 ---
 
 
 def index(request):
@@ -180,7 +170,7 @@ def delete(request, id):
 @member_required
 def collections(request, id):
     product = get_object_or_404(Product, id=id)
-    member = request.user.member  # 正常從user取出member
+    member = request.user.member
 
     collections = member.favorite_products
 
@@ -199,7 +189,7 @@ def collections(request, id):
     )
 
 
-@require_POST  # 確保這個 API 只接受 POST 請求
+@require_POST
 def estimate_calories_from_image(request):
     print('--- 進入 estimate_calories_from_image API 偵錯資訊 ---')
     print(f'請求方法: {request.method}')
@@ -276,7 +266,6 @@ def estimate_calories_from_image(request):
 
         # 呼叫 Gemini API
         print('正在呼叫 Gemini API 進行估算...')
-        # 注意：對於多模態模型，模型名稱應為 'gemini-pro-vision'
         response = gemini_model.generate_content(prompt_parts)
         print('Gemini API 呼叫完成。')
 
