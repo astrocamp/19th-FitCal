@@ -7,6 +7,8 @@ import { initPickupTimePicker } from './flatpickr/main.js';
 import { searchFormComponent } from './searchForm.js';
 import { initCategorySort } from './stores/categorySort.js';
 import { initProductSort } from './stores/productSort.js';
+import { initCategorySidebarActive } from './stores/selectCategory.js';
+import { initTabs } from './stores/selectTab.js';
 import { copyToClipboard } from './utils/clipboard.js';
 Chart.register(...registerables);
 window.Chart = Chart;
@@ -31,5 +33,7 @@ window.cartItem = cartItem;
 
 initProductSort();
 initCategorySort();
+initTabs();
+initCategorySidebarActive();
 
 Alpine.start();

@@ -4,21 +4,23 @@
     <div class="flex justify-between items-center">
       <h2 class="text-lg font-semibold text-gray-800">商品類別</h2>
     </div>
-    <ul id="sortable-categories" class="space-y-4" data-sort-url="{% url 'stores:api_category_sort' %}" class="space-y-2">
-      {% for category in categories %}
-      <li data-id="{{ category.id }}" hx-get="{% url 'stores:category_products_sort' store.id category.id %}" hx-target="#product-list" hx-swap="innerHTML" class="flex items-center justify-between bg-white px-3 py-2 rounded border hover:bg-gray-100 cursor-pointer">
-        <span class="text-gray-800 font-medium">{{ category.name }}</span>
-        <!-- 拖拉 icon，做為 handle -->
-        <div class="text-gray-400 hover:text-gray-600 cursor-move">
-          <i class="fas fa-bars fa-lg"></i>
-        </div>
-      </li>
-      {% empty %}
-      <li class="flex items-center bg-white px-3 py-2">
-        <span class="text-gray-800 font-medium">請先建立類別</span>
-      </li>
-      {% endfor %}
-    </ul>
+    <div id="category-sidebar">
+      <ul id="sortable-categories" class="space-y-4" data-sort-url="{% url 'stores:api_category_sort' %}" class="space-y-2">
+        {% for category in categories %}
+        <li data-id="{{ category.id }}" hx-get="{% url 'stores:category_products_sort' store.id category.id %}" hx-target="#product-list" hx-swap="innerHTML" class="category-item flex items-center justify-between bg-white px-3 py-2 rounded border hover:bg-gray-100 cursor-pointer {% if forloop.first %}category-select{% endif %}">
+          <span class="text-gray-800 font-medium">{{ category.name }}</span>
+          <!-- 拖拉 icon，做為 handle -->
+          <div class="text-gray-400 hover:text-gray-600 cursor-move">
+            <i class="fas fa-bars fa-lg"></i>
+          </div>
+        </li>
+        {% empty %}
+        <li class="flex items-center bg-white px-3 py-2">
+          <span class="text-gray-800 font-medium">請先建立類別</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 
   <!-- 商品排序區塊 (partial) -->
