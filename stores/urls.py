@@ -54,4 +54,7 @@ urlpatterns = [
         views.category_products,
         name='non_category_products',
     ),
+    path('export_sales_csv/', 
+         views.export_sales_csv, 
+         name='export_sales_csv'),
 ]
