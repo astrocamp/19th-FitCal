@@ -31,6 +31,7 @@
     "alpinejs": "^3.14.9",
     "chart.js": "^4.4.9",
     "flatpickr": "^4.6.13",
-    "htmx.org": "^1.9.12"
+    "htmx.org": "^1.9.12",
+    "sortablejs": "^1.15.6"
   }
 }
