@@ -44,7 +44,7 @@ def show(request, id):
         form = MemberForm(request.POST, instance=member)
         if form.is_valid():
             form.save()
-            return redirect('members:show')
+            return redirect('members:show', id=member.id)
         return render(request, 'members/edit.html', {'member': member, 'form': form})
     return render(request, 'members/index.html', {'member': member})
 
