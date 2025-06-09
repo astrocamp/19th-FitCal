@@ -1,0 +1,28 @@
+<div class="flex flex-col md:flex-row gap-6">
+  <!-- Sidebar: 商品分類 -->
+  <div class="w-full md:w-1/4 space-y-4">
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-gray-800">商品類別</h2>
+      <button hx-get="{% url 'stores:new_category' store.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded p-2">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+    <ul class="space-y-2">
+      {% for category in categories %}
+      <li hx-get="{% url 'stores:category_products' store.id category.id %}" hx-target="#product-list" hx-swap="innerHTML" class="flex justify-between items-center bg-white px-3 py-2 rounded border hover:bg-gray-100 cursor-pointer">
+        <button hx-get="{% url 'stores:show_category' category.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="text-blue-600 hover:text-blue-800" title="編輯類別">
+          <i class="fas fa-edit"></i>
+        </button>
+        <span class="text-gray-800 font-medium">{{ category.name }}</span>
+        <i class="fas fa-chevron-right text-gray-500"></i>
+      </li>
+      {% endfor %}
+      <li hx-get="{% url 'stores:non_category_products' store.id %}" hx-target="#product-list" hx-swap="innerHTML" class="flex justify-between items-center bg-white px-3 py-2 rounded border hover:bg-gray-100 cursor-pointer">
+        <span class="text-gray-800 font-medium">待分類</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content: 商品清單 -->
+  <div id="product-list" class="w-full md:w-3/4 space-y-6">{% include "stores/business/product_manage_list.html" with category=selected_category products=products %}</div>
+</div>
