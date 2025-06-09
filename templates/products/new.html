@@ -12,8 +12,11 @@
   <div x-data="formLogic()">
     {% for field in form %}
     <div>
-      {{ field.label_tag }} {# 特殊處理 'calories' 欄位，使其能與 AI 估算結果互動 #} {% if field.name == 'calories' %} {# 使用 Alpine.js 的 :value 綁定 AI 估算結果，並允許手動修改 #} {# id="{{ field.id_for_label }}" 和 name="{{ field.name }}" 確保它保持 Django 表單預期的 ID 和名稱 #} {# :value="estimatedCalories === null ? '{{ field.value|default:'' }}' : estimatedCalories" 讓輸入框優先顯示 AI 估算值 (若有)，若無則顯示 Django 表單的預設值 #} {# @input="estimatedCalories = $event.target.value" 讓手動修改時，Alpine.js 的 estimatedCalories 狀態也能同步更新 #}
-      <input type="number" id="{{ field.id_for_label }}" name="{{ field.name }}" :value="estimatedCalories === null ? '{{ field.value|default:'' }}' : estimatedCalories" @input="estimatedCalories = $event.target.value" class="{{ field.css_classes }}" /> {# 保持原本的 CSS class #} {# 特殊處理 'image' 欄位，整合圖片預覽和卡路里估算按鈕 #} {% elif field.name == 'image' %} {# 這裡放 Django 渲染的圖片輸入框本身 #} {{ field }} {# 將圖片預覽和估算按鈕放在圖片輸入框下方或旁邊 #}
+      {{ field.label_tag }} {# 特殊處理 'calories' 欄位，使其能與 AI 估算結果互動 #} {% if field.name == 'calories' %} {# 使用 Alpine.js 的 :value 綁定 AI 估算結果，並允許手動修改 #}
+      <input type="number" id="{{ field.id_for_label }}" name="{{ field.name }}" :value="estimatedCalories === null ? '{{ field.value|default:'' }}' : estimatedCalories" @input="estimatedCalories = $event.target.value" class="{{ field.css_classes }}" />
+      {# 特殊處理 'image' 欄位，整合圖片預覽和卡路里估算按鈕 #} {% elif field.name == 'image' %} {# 手動渲染圖片輸入框，添加 x-ref 和 @change 屬性 #}
+      <input type="file" id="{{ field.id_for_label }}" name="{{ field.name }}" x-ref="imageInput" {# 添加 x-ref 讓 Alpine.js 能夠引用這個元素 #} @change="handleFileChange($event.target.files[0])" {# 當檔案變更時，直接將檔案物件傳遞給 handleFileChange #} {# 如果有現有圖片，設定 data-initial-url 來顯示預覽 #} {% if field.value %} data-initial-url="{{ field.value.url }}" {% endif %} class="{{ field.css_classes }}" {# 保持原本的 CSS class #} />
+
       <div class="mt-1 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md" @dragover.prevent @drop="handleFileDrop($event)">
         <template x-if="imagePreview">
           <img :src="imagePreview" alt="圖片預覽" class="mx-auto h-48 w-48 object-cover rounded-md mb-4" />
@@ -29,14 +32,13 @@
         <p class="text-xs text-gray-500">PNG, JPG, GIF 最高 10MB</p>
       </div>
 
-      {# 卡路里估算按鈕，放在圖片上傳區塊內部 #}
       <button type="button" class="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" x-show="imagePreview && !loadingEstimation" @click="estimateCalories()" x-text="loadingEstimation ? '估算中...' : '估算卡路里'" :disabled="loadingEstimation"></button>
       <p x-show="loadingEstimation" class="mt-2 text-green-600">AI 正在努力估算中，請稍候...</p>
 
-      {# 錯誤或提示訊息 #} {# 調整 x-show 條件，使其在 estimatedCalories 為 null 且非載入中時顯示「未能估算」 #}
-      <p x-show="estimatedCalories === null && !loadingEstimation && imageFile" class="mt-2 text-red-600">未能從圖片中估算出卡路里，請手動輸入或嘗試其他圖片。</p>
+      {# 錯誤或提示訊息：調整 x-show 條件，引入 hasAttemptedEstimation #}
+      <p x-show="estimatedCalories === null && !loadingEstimation && hasAttemptedEstimation && imageFile" class="mt-2 text-red-600">未能從圖片中估算出卡路里，請手動輸入或嘗試其他圖片。</p>
 
-      {% else %} {# 其他欄位照常渲染 #} {{ field }} {% endif %} {% if field.errors %}
+      {% else %} {{ field }} {% endif %} {% if field.errors %}
       <div style="color: red">{{ field.errors }}</div>
       {% endif %}
     </div>
