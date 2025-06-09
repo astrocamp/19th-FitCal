@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from common.decorator import member_required
@@ -31,7 +32,7 @@ def create_member(request):
             messages.success(request, '新增會員資料成功')
             return redirect(next_url or 'members:show', id=member.id)
         else:
-            messages.error(request, '請檢查輸入內容')
+            messages.error(request, _('請檢查輸入內容'))
             return render(request, 'members/new.html', {'form': form}, status=400)
     return redirect('stores:index')
 
@@ -95,13 +96,6 @@ def favorite_list(req):
             'favorites': favorites,
         },
     )
-
-
-@member_required
-def store_list(req):
-    stores = Store.objects.all()
-    member = req.user.member
-    return render(req, 'members/store_list.html', {'stores': stores, 'member': member})
 
 
 @member_required

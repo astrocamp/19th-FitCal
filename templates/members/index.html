@@ -1,19 +1,19 @@
-{% extends 'layouts/default.html' %} {% block main %}
+{% extends 'layouts/default.html' %}{% load i18n %} {% block main %}
 <div class="max-w-xl mx-auto bg-white text-black p-6 mt-10 rounded-2xl shadow-lg">
-  <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">會員資料</h2>
-  <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/member-logo.webp" alt="頭像" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
+  <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">{% trans "會員資料" %}</h2>
+  <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/member-logo.webp" alt="{% trans '頭像' %}" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
 
-  <p class="mb-2"><span class="font-bold">姓名：</span>{{ member.name }}</p>
-  <p class="mb-2"><span class="font-bold">電話：</span>{{ member.phone_number }}</p>
-  <p class="mb-2"><span class="font-bold">性別：</span>{{ member.get_gender_display }}</p>
-  <p class="mb-2"><span class="font-bold">生日：</span>{{ member.date_of_birth|date:'Y-m-d' }}</p>
-  <p class="mb-2"><span class="font-bold">建立時間：</span>{{ member.created_at|date:'Y-m-d H:i' }}</p>
-  <p class="mb-2"><span class="font-bold">更新時間：</span>{{ member.updated_at|date:'Y-m-d H:i' }}</p>
+  <p class="mb-2"><span class="font-bold">{% trans "姓名：" %}</span>{{ member.name }}</p>
+  <p class="mb-2"><span class="font-bold">{% trans "電話：" %}</span>{{ member.phone_number }}</p>
+  <p class="mb-2"><span class="font-bold">{% trans "性別：" %}</span>{{ member.get_gender_display }}</p>
+  <p class="mb-2"><span class="font-bold">{% trans "生日：" %}</span>{{ member.date_of_birth|date:'Y-m-d' }}</p>
+  <p class="mb-2"><span class="font-bold">{% trans "建立時間：" %}</span>{{ member.created_at|date:'Y-m-d H:i' }}</p>
+  <p class="mb-2"><span class="font-bold">{% trans "更新時間：" %}</span>{{ member.updated_at|date:'Y-m-d H:i' }}</p>
   <div class="flex flex-wrap gap-4 mt-4">
-    <a href="{% url 'members:edit' member.id %}" class="inline-block mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">編輯資料</a>
-    <form action="{% url 'members:delete' member.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與會員？此操作無法復原！');">
+    <a href="{% url 'members:edit' member.id %}" class="inline-block mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">{% trans "編輯資料" %}</a>
+    <form action="{% url 'members:delete' member.id %}" method="post" onsubmit="return confirm('{{ _('是否確認刪除帳號與會員？此操作無法復原！')|escapejs }}');">
       {% csrf_token %}
-      <button type="submit" class="inline-block mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">刪除帳號與會員</button>
+      <button type="submit" class="inline-block mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">{% trans "刪除帳號與會員" %}</button>
     </form>
   </div>
 </div>

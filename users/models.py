@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('必須提供電子郵件地址')
+            raise ValueError(_('必須提供電子郵件地址'))
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -37,9 +37,7 @@ class User(AbstractUser):
         verbose_name=_('使用者的ID'),
     )
     username = None  # 移除 username
-    email = models.EmailField(
-        unique=True, help_text='example@mail.com', verbose_name=_('電子郵件地址')
-    )
+    email = models.EmailField(unique=True, help_text='example@mail.com')
 
     ROLE_CHOICES = [
         ('member', 'Member'),

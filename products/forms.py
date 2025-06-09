@@ -1,12 +1,13 @@
 from django.forms import ModelForm
 from django.forms.widgets import ClearableFileInput
+from django.utils.translation import gettext_lazy as _
 
 from .models import Product
 
 
 class NoLabelClearableFileInput(ClearableFileInput):
-    initial_text = '目前檔案'
-    input_text = '更新檔案'
+    initial_text = _('目前檔案')
+    input_text = _('更新檔案')
     clear_checkbox_label = ''
 
 
@@ -23,13 +24,13 @@ class ProductForm(ModelForm):
             'price',
         ]
         labels = {
-            'name': '商品名稱',
-            'category': '商品類別',
-            'image': '商品圖片',
-            'description': '商品介紹',
-            'calories': '卡路里',
-            'quantity': '可販售數量',
-            'price': '價格',
+            'name': _('商品名稱'),
+            'category': _('商品類別'),
+            'image': _('商品圖片'),
+            'description': _('商品介紹'),
+            'calories': _('卡路里'),
+            'quantity': _('可販售數量'),
+            'price': _('價格'),
         }
         widgets = {
             'image': NoLabelClearableFileInput,

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 def redirect_with_message(req, url_name, msg):
@@ -25,12 +26,12 @@ def member_required(view_func):
     def _wrapped_view(req, *args, **kwargs):
         if not req.user.is_member:
             return redirect_with_message(
-                req, 'users:index', '您不是會員，無法訪問此頁面'
+                req, 'users:index', _('您不是會員，無法訪問此頁面')
             )
         try:
             _ = req.user.member
         except Exception:
-            return redirect_with_message(req, 'members:new', '請先補充會員資料')
+            return redirect_with_message(req, 'members:new', _('請先補充會員資料'))
 
         member_id_from_url = kwargs.get('member_id')
 
@@ -38,7 +39,7 @@ def member_required(view_func):
             getattr(req.user.member, 'id', '')
         ) != str(member_id_from_url):
             return redirect_with_message(
-                req, 'users:index', '你沒有權限存取其他會員後台的權限'
+                req, 'users:index', _('你沒有權限存取其他會員後台的權限')
             )
         return view_func(req, *args, **kwargs)
 
@@ -51,12 +52,12 @@ def store_required(view_func):
     def _wrapped_view(req, *args, **kwargs):
         if not req.user.is_store:
             return redirect_with_message(
-                req, 'users:index', '您不是商家，無法訪問此頁面'
+                req, 'users:index', _('您不是店家，無法訪問此頁面')
             )
         try:
             _ = req.user.store
         except Exception:
-            return redirect_with_message(req, 'stores:new', '請先補充商家資料')
+            return redirect_with_message(req, 'stores:new', _('請先補充店家資料'))
 
         store_id_from_url = kwargs.get('store_id')
 
@@ -64,7 +65,7 @@ def store_required(view_func):
             getattr(req.user.store, 'id', '')
         ) != str(store_id_from_url):
             return redirect_with_message(
-                req, 'stores:index', '你沒有權限存取這個商家後台'
+                req, 'stores:index', _('你沒有權限存取這個店家後台')
             )
         return view_func(req, *args, **kwargs)
 

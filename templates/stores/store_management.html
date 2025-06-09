@@ -1,4 +1,4 @@
-{% extends 'layouts/business/default.html' %} {% block main %}
+{% extends 'layouts/business/default.html' %}{% load i18n %} {% block main %}
 <div class="dashboard-container">
   <!-- Main Content -->
   <main class="p-8">
@@ -12,23 +12,23 @@
 
     <!-- Today's Business Overview -->
     <section>
-      <h2 class="text-2xl font-semibold text-gray-700 mb-6">今日營業概況</h2>
+      <h2 class="text-2xl font-semibold text-gray-700 mb-6">{% trans "今日營業概況" %}</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Stat Card 1: Total Amount -->
         <div class="bg-white p-6 rounded-xl border border-gray-300 shadow-sm text-center">
-          <p class="text-lg text-gray-600 mb-2">總金額</p>
+          <p class="text-lg text-gray-600 mb-2">{% trans "總金額" %}</p>
           <p class="text-4xl font-bold text-gray-800">${{ stats.total_amount }}</p>
         </div>
 
         <!-- Stat Card 2: Average Order Value -->
         <div class="bg-white p-6 rounded-xl border border-gray-300 shadow-sm text-center">
-          <p class="text-lg text-gray-600 mb-2">訂單平均金額</p>
+          <p class="text-lg text-gray-600 mb-2">{% trans "訂單平均金額" %}</p>
           <p class="text-4xl font-bold text-gray-800">${{ stats.average_order_price }}</p>
         </div>
 
         <!-- Stat Card 3: Number of Orders -->
         <div class="bg-white p-6 rounded-xl border border-gray-300 shadow-sm text-center">
-          <p class="text-lg text-gray-600 mb-2">訂單數</p>
+          <p class="text-lg text-gray-600 mb-2">{% trans "訂單數" %}</p>
           <p class="text-4xl font-bold text-gray-800">{{ stats.order_count }}</p>
         </div>
       </div>

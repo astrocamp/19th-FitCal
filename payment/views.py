@@ -13,6 +13,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
 from carts.models import Cart
@@ -27,7 +28,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 def linepay_request(request):
     pending_order_id = request.GET.get('pending_order_id')
     if not pending_order_id:
-        messages.error(request, '找不到訂單資訊')
+        messages.error(request, _('找不到訂單資訊'))
         return redirect('carts:index')
 
     pending_order = get_object_or_404(PendingOrder, id=pending_order_id)
@@ -35,7 +36,7 @@ def linepay_request(request):
     cart_id = request.GET.get('cart_id')
     cart = get_object_or_404(Cart, id=cart_id)
     if not cart:
-        messages.error(request, '找不到購物車資訊')
+        messages.error(request, _('找不到購物車資訊'))
         return redirect('carts:index')
 
     total_price = cart.total_price
@@ -127,7 +128,7 @@ def linepay_confirm(request):
     pending_order_id = request.GET.get('pending_order_id')
 
     if not pending_order_id:
-        messages.error(request, '訂單資訊已過期')
+        messages.error(request, _('訂單資訊已過期'))
         return redirect('carts:index')
 
     pending_order = get_object_or_404(
@@ -138,13 +139,13 @@ def linepay_confirm(request):
     cart = get_object_or_404(Cart, id=cart_id)
 
     if not cart:
-        messages.error(request, '找不到購物車資訊')
+        messages.error(request, _('找不到購物車資訊'))
         return redirect('carts:index')
 
     total_price = cart.total_price
 
     if not transaction_id:
-        return HttpResponse('Missing transaction ID', status=400)
+        return HttpResponse(_('缺少交易 ID'), status=400)
 
     payload = {
         'amount': int(total_price),
@@ -198,16 +199,16 @@ def linepay_confirm(request):
                 # 刪除購物車
                 cart.delete()
 
-            messages.success(request, '付款成功，訂單已建立')
+            messages.success(request, _('付款成功，訂單已建立'))
             return redirect('orders:show', id=order.id)
 
         except Exception as e:
-            messages.error(request, f'建立訂單時發生錯誤：{str(e)}')
-            return render(request, 'payment/fail.html', {'message': '建立訂單失敗'})
+            messages.error(request, _('建立訂單時發生錯誤：') + str(e))
+            return render(request, 'payment/fail.html', {'message': _('建立訂單失敗')})
 
     else:
-        fail_message = data.get('returnMessage', 'Unknown error')
-        messages.error(request, f'付款失敗：{fail_message}')
+        fail_message = data.get('returnMessage', _('未知錯誤'))
+        messages.error(request, _('付款失敗：') + str(fail_message))
         return render(request, 'payment/fail.html', {'message': fail_message})
 
 

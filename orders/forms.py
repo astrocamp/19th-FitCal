@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import DateTimeInput, ModelForm, NumberInput
 from django.utils import timezone
 from django.utils.timezone import localtime
+from django.utils.translation import gettext_lazy as _
 
 from .models import Order, OrderItem
 from .utils import next_10min
@@ -21,13 +22,13 @@ class OrderForm(ModelForm):
             'note',
         ]
         labels = {
-            'pickup_time': '預計取貨時間',
-            'note': '備註',
-            'order_status': '訂單狀態',
-            'payment_method': '付款方式',
-            'payment_status': '付款狀態',
-            'total_price': '總金額',
-            'customize': '客製化選項',
+            'pickup_time': _('預計取貨時間'),
+            'note': _('備註'),
+            'order_status': _('訂單狀態'),
+            'payment_method': _('付款方式'),
+            'payment_status': _('付款狀態'),
+            'total_price': _('總金額'),
+            'customize': _('客製化選項'),
         }
 
         widgets = {
@@ -135,17 +136,17 @@ class OrderForm(ModelForm):
 
             min_time = next_10min(now)
             if pickup_time < min_time:
-                raise ValidationError('請選擇比現在晚至少10分鐘的時間')
+                raise ValidationError(_('請選擇比現在晚至少10分鐘的時間'))
 
             max_time = now + timedelta(days=7)
             if pickup_time > max_time:
-                raise ValidationError('取貨時間不得超過7天後')
+                raise ValidationError(_('取貨時間不得超過7天後'))
 
         elif self.mode == 'update':
             old_time = self.instance.pickup_time
             upper_bound = old_time + timedelta(hours=2)
             if not (old_time <= pickup_time <= upper_bound):
-                raise ValidationError('請選擇在原訂時間後2小時內的時間')
+                raise ValidationError(_('請選擇在原訂時間後2小時內的時間'))
 
         return pickup_time
 
@@ -155,8 +156,8 @@ class OrderItemForm(ModelForm):
         model = OrderItem
         fields = ['unit_price', 'quantity']
         labels = {
-            'unit_price': '單價',
-            'quantity': '數量',
+            'unit_price': _('單價'),
+            'quantity': _('數量'),
         }
         widgets = {
             'unit_price': NumberInput(attrs={'min': 0}),

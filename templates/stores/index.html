@@ -13,20 +13,20 @@
 {% if user.is_store %} {% if store %}
 <section class="mt-6 p-4 border rounded shadow">
   <img src="{{ store.logo_url }}" alt="{{ store.name }}LOGO" style="width: 200px; height: 200px" />
-  <p class="font-bold text-lg">您的店家資訊：</p>
-  <p>店家名稱：{{ store.name }}</p>
-  <p>店家地址：{{ store.address }}</p>
-  <p>店家電話：{{ store.phone_number }}</p>
-  <p>店家統編：{{ store.tax_id }}</p>
-  <p>開店時間：{{ store.opening_time }}</p>
-  <p>打烊時間：{{ store.closing_time }}</p>
-  <p class="mt-2 font-semibold">平均評分：{{ store.avg_rating|floatformat:1 }} 分</p>
+  <p class="font-bold text-lg">{% trans "您的店家資訊：" %}</p>
+  <p>{% trans "店家名稱：" %}{{ store.name }}</p>
+  <p>{% trans "店家地址：" %}{{ store.address }}</p>
+  <p>{% trans "店家電話：" %}{{ store.phone_number }}</p>
+  <p>{% trans "店家統編：" %}{{ store.tax_id }}</p>
+  <p>{% trans "開店時間：" %}{{ store.opening_time }}</p>
+  <p>{% trans "打烊時間：" %}{{ store.closing_time }}</p>
+  <p class="mt-2 font-semibold">{% trans "平均評分：" %}{{ store.avg_rating|floatformat:1 }} {% trans "分" %}</p>
 
   <div class="mt-4 space-x-2">
-    <a href="{% url 'stores:edit' store.id %}" class="btn btn-outline">編輯店家資料</a>
-    <a href="{% url 'stores:show' store.id %}" class="btn btn-secondary">前往店家頁面</a>
+    <a href="{% url 'stores:edit' store.id %}" class="btn btn-outline">{% trans "編輯店家資料" %}</a>
+    <a href="{% url 'stores:show' store.id %}" class="btn btn-secondary">{% trans "前往店家頁面" %}</a>
   </div>
 </section>
 {% else %}
-<a href="{% url 'stores:new' %}" class="btn mt-6">新增店家資訊</a>
+<a href="{% url 'stores:new' %}" class="btn mt-6">{% trans "新增店家資訊" %}</a>
 {% endif %} {% endif %} {% endblock %}

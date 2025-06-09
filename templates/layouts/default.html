@@ -1,11 +1,11 @@
-{% load static %}
+{% load static %}{% load i18n %}
 <!doctype html>
 <html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="FitCal - 健康餐點訂購系統，提供便捷的線上點餐服務" />
-    <meta name="keywords" content="健康餐點,線上訂餐,外帶,健康飲食,便當,餐廳外送,健康餐盒,FitCal" />
+    <meta name="description" content="{% trans 'FitCal - 健康餐點訂購系統，提供便捷的線上點餐服務' %}" />
+    <meta name="keywords" content="{% trans '健康餐點,線上訂餐,外帶,健康飲食,便當,餐廳外送,健康餐盒,FitCal' %}" />
     <title>FitCal</title>
     <link rel="icon" href="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/default-logo.webp" />
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />

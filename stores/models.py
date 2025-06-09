@@ -3,6 +3,7 @@ import uuid
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from users.models import User
 
@@ -26,7 +27,7 @@ class Store(models.Model):
     closing_time = models.TimeField(default='00:00')
     tax_id = models.CharField(
         max_length=8,
-        validators=[RegexValidator(r'^\d{8}$', message='統編必須為8位數字')],
+        validators=[RegexValidator(r'^\d{8}$', message=_('統編必須為8位數字'))],
         blank=False,
     )
 

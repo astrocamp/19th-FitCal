@@ -11,6 +11,7 @@ from django.contrib import messages
 # Django 相關導入
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from common.decorator import member_required, store_required
@@ -54,6 +55,7 @@ def index(request):
             product = form.save(commit=False)
             product.store = store
             product.save()
+            messages.success(request, _('新增成功'))
             return redirect('stores:show', id=store.id)
     else:
         form = ProductForm()
@@ -83,6 +85,7 @@ def show(request, id):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
+            messages.success(request, _('更新成功'))
             return redirect('products:show', product.id)
     return render(
         request,
