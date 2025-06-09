@@ -33,7 +33,7 @@ def create_cart_item(req, product_id):
     product = get_object_or_404(Product, id=product_id)
     default_block = ''
     try:
-        cart, _ = Cart.objects.get_or_create(member=member, store=product.store)
+        cart, create_ = Cart.objects.get_or_create(member=member, store=product.store)
         cart_item = CartItem.objects.filter(cart=cart, product=product).first()
         if cart_item:
             if not check_stock(
@@ -43,17 +43,17 @@ def create_cart_item(req, product_id):
             else:
                 cart_item.quantity += quantity
                 cart_item.save()
-                messages.success(req, '購物車已更新')
+                messages.success(req, _('購物車已更新'))
                 default_block = '<div id="productModal" hx-swap-oob="true"></div>'
         else:
             if check_stock(req, product, quantity):
                 CartItem.objects.create(cart=cart, product=product, quantity=quantity)
-                messages.success(req, '購物車已新增')
+                messages.success(req, _('購物車已新增'))
                 default_block = '<div id="productModal" hx-swap-oob="true"></div>'
             else:
                 quantity = product.quantity
     except Exception:
-        messages.error(req, '購物車更新失敗')
+        messages.error(req, _('購物車更新失敗'))
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
@@ -100,10 +100,10 @@ def update_cart_item(req, item_id):
             pass
         else:
             cart_item.quantity = quantity
-            messages.success(req, '購物車已更新')
+            messages.success(req, _('購物車已更新'))
             cart_item.save()
     except Exception:
-        messages.error(req, '購物車更新失敗')
+        messages.error(req, _('購物車更新失敗'))
     innertext = f'{cart.total_price}'
     total_calories = cart.total_calories
     messages_html = render_to_string(

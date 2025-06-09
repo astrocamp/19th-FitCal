@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 15:55+0800\n"
+"POT-Creation-Date: 2025-06-09 16:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,18 @@ msgstr "Quantity"
 #: .\carts\forms.py:33 .\products\forms.py:35 .\templates\products\show.html:25
 msgid "客製化"
 msgstr "Customization"
+
+#: .\carts\views.py:46 .\carts\views.py:91
+msgid "購物車已更新"
+msgstr "Cart updated"
+
+#: .\carts\views.py:51
+msgid "購物車已新增"
+msgstr "Item added to cart"
+
+#: .\carts\views.py:56 .\carts\views.py:94
+msgid "購物車更新失敗"
+msgstr "Failed to update cart"
 
 #: .\carts\views.py:145
 msgid "購物車已清空"
@@ -653,7 +665,7 @@ msgstr "FitCal - Healthy Meal Ordering System Offering Convenient Online Orderin
 #: .\templates\layouts\business\default.html:8
 #: .\templates\layouts\default.html:8
 msgid "健康餐點,線上訂餐,外帶,健康飲食,便當,餐廳外送,健康餐盒,FitCal"
-msgstr "Healthy Meals, Online Ordering, Takeout, Healthy Diet,Bento,Restaurant,Delivery, Healthy Meal Boxes, FitCal "
+msgstr "Healthy Meals, Online Ordering, Takeout, Healthy Diet,Bento,Restaurant,Delivery, Healthy Meal Boxes, FitCal"
 
 #: .\templates\members\collections.html:2
 msgid "收藏的商品"
@@ -1209,7 +1221,6 @@ msgstr "This password is too common. Hackers could guess it,please choose anothe
 msgid "密碼與你的email帳號太相似了~請換一組"
 msgstr "The password is too similar to your email address,please choose a different one."
 
-
 #: .\users\views.py:21
 msgid "你已經登入，不能註冊新帳號"
 msgstr "You are already logged in and cannot register a new account."
@@ -1245,15 +1256,6 @@ msgstr "Store login successful!"
 #: .\users\views.py:173
 msgid "已登出！"
 msgstr "You have been logged out."
-
-#~ msgid "購物車已更新"
-#~ msgstr "Cart updated"
-
-#~ msgid "購物車已新增"
-#~ msgstr "Item added to cart"
-
-#~ msgid "購物車更新失敗"
-#~ msgstr "Failed to update cart"
 
 #, python-format
 #~ msgid "%(product)s 已從購物車中刪除"
