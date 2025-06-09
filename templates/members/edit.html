@@ -1,5 +1,4 @@
-{% extends 'layouts/default.html' %} {% block main %}
-{% load widget_tweaks %}
+{% extends 'layouts/default.html' %} {% block main %} {% load widget_tweaks %}
 
 <form method="POST" action="{% url 'members:show' member.id %}" class="max-w-xl mx-auto bg-white text-black p-6 mt-10 rounded-2xl shadow-lg">
   {% csrf_token %}
@@ -7,21 +6,17 @@
   <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">編輯會員資料</h2>
 
   <div class="flex flex-col items-center mb-6">
-    <img src="https://i.pinimg.com/736x/43/14/0a/43140a3803e5f1b39c1ffac1a35a3ec7.jpg" alt="頭像" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
-    
+    <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/member-logo.webp" alt="頭像" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
   </div>
 
   <div class="space-y-4">
     {% for field in form %}
-      <div>
-        <label class="block font-medium text-gray-700 mb-1" for="{{ field.id_for_label }}">
-          {{ field.label }}
-        </label>
-        {{ field|add_class:"w-full border border-gray-300 rounded px-3 py-2" }}
-        {% if field.errors %}
-          <p class="text-sm text-red-600 mt-1">{{ field.errors.0 }}</p>
-        {% endif %}
-      </div>
+    <div>
+      <label class="block font-medium text-gray-700 mb-1" for="{{ field.id_for_label }}"> {{ field.label }} </label>
+      {{ field|add_class:"w-full border border-gray-300 rounded px-3 py-2" }} {% if field.errors %}
+      <p class="text-sm text-red-600 mt-1">{{ field.errors.0 }}</p>
+      {% endif %}
+    </div>
     {% endfor %}
   </div>
 
