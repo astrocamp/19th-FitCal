@@ -1,12 +1,15 @@
 from django.contrib import messages
 from django.db import transaction
+from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import condition
 
 from carts.models import Cart
 
+from .enums import CancelBy, OrderStatus
 from .forms import OrderForm
-from .models import Order, OrderItem
+from .models import Order, OrderItem, PendingOrder
 from .services import OrderService
 
 
@@ -40,25 +43,27 @@ def index(req):
                     },
                 )
 
-        for cart_item in cart.items.all():
-            # 檢查庫存
-            if cart_item.product.quantity < cart_item.quantity:
-                messages.error(req, '庫存不足，請重新選擇數量')
-
-                return render(
-                    req,
-                    'orders/ordering_steps.html',
-                    {
-                        'form': form,
-                        'cart': cart,
-                        'cart_items': cart.items.all(),
-                    },
-                )
-
         if form.is_valid():
             order = form.save(commit=False)
             order.store = cart.store
             order.member = cart.member
+
+            payment_method = form.cleaned_data['payment_method']
+
+            # 如果是 LINE Pay，先不儲存訂單
+            if payment_method == 'LINE_PAY':
+                pending_order = PendingOrder.objects.create(
+                    member_name=req.POST.get('ordering_member_name'),
+                    member_phone=req.POST.get('ordering_member_phone_number'),
+                    pickup_time=form.cleaned_data['pickup_time'],
+                    note=form.cleaned_data.get('note', ''),
+                )
+
+                # 導向 linepay_request 並傳送 pending_order_id
+                return redirect(
+                    reverse('payment:linepay_request')
+                    + f'?pending_order_id={pending_order.id}&cart_id={cart.id}'
+                )
 
             member_name = req.POST.get('ordering_member_name')
             member_phone = req.POST.get('ordering_member_phone_number')
@@ -71,8 +76,6 @@ def index(req):
                 order.member_phone = member_phone
             else:
                 order.member_phone = cart.member.phone_number
-
-            order.save()
 
             for cart_item in cart.items.all():
                 # 建立訂單項目
@@ -87,6 +90,17 @@ def index(req):
                 cart_item.product.quantity -= cart_item.quantity
                 cart_item.product.save()
 
+            # 計算總價
+            total = (
+                order.orderitem_set.aggregate(
+                    total_price=Sum(F('unit_price') * F('quantity'))
+                )['total_price']
+                or 0
+            )
+
+            order.total_price = total
+            order.save()
+
             # 刪除購物車
             cart.delete()
             messages.success(req, '訂單建立成功')
@@ -94,7 +108,7 @@ def index(req):
 
         return render(
             req,
-            'orders/new.html',
+            'orders/ordering_steps.html',
             {
                 'form': form,
                 'cart': cart,
@@ -167,18 +181,26 @@ def show(req, id):
 def cancel(request, id):
     """取消訂單"""
     service = OrderService(id)
+    order = get_object_or_404(Order, id=id)
 
     by_store = False
     if hasattr(request.user, 'store') and request.user.store:
         by_store = True
+        order.canceled_by = CancelBy.STORE
+    elif hasattr(request.user, 'member') and request.user.member:
+        order.canceled_by = CancelBy.MEMBER
 
     success = service.cancel_order(by_store=by_store)
-    order = get_object_or_404(Order, id=id)
 
     if success:
+        order.order_status = OrderStatus.CANCELED
+        order.save()
         messages.success(request, '訂單已取消')
     else:
         messages.error(request, '此訂單無法取消')
+
+    # 重新獲取訂單以確保狀態正確
+    order.refresh_from_db()
 
     return render(
         request, 'shared/orders/partial_order_status_response.html', {'order': order}

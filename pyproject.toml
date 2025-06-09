@@ -12,10 +12,12 @@ dependencies = [
     "email-validator>=2.2.0",
     "django-storages>=1.14.6",
     "pillow>=11.2.1",
+    "openai>=1.79.0",
     "psycopg[binary]>=3.2.7",
     "django-widget-tweaks>=1.5.0",
     "celery>=5.5.2",
     "redis>=6.2.0",
+    "django-anymail[mailgun]>=13.0",
 ]
 
 [dependency-groups]

@@ -81,5 +81,5 @@
     "editor.tabSize": 2,
     "editor.defaultFormatter": "esbenp.prettier-vscode",  // 指定 Prettier 作為格式化工具
     "editor.formatOnSave": true  // 開啟保存時自動格式化
-  }
+  },
 }

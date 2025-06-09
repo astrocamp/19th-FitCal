@@ -15,6 +15,7 @@ class ProductForm(ModelForm):
         model = Product
         fields = [
             'name',
+            'category',
             'image',
             'description',
             'calories',
@@ -24,6 +25,7 @@ class ProductForm(ModelForm):
         ]
         labels = {
             'name': '商品名稱',
+            'category': '商品類別',
             'image': '商品圖片',
             'description': '商品介紹',
             'calories': '卡路里',

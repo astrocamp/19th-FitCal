@@ -2,7 +2,10 @@
 <div id="messages-container" hx-swap-oob="true">{% include "shared/messages.html" %}</div>
 
 <!-- 更新 order_status_display -->
-<div id="order_status_display_{{ order.id }}" hx-swap-oob="true">{% include "shared/orders/order_status_display.html" with order=order %}</div>
+<span id="order_status_display_{{ order.id }}" hx-swap-oob="true">{% include "shared/orders/order_status_display.html" with order=order %}</span>
 
 <!-- 更新 order_status_button -->
-<div id="order_status_button_{{ order.id }}" hx-swap-oob="true">{% include "shared/orders/order_status_button.html" with order=order %}</div>
+<div id="order_status_button_{{ order.id }}" class="mt-5 md:mt-0 flex gap-2" hx-swap-oob="true">{% include "shared/orders/order_status_button.html" with order=order %}</div>
+
+<!-- 更新 order_payment_status_display -->
+<span id="order_payment_status_display_{{ order.id }}" hx-swap-oob="true">{% include "shared/orders/order_payment_status_display.html" with order=order %}</span>

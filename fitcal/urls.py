@@ -14,4 +14,5 @@ urlpatterns = [
     path('carts/', include('carts.urls', namespace='carts')),
     path('search/', include('search.urls', namespace='search')),
     path('payment/', include('payment.urls', namespace='payment')),
+    path('chatbot/', include('chatbot.urls', namespace='chatbot')),
 ]

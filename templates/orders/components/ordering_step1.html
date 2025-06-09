@@ -87,12 +87,12 @@
       </div>
       <div id="cart-summary-section" class="space-y-2 p-4">
         <div class="flex justify-between text-sm text-gray-700">
-          <span id="ordering_total_quantity">商品 X {{ cart.calculate_total_quantity }}</span>
-          <span id="ordering_total_price_brief">$ {{ cart.calculate_total_price }}</span>
+          <span id="ordering_total_quantity">商品 X {{ cart.total_quantity }}</span>
+          <span id="ordering_total_price_brief">$ {{ cart.total_price }}</span>
         </div>
         <div class="flex justify-between text-sm font-semibold text-gray-800">
           <span>應付金額</span>
-          <span id="ordering_total_price_final">$ {{ cart.calculate_total_price }}</span>
+          <span id="ordering_total_price_final">$ {{ cart.total_price }}</span>
         </div>
       </div>
     </div>

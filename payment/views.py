@@ -8,10 +8,14 @@ from pathlib import Path
 
 import environ
 import requests
+from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+
+from carts.models import Cart
+from orders.models import Order, OrderItem, PendingOrder
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -20,59 +24,76 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 @csrf_exempt
 def linepay_request(request):
-    if request.method == 'POST':
-        order_id = f'order_{str(uuid.uuid4())}'
-        package_id = f'package_{str(uuid.uuid4())}'
+    pending_order_id = request.GET.get('pending_order_id')
+    if not pending_order_id:
+        messages.error(request, '找不到訂單資訊')
+        return redirect('carts:index')
 
-        payload = {
-            'amount': 100,
-            'currency': 'TWD',
-            'orderId': order_id,
-            'packages': [
-                {
-                    'id': package_id,
-                    'amount': 100,
-                    'products': [
-                        {
-                            'id': '1',
-                            'name': '測試商品',
-                            'quantity': 1,
-                            'price': 100,
-                        }
-                    ],
-                }
-            ],
-            'redirectUrls': {
-                'confirmUrl': request.build_absolute_uri(
-                    reverse('payment:linepay_confirm')
-                ),
-                'cancelUrl': request.build_absolute_uri(
-                    reverse('payment:linepay_cancel')
-                ),
-            },
-        }
+    pending_order = get_object_or_404(PendingOrder, id=pending_order_id)
 
-        signature_uri = env('LINE_SIGNATURE_REQUEST_URI')
-        headers = create_headers(payload, signature_uri)
+    cart_id = request.GET.get('cart_id')
+    cart = get_object_or_404(Cart, id=cart_id)
+    if not cart:
+        messages.error(request, '找不到購物車資訊')
+        return redirect('carts:index')
 
-        body = json.dumps(payload)
+    total_price = cart.total_price
 
-        url = f'{env("LINE_SANDBOX_URL")}{env("LINE_REQUEST_URL")}'
+    order_id = pending_order_id or str(uuid.uuid4())
+    package_id = f'package_{str(uuid.uuid4())}'
 
-        response = requests.post(url, headers=headers, data=body)
+    products = []
+    for item in cart.items.all():
+        products.append(
+            {
+                'id': str(item.product.id),
+                'name': item.product.name,
+                'quantity': item.quantity,
+                'price': int(item.product.price),
+            }
+        )
 
-        if response.status_code == 200:
-            data = response.json()
-            if data['returnCode'] == '0000':
-                return redirect(data['info']['paymentUrl']['web'])
-            else:
-                print(data['returnMessage'])
-                return render(request, 'payment/checkout.html')
+    payload = {
+        'amount': int(total_price),
+        'currency': 'TWD',
+        'orderId': order_id,
+        'packages': [
+            {
+                'id': package_id,
+                'amount': int(total_price),
+                'products': products,
+            }
+        ],
+        'redirectUrls': {
+            'confirmUrl': request.build_absolute_uri(
+                reverse('payment:linepay_confirm')
+                + f'?pending_order_id={pending_order.id}&cart_id={cart.id}'
+            ),
+            'cancelUrl': request.build_absolute_uri(
+                reverse('payment:linepay_cancel')
+                + f'?pending_order_id={pending_order.id}&cart_id={cart.id}'
+            ),
+        },
+    }
+
+    signature_uri = env('LINE_SIGNATURE_REQUEST_URI')
+    headers = create_headers(payload, signature_uri)
+
+    body = json.dumps(payload)
+
+    url = f'{env("LINE_SANDBOX_URL")}{env("LINE_REQUEST_URL")}'
+
+    response = requests.post(url, headers=headers, data=body)
+
+    if response.status_code == 200:
+        data = response.json()
+        if data['returnCode'] == '0000':
+            return redirect(data['info']['paymentUrl']['web'])
         else:
-            print(f'Error: {response.status_code}')
+            print(data['returnMessage'])
             return render(request, 'payment/checkout.html')
-
     else:
+        print(f'Error: {response.status_code}')
         return render(request, 'payment/checkout.html')
 
 
@@ -102,12 +123,30 @@ def create_headers(body, uri):
 
 def linepay_confirm(request):
     transaction_id = request.GET.get('transactionId')
+    pending_order_id = request.GET.get('pending_order_id')
+
+    if not pending_order_id:
+        messages.error(request, '訂單資訊已過期')
+        return redirect('carts:index')
+
+    pending_order = get_object_or_404(
+        PendingOrder, id=pending_order_id, is_processed=False
+    )
+
+    cart_id = request.GET.get('cart_id')
+    cart = get_object_or_404(Cart, id=cart_id)
+
+    if not cart:
+        messages.error(request, '找不到購物車資訊')
+        return redirect('carts:index')
+
+    total_price = cart.total_price
 
     if not transaction_id:
         return HttpResponse('Missing transaction ID', status=400)
 
     payload = {
-        'amount': 100,
+        'amount': int(total_price),
         'currency': 'TWD',
     }
 
@@ -120,10 +159,50 @@ def linepay_confirm(request):
 
     data = response.json()
     if data['returnCode'] == '0000':
-        return render(request, 'payment/success.html')
+        try:
+            # 建立訂單
+            order = Order.objects.create(
+                store=cart.store,
+                member=cart.member,
+                member_name=pending_order.member_name,
+                member_phone=pending_order.member_phone,
+                pickup_time=pending_order.pickup_time,
+                note=pending_order.note,
+                payment_status='PAID',
+                payment_method='LINE_PAY',
+                total_price=total_price,
+            )
+
+            for cart_item in cart.items.all():
+                # 建立訂單項目
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.product,
+                    quantity=cart_item.quantity,
+                    unit_price=cart_item.product.price,
+                )
+
+                # 更新庫存
+                cart_item.product.quantity -= cart_item.quantity
+                cart_item.product.save()
+
+            # 標記 PendingOrder 為已處理
+            pending_order.is_processed = True
+            pending_order.save()
+
+            # 刪除購物車
+            cart.delete()
+
+            messages.success(request, '付款成功，訂單已建立')
+            return redirect('orders:show', id=order.id)
+
+        except Exception as e:
+            messages.error(request, f'建立訂單時發生錯誤：{str(e)}')
+            return render(request, 'payment/fail.html', {'message': '建立訂單失敗'})
+
     else:
         fail_message = data.get('returnMessage', 'Unknown error')
-        print(data['returnMessage'])
+        messages.error(request, f'付款失敗：{fail_message}')
         return render(request, 'payment/fail.html', {'message': fail_message})
 
 

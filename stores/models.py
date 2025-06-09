@@ -44,6 +44,7 @@ class Store(models.Model):
         self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
         self.products.update(deleted_at=self.deleted_at)
         self.user.delete(using=using, keep_parents=keep_parents)
+        self.categories.delete(using=using, keep_parents=keep_parents)
 
     def __str__(self):
         return self.name
@@ -64,6 +65,7 @@ class Store(models.Model):
 class Rating(models.Model):
     member = models.ForeignKey('members.Member', on_delete=models.CASCADE)
     store = models.ForeignKey('Store', on_delete=models.CASCADE)
+    order = models.OneToOneField('orders.Order', on_delete=models.CASCADE, default=0)
     score = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
@@ -72,10 +74,25 @@ class Rating(models.Model):
 
     class Meta:
         constraints = [
+            models.UniqueConstraint(fields=['order'], name='unique_rating_per_order')
+        ]
+
+    def __str__(self):
+        return f'{self.member.name} 評分訂單 {self.order.order_number} 的 {self.store.name}：{self.score} 分'
+
+
+class Category(models.Model):
+    store = models.ForeignKey(
+        Store, on_delete=models.CASCADE, related_name='categories'
+    )
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [
             models.UniqueConstraint(
-                fields=['member', 'store'], name='unique_member_store_rating'
+                fields=['store', 'name'], name='unique_category_store'
             )
         ]
 
     def __str__(self):
-        return f'{self.member.name} 給 {self.store.name} 的評分：{self.score} 分'
+        return f'{self.name}'

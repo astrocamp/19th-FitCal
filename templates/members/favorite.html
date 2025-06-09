@@ -1,25 +1,13 @@
 {% extends 'layouts/default.html' %} {% block main %}
-
-<section class="bg-gray-100">
-<h2 class="text-xl md:text-2xl lg:text-3xl font-bold">{{ member.name }} 喜愛的商店</h2>
-<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 max-w-full justify-items-center">
+<h2 class="text-xl md:text-2xl lg:text-3xl font-bold mt-10">{{ member.name }}收藏的商家</h2>
+<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-2">
   {% for store in favorites %}
-  
-  <li class="rounded-lg p-4 relative">
-    <a href="{% url 'stores:show' store.id %}">
-    <div class="absolute right-5 top-5">♥️</div>
-    <img src="https://media.istockphoto.com/id/1413100088/zh/%E5%90%91%E9%87%8F/koala-sitting-winking-cute-creative-kawaii-cartoon-mascot-logo.jpg?s=612x612&w=0&k=20&c=OTt5kJdzWSKgHiJX2cIN4UDIn0D5ai5d6QxY3doNMHU=" class="max-w-full max-h-full object-contain border text-center" alt="店家圖片">
-    <h3 class="text-lg font-semibold mb-2">店家名稱：{{ store.name }}</h3>
-    <p class="text-sm text-gray-600">地址：{{ store.address }}</p>
-    <p class="text-sm text-gray-600">電話：{{ store.phone_number }}</p>
-    </a>
-  </li>
+
+  <li class="rounded-lg relative">{% include 'stores/store_card.html'%}</li>
 
   {% empty %}
   <li>目前尚未收藏任何店家。</li>
   {% endfor %}
 </ul>
-</section>
 
-<a href="{% url 'members:store_list' %}" class="btn btn-active">回到店家列表</a>
 {% endblock main %}

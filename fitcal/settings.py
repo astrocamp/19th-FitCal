@@ -60,10 +60,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'stores',
     'storages',
     'search',
     'payment',
+    'anymail',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -76,12 +78,18 @@ SITE_ID = 1  # Django Sites Framework 的 ID，預設為 1
 LOGIN_REDIRECT_URL = '/'  # 登入成功後的重導向 URL
 LOGOUT_REDIRECT_URL = '/'  # 登出後的重導向 URL
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
+
+SOCIALACCOUNT_ADAPTER = 'users.adapters.MySocialAccountAdapter'
+SOCIALACCOUNT_AUTO_SIGN = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,7 +147,16 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': env('SOCIAL_AUTH_LINE_CHANNEL_ID'),
             'secret': env('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
         },
-        'SCOPE': ['profile', 'openid', 'email'],
+        'SCOPE': [
+            'profile',
+            'openid',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'response_type': 'code',
+            'prompt': 'consent',
+        },
+        'REDIRECT_URI': '/',  # 必要時填
     },
 }
 
@@ -245,3 +262,13 @@ USE_I18N = True
 LANGUAGE_CODE = 'zh-hant'
 
 CELERY_BROKER_URL = env('REDIS_URL')
+# OPENAI KEY CHATBOT
+OPENAI_API_KEY = env('OPENAI_API_KEY')
+CELERY_BROKER_URL = env('REDIS_URL')
+# Mailgun 配置
+ANYMAIL = {
+    'MAILGUN_API_KEY': os.getenv('MAILGUN_API_KEY'),
+    'MAILGUN_SENDER_DOMAIN': os.getenv('MAILGUN_SENDER_DOMAIN'),
+}
+EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+DEFAULT_FROM_EMAIL = 'FitCal <Fitcal@mg.fitcal-life.com>'

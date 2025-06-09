@@ -22,22 +22,6 @@
             -->
         <span>⭐ {{ store.avg_rating|floatformat:1 }}</span>
       </div>
-      <form method="POST" action="{% url 'stores:rate_store' store.id %}">
-        {% csrf_token %}
-        <label class="block mb-1">你的評分：</label>
-        <div class="rating rating-lg">
-          {% for i in "12345" %}
-          <!-- prettier-ignore -->
-          <input type="radio" name="score" value="{{ forloop.counter }}" class="mask mask-star-2 bg-yellow-400" 
-              {% if store.member_rating and store.member_rating.score == forloop.counter %}checked{% endif %} />
-          {% endfor %}
-        </div>
-        {% if store.member_rating %}
-        <button type="submit" class="btn btn-success btn-sm mt-2">已評分為 {{ store.member_rating.score }} 分</button>
-        {% else %}
-        <button type="submit" class="btn btn-sm mt-2 btn-neutral">送出評分</button>
-        {% endif %}
-      </form>
     </div>
   </a>
 </div>

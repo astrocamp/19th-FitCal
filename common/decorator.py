@@ -23,27 +23,24 @@ def member_required(view_func):
     @login_required
     @wraps(view_func)
     def _wrapped_view(req, *args, **kwargs):
-        if req.user.is_member:
-            try:
-                _ = req.user.member
-            except Exception:
-                return redirect_with_message(req, 'members:new', '請先補充會員資料')
-        else:
+        if not req.user.is_member:
             return redirect_with_message(
                 req, 'users:index', '您不是會員，無法訪問此頁面'
             )
+        try:
+            _ = req.user.member
+        except Exception:
+            return redirect_with_message(req, 'members:new', '請先補充會員資料')
 
+        member_id_from_url = kwargs.get('member_id')
 
-        # 從 kwargs 獲取 'id'
-        member_id_from_url = kwargs.get('id')
-
-
-        if member_id_from_url is None or str(getattr(req.user.member, 'id', '')) == str(member_id_from_url):
-            return view_func(req, *args, **kwargs)
-        else:
+        if member_id_from_url is not None and str(
+            getattr(req.user.member, 'id', '')
+        ) != str(member_id_from_url):
             return redirect_with_message(
                 req, 'users:index', '你沒有權限存取其他會員後台的權限'
             )
+        return view_func(req, *args, **kwargs)
 
     return _wrapped_view
 
@@ -52,27 +49,23 @@ def store_required(view_func):
     @login_required
     @wraps(view_func)
     def _wrapped_view(req, *args, **kwargs):
-        if req.user.is_store:
-            try:
-                _ = req.user.store
-            except Exception:
-                return redirect_with_message(req, 'stores:new', '請先補充會員資料')
-        else:
+        if not req.user.is_store:
             return redirect_with_message(
-                req, 'users:index', '您不是會員，無法訪問此頁面'
+                req, 'users:index', '您不是商家，無法訪問此頁面'
             )
+        try:
+            _ = req.user.store
+        except Exception:
+            return redirect_with_message(req, 'stores:new', '請先補充商家資料')
 
-        # return view_func(req, *args, **kwargs)
+        store_id_from_url = kwargs.get('store_id')
 
-        store_id = kwargs.get('id')  # 或 store_id，視你的 urls.py 而定
-
-        if store_id is not None and str(getattr(req.user.store, 'id', '')) == str(
-            store_id
-        ):
-            return view_func(req, *args, **kwargs)
-        else:
+        if store_id_from_url is not None and str(
+            getattr(req.user.store, 'id', '')
+        ) != str(store_id_from_url):
             return redirect_with_message(
                 req, 'stores:index', '你沒有權限存取這個商家後台'
             )
+        return view_func(req, *args, **kwargs)
 
     return _wrapped_view

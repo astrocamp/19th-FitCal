@@ -93,7 +93,9 @@ class Favorite(models.Model):
 
 class Collection(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='collections'
+    )
     collected_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

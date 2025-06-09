@@ -1,0 +1,289 @@
+{% extends "layouts/business/default.html" %} {% load humanize %} {% block main %}
+
+<section class="container px-4 mx-auto" x-data="{ tab: 'charts' }">
+  <div class="sm:flex sm:items-center sm:justify-between">
+    <div>
+      <div class="flex items-center gap-x-3">
+        <h2 class="text-lg font-medium text-gray-800 dark:text-white">店家銷售分析報告</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="mt-6 flex gap-4 border-b dark:border-gray-700">
+    <button @click="tab = 'charts'" :class="{'border-b-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400': tab === 'charts'}" class="py-2 px-4 text-base font-medium text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">銷售趨勢圖表</button>
+    <button @click="tab = 'ratings'" :class="{'border-b-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400': tab === 'ratings'}" class="py-2 px-4 text-base font-medium text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">顧客評分總表</button>
+    <button @click="tab = 'sales'" :class="{'border-b-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400': tab === 'sales'}" class="py-2 px-4 text-base font-medium text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">銷售分析表格</button>
+  </div>
+
+  <!-- 顧客評分總表 -->
+  <div class="mt-6" x-show="tab === 'ratings'">
+    <div class="mb-3">
+      <p class="text-base text-green-600 dark:text-green-600">
+        目前平均評分：
+        <span class="font-semibold text-yellow-600 dark:text-yellow-400">{{ avg_rating }} ★</span>
+        （共 {{ rating_count }} 筆）
+      </p>
+    </div>
+    <div class="overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">會員名稱</th>
+            <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">評分</th>
+            <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">評分時間</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+          {% for rating in store_ratings %}
+          <tr>
+            <td class="px-4 py-3 text-base text-gray-700 dark:text-white">{{ rating.member_name }}</td>
+            <td class="px-4 py-3 text-base text-yellow-500 dark:text-yellow-400">{{ rating.rating_score }} ★</td>
+            <td class="px-4 py-3 text-base text-gray-500 dark:text-gray-400">{{ rating.rating_time|date:"Y-m-d H:i" }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="px-4 py-4 text-center text-base text-gray-500 dark:text-gray-400">目前尚無評分紀錄。</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 銷售分析表格 -->
+  <div class="flex flex-col mt-6" x-show="tab === 'sales'">
+    <div class="text-left mb-2 text-base text-green-600 dark:text-green-600">{{ today|date:"Y-m-d" }} 統計數據（今日 / 總數）</div>
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">商品名稱</th>
+                <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">銷售數量（今日 / 總數）</th>
+                <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">營收（今日 / 總數）</th>
+                <th class="px-4 py-3 text-base font-medium text-left text-gray-500 dark:text-gray-400">總收藏次數</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+              {% for item in product_sales %}
+              <tr>
+                <td class="px-4 py-4 text-base font-medium text-gray-800 whitespace-nowrap dark:text-white">{{ item.name }}</td>
+                <td class="px-4 py-4 text-base text-gray-600 whitespace-nowrap dark:text-gray-400">{{ item.today_quantity|default:0 }} / {{ item.total_quantity|default:0 }}</td>
+                <td class="px-4 py-4 text-base text-gray-600 whitespace-nowrap dark:text-gray-400">${{ item.today_revenue|default:0|intcomma }} / ${{ item.total_revenue|default:0|intcomma }}</td>
+                <td class="px-4 py-4 text-base text-gray-600 whitespace-nowrap dark:text-gray-400">{{ item.collection_count|default:0 }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 銷售趨勢圖表 -->
+  <div class="mt-6" x-show="tab === 'charts'">
+    {% if chart_labels_raw and chart_labels_raw|length > 0 %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{% if is_today_data %}今日{% else %}歷史{% endif %}訂單各商品佔比</h3>
+        <div class="relative w-full h-64">
+          <canvas id="dailyOrderPieChart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{% if is_today_data %}今日{% else %}歷史{% endif %}營收各商品佔比</h3>
+        <div class="relative w-full h-64">
+          <canvas id="dailyRevenuePieChart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">每日訂單數量</h3>
+        <div class="relative w-full h-64">
+          <canvas id="orderCountChart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">每日營收金額</h3>
+        <div class="relative w-full h-64">
+          <canvas id="salesRevenueChart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">每日平均評分</h3>
+        <div class="relative w-full h-64">
+          <canvas id="avgRatingChart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">熱銷商品排行</h3>
+        <div class="relative w-full h-64">
+          <canvas id="topProductsChart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('alpine:init', () => {
+        const renderChart = (id, type, label, labels, data, color, extraOptions = {}) => {
+          const ctx = document.getElementById(id)?.getContext('2d');
+          if (ctx) {
+            new Chart(ctx, {
+              type: type,
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: label,
+                  data: data,
+                  backgroundColor: Array.isArray(color) ? color : [color],
+                  borderColor: Array.isArray(color) ? color : [color],
+                  fill: type === 'line',
+                  tension: 0.4
+                }]
+              },
+              options: Object.assign({
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: 'top' },
+                  title: { display: false }
+                }
+              }, extraOptions)
+            });
+          }
+        };
+
+        const ctx = document.getElementById('salesRevenueChart')?.getContext('2d');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: {{ chart_labels|safe }},
+              datasets: [
+                {
+                  type: 'bar',
+                  label: '每日營收（長條）',
+                  data: {{ chart_sales|safe }},
+                  backgroundColor: 'rgba(59, 130, 246, 0.3)',
+                  borderColor: 'rgba(59, 130, 246, 1)',
+                  borderWidth: 1
+                },
+                {
+                  type: 'line',
+                  label: '每日營收（折線）',
+                  data: {{ chart_sales|safe }},
+                  backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                  borderColor: 'rgba(59, 130, 246, 1)',
+                  fill: false,
+                  tension: 0.4
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'top' },
+                title: { display: false }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        }
+
+        const ctxOrder = document.getElementById('orderCountChart')?.getContext('2d');
+        if (ctxOrder) {
+          new Chart(ctxOrder, {
+            type: 'bar',
+            data: {
+              labels: {{ chart_labels|safe }},
+              datasets: [
+                {
+                  type: 'bar',
+                  label: '每日訂單數（長條）',
+                  data: {{ chart_orders|safe }},
+                  backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                  borderColor: 'rgba(16, 185, 129, 1)',
+                  borderWidth: 1
+                },
+                {
+                  type: 'line',
+                  label: '每日訂單數（折線）',
+                  data: {{ chart_orders|safe }},
+                  backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                  borderColor: 'rgba(16, 185, 129, 1)',
+                  fill: false,
+                  tension: 0.4
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'top' },
+                title: { display: false }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 5,
+                    callback: function (value) {
+                      return Number.isInteger(value) ? value : null;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        renderChart('avgRatingChart', 'line', '平均評分', {{ chart_labels|safe }}, {{ chart_avg_ratings|safe }}, 'rgba(234, 179, 8, 0.6)');
+        renderChart('topProductsChart', 'bar', '銷售量', {{ chart_top_names|safe }}, {{ chart_top_sales|safe }}, 'rgba(139, 92, 246, 0.6)');
+
+        renderChart(
+          'dailyRevenuePieChart',
+          'pie',
+          '商品營收',
+          {{ chart_pie_labels|safe }},
+          {{ chart_pie_data|safe }},
+          [
+            'rgba(218, 0, 0)',
+            'rgba(0, 135, 24)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)',
+          ]
+        );
+
+        renderChart(
+          'dailyOrderPieChart',
+          'pie',
+          '商品訂單數',
+          {{ chart_order_labels|safe }},
+          {{ chart_order_data|safe }},
+          [
+            'rgba(218, 0, 0)',
+            'rgba(0, 135, 24)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)',
+          ]
+        );
+      });
+    </script>
+    {% else %}
+    <div class="text-center text-gray-500 dark:text-gray-400 text-base mt-12">目前無資料可供分析，請稍後再試或確認是否已有訂單。</div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock main %}
