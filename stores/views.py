@@ -1,4 +1,6 @@
+import csv
 import json
+import re
 from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
@@ -509,5 +511,64 @@ def businesses_dashboard(request, store_id):
             'chart_order_labels': json.dumps(chart_order_labels),
             'chart_order_data': json.dumps(chart_order_data),
             'is_today_data': use_today_data,
+        },
+    )
+
+
+# 報表輸出
+class Echo:
+    def write(self, value):
+        return value
+
+
+@login_required
+def export_sales_csv(request):
+    """匯出銷售報表為 CSV 檔案"""
+    try:
+        store = Store.objects.get(user=request.user)
+    except Store.DoesNotExist:
+        return HttpResponse('沒有找到對應的店家')
+
+    queryset = (
+        Order.objects.select_related('store')
+        .prefetch_related('orderitem_set', 'orderitem_set__product')
+        .filter(store=store)
+    )
+
+    # 將資料轉為迭代器，每列是一個 list
+    def row_generator():
+        header = [
+            '訂單編號',
+            '商品名稱',
+            '購買數量',
+            '商品單價',
+            '小計',
+            '商家名稱',
+            '建立時間',
+        ]
+        yield header
+
+        for order in queryset:
+            for item in order.orderitem_set.all():
+                yield [
+                    order.order_number,
+                    item.product.name if item.product else '（無商品名稱）',
+                    item.quantity,
+                    item.unit_price,
+                    item.quantity * item.unit_price,
+                    store.name,
+                    order.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                ]
+
+    pseudo_buffer = Echo()
+    writer = csv.writer(pseudo_buffer)
+
+    safe_store_name = re.sub(r'[^\w\-]', '_', store.name)
+
+    return StreamingHttpResponse(
+        (writer.writerow(row) for row in row_generator()),
+        content_type='text/csv',
+        headers={
+            'Content-Disposition': f'attachment; filename="{safe_store_name}_sales_report.csv"'
         },
     )
