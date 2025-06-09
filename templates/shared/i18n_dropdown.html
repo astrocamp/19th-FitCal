@@ -1,7 +1,6 @@
-<form action="{% url 'set_language' %}" method="post">
+<form action="{% url 'set_language' %}" method="post" class="flex gap-2">
   {% csrf_token %}
-  <select name="language" onchange="this.form.submit()">
-    <option value="zh-hant" {% if LANGUAGE_CODE="zh-hant" %}selected{% endif %}>繁體中文</option>
-    <option value="en" {% if LANGUAGE_CODE="en" %}selected{% endif %}>English</option>
-  </select>
+  <button type="submit" name="language" value="zh-hant" class="text-sm px-2 py-1 rounded hover:bg-gray-100 {% if LANGUAGE_CODE == 'zh-hant' %}font-bold underline{% endif %}">繁體中文</button>
+
+  <button type="submit" name="language" value="en" class="text-sm px-2 py-1 rounded hover:bg-gray-100 {% if LANGUAGE_CODE == 'en' %}font-bold underline{% endif %}">English</button>
 </form>
