@@ -1,5 +1,5 @@
-{% extends 'layouts/default.html' %} {% block main %}
-<h1>編輯：{{ store.id }}的店家資料</h1>
+{% extends 'layouts/default.html' %} {% load i18n %} {% block main %}
+<h1>{% trans "編輯：" %}{{ store.id }}{% trans "的店家資料" %}</h1>
 
 <form action="{% url 'stores:show' store.id %}" method="post" enctype="multipart/form-data">
   {% csrf_token %} {% for field in form %}
@@ -15,9 +15,9 @@
 
   {% endfor %}
 
-  <input type="submit" value="更新店家" class="btn" />
+  <input type="submit" value="{% trans '更新店家' %}" class="btn" />
 </form>
 
-<a href="{% url 'stores:show' store.id %}" class="btn">回上一頁</a>
-<a href="{% url 'stores:index' %}" class="btn">回店家列表</a>
+<a href="{% url 'stores:show' store.id %}" class="btn">{% trans "回上一頁" %}</a>
+<a href="{% url 'stores:index' %}" class="btn">{% trans "回店家列表" %}</a>
 {% endblock main %}

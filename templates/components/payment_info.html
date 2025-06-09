@@ -1,14 +1,14 @@
 {% load model_display %}
 
 <tr class="border-b">
-  <td class="py-3 px-4">付款金額</td>
+  <td class="py-3 px-4">{% trans "付款金額" %}</td>
   <td class="py-3 px-4">${{ order.total_price }}</td>
 </tr>
 <tr class="border-b">
-  <td class="py-3 px-4">付款方式</td>
+  <td class="py-3 px-4">{% trans "付款方式" %}</td>
   <td class="py-3 px-4">{{ order|get_display:"payment_method" }}</td>
 </tr>
 <tr class="border-b">
-  <td class="py-3 px-4">付款狀態</td>
+  <td class="py-3 px-4">{% trans "付款狀態" %}</td>
   <td class="py-3 px-4">{{ order|get_display:"payment_status" }}</td>
 </tr>

@@ -4,6 +4,7 @@ from django.db import transaction
 from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
 
 from carts.models import Cart
@@ -38,7 +39,7 @@ def index(req):
             # 檢查庫存
             if cart_item.product.quantity < cart_item.quantity:
                 messages.error(
-                    req, f'{cart_item.product.name} 庫存不足，請重新選擇數量'
+                    req, _('{cart_item.product.name} 庫存不足，請重新選擇數量')
                 )
                 return render(
                     req,
@@ -110,7 +111,7 @@ def index(req):
 
             # 刪除購物車
             cart.delete()
-            messages.success(req, '訂單建立成功')
+            messages.success(req, _('訂單建立成功'))
             return redirect('orders:show', id=order.id)
 
         return render(
@@ -139,7 +140,7 @@ def new(req):
     for cart_item in cart.items.all():
         # 檢查庫存
         if cart_item.product.quantity < cart_item.quantity:
-            messages.error(req, f'{cart_item.product.name} 庫存不足，請重新選擇數量')
+            messages.error(req, _('{cart_item.product.name} 庫存不足，請重新選擇數量'))
             return render(
                 req,
                 'carts/show.html',
@@ -206,9 +207,9 @@ def cancel(request, id):
     if success:
         order.order_status = OrderStatus.CANCELED
         order.save()
-        messages.success(request, '訂單已取消')
+        messages.success(request, _('訂單已取消'))
     else:
-        messages.error(request, '此訂單無法取消')
+        messages.error(request, _('此訂單無法取消'))
 
     # 重新獲取訂單以確保狀態正確
     order.refresh_from_db()
@@ -227,9 +228,9 @@ def prepare(request, id):
     order = get_object_or_404(Order, id=id)
 
     if success:
-        messages.success(request, '訂單開始準備中')
+        messages.success(request, _('訂單開始準備中'))
     else:
-        messages.error(request, '此訂單無法開始準備')
+        messages.error(request, _('此訂單無法開始準備'))
 
     return render(
         request, 'shared/orders/partial_order_status_response.html', {'order': order}
@@ -245,9 +246,9 @@ def mark_ready(request, id):
     order = get_object_or_404(Order, id=id)
 
     if success:
-        messages.success(request, '訂單已準備完成')
+        messages.success(request, _('訂單已準備完成'))
     else:
-        messages.error(request, '此訂單無法標記為準備完成')
+        messages.error(request, _('此訂單無法標記為準備完成'))
 
     return render(
         request, 'shared/orders/partial_order_status_response.html', {'order': order}
@@ -263,9 +264,9 @@ def complete(request, id):
     order = get_object_or_404(Order, id=id)
 
     if success:
-        messages.success(request, '訂單已完成')
+        messages.success(request, _('訂單已完成'))
     else:
-        messages.error(request, '此訂單無法標記為完成')
+        messages.error(request, _('此訂單無法標記為完成'))
 
     return render(
         request, 'shared/orders/partial_order_status_response.html', {'order': order}

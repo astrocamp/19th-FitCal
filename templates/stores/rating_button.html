@@ -1,13 +1,6 @@
-<form
-  hx-post="{% url 'stores:rate_store' store.id %}"
-  hx-swap="outerHTML"
-  hx-target="#rating-btn-{{ store.id }}"
-  method="POST"
-  class="inline"
->
+{% load i18n %}
+<form hx-post="{% url 'stores:rate_store' store.id %}" hx-swap="outerHTML" hx-target="#rating-btn-{{ store.id }}" method="POST" class="inline">
   {% csrf_token %}
-  <input type="hidden" name="score" value="{{ member_rating.score }}">
-  <button id="rating-btn-{{ store.id }}" class="btn btn-sm btn-outline">
-    已評 {{ member_rating.score }} 分
-  </button>
+  <input type="hidden" name="score" value="{{ member_rating.score }}" />
+  <button id="rating-btn-{{ store.id }}" class="btn btn-sm btn-outline">{% trans "已評" %} {{ member_rating.score }} {% trans "分" %}</button>
 </form>

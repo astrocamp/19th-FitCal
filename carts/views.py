@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from common.decorator import member_required
@@ -18,7 +19,11 @@ def check_stock(req, product, quantity, item_quantity=0):
     if quantity + item_quantity > product.quantity:
         messages.error(
             req,
-            f'商品庫存不足，僅剩 {product.quantity} 件, 您最多可加購 {product.quantity - item_quantity} 件',
+            _('商品庫存不足，僅剩 %(stock)d 件，您最多可加購 %(can_add)d 件')
+            % {
+                'stock': product.quantity,
+                'can_add': product.quantity - item_quantity,
+            },
         )
         return False
     return True
@@ -42,17 +47,17 @@ def create_cart_item(req, product_id):
             else:
                 cart_item.quantity += quantity
                 cart_item.save()
-                messages.success(req, '購物車已更新')
+                messages.success(req, _('購物車已更新'))
                 default_block = '<div id="productModal" hx-swap-oob="true"></div>'
         else:
             if check_stock(req, product, quantity):
                 CartItem.objects.create(cart=cart, product=product, quantity=quantity)
-                messages.success(req, '購物車已新增')
+                messages.success(req, _('購物車已新增'))
                 default_block = '<div id="productModal" hx-swap-oob="true"></div>'
             else:
                 quantity = product.quantity
     except Exception:
-        messages.error(req, '購物車更新失敗')
+        messages.error(req, _('購物車更新失敗'))
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
@@ -99,10 +104,10 @@ def update_cart_item(req, item_id):
             pass
         else:
             cart_item.quantity = quantity
-            messages.success(req, '購物車已更新')
+            messages.success(req, _('購物車已更新'))
             cart_item.save()
     except Exception:
-        messages.error(req, '購物車更新失敗')
+        messages.error(req, _('購物車更新失敗'))
     innertext = f'{cart.total_price}'
     total_calories = cart.total_calories
     messages_html = render_to_string(
@@ -159,13 +164,15 @@ def delete_cart_item(req, item_id):
     cart_item.delete()
     if cart.items.count() == 0:
         cart.delete()
-        messages.success(req, '購物車已清空')
+        messages.success(req, _('購物車已清空'))
         if req.headers.get('HX-Request') == 'true':
             response = HttpResponse()
             response['HX-Redirect'] = reverse('carts:index')
             return response
         return redirect('carts:index')
-    messages.success(req, f'{cart_item.product.name}已從購物車中刪除')
+    messages.success(
+        req, _('%(product)s 已從購物車中刪除') % {'product': cart_item.product.name}
+    )
     return redirect('carts:show', id=cart_item.cart.id)
 
 
@@ -176,7 +183,7 @@ def update_preview(req, product_id):
     except ValueError:
         quantity = 1
     subtotal = product.price * quantity
-    return HttpResponse(f'小計：${subtotal}')
+    return HttpResponse(_('小計：$%(subtotal)s') % {'subtotal': subtotal})
 
 
 @member_required
@@ -190,7 +197,7 @@ def delete_item_from_ordering(req, id):
 
     if cart.items.count() == 0:
         cart.delete()
-        messages.success(req, '購物車已清空，請重新選擇商品')
+        messages.success(req, _('購物車已清空，請重新選擇商品'))
         response = HttpResponse()
         response['HX-Redirect'] = reverse('carts:index')  # HTMX Redirect
         return response
@@ -200,8 +207,10 @@ def delete_item_from_ordering(req, id):
     total_price = cart.total_price
     total_calories = cart.total_calories
 
-    messages.success(req, f'成功刪除 {product_name}')
-
+    # messages.success(req, f'成功刪除 {product_name}')
+    messages.success(
+        req, _('成功刪除 %(product_name)s') % {'product_name': product_name}
+    )
     return render(
         req,
         'shared/orders/delete_item_from_ordering_response.html',

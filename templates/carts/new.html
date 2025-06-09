@@ -1,5 +1,5 @@
-{% extends "layouts/default.html" %} {% block main %}
-<h2>新增商品到購物車</h2>
+{% extends "layouts/default.html" %}{% load i18n %}{% block main %}
+<h2>{% trans "新增商品到購物車" %}</h2>
 <form action="{% url 'carts:index' %}" method="post">
   {% csrf_token %}
   <!-- 單一 cart 表單 -->
@@ -18,6 +18,6 @@
   </div>
   {% endfor %}
 
-  <button class="btn" type="submit">加入購物車</button>
+  <button class="btn" type="submit">{% trans "加入購物車" %}</button>
 </form>
 {% endblock main %}
