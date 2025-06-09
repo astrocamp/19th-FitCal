@@ -17,7 +17,7 @@
         <a href="{% url 'stores:businesses_dashboard' user.store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">分析報告</a>
         <form action="{% url 'stores:export_sales_csv' %}" method="post">
           {% csrf_token %}
-          <button type="submit" class="btn btn-primary">下載銷售報表</button>
+          <button type="submit" class="btn px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">下載銷售報表</button>
         </form>
       </nav>
 
@@ -27,7 +27,7 @@
           <div class="text-gray-600">帳號：{{ user.email }}</div>
           <form method="post" action="{% url 'users:delete_session' %}">
             {% csrf_token %}
-            <button class="mt-0.5 px-3 py-1 border border-gray-400 rounded text-xm text-gray-700 hover:bg-gray-100">登出</button>
+            <button class="mt-0.5 px-3 py-1 border border-gray-400 rounded text-xm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">登出</button>
           </form>
         </div>
       </div>
