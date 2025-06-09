@@ -39,10 +39,14 @@ class Product(models.Model):
         blank=True,
         related_name='products',
     )
+    sort_order = models.PositiveIntegerField(default=0)
 
     objects = ProductManager()
     # 用all_objects可以查看全部包含被軟刪除的資料
     all_objects = models.Manager()
+
+    class Meta:
+        ordering = ['sort_order', 'created_at']  # 預設排序方式
 
     def delete(self, using=None, keep_parents=False):
         self.deleted_at = timezone.now()

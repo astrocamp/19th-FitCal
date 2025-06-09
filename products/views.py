@@ -312,3 +312,14 @@ def estimate_calories_from_image(request):
             },
             status=500,
         )
+@store_required
+@require_POST
+def api_product_sort(request):
+    ids = request.POST.getlist('ids')
+    store = request.user.store
+
+    for index, pid in enumerate(ids):
+        Product.objects.filter(id=pid, store=store).update(sort_order=index)
+    messages.success(request, '菜單排序已更新')
+
+    return render(request, 'shared/messages.html')
