@@ -326,7 +326,7 @@ def category_delete(request, category_id):
 @store_required
 def management(request):
     store = request.user.store
-    store = Store.objects.prefetch_related(  # 對 Store 的 related objects 預抓
+    store_qs = Store.objects.prefetch_related(  # 對 Store 的 related objects 預抓
         Prefetch(
             'categories',  # related_name='categories' 的欄位（Category FK Store）
             queryset=Category.objects.prefetch_related(
@@ -334,19 +334,48 @@ def management(request):
             ),  # 對每個 Category 預抓 products
         ),
     ).get(id=store.id)
-    categories = store.categories.order_by('name')
+    categories = store_qs.categories.order_by('sort_order')
     selected_category = categories.first() if categories.exists() else None
-    products = selected_category.products.all() if selected_category else []
-    return render(
-        request,
-        'stores/business/product_management.html',
-        {
-            'store': store,
-            'selected_category': selected_category,
-            'categories': categories,
-            'products': products,
-        },
+    products = (
+        selected_category.products.filter(store=store).order_by(
+            'sort_order', 'created_at'
+        )
+        if selected_category
+        else []
     )
+    if request.resolver_match.url_name == 'management':
+        return render(
+            request,
+            'stores/business/product_management.html',
+            {
+                'store': store,
+                'selected_category': selected_category,
+                'categories': categories,
+                'products': products,
+            },
+        )
+    elif request.resolver_match.url_name == 'product_manage_panel':
+        return render(
+            request,
+            'stores/business/product_manage_panel.html',
+            {
+                'store': store,
+                'selected_category': selected_category,
+                'categories': categories,
+                'products': products,
+            },
+        )
+    elif request.resolver_match.url_name == 'menu_sort_panel':
+        return render(
+            request,
+            'stores/business/menu_sort_panel.html',
+            {
+                'store': store,
+                'selected_category': selected_category,
+                'categories': categories,
+                'products': products,
+            },
+        )
 
 
 @store_required
@@ -360,17 +389,26 @@ def category_products(request, store_id, category_id=None):
     ).get(id=store.id)
     if category_id:
         category = get_object_or_404(Category, id=category_id, store=store)
-        products = store.products.filter(category=category)
-        return render(
-            request,
-            'stores/business/product_list.html',
-            {'category': category, 'products': products},
+        products = store.products.filter(category=category).order_by(
+            'sort_order', 'created_at'
         )
+        if request.resolver_match.url_name == 'category_products_sort':
+            return render(
+                request,
+                'stores/business/product_manage_list.html',
+                {'category': category, 'products': products},
+            )
+        else:
+            return render(
+                request,
+                'stores/business/product_sort_list.html',
+                {'category': category, 'products': products},
+            )
     else:
         products = store.uncat_products
         return render(
             request,
-            'stores/business/product_list.html',
+            'stores/business/product_manage_list.html',
             {'category': '', 'products': products},
         )
 
@@ -575,3 +613,14 @@ def export_sales_csv(request):
             'Content-Disposition': f'attachment; filename="{safe_store_name}_sales_report.csv"'
         },
     )
+
+
+@store_required
+def api_category_sort(request):
+    ids = request.POST.getlist('ids')
+    store = request.user.store
+    print('Received category ids:', ids)
+    for index, cid in enumerate(ids):
+        Category.objects.filter(id=cid, store=store).update(sort_order=index)
+    messages.success(request, '分類排序已更新')
+    return render(request, 'shared/messages.html')
