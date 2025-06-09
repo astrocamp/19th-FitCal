@@ -23,7 +23,10 @@
         <h2 class="text-lg font-medium text-[#3a643a] truncate">{{ cart.store.name }}</h2>
       </div>
 
-      <p class="text-sm text-gray-600 mb-4">總金額： <span class="font-semibold text-black">{{ cart.total_price }}</span> 元</p>
+      <div class="text-sm text-gray-600 mb-4 space-y-1">
+        <p>總卡路里：<span class="font-semibold text-black">{{ cart.total_calories }}</span> kcal</p>
+        <p>總金額：<span class="font-semibold text-black">{{ cart.total_price }}</span> 元</p>
+      </div>
 
       <div class="mt-auto">
         <a href="{% url 'carts:show' cart.id %}" class="block w-full text-center bg-[#5a855a] text-white py-1.5 rounded-md hover:bg-[#2e4e2e] transition-colors mb-2">查看明細</a>

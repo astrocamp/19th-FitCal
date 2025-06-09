@@ -35,7 +35,9 @@
       <!-- 商品名稱與價格 -->
       <div class="text-center md:text-left">
         <p class="text-lg font-medium">{{ item.product.name }}</p>
+        <p class="text-gray-600 mt-1">{{ item.product.calories }} kcal</p>
         <p class="text-gray-600 mt-1">$ {{ item.product.price }}</p>
+
       </div>
 
       <!-- 數量與刪除 -->
@@ -61,10 +63,11 @@
   {% endfor %}
 </div>
 
-<!-- 總金額區塊 -->
+<!-- 總卡路里、總金額區塊 -->
 <div class="mt-8 flex flex-col md:flex-row md:items-center md:justify-between">
   <div class="text-lg font-semibold text-right md:text-left mb-4 md:mb-0">
-    總金額：<span id="totalPrice">{{ cart.total_price }}</span> 元
+    <p>總卡路里：<span id="totalCalories">{{ cart.total_calories }}</span> kcal</p>
+    <p>總金額：<span id="totalPrice">{{ cart.total_price }}</span> 元</p> 
   </div>
 
   <!-- Alpine 包裹區塊 -->
