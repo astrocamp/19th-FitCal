@@ -1,0 +1,7 @@
+<form action="{% url 'set_language' %}" method="post">
+  {% csrf_token %}
+  <select name="language" onchange="this.form.submit()">
+    <option value="zh-hant" {% if LANGUAGE_CODE="zh-hant" %}selected{% endif %}>繁體中文</option>
+    <option value="en" {% if LANGUAGE_CODE="en" %}selected{% endif %}>English</option>
+  </select>
+</form>

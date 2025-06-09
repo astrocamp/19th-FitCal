@@ -1,17 +1,17 @@
-{% load static %}
+{% load static %}{% load i18n %}
 <div x-show="step === 2" x-transition>
-  <h1 class="mb-4 text-center text-xl font-bold text-[#000] sm:text-2xl">建立訂單</h1>
+  <h1 class="mb-4 text-center text-xl font-bold text-[#000] sm:text-2xl">{% trans "建立訂單" %}</h1>
 
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
     <li class="step step-active">
-      <span class="text-sm text-[#5a855a] sm:text-lg">確認明細</span>
+      <span class="text-sm text-[#5a855a] sm:text-lg">{% trans "確認明細" %}</span>
     </li>
     <li class="step step-active">
-      <span class="text-sm font-semibold text-[#5a855a] sm:text-lg">選擇付款</span>
+      <span class="text-sm font-semibold text-[#5a855a] sm:text-lg">{% trans "選擇付款" %}</span>
     </li>
     <li class="step step-inactive">
-      <span class="text-sm text-gray-500 sm:text-lg">確認結帳</span>
+      <span class="text-sm text-gray-500 sm:text-lg">{% trans "確認結帳" %}</span>
     </li>
   </ul>
 
@@ -21,7 +21,7 @@
     <div class="mb-4 flex items-center justify-between rounded-md bg-[#5a855a] p-2 text-white sm:p-3 sm:mb-6">
       <div class="flex items-center">
         <span id="ordering_total_quantity_step2" class="mr-2 rounded-md bg-white px-2 py-1 text-base font-semibold text-[#5a855a] sm:mr-3 sm:px-3 sm:text-lg"> {{ cart.total_quantity }}份</span>
-        <span class="text-sm font-semibold sm:text-base">應付金額</span>
+        <span class="text-sm font-semibold sm:text-base">{% trans "應付金額" %}</span>
       </div>
       <span id="ordering_total_price_step2" class="text-base font-bold sm:text-lg">$ {{ cart.total_price }}</span>
     </div>
@@ -30,11 +30,11 @@
     <div class="mb-4 rounded-md border border-gray-300 p-3 sm:p-4">
       <div class="space-y-4">
         <div>
-          <label for="ordering_member_name" class="mb-2 block text-base text-gray-700 sm:text-lg">取貨人姓名：</label>
+          <label for="ordering_member_name" class="mb-2 block text-base text-gray-700 sm:text-lg">{% trans "取貨人姓名：" %}</label>
           <input type="text" name="ordering_member_name" id="ordering_member_name" x-model="ordering_member_name" class="input input-bordered w-full text-base sm:text-lg" value="{{ cart.member.name }}" />
         </div>
         <div>
-          <label for="ordering_member_phone_number" class="mb-2 block text-base text-gray-700 sm:text-lg">聯絡電話：</label>
+          <label for="ordering_member_phone_number" class="mb-2 block text-base text-gray-700 sm:text-lg">{% trans "聯絡電話：" %}</label>
           <input type="text" name="ordering_member_phone_number" id="ordering_member_phone_number" x-model="ordering_member_phone_number" class="input input-bordered w-full text-base sm:text-lg" value="{{ cart.member.phone_number }}" />
         </div>
       </div>
@@ -42,7 +42,7 @@
 
     <!-- Payment Method -->
     <div class="mb-6 rounded-md border border-gray-300 p-3 sm:p-4 sm:mb-8">
-      <label for="{{ form.payment_method.id_for_label }}" class="mb-2 block text-base text-gray-700 sm:text-lg">付款方式：</label>
+      <label for="{{ form.payment_method.id_for_label }}" class="mb-2 block text-base text-gray-700 sm:text-lg">{% trans "付款方式：" %}</label>
       <div class="space-y-3">
         <!-- Cash Payment Option -->
         <div class="relative flex items-center">
@@ -52,7 +52,7 @@
               <div class="flex h-12 w-20 items-center justify-center rounded-full">
                 <i class="fa-solid fa-sack-dollar text-2xl text-gray-500 peer-checked:text-white"></i>
               </div>
-              <span class="font-medium text-gray-700 peer-checked:text-white">現金支付</span>
+              <span class="font-medium text-gray-700 peer-checked:text-white">{% trans "現金支付" %}</span>
             </div>
             <span class="ml-auto hidden peer-checked:block text-white">
               <i class="fas fa-check-circle text-xl"></i>
@@ -85,7 +85,7 @@
     <div>
       <div class="flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
         <button type="button" @click="prevStep()" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">回上一步</button>
-        <button type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
+        <button type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">{% trans "下一步" %}</button>
       </div>
     </div>
   </div>

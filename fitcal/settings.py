@@ -217,6 +217,13 @@ LANGUAGE_CODE = 'zh-hant'
 
 USE_L10N = True
 
+LANGUAGES = [
+    ('zh-hant', '繁體中文'),
+    ('en', 'English'),
+    ('ja', '日本語'),
+    ('ko', '한국어'),
+]
+
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 

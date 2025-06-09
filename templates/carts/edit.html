@@ -1,6 +1,6 @@
-{% extends "layouts/default.html" %} {% block main %}
-<h2>編輯購物車</h2>
-<div>商家：{{ cart_form.instance.store }}</div>
+{% extends "layouts/default.html" %} {% load i18n %} {% block main %}
+<h2>{% trans "編輯購物車" %}</h2>
+<div>{% trans "商家：" %} {{ cart_form.instance.store }}</div>
 <form action="{% url 'carts:show' id %}" method="post">
   {% csrf_token %}
   <!-- 多個 cart item 表單 -->
@@ -11,6 +11,6 @@
     {% endif %} {% endfor %}
   </div>
   {% endfor %}
-  <button class="btn" type="submit">更新購物車</button>
+  <button class="btn" type="submit">{% trans "更新購物車" %}</button>
 </form>
 {% endblock main %}

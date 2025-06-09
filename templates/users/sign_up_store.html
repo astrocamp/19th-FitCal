@@ -1,4 +1,4 @@
-{% extends "layouts/default.html" %} {% load widget_tweaks %} {% block main %}
+{% extends "layouts/default.html" %} {% load widget_tweaks %}{% load i18n %} {% block main %}
 <div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -17,7 +17,7 @@
           <!-- 註冊表單 -->
           <div class="w-full">
             <h2 class="text-center text-2xl font-bold text-gray-900 mb-2">Fit Your Calories, Fit Your Life.</h2>
-            <h2 class="text-center text-xl font-bold text-gray-900 mb-2">註冊店家</h2>
+            <h2 class="text-center text-xl font-bold text-gray-900 mb-2">{% trans "註冊店家" %}</h2>
 
             <form method="POST" action="{% url 'users:create_user_store' %}" class="space-y-4">
               {% csrf_token %}
@@ -25,7 +25,7 @@
               <!-- 使用者帳號欄位 -->
               <div>
                 <label for="{{ userform.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >電子郵件
+                  >{% trans "電子郵件" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ userform.email.errors }} {{ userform.email|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -33,7 +33,7 @@
 
               <div>
                 <label for="{{ userform.password1.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >密碼
+                  >{% trans "密碼" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ userform.password1.errors }} {{ userform.password1|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -41,7 +41,7 @@
 
               <div>
                 <label for="{{ userform.password2.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >確認密碼
+                  >{% trans "確認密碼" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ userform.password2.errors }} {{ userform.password2|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -50,7 +50,7 @@
               <!-- 店家資料欄位 -->
               <div>
                 <label for="{{ storeform.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >店家名稱
+                  >{% trans "店家名稱" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ storeform.name.errors }} {{ storeform.name|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -58,7 +58,7 @@
 
               <div>
                 <label for="{{ storeform.address.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >店家地址
+                  >{% trans "店家地址" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ storeform.address.errors }} {{ storeform.address|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -66,7 +66,7 @@
 
               <div>
                 <label for="{{ storeform.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >聯絡電話
+                  >{% trans "聯絡電話" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ storeform.phone_number.errors }} {{ storeform.phone_number|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -74,7 +74,7 @@
 
               <div>
                 <label for="{{ storeform.tax_id.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >統一編號
+                  >{% trans "統一編號" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ storeform.tax_id.errors }} {{ storeform.tax_id|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -82,7 +82,7 @@
 
               <div>
                 <label for="{{ storeform.opening_time.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >開店時間
+                  >{% trans "開店時間" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ storeform.opening_time.errors }} {{ storeform.opening_time|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
@@ -90,19 +90,19 @@
 
               <div>
                 <label for="{{ storeform.closing_time.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1"
-                  >打烊時間
+                  >{% trans "打烊時間" %}
                   <span class="text-red-500">*</span>
                 </label>
                 {{ storeform.closing_time.errors }} {{ storeform.closing_time|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300" }}
               </div>
 
-              <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold transition">註冊店家</button>
+              <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold transition">{% trans "註冊店家" %}</button>
             </form>
 
             <br />
             <p class="text-center text-sm mt-4 text-gray-600">
-              已有店家帳號？
-              <a href="{% url 'users:sign_in_store' %}" class="text-blue-600 font-semibold hover:underline">前往登入</a>
+              {% trans "已有店家帳號？" %}
+              <a href="{% url 'users:sign_in_store' %}" class="text-blue-600 font-semibold hover:underline">{% trans "前往登入" %}</a>
             </p>
           </div>
         </div>

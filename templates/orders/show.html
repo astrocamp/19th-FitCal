@@ -1,11 +1,11 @@
-{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}
+{% extends "layouts/default.html" %} {% load datetime_format %} {% load model_display %}{% load i18n %}
 <!-- prettier-ignore -->
 {% block main %}
 <div class="flex flex-wrap">
   <!-- 左側訂單資訊 -->
   <div class="w-full md:w-1/2 p-4 border-r-[3px] border-r-[#ececec] border-dashed">
     <div class="flex items-center space-x-2 mb-5">
-      <span class="text-2xl text-black font-bold"> 訂單狀態：</span>
+      <span class="text-2xl text-black font-bold"> {% trans "訂單狀態：" %}</span>
 
       <div id="order_status_wrapper_{{ order.id }}" hx-get="{% url 'orders:partial_status' order.id %}" hx-trigger="load, every 30s" hx-swap="outerHTML" hx-target="this">
         <div id="order_status_display_{{ order.id }}">{% include "shared/orders/order_status_display.html" with order=order %}</div>

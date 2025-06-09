@@ -1,4 +1,4 @@
-{% extends "layouts/default.html" %} {% load widget_tweaks %} {% block main %}
+{% extends "layouts/default.html" %} {% load widget_tweaks %}{% load i18n %} {% block main %}
 <div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -17,7 +17,7 @@
           <!-- 登入表單 -->
           <div class="w-full">
             <h2 class="text-center text-2xl font-bold text-gray-900 mb-2">Fit Your Calories, Fit Your Life.</h2>
-            <h2 class="text-center text-xl font-bold text-gray-900 mb-2">歡迎回來</h2>
+            <h2 class="text-center text-xl font-bold text-gray-900 mb-2">{% trans "歡迎回來" %}</h2>
 
             <form method="post" action="{% url 'users:create_session_store' %}" class="space-y-4">
               {% csrf_token %} {% if error %}
@@ -27,22 +27,19 @@
               <input type="hidden" name="role" value="store" />
 
               <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">電子郵件：</label>
+                <label for="email" class="block text-sm font-medium text-gray-700">{% trans "電子郵件：" %}</label>
                 <input type="email" name="email" value="{{ email }}" placeholder="example@gmail.com" class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:ring focus:ring-blue-200 focus:outline-none" required />
               </div>
 
               <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">密碼：</label>
-                <input type="password" name="password" placeholder="請輸入密碼" class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:ring focus:ring-blue-200 focus:outline-none" required />
+                <label for="password" class="block text-sm font-medium text-gray-700">{% trans "密碼：" %}</label>
+                <input type="password" name="password" placeholder="{% trans '請輸入密碼' %}" class="w-full border border-gray-300 px-3 py-2 rounded mt-1 focus:ring focus:ring-blue-200 focus:outline-none" required />
               </div>
 
-              <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold transition">登入</button>
+              <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded font-semibold transition">{% trans "登入" %}</button>
             </form>
             <br />
-            <p class="text-center text-sm text-gray-600 mb-4">
-              還不是店家？
-              <a href="{% url 'users:sign_up_store' %}" class="text-blue-600 font-semibold hover:underline">先來註冊</a>
-            </p>
+            <p class="text-center text-sm text-gray-600 mb-4">{% trans "還不是店家？" %}<a href="{% url 'users:sign_up_store' %}" class="text-blue-600 font-semibold hover:underline">{% trans "先來註冊" %}</a></p>
           </div>
         </div>
       </div>

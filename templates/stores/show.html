@@ -1,10 +1,10 @@
-{% extends 'layouts/default.html' %} {% block main %}
-<img src="{{  store.cover_url }}" alt="店家封面" class="w-full h-48 object-cover" />
+{% extends 'layouts/default.html' %} {%load i18n%}{% block main %}
+<img src="{{  store.cover_url }}" alt="{% trans '店家封面' %}" class="w-full h-48 object-cover" />
 <div class="p-4 space-y-6">
   <!-- 店家資訊區塊 -->
   <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
     <!-- LOGO -->
-    <img src="{{  store.logo_url }}" alt="店家 Logo" class="w-24 h-24 rounded-lg object-cover border" />
+    <img src="{{  store.logo_url }}" alt="{% trans '店家 Logo' %}" class="w-24 h-24 rounded-lg object-cover border" />
 
     <!-- 商家詳細資訊 -->
     <div class="space-y-1 mb-7">
@@ -12,9 +12,9 @@
         <span>{{ store.name }}</span>
         <span class="text-yellow-500">{{ store.avg_rating|floatformat:1 }} ⭐ </span>
       </div>
-      <div class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
+      <div class="text-sm text-gray-600">{% trans "營業時間：" %}{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
       <div class="text-sm text-gray-600">
-        <span>距離：2.1 公里</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
+        <span>{% trans "距離：" %}2.1 公里</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
         <a href="tel:{{ store.phone_number|cut:'-' }}" class="font-bold text-blue-600 hover:underline">{{ store.phone_number }}</a>
       </div>
     </div>
@@ -29,9 +29,9 @@
 {% if user.is_store and store == user.store %}
 <form action="{% url 'stores:delete' store.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')">
   {% csrf_token %}
-  <button type="submit" class="btn">刪除帳號</button>
+  <button type="submit" class="btn">{% trans "刪除帳號" %}</button>
 </form>
-<a hx-get="{% url 'stores:new_category' store.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="btn btn-primary">新增類別</a>
+<a hx-get="{% url 'stores:new_category' store.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="btn btn-primary">{% trans "新增類別" %}</a>
 
 {% for c in categories %}
 <a hx-get="{% url 'stores:show_category' c.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="cursor-pointer">
@@ -41,10 +41,10 @@
   </span>
 </a>
 {% empty %}
-<span>暫無分類</span>
+<span>{% trans "暫無分類" %}</span>
 {% endfor %}
 <hr />
-<a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a><br />
+<a href="{% url 'products:new' store.id %}" class="btn btn-primary"> {% trans "新增商品" %} </a><br />
 {% endif %}
 <div id="bottom_cart">{% include "stores/bottom_cart_icon.html" %}</div>
 {% endblock main %}

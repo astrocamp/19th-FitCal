@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from products.models import Product
 from stores.models import Store
@@ -18,9 +19,9 @@ class MemberManager(models.Manager):
 
 class Member(models.Model):
     GENDER_CHOICES = [
-        ('male', '男'),
-        ('female', '女'),
-        ('other', '不提供'),
+        ('male', _('男')),
+        ('female', _('女')),
+        ('other', _('不提供')),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -34,7 +35,7 @@ class Member(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(
         max_length=20,
-        validators=[RegexValidator(r'^09\d{8}$', message='手機號碼格式錯誤')],
+        validators=[RegexValidator(r'^09\d{8}$', message=_('手機號碼格式錯誤'))],
     )
     gender = models.CharField(
         max_length=10, null=True, blank=True, choices=GENDER_CHOICES
