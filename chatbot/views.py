@@ -6,26 +6,46 @@ client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
 import json
 
-from django.db.models import Prefetch
+from django.db.models import Avg, Prefetch
 from django.http import JsonResponse
 
 from products.models import Product
-from stores.models import Store
+from stores.models import Rating, Store
 
 
 # 從資料庫抓最新資料
 def fetch_latest_store_product_info():
     # 預先抓出每間店對應的商品，避免 N+1 問題
-    stores = Store.objects.prefetch_related(
+    # 加上平均評分的註解
+    stores = Store.objects.annotate(avg_rating=Avg('rating__score')).prefetch_related(
         Prefetch('products', queryset=Product.objects.all())
     )
+    rating = Rating.objects.all()
 
     info = ''
     for store in stores:
-        info += f'店家：{store.name}\n地址：{store.address}\n電話：{store.phone_number}\n營業時間：{store.opening_time}~{store.closing_time}\n'
+        # 如果沒有評分，顯示為「尚無評分」
+        rating_display = (
+            f'{store.avg_rating:.1f} 分' if store.avg_rating else '尚無評分'
+        )
+
+        info += (
+            f'店家：{store.name}\n'
+            f'地址：{store.address}\n'
+            f'電話：{store.phone_number}\n'
+            f'營業時間：{store.opening_time}~{store.closing_time}\n'
+            f'平均評分：{rating_display}\n\n'
+        )
 
         for product in store.products.all():  # 不會重新查資料庫
-            info += f'所屬店家：{store.name}\n商品：{product.name}\n價格：{product.price}元\n卡路里：{product.calories}\n商品介紹：{product.description}\n現有庫存量：{product.quantity}'
+            info += (
+                f'所屬店家：{store.name}\n'
+                f'商品：{product.name}\n'
+                f'價格：{product.price}元\n'
+                f'卡路里：{product.calories}\n'
+                f'商品介紹：{product.description}\n'
+                f'現有庫存量：{product.quantity}\n\n'
+            )
 
     return info
 
