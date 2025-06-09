@@ -312,6 +312,8 @@ def estimate_calories_from_image(request):
             },
             status=500,
         )
+
+
 @store_required
 @require_POST
 def api_product_sort(request):
