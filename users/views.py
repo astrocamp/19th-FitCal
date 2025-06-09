@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from stores.forms import StoreForm
