@@ -22,4 +22,5 @@ urlpatterns = [
         views.estimate_calories_from_image,
         name='estimate_calories',
     ),
+    path('api/product_sort/', views.api_product_sort, name='api_product_sort'),
 ]
