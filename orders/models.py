@@ -3,6 +3,7 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Sum
 
 from products.models import Product
 
@@ -43,6 +44,7 @@ class Order(models.Model):
     total_price = models.DecimalField(
         max_digits=10, decimal_places=0, default=0, validators=[MinValueValidator(0)]
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(null=True, blank=True)
@@ -120,6 +122,13 @@ class Order(models.Model):
         """檢查訂單是否可以標記為完成取餐"""
         return self.fsm.can_complete()
 
+    @property
+    def total_calories(self):
+        """計算訂單總卡路里"""
+        return (
+            self.orderitem_set.aggregate(total=Sum('product__calories'))['total'] or 0
+        )
+
 
 class OrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -165,8 +174,12 @@ class OrderItem(models.Model):
 
         # 更新訂單總金額
         if self.order:
-            total = sum(item.subtotal for item in self.order.orderitem_set.all())
-            Order.objects.filter(id=self.order.id).update(total_price=total)
+            Order.objects.filter(id=self.order.id).update(
+                total_price=self.order.orderitem_set.aggregate(total=Sum('subtotal'))[
+                    'total'
+                ]
+                or 0
+            )
 
     def clean(self):
         expected_subtotal = self.unit_price * self.quantity

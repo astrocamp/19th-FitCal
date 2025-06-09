@@ -13,6 +13,7 @@
           <thead>
             <tr class="border-b border-gray-200">
               <th class="py-3 text-left text-sm font-medium text-gray-500">商品名稱</th>
+              <th class="py-3 text-center text-sm font-medium text-gray-500">卡路里 (大卡)</th>
               <th class="py-3 text-center text-sm font-medium text-gray-500">數量</th>
               <th class="py-3 text-right text-sm font-medium text-gray-500">單價</th>
               <th class="py-3 text-right text-sm font-medium text-gray-500">小計</th>
@@ -22,6 +23,7 @@
             {% for item in order.orderitem_set.all %}
             <tr class="border-b border-gray-100">
               <td class="py-3 text-sm text-gray-900">{{ item.product_name }}</td>
+              <td class="py-3 text-center text-sm text-gray-600">{{ item.product.calories }}</td>
               <td class="py-3 text-center text-sm text-gray-600">{{ item.quantity }}</td>
               <td class="py-3 text-right text-sm text-gray-600">$ {{ item.unit_price }}</td>
               <td class="py-3 text-right text-sm font-medium text-gray-900">$ {{ item.subtotal }}</td>
@@ -30,8 +32,12 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3" class="py-3 text-right text-sm font-medium text-gray-700">總計</td>
+              <td colspan="4" class="py-3 text-right text-sm font-medium text-gray-700">總計</td>
               <td class="py-3 text-right text-sm font-bold text-gray-900">$ {{ order.total_price }}</td>
+            </tr>
+            <tr>
+              <td colspan="4" class="py-3 text-right text-sm font-medium text-gray-700">總卡路里</td>
+              <td class="py-3 text-right text-sm font-bold text-gray-900">{{ order.total_calories }} kcal</td>
             </tr>
           </tfoot>
         </table>

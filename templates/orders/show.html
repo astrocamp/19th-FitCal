@@ -15,7 +15,7 @@
   </div>
   <!-- 右側商品明細和操作按鈕 -->
   <div class="w-full md:w-1/2 p-4">
-    {% include "components/order_items.html" with items=order.orderitem_set.all total_price=order.total_price %}
+    {% include "components/order_items.html" with items=order.orderitem_set.all total_price=order.total_price total_calories=order.total_calories %}
     <!-- 會員操作按鈕 -->
     <div class="space-y-3 mt-6">
       {% if order.order_status == 'PENDING' %}
