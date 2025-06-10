@@ -3,6 +3,7 @@ import json
 import re
 from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal
+from carts.models import Cart
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -124,6 +125,7 @@ def show(req, id):
         if form.is_valid():
             form.save()
             return redirect('stores:show', id=store.id)
+<<<<<<< HEAD
         return render(req, 'stores/edit.html', {'store': store, 'form': form})
 
     return render(
@@ -133,7 +135,43 @@ def show(req, id):
             'store': store,
             'categories': categories,
         },
+=======
+        return render(
+            req,
+            'stores/edit.html',
+            {'store': store, 'form': form},
+        )
+    cart = None
+    cart_total_price = 0
+    cart_total_quantity = 0
+    cart_total_calories = 0
+    if hasattr(req.user, 'member'):
+        cart = (
+            Cart.objects
+            .filter(member=req.user.member, store=store)
+            .prefetch_related('items')
+            .first()
+        )
+        if cart:
+            cart_total_price = cart.total_price
+            cart_total_quantity = cart.total_quantity
+            # cart_total_calories = cart.total_calories
+    context = {
+        'store': store,
+        'cart': cart,
+        'products': products,
+        'categories': categories,
+        'cart_total_price': cart_total_price,
+        'cart_total_quantity': cart_total_quantity,
+        'cart_total_calories': cart_total_calories,
+    }
+    return render(
+        req,
+        'stores/show.html',
+        context
+>>>>>>> 9641756 (feat: add bottom cart button for cart info in stores:show page)
     )
+
 
 
 @store_required

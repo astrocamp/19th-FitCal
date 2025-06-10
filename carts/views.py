@@ -59,6 +59,15 @@ def create_cart_item(req, product_id):
     cart_count = render_to_string(
         'shared/cart_count.html', {'cart_count': member.carts.count() if member else 0}
     )
+    bottom_cart_icon = render_to_string(
+        'stores/bottom_cart_icon.html', 
+        {
+            'cart': cart,
+            'cart_total_price': cart.total_price,
+            'cart_total_quantity': cart.total_quantity,
+            # 'cart_total_calories': cart.total_calories,
+        }
+    )
     print(cart_count)
     return HttpResponse(
         default_block
@@ -69,6 +78,9 @@ def create_cart_item(req, product_id):
         <span id="cart-count" hx-swap-oob="innerHTML">
             {cart_count}
         </span>
+        <div id="bottom_cart" hx-swap-oob="innerHTML">
+            {bottom_cart_icon}
+        </div>
         """
     )
 
