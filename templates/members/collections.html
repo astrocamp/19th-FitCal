@@ -1,4 +1,4 @@
-{% extends 'layouts/default.html' %}{%load i18n%} {% block main %}
+{% extends 'layouts/default.html' %}{% load i18n %} {% block main %}
 <h2 class="text-xl md:text-2xl lg:text-3xl font-bold mt-10">{{ member.name }}{% trans "收藏的商品" %}</h2>
 <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-2">
   {% for product in collections %}
