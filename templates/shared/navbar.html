@@ -1,5 +1,5 @@
 {% load static %}
-<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2">
+<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2 relative">
   <!-- LOGO區 -->
   <div class="flex justify-between items-center w-full">
     <div class="shrink-0">
@@ -20,7 +20,7 @@
       {% comment %} 表單 HTML {% endcomment %}
       <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
         <!--- 上排搜尋欄 -->
-        <div class="flex gap-3 items-center">
+        <div class="hidden gap-3 items-center md:flex">
           <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered pl-10 w-38 sm:w-48 md:w-60 lg:w-72" value="{{ request.GET.q }}" />
 
           <!-- 🔘 篩選 icon button -->
@@ -54,7 +54,7 @@
         </div>
       </a>
       <!-- 📱 漢堡選單按鈕 + 個人選單 (手機用) -->
-      <div x-data="{ open: false }" class="md:hidden relative">
+      <div x-data="{ open: false }" class="md:hidden">
         <!-- 按鈕本體 -->
         <button @click="open = !open" class="text-gray-700">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
         </button>
 
         <!-- 漢堡選單內容 -->
-        <ul x-show="open" @click.away="open = false" x-transition tabindex="0" class="menu bg-base-100 rounded-box z-50 mt-6 shadow gap-4 absolute right-0 top-full w-115">
+        <ul x-show="open" @click.away="open = false" x-transition tabindex="0" class="menu bg-base-100 rounded-box z-50 shadow gap-4 absolute w-full left-0 top-full">
           <li><a href="{% url 'members:index' %}">會員資料</a></li>
           <li><a href="{% url 'members:favorite_list' %}">收藏商家</a></li>
           <li><a href="{% url 'members:collections' %}">收藏商品</a></li>
@@ -117,5 +117,17 @@
       <div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_up.html" %}</div>
       {% endif %}
     </div>
+  </div>
+  <!--- 手機版搜尋欄 -->
+  <div class="flex gap-3 justify-start mt-4 md:hidden">
+    <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-full" value="{{ request.GET.q }}" />
+
+    <!-- 🔘 篩選 icon button -->
+    <button type="button" @click="showFilter = !showFilter" class="btn">
+      <i class="fa-solid fa-sliders"></i>
+    </button>
+
+    <!-- 🔘 搜尋按鈕 -->
+    <button id="searchBtn" type="submit" class="btn">搜尋</button>
   </div>
 </div>
