@@ -45,4 +45,6 @@
 {% endfor %}
 <hr />
 <a href="{% url 'products:new' store.id %}" class="btn btn-primary"> 新增商品 </a><br />
-{% endif %} {% endblock main %}
+{% endif %}
+<div id="bottom_cart">{% include "stores/bottom_cart_icon.html" %}</div>
+{% endblock main %}
