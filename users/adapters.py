@@ -2,6 +2,7 @@ import logging
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth import get_user_model
+from allauth.account.models import EmailAddress
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -16,6 +17,12 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
                 sociallogin.connect(request, user)  # 將 LINE 登入綁定到此使用者
             except User.DoesNotExist:
                 pass  # 如果不存在就照預設邏輯走
+            # 強制建立已驗證的 EmailAddress
+            EmailAddress.objects.update_or_create(
+                user=sociallogin.user,
+                email=email,
+                defaults={"verified": True, "primary": True},
+            )
 
     def is_auto_signup_allowed(self, request, sociallogin):
         print('LINE 回傳資料：', sociallogin.account.extra_data)
