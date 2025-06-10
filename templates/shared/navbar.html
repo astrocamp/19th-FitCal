@@ -1,99 +1,121 @@
 {% load static %}
-<div class="navbar bg-base-100 max-w-7xl mx-auto">
-  <div class="flex-1">
-    {% if user.is_authenticated %}
-    <a href="{% url 'stores:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12" /></a>
-    {% else %}
-    <a href="{% url 'users:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12" /></a>
-    {% endif %}
-  </div>
-  <div class="flex-none flex items-center gap-3">
-    <!--- search bar -->
-    {% load static %} {% comment %} 初始資料注入 {% endcomment %} {% if user.is_authenticated %}
-    <script>
-      window.__initialSearchKeyword = "{{ request.GET.q|default:'' }}";
-      window.__initialMaxCalories = parseInt("{{ request.GET.max_calories|default:'0' }}");
-    </script>
-
-    {% comment %} 表單 HTML {% endcomment %}
-    <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
-      <!--- 上排搜尋欄 -->
-      <div class="flex gap-3 items-center">
-        <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-53 pl-10" value="{{ request.GET.q }}"  />
-
-        <!-- 🔘 篩選 icon button -->
-        <button type="button" @click="showFilter = !showFilter" class="btn">
-          <i class="fa-solid fa-sliders "></i>
-        </button>
-        
-        <!-- 🔘 搜尋按鈕 -->
-        <button id="searchBtn" type="submit" class="btn">搜尋</button>
-        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-20 pointer-events-none"></i>
-      </div>
-
-      <!-- 下排：拉霸，使用絕對定位 -->
-      <div id="calorieFilter" class="absolute left-0 w-full bg-white shadow-lg rounded mt-1 z-10 transition-all duration-300 overflow-hidden" x-ref="filter" x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
-        <div class="p-2">
-          <label for="max_calories" class="block text-xs mb-1"> 最多卡路里(非必填)：<span x-text="maxCalories"></span> </label>
-          <input type="range" id="max_calories" name="max_calories" min="0" max="1000" step="10" x-model="maxCalories" class="range w-full" />
-        </div>
-      </div>
-    </form>
-
-    {% comment %} 引入打包後 JS {% endcomment %}
-    <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
-    {% endif %}
-    <!--- 已登入購物車和個人資料狀態 -->
-    {% if user.is_authenticated %}
-    <!--- 購物車 -->
-    <a href="{% url 'carts:index' %}" class="btn btn-ghost btn-circle relative" tabindex="0">
-      <div class="indicator">
-        <span id="cart-count"> {% include "shared/cart_count.html" %} </span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0 a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      </div>
-    </a>
-
-    <!--- 個人資料 -->
-    <div class="dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" tabindex="0">
-        <div class="w-10 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="https://i.pinimg.com/736x/43/14/0a/43140a3803e5f1b39c1ffac1a35a3ec7.jpg" />
-        </div>
-      </div>
-
-      <!--- 子選單 -->
-      <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-72 p-4 shadow gap-6">
-        <li>
-          <a href="{% url 'members:index' %}">會員資料</a>
-        </li>
-        <li>
-          <!--- 補上連結 -->
-          <a href="{% url 'members:favorite_list' %}">收藏商家</a>
-        </li>
-        <li>
-          <!--- 補上連結 -->
-          <a href="{% url 'members:collections' %}">收藏商品</a>
-        </li>
-        <li>
-          <a href="{% url 'orders:index' %}">歷史訂單</a>
-        </li>
-        <li>
-          <form action="{% url 'users:delete_session' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn">登出</button>
-          </form>
-        </li>
-      </ul>
+<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2">
+  <!-- LOGO區 -->
+  <div class="flex justify-between items-center w-full">
+    <div class="shrink-0">
+      {% if user.is_authenticated %}
+      <a href="{% url 'stores:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12 w-auto object-contain pr-2" /></a>
+      {% else %}
+      <a href="{% url 'users:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12 w-auto object-contain pr-2" /></a>
+      {% endif %}
     </div>
-    {% else %}
-    <!-- 未登入狀態：登入/註冊按鈕 -->
-    <!-- 按鈕：打開 modal -->
-    <div id="signinModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_in.html" %}</div>
-    <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入 / 註冊</button>
-    <br />
-    <div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_up.html" %}</div>
-    {% endif %}
+    <div class="flex-none flex items-center gap-3">
+      <!--- search bar -->
+      {% load static %} {% comment %} 初始資料注入 {% endcomment %} {% if user.is_authenticated %}
+      <script>
+        window.__initialSearchKeyword = "{{ request.GET.q|default:'' }}";
+        window.__initialMaxCalories = parseInt("{{ request.GET.max_calories|default:'0' }}");
+      </script>
+
+      {% comment %} 表單 HTML {% endcomment %}
+      <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
+        <!--- 上排搜尋欄 -->
+        <div class="flex gap-3 items-center">
+          <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered pl-10 w-38 sm:w-48 md:w-60 lg:w-72" value="{{ request.GET.q }}" />
+
+          <!-- 🔘 篩選 icon button -->
+          <button type="button" @click="showFilter = !showFilter" class="btn">
+            <i class="fa-solid fa-sliders"></i>
+          </button>
+
+          <!-- 🔘 搜尋按鈕 -->
+          <button id="searchBtn" type="submit" class="btn">搜尋</button>
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-20 pointer-events-none"></i>
+        </div>
+
+        <!-- 下排：拉霸，使用絕對定位 -->
+        <div id="calorieFilter" class="absolute left-0 w-full bg-white shadow-lg rounded mt-1 z-10 transition-all duration-300 overflow-hidden" x-ref="filter" x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
+          <div class="p-2">
+            <label for="max_calories" class="block text-xs mb-1"> 最多卡路里(非必填)：<span x-text="maxCalories"></span> </label>
+            <input type="range" id="max_calories" name="max_calories" min="0" max="1000" step="10" x-model="maxCalories" class="range w-full" />
+          </div>
+        </div>
+      </form>
+      {% endif %}
+      <!--- 已登入購物車和個人資料狀態 -->
+      {% if user.is_authenticated %}
+      <!--- 購物車 -->
+      <a href="{% url 'carts:index' %}" class="btn btn-ghost btn-circle relative" tabindex="0">
+        <div class="indicator">
+          <span id="cart-count"> {% include "shared/cart_count.html" %} </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0 a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+      </a>
+      <!-- 📱 漢堡選單按鈕 + 個人選單 (手機用) -->
+      <div x-data="{ open: false }" class="md:hidden relative">
+        <!-- 按鈕本體 -->
+        <button @click="open = !open" class="text-gray-700 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <!-- 漢堡選單內容 -->
+        <ul x-show="open" @click.away="open = false" x-transition tabindex="0" class="menu bg-base-100 rounded-box z-50 mt-2 p-4 shadow gap-4 absolute right-0 top-full">
+          <li><a href="{% url 'members:index' %}">會員資料</a></li>
+          <li><a href="{% url 'members:favorite_list' %}">收藏商家</a></li>
+          <li><a href="{% url 'members:collections' %}">收藏商品</a></li>
+          <li><a href="{% url 'orders:index' %}">歷史訂單</a></li>
+          <li>
+            <form action="{% url 'users:delete_session' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn w-full">登出</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <!--- 個人資料 -->
+      <div class="dropdown dropdown-end hidden md:block">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" tabindex="0">
+          <div class="w-10 rounded-full">
+            <img alt="Tailwind CSS Navbar component" src="https://i.pinimg.com/736x/43/14/0a/43140a3803e5f1b39c1ffac1a35a3ec7.jpg" />
+          </div>
+        </div>
+
+        <!--- 子選單 -->
+        <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-72 p-4 shadow gap-6">
+          <li>
+            <a href="{% url 'members:index' %}">會員資料</a>
+          </li>
+          <li>
+            <!--- 補上連結 -->
+            <a href="{% url 'members:favorite_list' %}">收藏商家</a>
+          </li>
+          <li>
+            <!--- 補上連結 -->
+            <a href="{% url 'members:collections' %}">收藏商品</a>
+          </li>
+          <li>
+            <a href="{% url 'orders:index' %}">歷史訂單</a>
+          </li>
+          <li>
+            <form action="{% url 'users:delete_session' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">登出</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <!-- 未登入狀態：登入/註冊按鈕 -->
+      <!-- 按鈕：打開 modal -->
+      <div id="signinModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_in.html" %}</div>
+      <button type="button" onclick="document.getElementById('signinModal').classList.remove('hidden')" class="btn btn-primary">登入 / 註冊</button>
+      <br />
+      <div id="signupModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick="this.classList.add('hidden')">{% include "users/sign_up.html" %}</div>
+      {% endif %}
+    </div>
   </div>
 </div>
