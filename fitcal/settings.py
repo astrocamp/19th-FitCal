@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 import environ
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'orders',
     'products',
     'widget_tweaks',
+    'chatbot',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -67,6 +69,7 @@ INSTALLED_APPS = [
     'search',
     'payment',
     'anymail',
+    'django_celery_beat',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -83,14 +86,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
-
-SOCIALACCOUNT_ADAPTER = 'users.adapters.MySocialAccountAdapter'
-SOCIALACCOUNT_AUTO_SIGN = True
 
 MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',  # 語言中介軟體
@@ -152,16 +153,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': env('SOCIAL_AUTH_LINE_CHANNEL_ID'),
             'secret': env('SOCIAL_AUTH_LINE_CHANNEL_SECRET'),
         },
-        'SCOPE': [
-            'profile',
-            'openid',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'response_type': 'code',
-            'prompt': 'consent',
-        },
-        'REDIRECT_URI': '/',  # 必要時填
+        'SCOPE': ['profile', 'openid', 'email'],
     },
 }
 
@@ -169,6 +161,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 # OAUTH_PKCE_ENABLED: True
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
     'http://127.0.0.1:8000/accounts/google/login/callback/'
+    'http://localhost:8000/accounts/google/login/callback/'
 )
 
 
@@ -283,6 +276,7 @@ LANGUAGE_CODE = 'zh-hant'
 CELERY_BROKER_URL = env('REDIS_URL')
 
 # OPENAI KEY CHATBOT
+
 OPENAI_API_KEY = env('OPENAI_API_KEY')
 CELERY_BROKER_URL = env('REDIS_URL')
 # Mailgun 配置
@@ -292,3 +286,21 @@ ANYMAIL = {
 }
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 DEFAULT_FROM_EMAIL = 'FitCal <Fitcal@mg.fitcal-life.com>'
+
+OPENAI_API_KEY = env('OPENAI_API_KEY')
+
+CELERY_BEAT_SCHEDULE = {
+    'check_overdue_orders_every_5min': {
+        'task': 'orders.tasks.check_overdue_orders',
+        'schedule': crontab(minute='*/5'),
+    },
+}
+# 1. Celery 任務序列化設定
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+# 2. 時區
+CELERY_TIMEZONE = 'Asia/Taipei'
+
+# 3. 建議加入這行：使用 django-celery-beat 的資料庫排程系統
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
