@@ -50,7 +50,7 @@ urlpatterns = [
         name='category_products',
     ),
     path(
-        '<uuid:store_id>/<int:category_id>/products',
+        '<uuid:store_id>/<int:category_id>/products_sort',
         views.category_products,
         name='category_products_sort',
     ),

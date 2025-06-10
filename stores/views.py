@@ -392,7 +392,7 @@ def category_products(request, store_id, category_id=None):
         products = store.products.filter(category=category).order_by(
             'sort_order', 'created_at'
         )
-        if request.resolver_match.url_name == 'category_products_sort':
+        if request.resolver_match.url_name == 'category_products':
             return render(
                 request,
                 'stores/business/product_manage_list.html',
@@ -619,7 +619,6 @@ def export_sales_csv(request):
 def api_category_sort(request):
     ids = request.POST.getlist('ids')
     store = request.user.store
-    print('Received category ids:', ids)
     for index, cid in enumerate(ids):
         Category.objects.filter(id=cid, store=store).update(sort_order=index)
     messages.success(request, '分類排序已更新')
