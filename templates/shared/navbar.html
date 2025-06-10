@@ -56,14 +56,14 @@
       <!-- 📱 漢堡選單按鈕 + 個人選單 (手機用) -->
       <div x-data="{ open: false }" class="md:hidden relative">
         <!-- 按鈕本體 -->
-        <button @click="open = !open" class="text-gray-700 focus:outline-none">
+        <button @click="open = !open" class="text-gray-700">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
         <!-- 漢堡選單內容 -->
-        <ul x-show="open" @click.away="open = false" x-transition tabindex="0" class="menu bg-base-100 rounded-box z-50 mt-2 p-4 shadow gap-4 absolute right-0 top-full">
+        <ul x-show="open" @click.away="open = false" x-transition tabindex="0" class="menu bg-base-100 rounded-box z-50 mt-6 shadow gap-4 absolute right-0 top-full w-115">
           <li><a href="{% url 'members:index' %}">會員資料</a></li>
           <li><a href="{% url 'members:favorite_list' %}">收藏商家</a></li>
           <li><a href="{% url 'members:collections' %}">收藏商品</a></li>
