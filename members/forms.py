@@ -14,16 +14,12 @@ class MemberForm(ModelForm):
             'phone_number',
             'gender',
             'date_of_birth',
-            'line_id',
-            'google_id',
         ]
         labels = {
             'name': '姓名',
             'phone_number': '電話',
             'gender': '性別',
             'date_of_birth': '生日',
-            'line_id': 'LINE ID',
-            'google_id': 'Google ID',
         }
         widgets = {
             'phone_number': TextInput(attrs={'type': 'tel'}),

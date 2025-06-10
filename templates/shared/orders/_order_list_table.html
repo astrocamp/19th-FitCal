@@ -1,38 +1,84 @@
-<div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
-  <table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50 text-sm font-semibold text-gray-700">
-      <tr>
-        <th class="px-4 py-3 text-left">訂單編號</th>
-        <th class="px-4 py-3 text-left">取貨時間</th>
-        <th class="px-4 py-3 text-left">顧客</th>
-        <th class="px-4 py-3 text-left">金額</th>
-        <th class="px-4 py-3 text-left">訂單狀態</th>
-        <th class="px-4 py-3 text-left">付款狀態</th>
-        <th class="px-4 py-3 text-left">操作</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-100 text-sm text-gray-800">
-      {% for order in orders %}
-      <tr>
-        <td class="px-4 py-3 font-semibold">{{ order.order_number }}</td>
-        <td class="px-4 py-3">{{ order.pickup_time|date:"Y-m-d H:i" }}</td>
-        <td class="px-4 py-3">{{ order.member_name }}</td>
-        <td class="px-4 py-3">${{ order.total_price }}</td>
-        <td class="px-4 py-3">
-          <span id="order_status_display_{{ order.id }}"> {% include 'shared/orders/order_status_display.html' with order=order %} </span>
-        </td>
-        <td class="px-4 py-3">
-          <span id="order_payment_status_display_{{ order.id }}"> {% include 'shared/orders/order_payment_status_display.html' with order=order %} </span>
-        </td>
-        <td class="px-4 py-3">
-          <div id="order_status_button_{{ order.id }}" class="flex gap-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="7" class="text-center py-6 text-gray-500">目前沒有符合的訂單</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="relative">
+  <!-- Status filter -->
+  <div class="mb-4 flex flex-wrap gap-2">
+    <a href="?tab={{ tab }}&status=ALL" class="px-4 py-2 text-sm font-medium rounded-md {% if not current_status %}bg-blue-100 text-blue-700{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"> 全部 </a>
+    {% for status_value, status_label in status_choices %}
+    <a href="?tab={{ tab }}&status={{ status_value }}" class="px-4 py-2 text-sm font-medium rounded-md {% if current_status == status_value %}bg-blue-100 text-blue-700{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"> {{ status_label }} </a>
+    {% endfor %}
+  </div>
+
+  <!-- Table wrapper with horizontal scroll -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200 whitespace-nowrap lg:whitespace-normal">
+      <thead class="bg-gray-50 text-sm font-semibold text-gray-700">
+        <tr class="text-center">
+          <th class="px-4 py-3 sticky left-0 bg-gray-50 w-36">訂單編號</th>
+          <th class="px-4 py-3 w-40">建立時間</th>
+          <th class="px-4 py-3 w-40">取餐時間</th>
+          <th class="px-4 py-3 w-28">顧客</th>
+          <th class="px-4 py-3 w-24">金額</th>
+          <th class="px-4 py-3 w-40">訂單狀態</th>
+          <th class="px-4 py-3 w-40">付款狀態</th>
+          <th class="px-4 py-3 w-55">操作</th>
+          <th class="px-4 py-3 sticky right-0 bg-gray-50 w-24">詳細</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 text-sm text-gray-800">
+        {% for order in orders %}
+        <tr class="hover:bg-gray-50 text-center">
+          <td class="px-4 py-3 font-semibold sticky left-0 bg-white">{{ order.order_number }}</td>
+          <td class="px-4 py-3">{{ order.created_at|date:"Y-m-d H:i" }}</td>
+          <td class="px-4 py-3">{{ order.pickup_time|date:"Y-m-d H:i" }}</td>
+          <td class="px-4 py-3">{{ order.member_name }}</td>
+          <td class="px-4 py-3">${{ order.total_price }}</td>
+          <td class="px-4 py-3">
+            <span id="order_status_display_{{ order.id }}" class="inline-block min-w-[100px]"> {% include 'shared/orders/order_status_display.html' with order=order %} </span>
+          </td>
+          <td class="px-4 py-3">
+            <span id="order_payment_status_display_{{ order.id }}"> {% include 'shared/orders/order_payment_status_display.html' with order=order %} </span>
+          </td>
+          <td class="px-4 py-3">
+            <div id="order_status_button_{{ order.id }}" class="flex gap-2">{% include "shared/orders/order_status_button.html" with order=order %}</div>
+          </td>
+          <td class="px-4 py-3 sticky right-0 bg-white">
+            <button onclick="document.querySelector('#order_detail_modal_{{ order.id }}').showModal()" class="text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap">查看詳細</button>
+            <div class="text-left">{% include "shared/orders/_order_detail_modal.html" with order=order %}</div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-6 text-gray-500">目前沒有符合的訂單</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scroll indicators -->
+  <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+  <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+  <div class="flex items-center justify-between bg-white px-4 py-3 sm:px-6 mt-4 rounded-lg shadow">
+    <div>
+      <p class="text-sm text-gray-700">
+        顯示第
+        <span class="font-medium">{{ page_obj.start_index }}</span>
+        至
+        <span class="font-medium">{{ page_obj.end_index }}</span>
+        筆，共
+        <span class="font-medium">{{ paginator.count }}</span>
+        筆訂單
+      </p>
+    </div>
+    <div class="flex gap-2">
+      {% if page_obj.has_previous %}
+      <a href="?tab={{ tab }}&status={{ current_status|default:'ALL' }}&page={{ page_obj.previous_page_number }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"> 上一頁 </a>
+      {% endif %} {% if page_obj.has_next %}
+      <a href="?tab={{ tab }}&status={{ current_status|default:'ALL' }}&page={{ page_obj.next_page_number }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"> 下一頁 </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
 </div>

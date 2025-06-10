@@ -20,3 +20,20 @@
     -moz-appearance: textfield;
   }
 }
+
+@layer components {
+  dialog {
+    @apply fixed inset-0 m-auto p-0 border-none outline-none bg-transparent;
+    &::backdrop {
+      @apply bg-black/50;
+    }
+  }
+
+  .modal {
+    @apply w-[95vw] md:w-[80vw] lg:w-[60vw] max-w-3xl max-h-[90vh];
+  }
+
+  .modal-box {
+    @apply bg-white rounded-lg shadow-xl overflow-y-auto;
+  }
+}
