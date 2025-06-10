@@ -66,7 +66,6 @@ def send_line_message_when_order_created(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Order)
 def handle_order_notifications(sender, instance, created, **kwargs):
-    """處理訂單通知"""
     if created:  # 新訂單由另一個 signal 處理
         return
 

@@ -1,11 +1,11 @@
 import json
-from datetime import date
+from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Avg, Count, F, Sum
+from django.db.models import Avg, Count, F, Prefetch, Sum
 from django.db.models.functions import TruncDate
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -266,7 +266,7 @@ def category_create(request, store_id):
     store.categories.create(name=name)
     messages.success(request, '類別創建成功')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse('stores:management', args=[store_id])
+    response['HX-Redirect'] = reverse('stores:management')
     return response
 
 
@@ -286,7 +286,7 @@ def category_edit(request, category_id):
     else:
         messages.error(request, '請輸入有效的類別名稱')
     response = HttpResponse()
-    response['HX-Redirect'] = reverse('stores:management', args=[category.store.id])
+    response['HX-Redirect'] = reverse('stores:management')
     return response
 
 
@@ -298,31 +298,59 @@ def category_delete(request, category_id):
 
     category.delete()
     messages.success(request, '類別已刪除')
-    return redirect('stores:management', store.id)
+    return redirect('stores:management')
 
 
 @store_required
-def management(request, store_id):
-    store = get_object_or_404(Store, id=store_id)
-    categories = store.categories.all()
-    products = store.products.all()
+def management(request):
+    store = request.user.store
+    store = Store.objects.prefetch_related(  # 對 Store 的 related objects 預抓
+        Prefetch(
+            'categories',  # related_name='categories' 的欄位（Category FK Store）
+            queryset=Category.objects.prefetch_related(
+                'products'
+            ),  # 對每個 Category 預抓 products
+        ),
+    ).get(id=store.id)
+    categories = store.categories.order_by('name')
+    selected_category = categories.first() if categories.exists() else None
+    products = selected_category.products.all() if selected_category else []
     return render(
         request,
         'stores/business/product_management.html',
-        {'store': store, 'categories': categories, 'products': products},
+        {
+            'store': store,
+            'selected_category': selected_category,
+            'categories': categories,
+            'products': products,
+        },
     )
 
 
 @store_required
-def category_products(request, store_id, category_id):
+def category_products(request, store_id, category_id=None):
     store = get_object_or_404(Store, id=store_id)
-    category = get_object_or_404(Category, id=category_id, store=store)
-    products = category.products.all()
-    return render(
-        request,
-        'stores/business/product_list.html',
-        {'store': store, 'category': category, 'products': products},
-    )
+    # 空類別商品的篩選
+    uncategorized_products = Product.objects.filter(store=store, category__isnull=True)
+    # 用 prefetch_related 搭配 Prefetch 並指定 to_attr 給 store 一個屬性存這筆資料
+    store = Store.objects.prefetch_related(
+        Prefetch('products', queryset=uncategorized_products, to_attr='uncat_products')
+    ).get(id=store.id)
+    if category_id:
+        category = get_object_or_404(Category, id=category_id, store=store)
+        products = store.products.filter(category=category)
+        return render(
+            request,
+            'stores/business/product_list.html',
+            {'category': category, 'products': products},
+        )
+    else:
+        products = store.uncat_products
+        return render(
+            request,
+            'stores/business/product_list.html',
+            {'category': '', 'products': products},
+        )
 
 
 def businesses_dashboard(request, store_id):

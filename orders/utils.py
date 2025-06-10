@@ -115,7 +115,7 @@ def build_line_order_created_message(order):
         f'🏪 店家：{order.store_name}',
         f'📞 店家電話：{order.store_phone}',
         f'🔢 取餐號碼：{order.pickup_number}',
-        f'📅 取餐時間：{order.pickup_time.strftime("%Y-%m-%d %H:%M")}',
+        f'📅 取餐時間：{localtime(order.pickup_time).strftime("%Y-%m-%d %H:%M")}',
         '',
         '📦 商品內容：',
     ]
@@ -123,7 +123,7 @@ def build_line_order_created_message(order):
     total = 0
     for item in order.orderitem_set.all():
         lines.append(
-            f'- {item.product_name} x {item.quantity}（{item.unit_price} 元）= {item.subtotal:.0f} 元'
+            f'- {item.product_name}（{item.unit_price} 元）x {item.quantity} = {item.subtotal:.0f} 元'
         )
         total += item.subtotal
 
@@ -139,12 +139,19 @@ def build_line_order_status_message(order):
     if order.order_status == OrderStatus.CANCELED:
         # 根據取消來源建立不同訊息
         if order.canceled_by == CancelBy.MEMBER:
-            lines.extend([f'❌ 您已取消訂單 #{order.order_number}'])
+            lines.extend(
+                [
+                    f'❌ 您已取消訂單 #{order.order_number}',
+                    '感謝您的光臨，歡迎再次訂購！',
+                ]
+            )
         elif order.canceled_by == CancelBy.STORE:
             lines.extend(
                 [
-                    f'❌ 很抱歉，店家已取消您的訂單 #{order.order_number}\n'
-                    '如有疑問請直接聯繫店家'
+                    f'❌ 很抱歉，{order.store_name}已取消您的訂單 #{order.order_number}\n'
+                    '如有疑問請直接聯繫{order.store_name}',
+                    '電話：{order.store_phone}',
+                    '感謝您的光臨，歡迎再次訂購！',
                 ]
             )
         elif order.canceled_by == CancelBy.SYSTEM:
@@ -152,6 +159,7 @@ def build_line_order_status_message(order):
                 [
                     f'❌ 您的訂單 #{order.order_number} 已被系統自動取消\n'
                     '原因：超過取餐時間未取餐',
+                    '感謝您的光臨，歡迎再次訂購！',
                 ]
             )
 

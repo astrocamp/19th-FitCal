@@ -9,6 +9,7 @@ from pathlib import Path
 import environ
 import requests
 from django.contrib import messages
+from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -161,37 +162,41 @@ def linepay_confirm(request):
     if data['returnCode'] == '0000':
         try:
             # 建立訂單
-            order = Order.objects.create(
-                store=cart.store,
-                member=cart.member,
-                member_name=pending_order.member_name,
-                member_phone=pending_order.member_phone,
-                pickup_time=pending_order.pickup_time,
-                note=pending_order.note,
-                payment_status='PAID',
-                payment_method='LINE_PAY',
-                total_price=total_price,
-            )
-
-            for cart_item in cart.items.all():
-                # 建立訂單項目
-                OrderItem.objects.create(
-                    order=order,
-                    product=cart_item.product,
-                    quantity=cart_item.quantity,
-                    unit_price=cart_item.product.price,
+            with transaction.atomic():
+                order = Order(
+                    store=cart.store,
+                    member=cart.member,
+                    member_name=pending_order.member_name,
+                    member_phone=pending_order.member_phone,
+                    pickup_time=pending_order.pickup_time,
+                    note=pending_order.note,
+                    payment_status='PAID',
+                    payment_method='LINE_PAY',
+                    total_price=total_price,
                 )
 
-                # 更新庫存
-                cart_item.product.quantity -= cart_item.quantity
-                cart_item.product.save()
+                for cart_item in cart.items.all():
+                    # 建立訂單項目
+                    OrderItem.objects.create(
+                        order=order,
+                        product=cart_item.product,
+                        quantity=cart_item.quantity,
+                        unit_price=cart_item.product.price,
+                    )
 
-            # 標記 PendingOrder 為已處理
-            pending_order.is_processed = True
-            pending_order.save()
+                    # 更新庫存
+                    cart_item.product.quantity -= cart_item.quantity
+                    cart_item.product.save()
 
-            # 刪除購物車
-            cart.delete()
+                # trigger signals with all items created
+                order.save()
+
+                # 標記 PendingOrder 為已處理
+                pending_order.is_processed = True
+                pending_order.save()
+
+                # 刪除購物車
+                cart.delete()
 
             messages.success(request, '付款成功，訂單已建立')
             return redirect('orders:show', id=order.id)

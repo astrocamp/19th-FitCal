@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
-from common.decorator import member_required
-from stores.models import Store
+from common.decorator import member_required, store_required
+from stores.models import Category, Store
 
 from .forms import ProductForm
 from .models import Product
@@ -28,21 +29,15 @@ def index(request):
     )
 
 
-def new(request, store_id):
-    store = get_object_or_404(
-        Store,
-        id=store_id,
+def new(request, category_id):
+    store = request.user.store
+    category = get_object_or_404(Category, id=category_id)
+    form = ProductForm(store=store, category=category)
+    return render(
+        request,
+        'shared/business/products/new_product.html',
+        {'form': form, 'category': category},
     )
-    form = ProductForm(request.POST, request.FILES)
-    if request.POST:
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.store = store
-            product.save()
-            return redirect('products:show', product.id)
-    else:
-        form = ProductForm()
-    return render(request, 'products/new.html', {'form': form, 'store': store})
 
 
 def show(request, id):
@@ -62,16 +57,76 @@ def show(request, id):
     )
 
 
+@store_required
+@require_POST
+def create(request, category_id):
+    form = ProductForm(request.POST, request.FILES)
+    if form.is_valid():
+        form = form.save(commit=False)
+        form.store = request.user.store
+        form.save()
+        category = get_object_or_404(
+            Category.objects.prefetch_related('products'), id=category_id
+        )
+        products = category.products.filter(store=request.user.store)
+        return render(
+            request,
+            'shared/business/products/create_success.html',
+            {'products': products, 'category': category},
+        )
+    return render(request, 'products/create.html', {'form': form})
+
+
+@store_required
 def edit(request, id):
+    store = request.user.store
     product = get_object_or_404(Product, pk=id)
-    form = ProductForm(instance=product)
-    return render(request, 'products/edit.html', {'product': product, 'form': form})
+    category = product.category
+    form = ProductForm(instance=product, store=store, category=category)
+    return render(
+        request,
+        'shared/business/products/edit_product.html',
+        {'form': form, 'category': category, 'product': product},
+    )
+
+
+@store_required
+@require_POST
+def update(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForm(request.POST, request.FILES, instance=product)
+    if form.is_valid():
+        form = form.save(commit=False)
+        # form.store = request.user.store
+        form.save()
+        category = product.category
+        products = Product.objects.prefetch_related('category').filter(
+            category=category, store=request.user.store
+        )
+        return render(
+            request,
+            'shared/business/products/create_success.html',
+            {'products': products, 'category': category},
+        )
+    return render(
+        request,
+        'shared/business/products/edit_product.html',
+        {'form': form, 'category': category},
+    )
 
 
 def delete(request, id):
     product = get_object_or_404(Product, pk=id)
+    category = product.category
     product.delete()
-    return redirect('products:index')
+    products = Product.objects.prefetch_related('category').filter(
+        category=category, store=request.user.store
+    )
+    return render(
+        request,
+        'stores/business/product_list.html',
+        {'products': products, 'category': category},
+    )
 
 
 @member_required
