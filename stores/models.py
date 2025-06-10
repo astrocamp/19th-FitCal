@@ -65,7 +65,9 @@ class Store(models.Model):
 class Rating(models.Model):
     member = models.ForeignKey('members.Member', on_delete=models.CASCADE)
     store = models.ForeignKey('Store', on_delete=models.CASCADE)
-    order = models.OneToOneField('orders.Order', on_delete=models.CASCADE, default=0)
+    order = models.OneToOneField(
+        'orders.Order', on_delete=models.CASCADE, null=True, blank=True
+    )
     score = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )

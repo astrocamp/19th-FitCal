@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='rating',
             name='order',
-            field=models.OneToOneField(default=0, on_delete=django.db.models.deletion.CASCADE, to='orders.order'),
+            field=models.OneToOneField(null=True, blank=True, on_delete=django.db.models.deletion.CASCADE, to='orders.order'),
         ),
         migrations.AddConstraint(
             model_name='rating',
