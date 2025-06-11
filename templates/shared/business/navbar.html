@@ -1,5 +1,5 @@
 {% load static %}
-<div class="dashboard-container">
+<div class="dashboard-container" x-data="{ open: false }">
   <header class="bg-white border-b border-gray-200 px-6 py-4 max-w-7xl mx-auto">
     <div class="flex justify-between items-center">
       <!-- Logo -->
@@ -9,16 +9,23 @@
         </a>
       </div>
 
-      <!-- Navigation -->
-      <nav class="flex space-x-1">
-        <a href=" # " class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">基本設定</a>
-        <a href="{% url 'stores:management' %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">商品/庫存管理</a>
-        <a href="{% url 'stores:order_list' user.store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">訂單</a>
-        <a href="{% url 'stores:businesses_dashboard' user.store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">分析報告</a>
+      <!-- Hamburger button (mobile only) -->
+      <button @click="open = !open" class="md:hidden text-gray-600 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex space-x-1">
+        <a href="#" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100">基本設定</a>
+        <a href="{% url 'stores:management' %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100">商品/庫存管理</a>
+        <a href="{% url 'stores:order_list' user.store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100">訂單</a>
+        <a href="{% url 'stores:businesses_dashboard' user.store.id %}" class="px-4 py-2 border border-gray-400 rounded text-sm font-medium text-gray-700 hover:bg-gray-100">分析報告</a>
       </nav>
 
-      <!-- User Profile -->
-      <div class="flex items-center space-x-3">
+      <!-- Desktop User Info -->
+      <div class="hidden md:flex items-center space-x-3">
         <div class="text-sm">
           <div class="text-gray-600">帳號：{{ user.email }}</div>
           <form method="post" action="{% url 'users:delete_session' %}">
@@ -26,6 +33,22 @@
             <button class="mt-0.5 px-3 py-1 border border-gray-400 rounded text-xm text-gray-700 hover:bg-gray-100">登出</button>
           </form>
         </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu (展開用 Alpine) -->
+    <div x-show="open" x-transition class="md:hidden mt-4 space-y-2">
+      <a href="#" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">基本設定</a>
+      <a href="{% url 'stores:management' %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">商品/庫存管理</a>
+      <a href="{% url 'stores:order_list' user.store.id %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">訂單</a>
+      <a href="{% url 'stores:businesses_dashboard' user.store.id %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">分析報告</a>
+
+      <div class="border-t pt-2">
+        <div class="text-sm text-gray-600">帳號：{{ user.email }}</div>
+        <form method="post" action="{% url 'users:delete_session' %}">
+          {% csrf_token %}
+          <button class="mt-1 px-3 py-1 border border-gray-400 rounded text-xm text-gray-700 hover:bg-gray-100">登出</button>
+        </form>
       </div>
     </div>
   </header>
