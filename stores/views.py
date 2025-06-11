@@ -18,7 +18,7 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.timezone import now
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
@@ -137,17 +137,27 @@ def show(req, id):
 
 
 @store_required
-def edit(req, id):
-    store = get_object_or_404(Store, pk=id, user=req.user)
-    if req.method == 'POST':
-        form = StoreForm(req.POST, req.FILES, instance=store)
+def store_settings(request):
+    """
+    商家基本設定編輯頁面
+    顯示並處理商家自己的資料更新
+    """
+    store = request.user.store
+
+    if request.method == 'POST':
+        form = StoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
             form.save()
-            return redirect('stores:show', store_id=store.id)
-    form = StoreForm(instance=store)
+            messages.success(request, '商家資訊已成功更新！')
+            return redirect('stores:store_settings')
+        else:
+            messages.error(request, '請檢查您的輸入，有錯誤發生！')
+    else:
+        form = StoreForm(instance=store)
+
     return render(
-        req,
-        'stores/edit.html',
+        request,
+        'stores/store_settings.html',
         {
             'form': form,
             'store': store,
@@ -206,14 +216,14 @@ def store_management(request):
     """商家管理頁面"""
     store = request.user.store
 
-    today = now().date()  # 取得今天日期（含時區）
+    today = timezone.now().date()  # 取得今天日期（含時區），使用 timezone.now()
 
     # 篩選今天的「已完成」訂單
     order_queryset = store.orders.filter(
         created_at__date=today,
         order_status='COMPLETED',
     )
-    Order.objects.values_list('order_status', flat=True).distinct()
+    # Order.objects.values_list('order_status', flat=True).distinct() # 這行不需要
 
     stats = order_queryset.aggregate(
         total_amount=Sum('total_price'),
@@ -224,7 +234,9 @@ def store_management(request):
     # 預設為 0 或顯示友善數字（處理 None）
     stats = {
         'total_amount': stats['total_amount'] or 0,
-        'average_order_price': round(stats['average_order_price'] or 0),
+        'average_order_price': round(stats['average_order_price'] or 0)
+        if stats['average_order_price'] is not None
+        else 0,  # 避免 round(None)
         'order_count': stats['order_count'] or 0,
     }
 
@@ -303,6 +315,7 @@ def category_create(request, store_id):
     if not name:
         messages.error(request, '類別名稱不能為空')
         return render(request, 'shared/messages.html')
+    # 檢查類別名稱是否已經存在於該商店下
     if store.categories.filter(name=name).exists():
         messages.error(request, '此類別已存在')
         return render(request, 'shared/messages.html')
@@ -320,7 +333,12 @@ def category_edit(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     new_name = request.POST.get('name')
     if new_name:
-        if category.store.categories.filter(name=new_name).exists():
+        # 檢查新的類別名稱是否與同商店下其他類別重複
+        if (
+            category.store.categories.filter(name=new_name)
+            .exclude(id=category.id)
+            .exists()
+        ):
             messages.error(request, '此類別名稱已存在')
             return render(request, 'shared/messages.html')
         elif new_name != category.name:
@@ -338,7 +356,10 @@ def category_edit(request, category_id):
 @require_POST
 def category_delete(request, category_id):
     category = get_object_or_404(Category, id=category_id)
-    store = category.store
+    # 確保只有商店自己的類別可以被刪除
+    if category.store != request.user.store:
+        messages.error(request, '您無權刪除此類別。')
+        return HttpResponseBadRequest('Unauthorized access.')
 
     category.delete()
     messages.success(request, '類別已刪除')
@@ -437,9 +458,13 @@ def category_products(request, store_id, category_id=None):
 
 def businesses_dashboard(request, store_id):
     store = request.user.store
+    # 檢查 store_id 是否與當前登入用戶的 store_id 匹配
+    if str(store.id) != str(store_id):
+        return HttpResponseBadRequest('Unauthorized access to dashboard.')
+
     orders = Order.objects.filter(store=store, order_status='COMPLETED')
     ratings = Rating.objects.filter(store=store)
-    today = now().date()
+    today = timezone.now().date()  # 使用 timezone.now()
 
     # 熱銷商品排行（Top 5）
     top_products = (
