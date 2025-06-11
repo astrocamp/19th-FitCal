@@ -1,0 +1,72 @@
+{% load static %}
+{% if user.is_authenticated %}
+<!-- 表單HTML -->
+<form
+  x-data="{
+    showFilter: false,
+    keyword: '{{ request.GET.q|default:"" }}',
+    maxCalories: parseInt('{{ request.GET.max_calories|default:"0" }}'),
+    get isValidSearch() {
+      return this.keyword.trim().length > 0 || this.maxCalories > 0;
+    }
+  }" 
+  id="searchForm" 
+  action="{% url 'search:index' %}" 
+  method="get" 
+  class="relative w-full max-w-lg" 
+  @click.away="showFilter = false">
+
+
+  <!--- 搜尋欄 -->
+  <div class="flex gap-3 items-center">
+    <input
+      id="searchInput" 
+      name="q" 
+      type="text" 
+      placeholder="搜尋商家、餐點" 
+      class="input input-bordered w-53 pl-10" 
+      value="{{ request.GET.q }}"
+      x-model="keyword" />
+
+    <!-- 篩選 icon button -->
+    <button type="button" @click="showFilter = !showFilter" class="btn">
+      <i class="fa-solid fa-sliders"></i>
+    </button>
+
+    <!-- 搜尋按鈕 -->
+    <button 
+      id="searchBtn" 
+      type="submit" 
+      class="btn">搜尋
+    </button>
+    <i 
+      class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-20 pointer-events-none">
+    </i>
+  </div>
+
+  <!-- 下排：拉霸，使用絕對定位 -->
+  <div 
+    id="calorieFilter" 
+    class="absolute left-0 w-full bg-white shadow-lg rounded mt-1 z-10 transition-all duration-300 overflow-hidden" 
+    x-ref="filter" 
+    x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
+    <div class="p-2">
+      <label
+        for="max_calories" 
+        class="block text-xs mb-1"> 最多卡路里(非必填)：
+        <span x-text="maxCalories">          
+        </span> 
+      </label>
+      <input 
+        type="range" 
+        id="max_calories" 
+        name="max_calories" 
+        min="0" 
+        max="1000" 
+        step="10" 
+        x-model="maxCalories" 
+        class="range w-full" />
+    </div>
+  </div>
+</form>
+{% endif %}
