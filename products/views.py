@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -69,6 +70,7 @@ def create(request, category_id):
             Category.objects.prefetch_related('products'), id=category_id
         )
         products = category.products.filter(store=request.user.store)
+        messages.success(request, f'商品 {form.name} 已新增')
         return render(
             request,
             'shared/business/products/create_success.html',
@@ -99,11 +101,12 @@ def update(request, id):
         form = form.save(commit=False)
         # form.store = request.user.store
         form.save()
+        messages.success(request, f'商品 {product.name} 已更新')
         category = product.category
         products = Product.objects.prefetch_related('category').filter(
             category=category, store=request.user.store
         )
-        return render(
+        return redirect(
             request,
             'shared/business/products/create_success.html',
             {'products': products, 'category': category},
@@ -122,7 +125,8 @@ def delete(request, id):
     products = Product.objects.prefetch_related('category').filter(
         category=category, store=request.user.store
     )
-    return render(
+    messages.success(request, f'商品 {product.name} 已刪除')
+    return redirect(
         request,
         'stores/business/product_list.html',
         {'products': products, 'category': category},
