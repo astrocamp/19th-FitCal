@@ -23,7 +23,6 @@
             <p>{{ product.description }}</p>
             <p>卡路里: {{ product.calories }}</p>
             <p>可販售數量: {{ product.quantity }}</p>
-            <p>客製化: {{ product.customize }}</p>
           </section>
 
           <!-- 加入購物車表單 -->
@@ -39,7 +38,7 @@
               </div>
             </div>
 
-            <button type="submit" class="w-full rounded-md bg-[#5a855a] px-4 py-2 text-white hover:bg-[#2e4e2e] text-sm font-semibold">加入購物車</button>
+            <button {% if user.is_authenticated and user.is_member %} type="submit" {% else %} type="button" @click="document.getElementById('signinModal').classList.remove('hidden'); $el.closest('#productModal').remove()" {% endif %} class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-[#5a855a] px-8 py-3 text-base font-medium text-white hover:bg-[#2e4e2e] focus:bg-[#2e4e2e] focus:ring-2 focus:ring-[#2e4e2e] focus:ring-offset-2 focus:outline-none">加入購物車</button>
           </form>
 
           {% if user.is_store and user.store == product.store %}
