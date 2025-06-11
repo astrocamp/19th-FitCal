@@ -1,9 +1,11 @@
+import json
 import os
 from datetime import timedelta
 from pathlib import Path
 
 import environ
 import requests
+from django.conf import settings
 from django.db import connection
 from django.utils.timezone import localtime, now
 
@@ -182,3 +184,35 @@ def build_line_order_status_message(order):
         )
 
     return '\n'.join(lines)
+
+
+def send_order_reminder_email(order):
+    """使用 Mailgun 發送逾時未取餐提醒信給會員"""
+    print(f'[DEBUG] order={order}, type={type(order)}')
+    member = order.member
+    if not member or not getattr(member, 'user', None):
+        return False
+
+    email = getattr(member.user, 'email', None)
+    if not email:
+        return False
+
+    variables = {
+        'pickup_time': order.pickup_time.strftime('%Y-%m-%d %H:%M'),
+        'order_number': order.order_number,
+        'member_name': getattr(order.member, 'name', '會員'),
+    }
+
+    response = requests.post(
+        f'https://api.mailgun.net/v3/{settings.ANYMAIL["MAILGUN_SENDER_DOMAIN"]}/messages',
+        auth=('api', settings.ANYMAIL['MAILGUN_API_KEY']),
+        data={
+            'from': settings.ANYMAIL['MAILGUN_FROM_EMAIL'],
+            'to': [email],
+            'subject': '【FitCal】您有尚未完成的訂單',
+            'template': 'order_reminder',  # 你 Mailgun 後台設定的模板名稱
+            'h:X-Mailgun-Variables': json.dumps(variables),  # 傳入模板變數
+        },
+    )
+
+    return response.status_code == 200

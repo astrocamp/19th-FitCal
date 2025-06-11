@@ -283,6 +283,7 @@ CELERY_BROKER_URL = env('REDIS_URL')
 ANYMAIL = {
     'MAILGUN_API_KEY': os.getenv('MAILGUN_API_KEY'),
     'MAILGUN_SENDER_DOMAIN': os.getenv('MAILGUN_SENDER_DOMAIN'),
+    'MAILGUN_FROM_EMAIL': os.getenv('MAILGUN_FROM_EMAIL'),
 }
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 DEFAULT_FROM_EMAIL = 'FitCal <Fitcal@mg.fitcal-life.com>'
