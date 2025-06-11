@@ -8,6 +8,7 @@ import json
 
 from django.db.models import Avg, Prefetch
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 from products.models import Product
 from stores.models import Rating, Store
@@ -50,12 +51,12 @@ def fetch_latest_store_product_info():
     return info
 
 
-# 處裡使用者的訊息
+# 處理使用者的訊息
+@require_POST
 def chatbot_api(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        user_input = data.get('message', '')
-        reply = generate_chatbot_reply(user_input)
+    data = json.loads(request.body)
+    user_input = data.get('message', '')
+    reply = generate_chatbot_reply(user_input)
     return JsonResponse({'reply': reply})
 
 
@@ -63,27 +64,29 @@ def chatbot_api(request):
 def generate_chatbot_reply(user_input):
     answer = fetch_latest_store_product_info()
 
-    # 如果資料庫沒有找到答案，就用 OpenAI 輔助回答
-    # 這會向 OpenAI 發送一個「聊天請求」，並回傳一個字典（Python 的 dict）
     response = client.chat.completions.create(
-        model='gpt-3.5-turbo',
+        model='gpt-4.1-nano-2025-04-14',
         messages=[
             {
                 'role': 'system',
-                'content': '你是一位溫柔有禮貌、善於解釋的網站客服助理，'
-                '你的任務是根據以下提供的知識資料，協助使用者解答問題。\n\n'
-                '請遵守以下規則：\n'
-                '- 只能根據提供的知識資料作答\n'
-                '- 不要依據常識、個人推測或未提供的背景知識作答\n'
-                '- 不要補充或延伸未提及的內容\n\n'
-                '若使用者的問題與知識資料無關，請回答：\n'
-                '「這個問題目前無法提供進一步回應，建議您洽詢客服 fitcal@gmail.com。」\n\n'
-                '請使用簡單、親切、易懂的語氣回答。\n\n'
-                '以下是知識資料：\n' + answer,
+                'content': f"""你是一位溫柔有禮貌、善於解釋的網站客服助理，
+                你的任務是根據以下提供的知識資料，協助使用者解答問題。
+                請遵守以下規則：
+                - 只能根據提供的知識資料作答
+                - 不要依據常識、個人推測或未提供的背景知識作答
+                - 不要補充或延伸未提及的內容
+                - 若使用者的問題與知識資料無關，請回答：
+                「這個問題目前無法提供進一步回應，建議您洽詢客服 fitcal@gmail.com。」
+                - 若使用者尋求你的幫助，請回答：
+                「我可以協助您尋找心儀的餐點，搭配卡路里資訊及評分狀況，解決你的選擇困難!」
+                - 若使用者希望外送餐點，請回答：
+                「目前平台沒有提供外送服務，您可以致電店家尋求進一步的協助!」
+                - 請使用簡單、親切、易懂的語氣回答。
+                以下是知識資料：
+                {answer}""",
             },
             {'role': 'user', 'content': user_input},
         ],
-        temperature=0,  # 越低越不會亂發揮，只有0跟1的選項
+        temperature=0.7,
     )
-    # choices 是 OpenAI 回傳的 JSON 結構中固定會出現的欄位之一
-    return response.choices[0].message.content  # 選擇第一個回答
+    return response.choices[0].message.content
