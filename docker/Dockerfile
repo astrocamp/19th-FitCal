@@ -35,5 +35,4 @@ RUN uv pip install --system gunicorn
 # 開放 Gunicorn port
 EXPOSE 8000
 
-# 預設啟動指令（使用 gunicorn 啟動 Django）
-CMD ["gunicorn", "--workers=3", "--bind=0.0.0.0:8000", "fitcal.wsgi:application"]
+RUN chmod +x docker/entrypoint.sh
