@@ -60,13 +60,13 @@ def create_cart_item(req, product_id):
         'shared/cart_count.html', {'cart_count': member.carts.count() if member else 0}
     )
     bottom_cart_icon = render_to_string(
-        'stores/bottom_cart_icon.html', 
+        'stores/bottom_cart_icon.html',
         {
             'cart': cart,
             'cart_total_price': cart.total_price,
             'cart_total_quantity': cart.total_quantity,
-            # 'cart_total_calories': cart.total_calories,
-        }
+            'cart_total_calories': cart.total_calories,
+        },
     )
     print(cart_count)
     return HttpResponse(
