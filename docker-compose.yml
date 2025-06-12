@@ -14,7 +14,7 @@ services:
     expose:
       - 8000
     restart: on-failure
-    command: docker/entrypoint.sh
+    command: /app/entrypoint.sh
 
   db:
     image: postgis/postgis:17-3.4

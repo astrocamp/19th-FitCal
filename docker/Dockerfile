@@ -35,4 +35,5 @@ RUN uv pip install --system gunicorn
 # 開放 Gunicorn port
 EXPOSE 8000
 
-RUN chmod +x docker/entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
