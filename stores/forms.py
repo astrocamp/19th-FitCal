@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
-from django.forms import HiddenInput, ModelForm, TextInput, TimeInput
-from django.forms.widgets import ClearableFileInput, RadioSelect
+from django.forms import FileInput, HiddenInput, ModelForm, TextInput, TimeInput
+from django.forms.widgets import RadioSelect
 
 from .models import Rating, Store
 
@@ -32,10 +32,10 @@ def validate_tax_id(tax_id):
     return False
 
 
-class NoLabelClearableFileInput(ClearableFileInput):
-    initial_text = '目前檔案'
-    input_text = '更新檔案'
-    clear_checkbox_label = ''
+# class NoLabelClearableFileInput(ClearableFileInput):
+#     initial_text = '目前檔案'
+#     input_text = '更新檔案'
+#     clear_checkbox_label = ''
 
 
 class StoreForm(ModelForm):
@@ -85,8 +85,8 @@ class StoreForm(ModelForm):
 
         widgets = {
             'user': HiddenInput(),
-            'cover_image': NoLabelClearableFileInput(),
-            'logo_image': NoLabelClearableFileInput(),
+            'cover_image': FileInput(),
+            'logo_image': FileInput(),
             'name': TextInput(
                 attrs={
                     'placeholder': '格式範例：五倍學院',
