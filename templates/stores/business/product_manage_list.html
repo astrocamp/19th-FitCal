@@ -1,3 +1,14 @@
+<div class="flex justify-between items-center">
+  {% if category %}
+  <h2 class="text-xl font-bold text-gray-900">{{ category.name }}</h2>
+  <button hx-get="{% url 'products:new' category.id %}" hx-target="body" hx-swap="beforeend" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center space-x-2">
+    <i class="fas fa-plus"></i>
+    <span>新增商品</span>
+  </button>
+  {% else %}
+  <h2 class="text-xl font-bold text-gray-900">待分類</h2>
+  {% endif %}
+</div>
 <div class="space-y-4">
   {% for product in products %}
   <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
