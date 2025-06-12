@@ -119,6 +119,7 @@ def update_cart_item(req, item_id):
     )
 
 
+@member_required
 def index(req):
     member = req.user.member
     stores = Store.objects.filter(carts__member=member).distinct()
@@ -128,6 +129,7 @@ def index(req):
     )
 
 
+@member_required
 def show(req, id):
     member = req.user.member
     cart = get_object_or_404(Cart, id=id)
@@ -143,12 +145,14 @@ def show(req, id):
     )
 
 
+@member_required
 def delete_cart(req, id):
     cart = get_object_or_404(Cart, id=id)
     cart.delete()
     return redirect('carts:index')
 
 
+@member_required
 def delete_cart_item(req, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
     cart = cart_item.cart
@@ -175,6 +179,7 @@ def update_preview(req, product_id):
     return HttpResponse(f'小計：${subtotal}')
 
 
+@member_required
 def delete_item_from_ordering(req, id):
     cart_item = get_object_or_404(CartItem, id=id)
     product_name = cart_item.product.name
