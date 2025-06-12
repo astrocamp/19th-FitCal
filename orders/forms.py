@@ -33,8 +33,10 @@ class OrderForm(ModelForm):
         widgets = {
             'pickup_time': DateTimeInput(
                 attrs={
-                    'type': 'datetime-local',
+                    'type': 'text',
+                    'class': 'flatpickr-input',
                 },
+                format='%Y-%m-%dT%H:%M',
             )
         }
 
