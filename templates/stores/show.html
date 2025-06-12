@@ -14,7 +14,7 @@
       </div>
       <div class="text-sm text-gray-600">{% trans "營業時間：" %}{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
       <div class="text-sm text-gray-600">
-        <span>{% trans "距離：" %}2.1 公里</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
+        <span>{% trans "距離：" %}2.1 {% trans "公里" %}</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
         <a href="tel:{{ store.phone_number|cut:'-' }}" class="font-bold text-blue-600 hover:underline">{{ store.phone_number }}</a>
       </div>
     </div>
