@@ -50,8 +50,17 @@ urlpatterns = [
         name='category_products',
     ),
     path(
+        '<uuid:store_id>/<int:category_id>/products_sort',
+        views.category_products,
+        name='category_products_sort',
+    ),
+    path(
         '<uuid:store_id>/products',
         views.category_products,
         name='non_category_products',
     ),
+    path('export_sales_csv/', views.export_sales_csv, name='export_sales_csv'),
+    path('management/product_manage', views.management, name='product_manage_panel'),
+    path('management/menu_sort', views.management, name='menu_sort_panel'),
+    path('api/category_sort/', views.api_category_sort, name='api_category_sort'),
 ]

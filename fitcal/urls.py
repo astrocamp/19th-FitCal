@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import include, path
 
+from products import views as products_views
+
 app_name = 'fitcal'
 
 urlpatterns = [
@@ -15,4 +17,9 @@ urlpatterns = [
     path('search/', include('search.urls', namespace='search')),
     path('payment/', include('payment.urls', namespace='payment')),
     path('chatbot/', include('chatbot.urls', namespace='chatbot')),
+    path(
+        'api/estimate-calories/',
+        products_views.estimate_calories_from_image,
+        name='estimate_calories_api',
+    ),
 ]

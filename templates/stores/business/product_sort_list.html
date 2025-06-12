@@ -1,0 +1,29 @@
+<div class="flex justify-between items-center">
+  <h2 class="text-xl font-bold text-gray-900">{{ category.name }}</h2>
+</div>
+
+<!-- 商品排序卡片 -->
+<div id="sortable-products" class="space-y-4" data-sort-url="{% url 'products:api_product_sort' %}">
+  {% for product in products %}
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 grid grid-cols-[auto_1fr_auto] items-center gap-6" data-id="{{ product.id }}">
+    <!-- 商品圖片 -->
+    <img src="{{ product.image.url }}" alt="商品圖片" class="w-20 h-20 object-cover rounded-md bg-gray-100" />
+
+    <!-- 商品資訊 -->
+    <div class="space-y-2">
+      <h3 class="text-lg font-semibold text-gray-900">
+        {{ product.name }}
+        <span class="text-sm text-gray-500 ml-2">({{ product.category }})</span>
+      </h3>
+      <p class="text-sm text-gray-500">{{ product.description }}</p>
+    </div>
+
+    <!-- 拖拉 icon，做為 handle -->
+    <div class="text-gray-400 hover:text-gray-600 cursor-move">
+      <i class="fas fa-bars fa-lg"></i>
+    </div>
+  </div>
+  {% empty %}
+  <div class="text-gray-500">尚無商品</div>
+  {% endfor %}
+</div>

@@ -36,4 +36,8 @@
   .modal-box {
     @apply bg-white rounded-lg shadow-xl overflow-y-auto;
   }
+
+  .category-select {
+    @apply bg-blue-100 !border-2 border-blue-500 font-semibold text-blue-700;
+  }
 }

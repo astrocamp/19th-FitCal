@@ -10,7 +10,9 @@
 
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
+    {% block head_extra %}{% endblock %}
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
   <body class="min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="flex-1">
@@ -21,5 +23,10 @@
       </section>
     </main>
     <footer class="bg-white-100 text-gray-700 px-6 py-10">{% include 'shared/footer.html' %}</footer>
+
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQGfgrR6EQK8TbtNDYg7HQePmcWMKvCQkTMkHTKfhtXMHT5xQZkOL/lmbGCdXzowuoxB9YfX4KrvB9YfX4KrvB/s" crossorigin="anonymous"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.14.4/dist/cdn.min.js"></script>
+
+    {# 這裡放頁面特定的 JS 變數或其他腳本，確保它們在 form_logic.js 之前載入 #} {% block extra_js %}{% endblock extra_js %} {# 載入其他需要在所有頁面載入的通用腳本 #} {% block body_extra_scripts %}{% endblock %}
   </body>
 </html>

@@ -1,4 +1,6 @@
+import csv
 import json
+import re
 from datetime import date, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
@@ -8,7 +10,12 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Avg, Count, F, Prefetch, Sum
 from django.db.models.functions import TruncDate
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    JsonResponse,
+    StreamingHttpResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.timezone import now
@@ -85,25 +92,47 @@ def index(request):
 
 def show(req, id):
     store = get_object_or_404(Store, pk=id)
-    products = store.products.all()
-    categories = store.categories.all()
+
+    # 先查出所有商品，避免 N+1
+    all_products = store.products.select_related('category').all()
+
+    # 預先取得各類別的商品，排序好
+    categories_qs = (
+        store.categories.all()
+        .order_by('sort_order')
+        .prefetch_related(
+            Prefetch(
+                'products',
+                queryset=all_products.order_by('sort_order'),
+                to_attr='sorted_products',  # 自訂屬性名，避免覆蓋原來的 `products`
+            )
+        )
+    )
+
+    # 組裝資料
+    categories = [
+        {'name': category.name, 'products': category.sorted_products}
+        for category in categories_qs
+    ]
+
     store.avg_rating = (
         Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg'] or 0
     )
+
     if req.method == 'POST':
         form = StoreForm(req.POST, req.FILES, instance=store)
         if form.is_valid():
             form.save()
             return redirect('stores:show', id=store.id)
-        return render(
-            req,
-            'stores/edit.html',
-            {'store': store, 'form': form},
-        )
+        return render(req, 'stores/edit.html', {'store': store, 'form': form})
+
     return render(
         req,
         'stores/show.html',
-        {'store': store, 'products': products, 'categories': categories},
+        {
+            'store': store,
+            'categories': categories,
+        },
     )
 
 
@@ -204,6 +233,7 @@ def store_management(request):
 
 @store_required
 def order_list(request, id):
+    # 確保從 URL 傳入的 id 獲取到 Store 物件
     store = get_object_or_404(Store, id=id)
 
     status = request.GET.get('status', '')
@@ -318,7 +348,7 @@ def category_delete(request, category_id):
 @store_required
 def management(request):
     store = request.user.store
-    store = Store.objects.prefetch_related(  # 對 Store 的 related objects 預抓
+    store_qs = Store.objects.prefetch_related(  # 對 Store 的 related objects 預抓
         Prefetch(
             'categories',  # related_name='categories' 的欄位（Category FK Store）
             queryset=Category.objects.prefetch_related(
@@ -326,19 +356,48 @@ def management(request):
             ),  # 對每個 Category 預抓 products
         ),
     ).get(id=store.id)
-    categories = store.categories.order_by('name')
+    categories = store_qs.categories.order_by('sort_order')
     selected_category = categories.first() if categories.exists() else None
-    products = selected_category.products.all() if selected_category else []
-    return render(
-        request,
-        'stores/business/product_management.html',
-        {
-            'store': store,
-            'selected_category': selected_category,
-            'categories': categories,
-            'products': products,
-        },
+    products = (
+        selected_category.products.filter(store=store).order_by(
+            'sort_order', 'created_at'
+        )
+        if selected_category
+        else []
     )
+    if request.resolver_match.url_name == 'management':
+        return render(
+            request,
+            'stores/business/product_management.html',
+            {
+                'store': store,
+                'selected_category': selected_category,
+                'categories': categories,
+                'products': products,
+            },
+        )
+    elif request.resolver_match.url_name == 'product_manage_panel':
+        return render(
+            request,
+            'stores/business/product_manage_panel.html',
+            {
+                'store': store,
+                'selected_category': selected_category,
+                'categories': categories,
+                'products': products,
+            },
+        )
+    elif request.resolver_match.url_name == 'menu_sort_panel':
+        return render(
+            request,
+            'stores/business/menu_sort_panel.html',
+            {
+                'store': store,
+                'selected_category': selected_category,
+                'categories': categories,
+                'products': products,
+            },
+        )
 
 
 @store_required
@@ -352,17 +411,26 @@ def category_products(request, store_id, category_id=None):
     ).get(id=store.id)
     if category_id:
         category = get_object_or_404(Category, id=category_id, store=store)
-        products = store.products.filter(category=category)
-        return render(
-            request,
-            'stores/business/product_list.html',
-            {'category': category, 'products': products},
+        products = store.products.filter(category=category).order_by(
+            'sort_order', 'created_at'
         )
+        if request.resolver_match.url_name == 'category_products':
+            return render(
+                request,
+                'stores/business/product_manage_list.html',
+                {'category': category, 'products': products},
+            )
+        else:
+            return render(
+                request,
+                'stores/business/product_sort_list.html',
+                {'category': category, 'products': products},
+            )
     else:
         products = store.uncat_products
         return render(
             request,
-            'stores/business/product_list.html',
+            'stores/business/product_manage_list.html',
             {'category': '', 'products': products},
         )
 
@@ -511,3 +579,69 @@ def businesses_dashboard(request, store_id):
             'is_today_data': use_today_data,
         },
     )
+
+
+# 報表輸出
+class Echo:
+    def write(self, value):
+        return value
+
+
+@store_required
+def export_sales_csv(request):
+    """匯出銷售報表為 CSV 檔案"""
+    store = Store.objects.get(user=request.user)
+
+    queryset = (
+        Order.objects.select_related('store')
+        .prefetch_related('orderitem_set', 'orderitem_set__product')
+        .filter(store=store)
+    )
+
+    # 將資料轉為迭代器，每列是一個 list
+    def row_generator():
+        header = [
+            '訂單編號',
+            '商品名稱',
+            '購買數量',
+            '商品單價',
+            '小計',
+            '商家名稱',
+            '建立時間',
+        ]
+        yield header
+
+        for order in queryset:
+            for item in order.orderitem_set.all():
+                yield [
+                    order.order_number,
+                    item.product.name if item.product else '（無商品名稱）',
+                    item.quantity,
+                    item.unit_price,
+                    item.quantity * item.unit_price,
+                    store.name,
+                    order.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                ]
+
+    pseudo_buffer = Echo()
+    writer = csv.writer(pseudo_buffer)
+
+    safe_store_name = re.sub(r'[^\w\-]', '_', store.name)
+
+    return StreamingHttpResponse(
+        (writer.writerow(row) for row in row_generator()),
+        content_type='text/csv',
+        headers={
+            'Content-Disposition': f'attachment; filename="{safe_store_name}_sales_report.csv"'
+        },
+    )
+
+
+@store_required
+def api_category_sort(request):
+    ids = request.POST.getlist('ids')
+    store = request.user.store
+    for index, cid in enumerate(ids):
+        Category.objects.filter(id=cid, store=store).update(sort_order=index)
+    messages.success(request, '分類排序已更新')
+    return render(request, 'shared/messages.html')

@@ -88,6 +88,7 @@ class Category(models.Model):
         Store, on_delete=models.CASCADE, related_name='categories'
     )
     name = models.CharField(max_length=100)
+    sort_order = models.PositiveIntegerField(default=0)
 
     class Meta:
         constraints = [
