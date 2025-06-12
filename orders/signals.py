@@ -36,7 +36,7 @@ def handle_order_status_change(sender, instance, **kwargs):
     # 處理超時未取餐
     if (
         instance.order_status == OrderStatus.READY
-        and instance.pickup_time < timezone.now()
+        and instance.pickup_time < timezone.now() - timezone.timedelta(hours=12)
     ):
         instance.order_status = OrderStatus.NO_SHOW
 

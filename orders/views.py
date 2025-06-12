@@ -24,7 +24,11 @@ def index(req):
             return redirect('carts:index')
 
         cart = get_object_or_404(Cart, id=cart_id)
-        form = OrderForm(req.POST, mode='create')
+        form = OrderForm(
+            req.POST,
+            store=cart.store,
+            mode='create',
+        )
         cart_items = cart.items.all()
 
         for cart_item in cart.items.all():
@@ -147,6 +151,7 @@ def new(req):
 
     form = OrderForm(
         mode='create',
+        store=cart.store,
         initial={
             'store': cart.store,
             'note': cart.note,
