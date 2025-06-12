@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 19:58+0800\n"
+"POT-Creation-Date: 2025-06-12 18:31+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,63 +92,55 @@ msgstr "Please complete your store profile first"
 msgid "你沒有權限存取這個店家後台"
 msgstr "You do not have permission to access this store's dashboard"
 
-#: .\members\forms.py:22
+#: .\members\forms.py:20
 msgid "姓名"
 msgstr "Name"
 
-#: .\members\forms.py:23
+#: .\members\forms.py:21
 msgid "電話"
 msgstr "Phone"
 
-#: .\members\forms.py:24
+#: .\members\forms.py:22
 msgid "性別"
 msgstr "Gender"
 
-#: .\members\forms.py:25
+#: .\members\forms.py:23
 msgid "生日"
 msgstr "Date of Birth"
 
-#: .\members\forms.py:26
-msgid "LINE ID"
-msgstr "LINE ID"
-
-#: .\members\forms.py:27
-msgid "Google ID"
-msgstr "Google ID"
-
-#: .\members\forms.py:40
+#: .\members\forms.py:36
 msgid "請輸入姓名"
 msgstr "Please enter your name"
 
-#: .\members\forms.py:43
+#: .\members\forms.py:39
 msgid "請輸入電話號碼"
 msgstr "Please enter your phone number"
 
-#: .\members\forms.py:46
+#: .\members\forms.py:42
 msgid "請選擇性別"
 msgstr "Please select your gender"
 
-#: .\members\forms.py:47
+#: .\members\forms.py:43
 msgid "性別選擇無效"
 msgstr "Invalid gender selection"
 
-#: .\members\forms.py:50
+#: .\members\forms.py:46
 msgid "請輸入正確的日期格式"
 msgstr "Please enter a valid date format"
 
-#: .\members\forms.py:64
+#: .\members\forms.py:60
 msgid "此欄位僅供查看，無法修改。"
 msgstr "This field is read-only and cannot be edited"
 
-#: .\members\forms.py:71
+#: .\members\forms.py:67
 msgid "請輸入生日"
 msgstr "Please enter your date of birth"
 
-#: .\members\forms.py:73
+#: .\members\forms.py:69
 msgid "生日不能是未來的日期"
 msgstr "Date of birth cannot be in the future"
 
-#: .\members\forms.py:78
+#: .\members\forms.py:74
 msgid "生日不可修改"
 msgstr "Date of birth cannot be modified"
 
@@ -232,6 +224,18 @@ msgstr "Paid"
 msgid "已退款"
 msgstr "Refunded"
 
+#: .\orders\enums.py:28
+msgid "會員取消"
+msgstr "Cancelled by member"
+
+#: .\orders\enums.py:29
+msgid "店家取消"
+msgstr "Cancelled by store"
+
+#: .\orders\enums.py:30
+msgid "系統自動取消"
+msgstr "Automatically cancelled by system"
+
 #: .\orders\forms.py:25 .\templates\orders\components\ordering_step1.html:48
 #: .\templates\orders\components\ordering_step3.html:38
 msgid "預計取貨時間"
@@ -250,7 +254,7 @@ msgstr "Payment Method"
 msgid "付款狀態"
 msgstr "Payment Status"
 
-#: .\orders\forms.py:30
+#: .\orders\forms.py:30 .\templates\stores\store_management.html:19
 msgid "總金額"
 msgstr "Total Amount"
 
@@ -274,39 +278,39 @@ msgstr "Please select a time within 2 hours after the original pickup time"
 msgid "單價"
 msgstr "Unit Price"
 
-#: .\payment\views.py:30
+#: .\payment\views.py:31
 msgid "找不到訂單資訊"
 msgstr "Order information not found"
 
-#: .\payment\views.py:38 .\payment\views.py:141
+#: .\payment\views.py:39 .\payment\views.py:142
 msgid "找不到購物車資訊"
 msgstr "Cart information not found"
 
-#: .\payment\views.py:130
+#: .\payment\views.py:131
 msgid "訂單資訊已過期"
 msgstr "Order information has expired"
 
-#: .\payment\views.py:147
+#: .\payment\views.py:148
 msgid "缺少交易 ID"
 msgstr "Transaction ID is missing"
 
-#: .\payment\views.py:197
+#: .\payment\views.py:202
 msgid "付款成功，訂單已建立"
 msgstr "Payment successful, order has been created"
 
-#: .\payment\views.py:201
+#: .\payment\views.py:206
 msgid "建立訂單時發生錯誤："
 msgstr "An error occurred while creating the order:"
 
-#: .\payment\views.py:202
+#: .\payment\views.py:207
 msgid "建立訂單失敗"
 msgstr "Failed to create order"
 
-#: .\payment\views.py:205
+#: .\payment\views.py:210
 msgid "未知錯誤"
 msgstr "Unknown error"
 
-#: .\payment\views.py:206
+#: .\payment\views.py:211
 msgid "付款失敗："
 msgstr "Payment failed:"
 
@@ -347,17 +351,13 @@ msgstr "Available quantity"
 msgid "價格"
 msgstr "Price"
 
-#: .\products\views.py:22 .\products\views.py:45
+#: .\products\views.py:58
 msgid "新增成功"
 msgstr "Successfully added"
 
-#: .\products\views.py:58 .\stores\views.py:98 .\stores\views.py:119
+#: .\products\views.py:88 .\stores\views.py:128 .\stores\views.py:149
 msgid "更新成功"
 msgstr "Successfully updated"
-
-#: .\products\views.py:79 .\stores\views.py:136
-msgid "已刪除"
-msgstr "Deleted"
 
 #: .\stores\forms.py:57 .\stores\forms.py:126
 msgid "店家名稱不能空白"
@@ -451,39 +451,63 @@ msgstr "Rating (1–5 points)"
 msgid "統編必須為8位數字"
 msgstr "Unified Business Number must be 8 digits"
 
-#: .\stores\views.py:40
+#: .\stores\views.py:48
 msgid "創建成功"
 msgstr "Created successfully"
 
-#: .\stores\views.py:145
-msgid "請先填寫會員資料"
-msgstr "Please complete your member profile first"
+#: .\stores\views.py:166
+msgid "已刪除"
+msgstr "Deleted"
 
-#: .\stores\views.py:254
+#: .\stores\views.py:177
+msgid "訂單尚未完成，無法評分"
+msgstr "The order is not completed yet and cannot be rated."
+
+#: .\stores\views.py:180
+msgid "此訂單已評分"
+msgstr "This order has already been rated."
+
+#: .\stores\views.py:185
+msgid "請提供有效的分數"
+msgstr "Please provide a valid rating."
+
+#: .\stores\views.py:188
+msgid "分數必須在 1 到 5 分之間"
+msgstr "The rating must be between 1 and 5."
+
+#: .\stores\views.py:199
+msgid "已評分："
+msgstr "Rated:"
+
+#: .\stores\views.py:205
+msgid "伺服器發生錯誤，請稍後再試"
+msgstr "A server error occurred. Please try again later."
+
+#: .\stores\views.py:309
 msgid "類別名稱不能為空"
 msgstr "Category name cannot be empty"
 
-#: .\stores\views.py:257
+#: .\stores\views.py:312
 msgid "此類別已存在"
 msgstr "This category already exists"
 
-#: .\stores\views.py:261
+#: .\stores\views.py:316
 msgid "類別創建成功"
 msgstr "Category created successfully"
 
-#: .\stores\views.py:274
+#: .\stores\views.py:329
 msgid "此類別名稱已存在"
 msgstr "This category name already exists"
 
-#: .\stores\views.py:279
+#: .\stores\views.py:334
 msgid "類別名稱已更新"
 msgstr "Category name updated"
 
-#: .\stores\views.py:281
+#: .\stores\views.py:336
 msgid "請輸入有效的類別名稱"
 msgstr "Please enter a valid category name"
 
-#: .\stores\views.py:294
+#: .\stores\views.py:349
 msgid "類別已刪除"
 msgstr "Category deleted"
 
@@ -560,6 +584,10 @@ msgstr "Business Hours:"
 msgid "距離："
 msgstr "Distance:"
 
+#: .\templates\carts\show.html:14 .\templates\stores\store_card.html:22
+msgid "公里"
+msgstr "km"
+
 #: .\templates\carts\show.html:29
 msgid "無圖片"
 msgstr "No Image"
@@ -597,6 +625,8 @@ msgid "送出"
 msgstr "Send"
 
 #: .\templates\components\order_actions.html:3
+#: .\templates\shared\orders\order_status_button.html:2
+#: .\templates\shared\orders\order_status_button.html:12
 msgid "確定要取消訂單嗎？"
 msgstr "Are you sure you want to cancel the order?"
 
@@ -708,54 +738,42 @@ msgstr "No stores have been added to favorites yet."
 msgid "會員資料"
 msgstr "Member Information"
 
-#: .\templates\members\index.html:6 .\templates\members\show.html:3
-msgid "ID："
-msgstr "ID:"
-
-#: .\templates\members\index.html:7
+#: .\templates\members\index.html:6
 msgid "姓名："
 msgstr "Name:"
 
-#: .\templates\members\index.html:8 .\templates\members\show.html:4
+#: .\templates\members\index.html:7 .\templates\members\show.html:4
 #: .\templates\shared\footer.html:6
 msgid "電話："
 msgstr "Phone:"
 
-#: .\templates\members\index.html:9 .\templates\members\show.html:5
+#: .\templates\members\index.html:8 .\templates\members\show.html:5
 msgid "性別："
 msgstr "Gender:"
 
-#: .\templates\members\index.html:10 .\templates\members\show.html:6
+#: .\templates\members\index.html:9 .\templates\members\show.html:6
 msgid "生日："
 msgstr "Birthday:"
 
-#: .\templates\members\index.html:11
-msgid "LINE："
-msgstr "LINE:"
-
-#: .\templates\members\index.html:12 .\templates\members\show.html:8
-msgid "Google："
-msgstr "Google:"
-
-#: .\templates\members\index.html:13 .\templates\members\show.html:9
+#: .\templates\members\index.html:10 .\templates\members\show.html:9
 msgid "建立時間："
 msgstr "Created At:"
 
-#: .\templates\members\index.html:14 .\templates\members\show.html:10
+#: .\templates\members\index.html:11 .\templates\members\show.html:10
 msgid "更新時間："
 msgstr "Updated At:"
 
-#: .\templates\members\index.html:16
+#: .\templates\members\index.html:13
 msgid "編輯資料"
 msgstr "Edit Info"
 
-#: .\templates\members\index.html:17 .\templates\members\show.html:12
+#: .\templates\members\index.html:14 .\templates\members\show.html:12
 msgid "是否確認刪除帳號與會員？此操作無法復原！"
 msgstr ""
 "Are you sure you want to delete this account and membership? This action "
 "cannot be undone!"
 
-#: .\templates\members\index.html:19 .\templates\members\show.html:15
+#: .\templates\members\index.html:16 .\templates\members\show.html:15
 msgid "刪除帳號與會員"
 msgstr "Delete Account and Membership"
 
@@ -763,9 +781,17 @@ msgstr "Delete Account and Membership"
 msgid "確定"
 msgstr "Confirm"
 
+#: .\templates\members\show.html:3
+msgid "ID："
+msgstr "ID:"
+
 #: .\templates\members\show.html:7
 msgid "Line："
 msgstr "LINE:"
+
+#: .\templates\members\show.html:8
+msgid "Google："
+msgstr "Google:"
 
 #: .\templates\members\show.html:11
 msgid "更新資料"
@@ -959,6 +985,12 @@ msgstr "Related Stores"
 msgid "相關商品"
 msgstr "Related Products"
 
+#: .\templates\search\index.html:27
+#, fuzzy
+#| msgid "商家："
+msgid "商家"
+msgstr "Store:"
+
 #: .\templates\shared\footer.html:7
 msgid "地址：五倍紅寶石學院"
 msgstr "Address: 5xRuby Academy"
@@ -1007,6 +1039,23 @@ msgstr "Favorite Items"
 msgid "登入 / 註冊"
 msgstr "Login / Register"
 
+#: .\templates\shared\orders\order_status_button.html:2
+#: .\templates\shared\orders\order_status_button.html:12
+msgid "取消訂單"
+msgstr "Cancel Order"
+
+#: .\templates\shared\orders\order_status_button.html:4
+msgid "開始準備"
+msgstr "Start Preparing"
+
+#: .\templates\shared\orders\order_status_button.html:6
+msgid "完成準備"
+msgstr "Preparation Completed"
+
+#: .\templates\shared\orders\order_status_button.html:8
+msgid "完成取餐"
+msgstr "Pickup Completed"
+
 #: .\templates\stores\business\index.html:3 .\templates\stores\index.html:16
 msgid "您的店家資訊："
 msgstr "Your Store Information:"
@@ -1037,7 +1086,6 @@ msgstr "Average Rating:"
 
 #: .\templates\stores\business\index.html:10 .\templates\stores\index.html:23
 #: .\templates\stores\rating_button.html:5
-#: .\templates\stores\store_card.html:37
 msgid "分"
 msgstr "points"
 
@@ -1089,45 +1137,29 @@ msgstr "Rated"
 msgid "店家封面"
 msgstr "Store Cover"
 
-#: .\templates\stores\show.html:28
+#: .\templates\stores\show.html:32
 msgid "刪除帳號"
 msgstr "Delete Account"
 
-#: .\templates\stores\show.html:30
+#: .\templates\stores\show.html:34
 msgid "新增類別"
 msgstr "Add Category"
 
-#: .\templates\stores\show.html:40
+#: .\templates\stores\show.html:44
 msgid "暫無分類"
 msgstr "No Category"
 
-#: .\templates\stores\show.html:43
+#: .\templates\stores\show.html:47
 msgid "新增商品"
 msgstr "Add Product"
-
-#: .\templates\stores\store_card.html:28
-msgid "你的評分："
-msgstr "Your Rating:"
-
-#: .\templates\stores\store_card.html:37
-msgid "已評分為"
-msgstr "Rated as"
-
-#: .\templates\stores\store_card.html:39
-msgid "送出評分"
-msgstr "Submit Rating"
 
 #: .\templates\stores\store_management.html:15
 msgid "今日營業概況"
 msgstr "Today's Business Overview"
 
-#: .\templates\stores\store_management.html:19
-msgid "結帳金額"
-msgstr "Checkout Amount"
-
 #: .\templates\stores\store_management.html:25
-msgid "訂單均單價"
-msgstr "Average Order Value"
+msgid "訂單平均金額"
+msgstr "Average Order Amount"
 
 #: .\templates\stores\store_management.html:31
 msgid "訂單數"
@@ -1291,41 +1323,68 @@ msgstr ""
 "The password is too similar to your email address,please choose a different "
 "one."
 
-#: .\users\views.py:21
+#: .\users\views.py:22
 msgid "你已經登入，不能註冊新帳號"
 msgstr "You are already logged in and cannot register a new account."
 
-#: .\users\views.py:37 .\users\views.py:110 .\users\views.py:118
+#: .\users\views.py:38 .\users\views.py:124 .\users\views.py:132
 msgid "你已登入"
 msgstr "You are already logged in."
 
-#: .\users\views.py:53
+#: .\users\views.py:54
 msgid "你已經登入，不能再建立新帳號"
 msgstr "You are already logged in and cannot create another account."
 
-#: .\users\views.py:77
+#: .\users\views.py:91
 msgid "你已登入，不能再建立帳號"
 msgstr "You are already logged in and cannot create another account."
 
-#: .\users\views.py:136
+#: .\users\views.py:150
 msgid "帳號或密碼錯誤，請再試一次。"
 msgstr "Incorrect email or password. Please try again."
 
-#: .\users\views.py:141
+#: .\users\views.py:155
 msgid "會員登入成功！"
 msgstr "Member login successful!"
 
-#: .\users\views.py:155
+#: .\users\views.py:169
 msgid "帳號或密碼錯誤，或此帳號非店家"
 msgstr "Incorrect email or password, or this account is not a store owner."
 
-#: .\users\views.py:165
+#: .\users\views.py:179
 msgid "店家登入成功！"
 msgstr "Store login successful!"
 
-#: .\users\views.py:173
+#: .\users\views.py:187
 msgid "已登出！"
 msgstr "You have been logged out."
+
+#~ msgid "LINE ID"
+#~ msgstr "LINE ID"
+
+#~ msgid "Google ID"
+#~ msgstr "Google ID"
+
+#~ msgid "請先填寫會員資料"
+#~ msgstr "Please complete your member profile first"
+
+#~ msgid "LINE："
+#~ msgstr "LINE:"
+
+#~ msgid "你的評分："
+#~ msgstr "Your Rating:"
+
+#~ msgid "已評分為"
+#~ msgstr "Rated as"
+
+#~ msgid "送出評分"
+#~ msgstr "Submit Rating"
+
+#~ msgid "結帳金額"
+#~ msgstr "Checkout Amount"
+
+#~ msgid "訂單均單價"
+#~ msgstr "Average Order Value"
 
 #, python-format
 #~ msgid "%(product)s 已從購物車中刪除"
@@ -1355,9 +1414,6 @@ msgstr "You have been logged out."
 
 #~ msgid "此訂單無法取消"
 #~ msgstr "This order cannot be canceled"
-
-#~ msgid "訂單開始準備中"
-#~ msgstr "Order is now being prepared"
 
 #~ msgid "此訂單無法開始準備"
 #~ msgstr "This order cannot be prepared"
