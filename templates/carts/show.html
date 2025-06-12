@@ -20,43 +20,55 @@
 <!-- 商品明細 -->
 <div class="space-y-4">
   {% for item in cart_item %}
-  <div id="cart-item-{{ item.id }}" x-data="cartItem({{ item.quantity }}, '{{ item.id }}', '{% url 'carts:update_cart_item' item.id %}', {{ item.product.quantity }})" class="flex flex-col md:flex-row md:items-center md:justify-between border rounded-lg p-4 space-y-4 md:space-y-0 md:space-x-4">
+  <div id="cart-item-{{ item.id }}"
+      x-data="cartItem({{ item.quantity }}, '{{ item.id }}', '{% url 'carts:update_cart_item' item.id %}', {{ item.product.quantity }})"
+      class="flex items-center gap-4 border rounded-lg p-3 sm:p-4">
+
     <!-- 商品圖片 -->
-    <div class="flex-shrink-0 self-center md:self-auto">
+    <div class="flex-shrink-0">
       {% if item.product.image %}
-      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-24 h-24 object-cover rounded-md border border-gray-200" />
+      <img src="{{ item.product.image.url }}"
+          alt="{{ item.product.name }}"
+          class="w-20 h-20 object-cover rounded-md border border-gray-200" />
       {% else %}
-      <div class="w-24 h-24 bg-gray-100 flex items-center justify-center text-gray-400 text-sm rounded-md border">無圖片</div>
+      <div class="w-20 h-20 bg-gray-100 flex items-center justify-center text-gray-400 text-sm rounded-md border">
+        無圖片
+      </div>
       {% endif %}
     </div>
 
-    <!-- 商品資訊與互動 -->
-    <div class="flex flex-1 flex-col md:flex-row md:items-center md:justify-between w-full space-y-2 md:space-y-0">
-      <!-- 商品名稱與價格 -->
-      <div class="text-center md:text-left">
-        <p class="text-lg font-medium">{{ item.product.name }}</p>
-        <p class="text-gray-600 mt-1">{{ item.product.calories }} kcal</p>
-        <p class="text-gray-600 mt-1">$ {{ item.product.price }}</p>
-
-      </div>
-
-      <!-- 數量與刪除 -->
-      <div class="flex items-center justify-end space-x-4 gap-5 w-full md:w-auto">
-        <!-- 數量 -->
-        <label for="{{ item.id }}_edit_qty" class="sr-only">數量</label>
-        <div>
-          <input id="{{ item.id }}_edit_qty" type="number" min="1" x-model.number="qty" @blur="isDelete" @keydown.enter.prevent="isDelete"
-          class="w-20 border rounded-md px-2 py-1 text-center" />
-          <span class="text-gray-600">件</span>
+    <!-- 右側內容（商品資訊 + 控制區） -->
+    <div class="flex flex-1 flex-col justify-between w-full">
+      <div class="flex justify-between items-start flex-wrap sm:flex-nowrap">
+        <!-- 商品資訊 -->
+        <div class="text-sm">
+          <p class="font-medium text-gray-900">{{ item.product.name }}</p>
+          <p class="text-gray-500 text-xs">{{ item.product.calories }} kcal</p>
+          <p class="text-gray-600 text-sm">$ {{ item.product.price }}</p>
         </div>
 
-        <!-- 刪除按鈕 -->
-        <form action="{% url 'carts:delete_cart_item' item.id %}" method="post" onsubmit="return confirm('確認刪除商品？')">
-          {% csrf_token %}
-          <button type="submit" class="text-red-600 hover:text-red-700 text-2xl transition-colors">
-            <i class="fas fa-trash"></i>
-          </button>
-        </form>
+        <!-- 數量與刪除 -->
+        <div class="flex items-center gap-3 mt-2 sm:mt-0">
+          <label for="{{ item.id }}_edit_qty" class="sr-only">數量</label>
+          <div class="flex items-center gap-1">
+            <input id="{{ item.id }}_edit_qty" type="number" min="1"
+                  x-model.number="qty"
+                  @blur="isDelete"
+                  @keydown.enter.prevent="isDelete"
+                  class="w-16 border rounded-md px-2 py-1 text-center text-sm" />
+            <span class="text-gray-500 text-xs">件</span>
+          </div>
+
+          <!-- 刪除按鈕 -->
+          <form action="{% url 'carts:delete_cart_item' item.id %}"
+                method="post"
+                onsubmit="return confirm('確認刪除商品？')">
+            {% csrf_token %}
+            <button type="submit" class="text-red-600 hover:text-red-700 text-xl transition-colors">
+              <i class="fas fa-trash"></i>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

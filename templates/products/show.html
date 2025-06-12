@@ -1,79 +1,56 @@
-<div id="productModal" x-data class="relative z-10" role="dialog" aria-modal="true" @click="$el.remove()">
-  <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
-  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-    <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
-      <div class="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
-        <div class="relative flex w-full items-center overflow-hidden rounded-2xl bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8" @click.stop>
-          <button type="button" @click="$el.closest('#productModal').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
-            <span class="sr-only">Close</span>
-            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-          </button>
+<div id="productModal" x-data class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6 sm:px-6 lg:px-8" role="dialog" aria-modal="true" @click="$el.remove()">
+  <div class="relative w-full max-w-lg sm:max-w-xl lg:max-w-4xl bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-hidden" @click.stop>
+    <!-- 關閉按鈕 -->
+    <button type="button" @click="$el.closest('#productModal').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 z-10">
+      <span class="sr-only">Close</span>
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
 
-          <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="aspect-2/3 w-full rounded-lg bg-gray-100 object-cover sm:col-span-4 lg:col-span-5" />
-            <div class="sm:col-span-8 lg:col-span-7">
-              <h2 class="text-2xl font-bold text-gray-900 sm:pr-12">{{ product.name }}</h2>
+    <!-- 內容捲動容器 -->
+    <div class="overflow-y-auto max-h-[90vh] p-5 sm:p-6 lg:p-8">
+      <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-12 sm:gap-x-6">
+        <!-- 商品圖片 -->
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full aspect-square rounded-lg bg-gray-100 object-cover sm:col-span-5" />
 
-              <section class="mt-2">
-                <p class="text-xl text-gray-900">${{ product.price }}</p>
-                <p class="mt-1 text-m text-gray-600">{{ product.description }}</p>
-                <p class="mt-1 text-sm text-gray-600">卡路里: {{ product.calories }}</p>
-                <p class="mt-1 text-sm text-gray-600">可販售數量: {{ product.quantity }}</p>
-                <p class="mt-1 text-sm text-gray-600">客製化: {{ product.customize }}</p>
-              </section>
+        <!-- 文字內容 -->
+        <div class="sm:col-span-7">
+          <h2 class="text-xl font-bold text-gray-900 mb-2">{{ product.name }}</h2>
 
-              <section class="mt-10">
-                <fieldset class="mt-6">
-                  <legend class="text-base font-medium text-gray-900 mb-4">飯量</legend>
-                  <div class="flex items-center mb-4">
-                    <input id="rice-full" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label for="rice-full" class="ml-2 block text-sm text-gray-700">吃飽飽</label>
-                  </div>
-                  <div class="flex items-center mb-4">
-                    <input id="rice-less" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label for="rice-less" class="ml-2 block text-sm text-gray-700">不要那麼多</label>
-                  </div>
-                  <div class="flex items-center mb-4">
-                    <input id="rice-mini" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label for="rice-mini" class="ml-2 block text-sm text-gray-700">迷你飯</label>
-                  </div>
-                </fieldset>
+          <section class="text-sm text-gray-700 space-y-1">
+            <p class="text-base text-gray-900 font-medium">${{ product.price }}</p>
+            <p>{{ product.description }}</p>
+            <p>卡路里: {{ product.calories }}</p>
+            <p>可販售數量: {{ product.quantity }}</p>
+            <p>客製化: {{ product.customize }}</p>
+          </section>
 
-                <form action="{% url 'carts:create_cart_item' product.id %}" method="POST" x-data="{ quantity: 1 }" hx-post="{% url 'carts:create_cart_item' product.id %}" hx-target="this" hx-swap="none">
-                  {% csrf_token %}
+          <!-- 加入購物車表單 -->
+          <form action="{% url 'carts:create_cart_item' product.id %}" method="POST" x-data="{ quantity: 1 }" class="mt-4 space-y-4" hx-post="{% url 'carts:create_cart_item' product.id %}" hx-target="this" hx-swap="none">
+            {% csrf_token %}
 
-                  <div class="mt-6">
-                    <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">數量</label>
-
-                    <div class="flex items-center space-x-2">
-                      <!-- 減號按鈕 -->
-                      <button type="button" @click="if(quantity > 1) quantity--" class="inline-flex h-8 w-8 items-center justify-center rounded border border-[#5a855a] bg-[#5a855a] text-white hover:bg-[#2e4e2e] hover:border-[#2e4e2e] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] active:scale-95 active:bg-[#264023] active:border-[#264023] select-none transition-transform duration-150" style="-webkit-tap-highlight-color: transparent">-</button>
-
-                      <!-- 數量輸入框 -->
-                      <input id="added_qty_{{ product.id }}" type="number" name="quantity" min="1" max="{{ product.quantity }}" :value="quantity" x-model.number="quantity" class="w-16 rounded border border-[#5a855a] px-3 py-2 text-center text-base text-[#3a643a] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] select-none" style="appearance: none; -moz-appearance: textfield; -webkit-appearance: none" @focus="$el.select()" />
-
-                      <!-- 加號按鈕 -->
-                      <button type="button" @click="quantity++" class="inline-flex h-8 w-8 items-center justify-center rounded border border-[#5a855a] bg-[#5a855a] text-white hover:bg-[#2e4e2e] hover:border-[#2e4e2e] focus:outline-none focus:ring-2 focus:ring-[#2e4e2e] active:scale-95 active:bg-[#264023] active:border-[#264023] select-none transition-transform duration-150" style="-webkit-tap-highlight-color: transparent">+</button>
-                    </div>
-                  </div>
-
-                  <button type="submit" class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-[#5a855a] px-8 py-3 text-base font-medium text-white hover:bg-[#2e4e2e] focus:bg-[#2e4e2e] focus:ring-2 focus:ring-[#2e4e2e] focus:ring-offset-2 focus:outline-none">加入購物車</button>
-                </form>
-
-                {% if user.is_store and user.store == product.store %}
-                <div class="mt-6 flex gap-4">
-                  <a href="{% url 'products:edit' product.id %}" class="btn">編輯</a>
-                  <form action="{% url 'products:delete' product.id %}" method="post" onsubmit="return confirm('確定要刪除嗎?');">
-                    {% csrf_token %}
-                    <input type="submit" value="刪除" class="btn" />
-                  </form>
-                </div>
-                {% endif %}
-              </section>
+            <div>
+              <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">數量</label>
+              <div class="flex items-center gap-2">
+                <button type="button" @click="if(quantity > 1) quantity--" class="h-8 w-8 rounded bg-[#5a855a] text-white hover:bg-[#2e4e2e]">-</button>
+                <input id="added_qty_{{ product.id }}" name="quantity" type="number" min="1" max="{{ product.quantity }}" x-model.number="quantity" class="w-14 text-center border rounded" />
+                <button type="button" @click="quantity++" class="h-8 w-8 rounded bg-[#5a855a] text-white hover:bg-[#2e4e2e]">+</button>
+              </div>
             </div>
+
+            <button type="submit" class="w-full rounded-md bg-[#5a855a] px-4 py-2 text-white hover:bg-[#2e4e2e] text-sm font-semibold">加入購物車</button>
+          </form>
+
+          {% if user.is_store and user.store == product.store %}
+          <div class="mt-4 flex gap-3">
+            <a href="{% url 'products:edit' product.id %}" class="btn text-sm">編輯</a>
+            <form action="{% url 'products:delete' product.id %}" method="post" onsubmit="return confirm('確定要刪除嗎?');">
+              {% csrf_token %}
+              <input type="submit" value="刪除" class="btn text-sm" />
+            </form>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>
