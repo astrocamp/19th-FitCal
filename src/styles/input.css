@@ -8,6 +8,9 @@
 @import './components/stepper.css';
 
 @layer base {
+  html {
+    font-size: 20px;
+  }
   button {
     @apply cursor-pointer;
   }
