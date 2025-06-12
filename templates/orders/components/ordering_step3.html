@@ -4,10 +4,10 @@
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
     <li class="step step-active">
-      <span class="text-blue-800">確認明細</span>
+      <span class="text-[#5a855a] text-lg">確認明細</span>
     </li>
-    <li class="step step-active text-blue-800">選擇付款</li>
-    <li class="step step-active text-blue-800">確認結帳</li>
+    <li class="step step-active text-[#5a855a] text-lg">選擇付款</li>
+    <li class="step step-active text-[#5a855a] font-semibold text-lg">確認結帳</li>
   </ul>
 
   <!-- Main Content Card -->
@@ -17,44 +17,44 @@
     <div class="space-y-0">
       <!-- container for list items -->
       <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">訂購門市</span>
-        <span class="text-sm text-gray-900">{{ cart.store.name }}</span>
+        <span class="text-lg text-gray-700">訂購門市</span>
+        <span class="text-lg text-gray-900">{{ cart.store.name }}</span>
       </div>
       <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">取貨人</span>
-        <span class="text-sm text-gray-900" x-text="ordering_member_name"></span>
+        <span class="text-lg text-gray-700">取貨人</span>
+        <span class="text-lg text-gray-900" x-text="ordering_member_name"></span>
       </div>
 
       <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">聯絡電話</span>
-        <span class="text-sm text-gray-900" x-text="ordering_member_phone_number"></span>
+        <span class="text-lg text-gray-700">聯絡電話</span>
+        <span class="text-lg text-gray-900" x-text="ordering_member_phone_number"></span>
       </div>
       <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">取貨方式</span>
-        <span class="text-sm text-gray-900">自取</span>
+        <span class="text-lg text-gray-700">取貨方式</span>
+        <span class="text-lg text-gray-900">自取</span>
       </div>
       <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">預計取貨時間</span>
-        <span class="text-sm text-gray-900" x-text="formatDateTime(formData.pickup_time)"></span>
+        <span class="text-lg text-gray-700">預計取貨時間</span>
+        <span class="text-lg text-gray-900" x-text="formatDateTime(formData.pickup_time)"></span>
       </div>
       <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-sm text-gray-700">付款方式</span>
-        <span class="text-sm text-gray-900" x-text="paymentLabels[formData.payment_method]"></span>
+        <span class="text-lg text-gray-700">付款方式</span>
+        <span class="text-lg text-gray-900" x-text="paymentLabels[formData.payment_method]"></span>
       </div>
       <div class="flex items-center justify-between py-3">
-        <span class="text-sm text-gray-700">總卡路里</span>
-        <span id="ordering_total_calories_step3" class="text-sm font-semibold text-gray-900"> {{ cart.total_calories }} kcal </span>
+        <span class="text-lg text-gray-700">總卡路里</span>
+        <span id="ordering_total_calories_step3" class="text-lg font-semibold text-gray-900"> {{ cart.total_calories }} kcal </span>
       </div>
       <div class="flex items-center justify-between py-3">
-        <span class="text-sm text-gray-700">應付金額</span>
-        <span id="ordering_total_price_step3" class="text-sm font-semibold text-gray-900">$ {{ cart.total_price }}</span>
+        <span class="text-lg text-gray-700">應付金額</span>
+        <span id="ordering_total_price_step3" class="text-lg font-semibold text-gray-900">$ {{ cart.total_price }}</span>
       </div>
     </div>
 
     <!-- Action Buttons -->
     <div class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-      <button type="button" @click="step = 2" class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">上一步</button>
-      <button type="submit" class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto">送出訂單</button>
+      <button type="button" @click="step = 2" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">上一步</button>
+      <button type="submit" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">送出訂單</button>
     </div>
   </div>
 </div>
