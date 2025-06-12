@@ -1,9 +1,9 @@
 <div id="messages-container" hx-swap-oob="true">{% include "shared/messages.html" %}</div>
 <span id="ordering_total_calories" hx-swap-oob="true">{{ total_calories }} kcal</span>
-<span id="ordering_total_calories_step3" hx-swap-oob="true">{{ total_calories }} kcal</span>
+<span id="ordering_total_calories_step3" hx-swap-oob="true" class="text-lg font-semibold text-gray-900">{{ total_calories }} kcal</span>
 <span id="ordering_total_quantity" hx-swap-oob="true">商品 X {{ total_quantity }}</span>
-<span id="ordering_total_quantity_step2" hx-swap-oob="true" class="mr-3 rounded-md bg-white px-3 py-1 text-sm font-semibold text-blue-700">{{ total_quantity }}份</span>
+<span id="ordering_total_quantity_step2" hx-swap-oob="true" class="mr-3 rounded-md bg-white px-3 py-1 text-lg font-semibold text-[#5a855a]">{{ total_quantity }}份</span>
 <span id="ordering_total_price_brief" hx-swap-oob="true">$ {{ total_price }}</span>
 <span id="ordering_total_price_final" hx-swap-oob="true">$ {{ total_price }}</span>
 <span id="ordering_total_price_step2" hx-swap-oob="true" class="text-lg font-bold">$ {{ total_price }}</span>
-<span id="ordering_total_price_step3" hx-swap-oob="true">$ {{ total_price }}</span>
+<span id="ordering_total_price_step3" hx-swap-oob="true" class="text-lg font-semibold text-gray-900">${{ total_price }}</span>
