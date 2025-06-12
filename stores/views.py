@@ -526,13 +526,10 @@ class Echo:
         return value
 
 
-@login_required
+@store_required
 def export_sales_csv(request):
     """匯出銷售報表為 CSV 檔案"""
-    try:
-        store = Store.objects.get(user=request.user)
-    except Store.DoesNotExist:
-        return HttpResponse('沒有找到對應的店家')
+    store = Store.objects.get(user=request.user)
 
     queryset = (
         Order.objects.select_related('store')
