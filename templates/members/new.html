@@ -2,7 +2,7 @@
 
 <form method="POST" action="{% url 'members:create_member' %}" class="max-w-xl mx-auto bg-white text-black p-6 mt-10 rounded-2xl shadow-lg">
   {% csrf_token %}
-
+  <input type="hidden" name="next" value="{{ request.GET.next|default:request.META.HTTP_REFERER }}" />
   <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">編輯會員資料</h2>
 
   <div class="flex flex-col items-center mb-6">

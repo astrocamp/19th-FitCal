@@ -28,13 +28,13 @@
           {% endfor %}
 
           <div class="flex justify-end">
-            <input type="submit" value="新增商品" class="btn btn-primary" />
+            <input type="submit" value="更新商品" class="btn btn-primary" />
           </div>
         </div>
 
         <!-- 右欄 預覽圖 -->
         <div class="md:w-1/2 flex justify-center items-start">
-          <img x-show="imageUrl" :src="imageUrl" alt="預覽圖片" class="w-[200px] h-[200px] object-cover border rounded" />
+          <img src="{{ product.image.url }}" alt="預覽圖片" class="w-[200px] h-[200px] object-cover border rounded" />
         </div>
       </form>
     </div>

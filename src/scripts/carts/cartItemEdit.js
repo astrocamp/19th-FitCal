@@ -5,7 +5,7 @@ export default function cartItem(initQuantity, itemId, editUrl, stockQuantity) {
     isDelete() {
       if (this.qty !== this.initQty) {
         if (this.qty < 1) {
-          if (confirm('確認要刪除這個品相嗎？')) {
+          if (confirm('確認要刪除這個品項嗎？')) {
             htmx.ajax('POST', `${editUrl}`, {
               swap: 'innerHTML',
               values: {

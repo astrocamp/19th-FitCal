@@ -4,23 +4,37 @@
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
     <li class="step step-active">
-      <span class="text-blue-800">確認明細</span>
+      <span class="text-[#5a855a] font-semibold text-lg">確認明細</span>
     </li>
-    <li class="step step-inactive text-gray-500">選擇付款</li>
-    <li class="step step-inactive text-gray-500">確認結帳</li>
+    <li class="step step-inactive text-gray-500 text-lg">選擇付款</li>
+    <li class="step step-inactive text-gray-500 text-lg">確認結帳</li>
   </ul>
 
   <!-- Main Content Card -->
   <div class="w-full max-w-xl m-auto mt-7">
     <!-- Store Information -->
-    <div class="mb-4 rounded-md border border-gray-300 p-4 m-auto">
-      <div class="flex items-start justify-between">
-        <div>
-          <p class="font-semibold text-gray-800">{{ cart.store.name }}</p>
-          <p class="text-sm text-gray-600">
-            {{ cart.store.address }} <span><i class="fa-solid fa-location-dot"></i></span>
-          </p>
-          <p class="text-sm text-gray-600">{{ cart.store.phone_number }}</p>
+    <div class="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-200 bg-gray-50 px-4 py-3">
+        <h3 class="text-lg font-semibold text-gray-700">店家資訊</h3>
+      </div>
+
+      <div class="p-4">
+        <div class="items-start justify-between">
+          <div class="flex flex-col gap-4">
+            <p class="font-semibold text-gray-800 text-xl">{{ cart.store.name }}</p>
+            <div class="mb-4 flex items-center">
+              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#5a855a] text-white">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <span class="text-lg text-gray-600">{{ cart.store.address }}</span>
+            </div>
+            <div class="mb-4 flex items-center">
+              <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#5a855a] text-white">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <span class="text-lg text-gray-600">{{ cart.store.phone_number }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -28,24 +42,24 @@
     <!-- Pickup Information -->
     <div class="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm">
       <div class="border-b border-gray-200 bg-gray-50 px-4 py-3">
-        <h3 class="text-sm font-semibold text-gray-700">取貨資訊</h3>
+        <h3 class="text-lg font-semibold text-gray-700">取貨資訊</h3>
       </div>
 
       <div class="p-4">
         <div class="mb-4 flex items-center">
-          <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+          <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#5a855a] text-white">
             <i class="fa-solid fa-store"></i>
           </div>
-          <span class="text-sm font-medium text-gray-700">取貨方式：自取</span>
+          <span class="text-lg font-medium text-gray-700">取貨方式：自取</span>
         </div>
 
-        <div class="flex flex-col">
+        <div class="flex flex-col gap-4">
           <div class="mb-4 flex items-center">
-            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-[#5a855a] text-white">
               <i class="fa-regular fa-clock"></i>
             </div>
-            <label for="{{ form.pickup_time.id_for_label }}" class="mb-2 text-sm font-medium text-gray-700"> 預計取貨時間 </label>
-            <span class="ml-4">{{ form.pickup_time }}</span>
+            <label for="{{ form.pickup_time.id_for_label }}" class="mb-2 text-lg font-medium text-gray-700"> 預計取貨時間 </label>
+            <span class="ml-4 text-lg">{{ form.pickup_time }}</span>
           </div>
         </div>
       </div>
@@ -53,15 +67,15 @@
     <!-- Shopping Contents -->
     <div class="mb-4 border-y border-gray-300">
       <div class="bg-gray-50 px-4 py-2">
-        <p class="text-sm font-semibold text-gray-700">購物內容</p>
+        <p class="text-lg font-semibold text-gray-700">購物內容</p>
       </div>
       {% if cart_items %}
-      <div id="cart-items" class="bg-gray-100 p-4 space-y-4">
+      <div id="cart-items" class="bg-white p-4 space-y-4">
         {% for item in cart_items %}
         <div id="item-{{ item.id }}" class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-800">{{ item.product.name }}</p>
-            <p class="text-xs text-gray-600">$ {{ item.product.price|floatformat:0 }} / {{ item.quantity }} 份</p>
+            <p class="text-lg font-medium text-gray-800">{{ item.product.name }}</p>
+            <p class="text-lg text-gray-600">$ {{ item.product.price|floatformat:0 }} / {{ item.quantity }} 份</p>
           </div>
 
           <div class="flex items-center space-x-3">
@@ -80,27 +94,37 @@
       {% endif %}
     </div>
 
+    <!-- Total Calories-->
+    <div class="mb-4 border-y border-gray-300">
+      <div class="bg-gray-50 px-4 py-2">
+        <p class="text-lg font-semibold text-gray-700">總卡路里</p>
+      </div>
+      <div class="p-4 text-lg text-gray-700">
+        <span id="ordering_total_calories">{{ cart.total_calories }} kcal</span>
+      </div>
+    </div>
+
     <!-- Billing Details -->
     <div class="border-y border-gray-300">
       <div class="bg-gray-50 px-4 py-2">
-        <p class="text-sm font-semibold text-gray-700">結帳明細</p>
+        <p class="text-lg font-semibold text-gray-700">結帳明細</p>
       </div>
       <div id="cart-summary-section" class="space-y-2 p-4">
-        <div class="flex justify-between text-sm text-gray-700">
-          <span id="ordering_total_quantity">商品 X {{ cart.total_quantity }}</span>
-          <span id="ordering_total_price_brief">$ {{ cart.total_price }}</span>
+        <div class="flex justify-between text-lg text-gray-700">
+          <span class="text-lg" id="ordering_total_quantity">商品 X {{ cart.total_quantity }}</span>
+          <span class="text-lg" id="ordering_total_price_brief">$ {{ cart.total_price }}</span>
         </div>
-        <div class="flex justify-between text-sm font-semibold text-gray-800">
+        <div class="flex justify-between text-lg font-semibold text-gray-800">
           <span>應付金額</span>
-          <span id="ordering_total_price_final">$ {{ cart.total_price }}</span>
+          <span class="text-lg" id="ordering_total_price_final">$ {{ cart.total_price }}</span>
         </div>
       </div>
     </div>
 
     <!-- Action Buttons -->
     <div class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-      <a href="{% url 'stores:show' cart.store.id %}" class="btn w-full border-gray-800 text-gray-800 btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">繼續加購</a>
-      <button id="next-step-btn" type="button" @click="step = 2" class="btn w-full border-none bg-[#000] text-[#fff] hover:bg-[#298A2F] sm:w-auto">下一步</button>
+      <a href="{% url 'stores:show' cart.store.id %}" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">繼續加購</a>
+      <button id="next-step-btn" type="button" @click="step = 2" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
     </div>
   </div>
 </div>

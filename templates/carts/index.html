@@ -6,8 +6,8 @@
   {% for cart in carts %}
   <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col justify-between">
     <!-- 商家橫幅圖片 -->
-    {% if cart.store.banner %}
-    <img src="{{ cart.store.banner.url }}" alt="商家橫幅" class="w-full h-24 object-cover" />
+    {% if cart.store.cover_url %}
+    <img src="{{ cart.store.cover_url }}" alt="商家橫幅" class="w-full h-24 object-cover" />
     {% else %}
     <div class="w-full h-24 bg-gray-200 flex items-center justify-center text-gray-400 text-sm">無橫幅圖片</div>
     {% endif %}
@@ -15,15 +15,18 @@
     <!-- 商家資訊區塊 -->
     <div class="p-4 flex flex-col flex-1">
       <div class="flex items-center mb-2">
-        {% if cart.store.logo %}
-        <img src="{{ cart.store.logo.url }}" alt="商家Logo" class="w-10 h-10 rounded-full object-cover mr-2 border border-gray-300" />
+        {% if cart.store.logo_url %}
+        <img src="{{ cart.store.logo_url }}" alt="商家Logo" class="w-10 h-10 rounded-full object-cover mr-2 border border-gray-300" />
         {% else %}
         <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm text-gray-500 mr-2">無</div>
         {% endif %}
         <h2 class="text-lg font-medium text-[#3a643a] truncate">{{ cart.store.name }}</h2>
       </div>
 
-      <p class="text-sm text-gray-600 mb-4">總金額： <span class="font-semibold text-black">{{ cart.total_price }}</span> 元</p>
+      <div class="text-sm text-gray-600 mb-4 space-y-1">
+        <p>總卡路里：<span class="font-semibold text-black">{{ cart.total_calories }}</span> kcal</p>
+        <p>總金額：<span class="font-semibold text-black">{{ cart.total_price }}</span> 元</p>
+      </div>
 
       <div class="mt-auto">
         <a href="{% url 'carts:show' cart.id %}" class="block w-full text-center bg-[#5a855a] text-white py-1.5 rounded-md hover:bg-[#2e4e2e] transition-colors mb-2">查看明細</a>

@@ -9,7 +9,6 @@ urlpatterns = [
     path('new/', views.new, name='new'),
     path('create/', views.create_store, name='create_store'),
     path('<uuid:id>/', views.show, name='show'),
-    path('<uuid:id>/edit/', views.edit, name='edit'),
     path('<uuid:id>/delete/', views.delete, name='delete'),
     path('rate/<uuid:order_id>/', views.rate_store, name='rate_store'),
     path(
@@ -63,4 +62,5 @@ urlpatterns = [
     path('management/product_manage', views.management, name='product_manage_panel'),
     path('management/menu_sort', views.management, name='menu_sort_panel'),
     path('api/category_sort/', views.api_category_sort, name='api_category_sort'),
+    path('settings/', views.store_settings, name='store_settings'),
 ]

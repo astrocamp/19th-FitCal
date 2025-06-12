@@ -59,6 +59,15 @@ def create_cart_item(req, product_id):
     cart_count = render_to_string(
         'shared/cart_count.html', {'cart_count': member.carts.count() if member else 0}
     )
+    bottom_cart_icon = render_to_string(
+        'stores/bottom_cart_icon.html',
+        {
+            'cart': cart,
+            'cart_total_price': cart.total_price,
+            'cart_total_quantity': cart.total_quantity,
+            'cart_total_calories': cart.total_calories,
+        },
+    )
     print(cart_count)
     return HttpResponse(
         default_block
@@ -69,6 +78,9 @@ def create_cart_item(req, product_id):
         <span id="cart-count" hx-swap-oob="innerHTML">
             {cart_count}
         </span>
+        <div id="bottom_cart" hx-swap-oob="innerHTML">
+            {bottom_cart_icon}
+        </div>
         """
     )
 
@@ -92,12 +104,14 @@ def update_cart_item(req, item_id):
     except Exception:
         messages.error(req, '購物車更新失敗')
     innertext = f'{cart.total_price}'
+    total_calories = cart.total_calories
     messages_html = render_to_string(
         'shared/messages.html', {'messages': get_messages(req)}
     )
     return HttpResponse(
         f'{innertext}'
         + f"""
+        <span id="totalCalories" hx-swap-oob="true">{total_calories}</span>
         <div id="messages-container" hx-swap-oob="true">
             {messages_html}
         </div>
@@ -171,7 +185,7 @@ def delete_item_from_ordering(req, id):
 
     if cart.items.count() == 0:
         cart.delete()
-        messages.warning(req, '購物車已清空，請重新選擇商品')
+        messages.success(req, '購物車已清空，請重新選擇商品')
         response = HttpResponse()
         response['HX-Redirect'] = reverse('carts:index')  # HTMX Redirect
         return response
@@ -179,19 +193,16 @@ def delete_item_from_ordering(req, id):
     # 若還有商品，則更新總數與金額
     total_quantity = cart.total_quantity
     total_price = cart.total_price
+    total_calories = cart.total_calories
 
     messages.success(req, f'成功刪除 {product_name}')
-    messages_html = render_to_string(
-        'shared/messages.html', {'messages': get_messages(req)}
-    )
 
-    return HttpResponse(
-        ''
-        + f"""
-        <div id="messages-container" hx-swap-oob="true">{messages_html}</div>
-        <span id="ordering_total_quantity" hx-swap-oob="true">商品 X {total_quantity}</span>
-        <span id="ordering_total_price_brief" hx-swap-oob="true">$ {total_price}</span>
-        <span id="ordering_total_price_final" hx-swap-oob="true">$ {total_price}</span>
-        """,
-        content_type='text/html',
+    return render(
+        req,
+        'shared/orders/delete_item_from_ordering_response.html',
+        {
+            'total_quantity': total_quantity,
+            'total_price': total_price,
+            'total_calories': total_calories,
+        },
     )

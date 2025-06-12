@@ -11,13 +11,13 @@
 }
 
 .step.step-active::before {
-  background-color: blue;
+  background-color: #5a855a;
   border: none;
   height: 0.2rem;
 }
 
 .step.step-active::after {
-  background-color: blue;
+  background-color: #5a855a;
   color: #fff;
   border: none;
 }
