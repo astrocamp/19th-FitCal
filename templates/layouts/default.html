@@ -10,14 +10,11 @@
 
     <link rel="stylesheet" href="{% static 'assets/styles/style.css' %}" />
     <script type="module" src="{% static 'assets/scripts/app.js' %}"></script>
-    {% block head_extra %}{% endblock %}
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   </head>
   <body class="min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <main class="flex-1">
-      <nav class="shadow-sm">{% include 'shared/navbar.html' %}</nav>
-      <section class="max-w-7xl mx-auto">
+      <nav class="shadow-sm fixed top-0 left-0 w-full z-50 bg-white">{% include 'shared/navbar.html' %}</nav>
+      <section class="max-w-7xl mx-auto mt-33 md:mt-17">
         <div id="messages-container">{% include "shared/messages.html" %}</div>
         {% include "chatbot/widget.html" %} {% block main %}{% endblock main %}
       </section>
