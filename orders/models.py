@@ -3,7 +3,7 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Sum
+from django.db.models import F, Sum
 
 from products.models import Product
 
@@ -126,7 +126,10 @@ class Order(models.Model):
     def total_calories(self):
         """計算訂單總卡路里"""
         return (
-            self.orderitem_set.aggregate(total=Sum('product__calories'))['total'] or 0
+            self.orderitem_set.aggregate(
+                total=Sum(F('quantity') * F('product__calories'))
+            )['total']
+            or 0
         )
 
 
