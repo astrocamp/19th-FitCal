@@ -92,25 +92,47 @@ def index(request):
 
 def show(req, id):
     store = get_object_or_404(Store, pk=id)
-    products = store.products.all()
-    categories = store.categories.all()
+
+    # 先查出所有商品，避免 N+1
+    all_products = store.products.select_related('category').all()
+
+    # 預先取得各類別的商品，排序好
+    categories_qs = (
+        store.categories.all()
+        .order_by('sort_order')
+        .prefetch_related(
+            Prefetch(
+                'products',
+                queryset=all_products.order_by('sort_order'),
+                to_attr='sorted_products',  # 自訂屬性名，避免覆蓋原來的 `products`
+            )
+        )
+    )
+
+    # 組裝資料
+    categories = [
+        {'name': category.name, 'products': category.sorted_products}
+        for category in categories_qs
+    ]
+
     store.avg_rating = (
         Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg'] or 0
     )
+
     if req.method == 'POST':
         form = StoreForm(req.POST, req.FILES, instance=store)
         if form.is_valid():
             form.save()
             return redirect('stores:show', id=store.id)
-        return render(
-            req,
-            'stores/edit.html',
-            {'store': store, 'form': form},
-        )
+        return render(req, 'stores/edit.html', {'store': store, 'form': form})
+
     return render(
         req,
         'stores/show.html',
-        {'store': store, 'products': products, 'categories': categories},
+        {
+            'store': store,
+            'categories': categories,
+        },
     )
 
 

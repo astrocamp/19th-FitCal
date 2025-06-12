@@ -19,8 +19,12 @@
       </div>
     </div>
   </div>
-  <!-- 商品列表 -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{% for product in products %} {% include "products/product_card.html" %} {% endfor %}</div>
+  {% for category in categories %}
+  <div class="mb-12">
+    <h2 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200">{{ category.name }}</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">{% for product in category.products %} {% include "products/product_card.html" %} {% endfor %}</div>
+  </div>
+  {% endfor %}
 </div>
 {% if user.is_store and store == user.store %}
 <form action="{% url 'stores:delete' store.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')">
