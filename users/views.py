@@ -154,7 +154,10 @@ def create_session(req, next_url=None):
     if user.is_member:
         messages.success(req, '會員登入成功！')
     if not next_url:
-        next_url = req.POST.get('next') or '/stores/'  # 預設跳 stores 頁
+        next_url = (
+            '/stores/' if req.POST.get('next') == '/' else req.POST.get('next')
+        )  # 預設跳 stores 頁
+    print(next_url)
     response = HttpResponse()
     response['HX-Redirect'] = next_url
     return response
