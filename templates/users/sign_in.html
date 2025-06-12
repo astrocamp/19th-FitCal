@@ -14,7 +14,7 @@
     {% csrf_token %} {% if error %}
     <p class="text-red-500 text-sm text-center">{{ error }}</p>
     {% endif %}
-    <input x-data type="hidden" name="next" :value="window.location.href" />
+    <input x-data type="hidden" name="next" :value="window.location.pathname" />
     <div>
       <label for="email" class="block text-sm font-medium">電子郵件：</label>
       <input type="email" name="email" placeholder="example@gmail.com" class="w-full border px-3 py-2 rounded mt-1" />
