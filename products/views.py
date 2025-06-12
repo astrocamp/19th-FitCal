@@ -30,6 +30,7 @@ def index(request):
     )
 
 
+@store_required
 def new(request, category_id):
     store = request.user.store
     category = get_object_or_404(Category, id=category_id)
@@ -53,7 +54,6 @@ def show(request, id):
         'products/show.html',
         {
             'product': product,
-            'quantity_range': range(1, 101),
         },
     )
 
@@ -98,15 +98,13 @@ def update(request, id):
     product = get_object_or_404(Product, pk=id)
     form = ProductForm(request.POST, request.FILES, instance=product)
     if form.is_valid():
-        form = form.save(commit=False)
-        # form.store = request.user.store
         form.save()
         messages.success(request, f'商品 {product.name} 已更新')
         category = product.category
         products = Product.objects.prefetch_related('category').filter(
             category=category, store=request.user.store
         )
-        return redirect(
+        return render(
             request,
             'shared/business/products/create_success.html',
             {'products': products, 'category': category},
@@ -118,6 +116,7 @@ def update(request, id):
     )
 
 
+@store_required
 def delete(request, id):
     product = get_object_or_404(Product, pk=id)
     category = product.category
@@ -126,9 +125,9 @@ def delete(request, id):
         category=category, store=request.user.store
     )
     messages.success(request, f'商品 {product.name} 已刪除')
-    return redirect(
+    return render(
         request,
-        'stores/business/product_list.html',
+        'shared/business/products/create_success.html',
         {'products': products, 'category': category},
     )
 
