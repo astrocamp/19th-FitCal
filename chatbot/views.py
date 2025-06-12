@@ -82,7 +82,9 @@ def generate_chatbot_reply(user_input):
                 - 若使用者希望外送餐點，請回答：
                 「目前平台沒有提供外送服務，您可以致電店家尋求進一步的協助!」
                 - 若使用者希望加入LINE，請回答：
-                「歡迎加入我們平台的LINE好友https://line.me/R/ti/p/@044ggaso，可以在LINE聊天室收到訂單最新資訊喔!」
+                「歡迎加入我們平台的LINE好友
+                 <a href="https://line.me/R/ti/p/@044ggaso" class="underline text-blue-500">官方Line帳號</a>(@044ggaso) ，
+                可以在LINE聊天室收到訂單最新資訊喔!<img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/3party-logo/LINE_QRCode.webp" alt="LINE QR Code" class="max-w-24" />」
                 - 請使用簡單、親切、易懂的語氣回答。
 
                 以下是知識資料：
