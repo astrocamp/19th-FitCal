@@ -1,9 +1,10 @@
+{% load i18n %}
 <dialog id="order_detail_modal_{{ order.id }}" class="modal">
   <form method="dialog" class="modal-box p-0">
     <!-- Header -->
     <div class="sticky top-0 z-10 bg-white px-6 py-4 border-b">
       <div class="flex justify-between items-center">
-        <h3 class="text-lg md:text-xl font-bold">訂單 #{{ order.order_number }} 詳細資訊</h3>
+        <h3 class="text-lg md:text-xl font-bold">{% trans "訂單" %} #{{ order.order_number }} {% trans "詳細資訊" %}</h3>
         <button type="submit" class="text-gray-400 hover:text-gray-500 p-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -17,26 +18,26 @@
       <!-- 基本資訊 -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <p class="text-gray-600">取餐時間</p>
+          <p class="text-gray-600">{% trans "取餐時間" %}</p>
           <p class="font-medium">{{ order.pickup_time|date:"Y-m-d H:i" }}</p>
         </div>
         <div>
-          <p class="text-gray-600">取餐編號</p>
+          <p class="text-gray-600">{% trans "取餐編號" %}</p>
           <p class="font-medium">{{ order.pickup_number }}</p>
         </div>
         <div>
-          <p class="text-gray-600">顧客姓名</p>
+          <p class="text-gray-600">{% trans "顧客姓名<" %}/p></p>
           <p class="font-medium">{{ order.member_name }}</p>
         </div>
         <div>
-          <p class="text-gray-600">聯絡電話</p>
+          <p class="text-gray-600">{% trans "聯絡電話" %}</p>
           <p class="font-medium">{{ order.member_phone }}</p>
         </div>
       </div>
 
       <!-- 訂單項目 -->
       <div>
-        <h4 class="font-medium mb-2">訂購項目</h4>
+        <h4 class="font-medium mb-2">{% trans "訂購項目" %}</h4>
         <div class="border rounded-lg divide-y">
           {% for item in order.orderitem_set.all %}
           <div class="p-3 flex justify-between items-center">
@@ -52,13 +53,13 @@
 
       <!-- 總計 -->
       <div class="flex justify-end">
-        <p class="text-xl font-bold">總計：${{ order.total_price }}</p>
+        <p class="text-xl font-bold">{% trans "總計：" %}${{ order.total_price }}</p>
       </div>
 
       <!-- 備註 -->
       {% if order.note %}
       <div>
-        <h4 class="font-medium mb-2">備註</h4>
+        <h4 class="font-medium mb-2">{% trans "備註" %}</h4>
         <p class="text-gray-600">{{ order.note }}</p>
       </div>
       {% endif %}
@@ -67,7 +68,7 @@
     <!-- Footer -->
     <div class="sticky bottom-0 bg-white px-6 py-4 border-t">
       <div class="flex justify-end">
-        <button type="submit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">關閉</button>
+        <button type="submit" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors">{% trans "關閉" %}</button>
       </div>
     </div>
   </form>
