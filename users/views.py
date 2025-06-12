@@ -72,7 +72,8 @@ def create_user(req):
             'useremail': user.email,  # 對應 template 的變數
         }
         message.send()
-        return create_session(req)
+        next_url = req.POST.get('next') or '/stores/'
+        return create_session(req, next_url)
     else:
         return render(
             req,
@@ -135,7 +136,7 @@ def sign_in_store(req):
 
 # 登入處理（會員）
 @require_POST
-def create_session(req):
+def create_session(req, next_url=None):
     email = req.POST.get('email')
     password = req.POST.get('password')
     # 因為上方create_user有用到這隻function，但是在註冊的時候沒有‘password’欄位，
@@ -152,8 +153,10 @@ def create_session(req):
     login(req, user)
     if user.is_member:
         messages.success(req, '會員登入成功！')
+    if not next_url:
+        next_url = req.POST.get('next') or '/stores/'  # 預設跳 stores 頁
     response = HttpResponse()
-    response['HX-Redirect'] = '/stores/'
+    response['HX-Redirect'] = next_url
     return response
 
 

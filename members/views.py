@@ -23,7 +23,8 @@ def create_member(request):
             member = form.save(commit=False)
             member.user = request.user
             member.save()
-            return redirect('members:index')
+            next_url = request.POST.get('next')
+            return redirect(next_url or 'members:show', id=member.id)
         else:
             messages.error(request, '請檢查輸入內容')
             return render(request, 'members/new.html', {'form': form}, status=400)
