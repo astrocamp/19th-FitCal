@@ -184,18 +184,13 @@ def delete_item_from_ordering(req, id):
     total_calories = cart.total_calories
 
     messages.success(req, f'成功刪除 {product_name}')
-    messages_html = render_to_string(
-        'shared/messages.html', {'messages': get_messages(req)}
-    )
 
-    return HttpResponse(
-        ''
-        + f"""
-        <div id="messages-container" hx-swap-oob="true">{messages_html}</div>
-        <span id="ordering_total_calories" hx-swap-oob="true">{total_calories} kcal</span>
-        <span id="ordering_total_quantity" hx-swap-oob="true">商品 X {total_quantity}</span>
-        <span id="ordering_total_price_brief" hx-swap-oob="true">$ {total_price}</span>
-        <span id="ordering_total_price_final" hx-swap-oob="true">$ {total_price}</span>
-        """,
-        content_type='text/html',
+    return render(
+        req,
+        'shared/orders/delete_item_from_ordering_response.html',
+        {
+            'total_quantity': total_quantity,
+            'total_price': total_price,
+            'total_calories': total_calories,
+        },
     )
