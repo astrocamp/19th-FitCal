@@ -191,23 +191,18 @@ def collections(request, id):
 
 @require_POST
 def estimate_calories_from_image(request):
-    print('--- 進入 estimate_calories_from_image API 偵錯資訊 ---')
+    print('--- 進入 estimate_calories_from_image API ---')
     print(f'請求方法: {request.method}')
-    print(f'請求頭 (Headers): {request.headers}')
+    # print(f'請求頭 (Headers): {request.headers}') # 移除不必要的詳細日誌
     print(f'內容類型 (Content-Type): {request.content_type}')
-    print(f'原始請求體 (Raw Request Body): {request.body}')
+    # print(f'原始請求體 (Raw Request Body): {request.body}') # 移除不必要的詳細日誌
     print('--- 偵錯資訊結束 ---')
-
-    # 簡單檢查請求是否為 AJAX 請求，增加安全性
-    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        print('錯誤：請求類型無效，不是 XMLHttpRequest。')
-        return JsonResponse({'error': 'Invalid request type'}, status=400)
 
     try:
         # 檢查請求的 Content-Type 是否為 application/json
         if request.content_type != 'application/json':
             print(
-                f'錯誤：Content-Type 不正確 - 實際為 {request.content_type}，預期為 application/json。'
+                f'錯誤：Content-Type 不正確。實際為 "{request.content_type}"，預期為 "application/json"。'
             )
             return JsonResponse(
                 {
@@ -217,37 +212,28 @@ def estimate_calories_from_image(request):
                 status=400,
             )
 
-        # 嘗試解析 request.body
-        # HTMX 從前端發送的 JSON 數據會放在 request.body 中
+        # 嘗試解析 request.body 中的 JSON 數據
         data = json.loads(request.body)
-        print(f'成功解析請求體為 JSON: {data}')
+        print('成功解析請求體為 JSON。')
 
-        image_base64 = data.get('image_base64')  # 獲取 Base64 編碼的圖片數據
-        mime_type = data.get(
-            'mime_type', 'image/jpeg'
-        )  # 獲取圖片的 MIME Type，預設為 jpeg
+        image_base64 = data.get('image_base64')
+        mime_type = data.get('mime_type', 'image/jpeg')
 
         if not image_base64:
             print('錯誤：Base64 圖片數據缺失。')
-            return JsonResponse({'error': 'Base64 image data is missing'}, status=400)
+            return JsonResponse(
+                {'success': False, 'error': 'Base64 image data is missing'}, status=400
+            )
 
         # 將 Base64 字串解碼回圖片位元組數據
         image_bytes = base64.b64decode(image_base64)
 
-        # *** 關鍵修改：使用 genai.upload_file 或直接構造 Content 內容 ***
-        # 最直接的方式是將圖片bytes直接放入Content列表中
-        # 或使用 genai.types.Blob
-        # 但由於您無法直接導入 Part，我們嘗試以下方式：
-        # 這裡我們將圖片數據作為 BytesIO 對象傳遞給模型，
-        # 或者直接作為字典傳遞，讓 genai 處理其內部類型
-
-        # 根據 google-generativeai 的最新使用方式，通常是直接傳遞字典或 BytesIO 對象
-        # 嘗試直接傳遞字典，這是最常見且穩定的方式
+        # 構造用於 Gemini API 的圖片內容
         image_content = {'mime_type': mime_type, 'data': image_bytes}
 
         # 定義給 Gemini 的提示詞 (Prompt)
         prompt_parts = [
-            image_content,  # 這是圖片數據，現在作為字典傳遞
+            image_content,
             """Based on this food image, estimate the total calorie content for this serving. Provide only the numerical calorie value (kcal) as the first line, followed by a brief list of main ingredients identified and mention that it's an estimation.
             Example Output:
             250 kcal (estimated)
@@ -257,7 +243,7 @@ def estimate_calories_from_image(request):
         ]
 
         # 檢查 gemini_model 是否已成功載入
-        if gemini_model is None:
+        if gemini_model is None:  # 確保 gemini_model 已經被正確定義和初始化
             print('錯誤：Gemini 模型未成功載入。')
             return JsonResponse(
                 {'success': False, 'error': 'Gemini model is not initialized.'},
@@ -274,53 +260,50 @@ def estimate_calories_from_image(request):
         print(f'Gemini 原始回應: {text_response}')
 
         estimated_calories = None
-        # 使用正規表達式從回覆的第一行中提取數字 (例如 "250 kcal (estimated)" 中的 250)
+        # 從回應的第一行中提取卡路里數字
         first_line = text_response.split('\n')[0]
-        match = re.search(
-            r'(\d+)\s*kcal', first_line, re.IGNORECASE
-        )  # 尋找數字後接 kcal
+        match = re.search(r'(\d+)\s*kcal', first_line, re.IGNORECASE)
         if match:
             try:
-                estimated_calories = int(match.group(1))  # 提取第一個匹配到的數字
+                estimated_calories = int(match.group(1))
             except ValueError:
-                pass  # 如果轉換失敗，則保持為 None
+                pass  # 如果轉換失敗，保持為 None
 
         if estimated_calories is None:
-            # 如果第一行沒提取到，作為備案，嘗試從整個回覆中尋找第一個數字
-            numbers = re.findall(r'\b(\d+)\b', text_response)  # 尋找所有獨立的數字
+            # 如果第一行未找到，嘗試從整個回應中尋找第一個數字
+            numbers = re.findall(r'\b(\d+)\b', text_response)
             if numbers:
-                estimated_calories = int(numbers[0])  # 取第一個找到的數字作為備案
+                estimated_calories = int(numbers[0])
 
         if estimated_calories is None:
-            # 如果最終還是沒有提取到數字，給一個預設值，例如 0
-            estimated_calories = 0  # 讓前端可以接收並顯示 0，或提示錯誤
+            # 如果最終未能提取到數字，設定為 0 並發出警告
+            estimated_calories = 0
             print(
                 f'警告：未能從 Gemini 回應中提取到卡路里數字，設定為 0。原始回應：{text_response}'
             )
 
         # 返回 JSON 響應給前端
-        print(f'成功估算卡路里：{estimated_calories} kcal。返回響應。')
+        print(f'成功估算卡路里：{estimated_calories} kcal。')
         return JsonResponse(
             {
                 'success': True,
                 'estimated_calories': estimated_calories,
-                'full_ai_response': text_response,  # 為了調試，可以返回完整的 AI 回應
+                'full_ai_response': text_response,  # 為了調試或前端顯示，可以返回完整的 AI 回應
             }
         )
 
     except json.JSONDecodeError as e:
         # 捕獲 JSON 解析錯誤
-        print(f'嚴重大於 JSON 解析錯誤 (json.JSONDecodeError): {e}')
-        print(
-            f'錯誤的請求體內容: {request.body.decode("utf-8", errors="ignore")}'
-        )  # 嘗試解碼並打印，忽略編碼錯誤
+        print(f'錯誤：JSON 解析失敗 - {e}')
+        # 打印錯誤的請求體內容，有助於調試
+        print(f'錯誤的請求體內容: {request.body.decode("utf-8", errors="ignore")}')
         return JsonResponse(
             {'success': False, 'error': 'Invalid JSON format in request body.'},
             status=400,
         )
     except Exception as e:
         # 捕獲所有其他未知錯誤，例如 Gemini API 呼叫失敗、網絡問題等
-        print(f'發生未預期錯誤 (Exception): {e}')  # 在伺服器日誌中打印錯誤
+        print(f'發生未預期錯誤：{e}')
         return JsonResponse(
             {
                 'success': False,

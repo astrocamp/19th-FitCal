@@ -1,27 +1,131 @@
 {% load widget_tweaks %}
 <div id="new-product" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
   <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
-    <!-- scrollable container -->
     <div class="h-[90vh] overflow-y-auto">
-      <!-- sticky header inside scrollable -->
       <div class="sticky top-0 z-10 bg-white px-6 pt-6 pb-4 border-b">
-        <!-- Close Button -->
         <button class="btn btn-sm btn-circle absolute right-4 top-4" @click="document.getElementById('new-product').remove()">✕</button>
 
         <p class="text-sm text-gray-500">新增商品</p>
         <h2 class="text-xl font-semibold text-gray-800">目前類別：{{ category.name }}</h2>
       </div>
 
-      <!-- form body -->
-      <form id="productForm" enctype="multipart/form-data" hx-post="{% url 'products:create' category.id %}" hx-target="#new-product" hx-swap="outerHTML" hx-vals='{"select_category": "{{ category.id }}"}' class="flex flex-col md:flex-row gap-6 px-6 pb-6" x-data="{ imageUrl: '' }">
+      <form
+        id="productForm"
+        enctype="multipart/form-data"
+        hx-post="{% url 'products:create' category.id %}"
+        hx-target="#new-product"
+        hx-swap="outerHTML"
+        hx-vals='{"select_category": "{{ category.id }}"}'
+        class="flex flex-col md:flex-row gap-6 px-6 pb-6"
+        x-data="{
+                imageUrl: '',             // 圖片預覽 URL
+                selectedFile: null,       // 儲存選取的圖片檔案物件
+                loadingEstimation: false, // 估算是否正在進行
+                estimationError: '',      // 估算錯誤訊息
+                estimatedCalories: '',    // AI 估算出的卡路里值
+
+                handleImageChange(event) {
+                    const file = event.target.files[0];
+                    this.selectedFile = file;
+                    this.imageUrl = file ? URL.createObjectURL(file) : '';
+                    this.estimationError = ''; // 清除之前的錯誤訊息
+                    this.estimatedCalories = ''; // 清除之前的估算結果
+                },
+
+                async estimateCalories(event) {
+                    event.preventDefault(); // 防止按鈕觸發表單提交
+                    if (!this.selectedFile) {
+                        this.estimationError = '請先選擇一張圖片！';
+                        return;
+                    }
+
+                    this.loadingEstimation = true;
+                    this.estimationError = ''; // 清除之前的錯誤
+                    this.estimatedCalories = ''; // 清除之前的估算結果
+
+                    const reader = new FileReader();
+                    reader.onload = async () => {
+                        const base64Image = reader.result.split(',')[1]; // 獲取 Base64 數據部分
+                        const mimeType = this.selectedFile.type;
+
+                        try {
+                            const response = await fetch('/products/estimate_calories/', { // 請確認這個 URL 路徑是否正確
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': this.getCookie('csrftoken') // 確保這個函數可用
+                                },
+                                body: JSON.stringify({
+                                    image_base64: base64Image,
+                                    mime_type: mimeType
+                                })
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                                // 新增的判斷邏輯：如果估算結果為 0 或顯示為非數字（例如無法辨識的文字）
+                                const parsedCalories = parseFloat(data.estimated_calories);
+                                if (isNaN(parsedCalories) || parsedCalories === 0) {
+                                    this.estimationError = '無法成功分析卡路里，請手動輸入或嘗試其他圖片。';
+                                    this.estimatedCalories = ''; // 清空卡路里欄位
+                                    alert(this.estimationError);
+                                } else {
+                                    this.estimatedCalories = parsedCalories; // 確保存儲的是數字
+                                    alert(`卡路里估算結果：${parsedCalories} kcal`);
+                                }
+                            } else {
+                                // API 返回失敗的情況
+                                this.estimationError = data.message || '未能估算出卡路里，請手動輸入或嘗試其他圖片。';
+                                alert(this.estimationError);
+                            }
+                        } catch (error) {
+                            console.error('估算卡路里時發生錯誤:', error);
+                            this.estimationError = '估算卡路里時發生網路或系統錯誤，請稍後再試。';
+                            alert(this.estimationError);
+                        } finally {
+                            this.loadingEstimation = false;
+                        }
+                    };
+                    reader.readAsDataURL(this.selectedFile);
+                },
+
+                // 獲取 CSRF Token 的輔助函數 (請確保它在你的 app.js 或其他地方可用)
+                getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            }"
+      >
         {% csrf_token %}
 
-        <!-- 左欄 -->
         <div class="md:w-1/2 space-y-4">
           {% for field in form %}
           <div class="{% if field.name == 'description' %}h-20{% endif %}">
             <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
-            {% if field.name == 'category' %} {{ field|add_class:"select select-bordered w-full" }} {% elif field.name == 'image' %} {{ field|add_class:"file-input file-input-bordered w-full" }} {% else %} {{ field|add_class:"input input-bordered w-full" }} {% endif %} {% if field.errors %}
+            {% if field.name == 'category' %} {{ field|add_class:"select select-bordered w-full" }} {% elif field.name == 'image' %} {# 直接將 Alpine.js 的 @change 事件綁定到 Django 的檔案輸入框上 #}
+            <input type="file" name="{{ field.name }}" class="file-input file-input-bordered w-full" @change="handleImageChange($event)" />
+            {# 移除原有的「選擇圖片」按鈕，因為檔案輸入框本身就可點擊 #}
+            <button type="button" x-show="imageUrl" @click="selectedFile = null; imageUrl = ''; estimationError = ''; estimatedCalories = ''; event.target.closest('div').querySelector('input[type=file]').value = '';" class="btn btn-outline btn-sm mt-2 ml-2">清除圖片</button>
+
+            <button type="button" x-show="imageUrl && !loadingEstimation" @click="estimateCalories($event)" class="btn btn-secondary btn-sm mt-2 ml-2" :disabled="loadingEstimation">估算卡路里</button>
+            <p x-show="loadingEstimation" class="text-blue-500 text-sm mt-1">AI 正在努力估算中，請稍候...</p>
+            <p x-show="estimationError" class="text-red-500 text-sm mt-1" x-text="estimationError"></p>
+
+            {% elif field.name == 'calories' %}
+            <input type="number" name="{{ field.name }}" class="input input-bordered w-full" :value="estimatedCalories || '{{ field.value|default:'' }}'" {# 如果有估算值優先使用，否則使用 Django 預設值 #} min="0" step="0.01" />
+            {% else %} {{ field|add_class:"input input-bordered w-full" }} {% endif %} {% if field.errors %}
             <div class="text-red-500 text-sm mt-1">{{ field.errors }}</div>
             {% endif %}
           </div>
@@ -32,7 +136,6 @@
           </div>
         </div>
 
-        <!-- 右欄 預覽圖 -->
         <div class="md:w-1/2 flex justify-center items-start">
           <img x-show="imageUrl" :src="imageUrl" alt="預覽圖片" class="w-[200px] h-[200px] object-cover border rounded" />
         </div>

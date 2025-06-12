@@ -17,4 +17,9 @@ urlpatterns = [
         views.collections,
         name='collections',
     ),
+    path(
+        'estimate_calories/',
+        views.estimate_calories_from_image,
+        name='estimate_calories',
+    ),
 ]
