@@ -50,8 +50,9 @@
         </div>
 
         <div>
-          <label for="{{ form.cover_image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.cover_image.label }}</label>
-          {{ form.cover_image }} {% if store.cover_image %}
+          <div>{{ form.cover_image.label_tag }}</div>
+          <div>{{ form.cover_image|add_class:"file-input file-input-bordered w-full" }}</div>
+          {% if store.cover_image %}
           <img src="{{ store.cover_url }}" alt="目前封面圖片" class="mt-2 w-32 h-32 object-cover rounded-md border border-gray-300" />
           {% endif %} {% if form.cover_image.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.cover_image.errors.0 }}</p>
@@ -59,8 +60,9 @@
         </div>
 
         <div>
-          <label for="{{ form.logo_image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.logo_image.label }}</label>
-          {{ form.logo_image }} {% if store.logo_image %}
+          <div>{{ form.logo_image.label_tag }}</div>
+          <div>{{ form.logo_image|add_class:"file-input file-input-bordered w-full" }}</div>
+          {% if store.logo_image %}
           <img src="{{ store.logo_url }}" alt="目前 Logo 圖片" class="mt-2 w-32 h-32 object-cover rounded-md border border-gray-300" />
           {% endif %} {% if form.logo_image.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.logo_image.errors.0 }}</p>
