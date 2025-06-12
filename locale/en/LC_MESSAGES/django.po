@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-13 03:00+0800\n"
+"POT-Creation-Date: 2025-06-13 03:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -954,22 +954,24 @@ msgstr "Place Order"
 msgid "歷史訂單"
 msgstr "Order History"
 
-#: .\templates\pages\index.html:12
-msgid "讓你吃得更聰明"
+#: .\templates\pages\index.html:10
+#, fuzzy
+#| msgid "讓你吃得更聰明"
+msgid "FitCal 讓你吃得更聰明"
 msgstr "Eat Smarter"
 
-#: .\templates\pages\index.html:14
+#: .\templates\pages\index.html:12
 msgid "想吃美食又怕熱量爆表？ FitCal 幫你搞定！"
 msgstr ""
 "Craving delicious food but worried about calories? FitCal has you covered!"
 
-#: .\templates\pages\index.html:15
+#: .\templates\pages\index.html:13
 msgid "不只能自由選餐、掌握每一口的卡路里，還能收藏最愛店家、留下真心評價。"
 msgstr ""
 "Customize your meals, track every calorie, save your favorite stores, and "
 "leave honest reviews."
 
-#: .\templates\pages\index.html:16
+#: .\templates\pages\index.html:14
 msgid ""
 "店家也能靠後台報表看清賺錢關鍵，輕鬆管理菜單與訂單。從今天起，吃得聰明、活得"
 "漂亮！"
@@ -977,13 +979,96 @@ msgstr ""
 "Merchants can gain insights from backend reports, easily manage menus and "
 "orders. From today,eat smart and live beautifully!"
 
-#: .\templates\pages\index.html:20
+#: .\templates\pages\index.html:18
 msgid "開始探索餐點"
 msgstr "Start Exploring Meals"
 
-#: .\templates\pages\index.html:21
+#: .\templates\pages\index.html:19
 msgid "商家加入"
 msgstr "Join as a Merchant"
+
+msgid "健康點餐，輕鬆生活"
+msgstr "Healthy Ordering, Effortless Living"
+
+msgid "智慧飲食，盡在指尖"
+msgstr "Smart Eating at Your Fingertips"
+
+msgid ""
+"我們的平台讓您在享受美食的同時，輕鬆掌握每一份餐點的健康資訊。從點餐到支付，"
+"再到售後服務，全程為您打造流暢、個人化的體驗。"
+msgstr ""
+"Our platform lets you enjoy delicious meals while effortlessly tracking health information for every item. "
+"From ordering to payment and post-sale services, we provide a smooth and personalized experience."
+
+msgid "卡路里智能管理。"
+msgstr "Smart Calorie Management."
+
+msgid ""
+"無論是單一商品還是整筆訂單，所有卡路里資訊一目瞭然，助您輕鬆規劃每日飲食。"
+msgstr ""
+"Whether it’s a single item or an entire order, calorie information is clearly displayed to help you easily plan your daily diet."
+
+msgid "訂單與店家互動。"
+msgstr "Order and Store Interaction."
+
+msgid ""
+"即時查看店家平均評分，對每筆訂單和商品進行收藏，並透過多元登入方式快速開啟美"
+"食旅程。"
+msgstr ""
+"View store ratings in real time, favorite any order or item, and start your food journey with multiple sign-in options."
+
+msgid "便捷支付與即時通訊。"
+msgstr "Convenient Payment and Instant Communication."
+
+msgid ""
+"支援 Line 線上支付與多種登入方式（含 Google、Line），訂單狀態即時通知，還有 "
+"AI 客服機器人隨時為您提供協助。"
+msgstr ""
+"Supports LINE Pay and multiple login methods (including Google and LINE). Get real-time order updates and assistance from our AI customer service bot anytime."
+
+msgid "消費者端產品截圖"
+msgstr "Customer-Side Product Screenshots"
+
+msgid "店家端產品截圖"
+msgstr "Merchant-Side Product Screenshots"
+
+msgid "高效管理，輕鬆營運"
+msgstr "Efficient Management, Seamless Operations"
+
+msgid "智能後台，助您事業騰飛"
+msgstr "Smart Backend to Empower Your Business"
+
+msgid ""
+"我們為店家提供一套功能強大且直觀的後台管理系統，從商品上架到訂單處理，再到數"
+"據分析，全面助力您提升營運效率，掌握市場動態。"
+msgstr ""
+"We provide merchants with a powerful and intuitive backend system. From product listings to order processing and data analysis, we help you boost operational efficiency and stay ahead of market trends."
+
+msgid "智能商品管理。"
+msgstr "Smart Product Management."
+
+msgid ""
+"新增商品時，AI 自動辨識圖片並分析卡路里，讓您輕鬆上架。還能自由新增商品類別，"
+"並拖曳排序菜單，彈性調整前台顯示順序。"
+msgstr ""
+"When adding new products, AI automatically recognizes images and estimates calorie content for easy listing. You can also create custom categories and drag to reorder menu items flexibly."
+
+msgid "訂單與數據分析。"
+msgstr "Order and Data Analysis."
+
+msgid ""
+"訂單自動分類為當日、預約與歷史訂單，以精美卡片呈現不同狀態。詳細的分析報表助"
+"您洞察營收、收藏及評分變化，做出精準決策。"
+msgstr ""
+"Orders are automatically categorized into today’s, scheduled, and past orders, displayed with elegant cards. Detailed analytics help you understand revenue, favorites, and rating trends for precise decision-making."
+
+msgid "商家門面自訂。"
+msgstr "Customizable Storefront."
+
+msgid ""
+"彈性變更您的商家 Logo 和 Banner 圖片，輕鬆打造專屬品牌風格，吸引更多顧客。"
+msgstr ""
+"Easily update your store’s logo and banner to create a unique brand identity and attract more customers."
 
 #: .\templates\products\show.html:30
 msgid "飯量"
