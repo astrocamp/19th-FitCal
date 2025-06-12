@@ -119,15 +119,24 @@
     </div>
   </div>
   <!--- 手機版搜尋欄 -->
-  <div class="flex gap-3 justify-start mt-4 md:hidden">
-    <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-full" value="{{ request.GET.q }}" />
+  <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
+    <div class="flex gap-3 justify-start mt-4 md:hidden relative">
+      <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-full" value="{{ request.GET.q }}" />
 
-    <!-- 🔘 篩選 icon button -->
-    <button type="button" @click="showFilter = !showFilter" class="btn">
-      <i class="fa-solid fa-sliders"></i>
-    </button>
+      <!-- 🔘 篩選 icon button -->
+      <button type="button" @click="showFilter = !showFilter" class="btn">
+        <i class="fa-solid fa-sliders"></i>
+      </button>
 
-    <!-- 🔘 搜尋按鈕 -->
-    <button id="searchBtn" type="submit" class="btn">搜尋</button>
-  </div>
+      <!-- 🔘 搜尋按鈕 -->
+      <button id="searchBtn" type="submit" class="btn">搜尋</button>
+      <!-- 下排：拉霸，使用絕對定位 -->
+      <div id="calorieFilter" class="absolute left-0 w-full bg-white shadow-lg rounded mt-12 z-10 transition-all duration-300 overflow-hidden" x-ref="filter" x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
+        <div class="p-2">
+          <label for="max_calories" class="block text-xs mb-1"> 最多卡路里(非必填)：<span x-text="maxCalories"></span> </label>
+          <input type="range" id="max_calories" name="max_calories" min="0" max="1000" step="10" x-model="maxCalories" class="range w-full" />
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
