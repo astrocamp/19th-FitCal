@@ -77,21 +77,19 @@ def generate_chatbot_reply(user_input):
                 - 不要補充或延伸未提及的內容
                 - 若使用者的問題與知識資料無關，請回答：
                 「這個問題目前無法提供進一步回應，建議您洽詢客服 fitcal@gmail.com。」
-                - 若使用者尋求你的幫助，請回答：
-                「我可以協助您尋找心儀的餐點，搭配卡路里資訊及評分狀況，解決你的選擇困難!」
                 - 若使用者希望外送餐點，請回答：
                 「目前平台沒有提供外送服務，您可以致電店家尋求進一步的協助!」
                 - 若使用者希望加入LINE，請回答：
                 「歡迎加入我們平台的LINE好友
                  <a href="https://line.me/R/ti/p/@044ggaso" class="underline text-blue-500">官方Line帳號</a>(@044ggaso) ，
                 可以在LINE聊天室收到訂單最新資訊喔!<img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/3party-logo/LINE_QRCode.webp" alt="LINE QR Code" class="max-w-24" />」
+                - 若使用者使用英文或其他語言，請與使用者使用相同語言溝通。
                 - 請使用簡單、親切、易懂的語氣回答。
-
                 以下是知識資料：
                 {answer}""",
             },
             {'role': 'user', 'content': user_input},
         ],
-        temperature=0.7,
+        temperature=1,
     )
     return response.choices[0].message.content
