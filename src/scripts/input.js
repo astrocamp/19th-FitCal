@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { Chart, registerables } from 'chart.js';
 import flatpickr from 'flatpickr';
 import htmx from 'htmx.org';
 import cartItem from './carts/cartItemEdit.js';
@@ -8,6 +9,7 @@ import { initCategorySort } from './stores/categorySort.js';
 import { initProductSort } from './stores/productSort.js';
 import { initCategorySidebarActive } from './stores/selectCategory.js';
 import { initTabs } from './stores/selectTab.js';
+
 Chart.register(...registerables);
 window.Chart = Chart;
 
