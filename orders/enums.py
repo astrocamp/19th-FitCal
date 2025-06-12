@@ -13,7 +13,6 @@ class OrderStatus(models.TextChoices):
 
 class PaymentMethod(models.TextChoices):
     CASH = 'CASH', '現金'
-    CREDIT_CARD = 'CREDIT_CARD', '信用卡'
     LINE_PAY = 'LINE_PAY', 'LINE Pay'
 
 
