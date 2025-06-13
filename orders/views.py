@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404, redirect, render
@@ -6,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.http import condition
 
 from carts.models import Cart
+from common.decorator import member_required, store_required
 
 from .enums import CancelBy, OrderStatus
 from .forms import OrderForm
@@ -14,6 +16,7 @@ from .services import OrderService
 
 
 @transaction.atomic
+@member_required
 def index(req):
     member = req.user.member
     orders = Order.objects.filter(member=req.user.member).order_by('-created_at')
@@ -24,7 +27,11 @@ def index(req):
             return redirect('carts:index')
 
         cart = get_object_or_404(Cart, id=cart_id)
-        form = OrderForm(req.POST, mode='create')
+        form = OrderForm(
+            req.POST,
+            store=cart.store,
+            mode='create',
+        )
         cart_items = cart.items.all()
 
         for cart_item in cart.items.all():
@@ -119,6 +126,7 @@ def index(req):
     return render(req, 'orders/order_list.html', {'orders': orders})
 
 
+@member_required
 def new(req):
     member = req.user.member
     cart_id = req.GET.get('cart_id')
@@ -147,6 +155,7 @@ def new(req):
 
     form = OrderForm(
         mode='create',
+        store=cart.store,
         initial={
             'store': cart.store,
             'note': cart.note,
@@ -164,6 +173,7 @@ def new(req):
     )
 
 
+@member_required
 def show(req, id):
     order = get_object_or_404(Order, id=id)
     if req.method == 'POST':
@@ -178,6 +188,7 @@ def show(req, id):
     return render(req, 'orders/show.html', {'order': order})
 
 
+@login_required
 def cancel(request, id):
     """取消訂單"""
     service = OrderService(id)
@@ -207,6 +218,7 @@ def cancel(request, id):
     )
 
 
+@store_required
 def prepare(request, id):
     """開始準備訂單"""
     service = OrderService(id)
@@ -224,6 +236,7 @@ def prepare(request, id):
     )
 
 
+@store_required
 def mark_ready(request, id):
     """標記訂單準備完成"""
     service = OrderService(id)
@@ -241,6 +254,7 @@ def mark_ready(request, id):
     )
 
 
+@store_required
 def complete(request, id):
     """完成訂單（顧客取餐）"""
     service = OrderService(id)

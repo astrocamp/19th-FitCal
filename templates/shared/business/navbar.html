@@ -38,7 +38,7 @@
 
     <!-- Mobile menu (展開用 Alpine) -->
     <div x-show="open" x-transition class="md:hidden mt-4 space-y-2 px-4">
-      <a href="#" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">基本設定</a>
+      <a href="{% url 'stores:store_settings' %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">基本設定</a>
       <a href="{% url 'stores:management' %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">商品/庫存管理</a>
       <a href="{% url 'stores:order_list' user.store.id %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">訂單</a>
       <a href="{% url 'stores:businesses_dashboard' user.store.id %}" class="block px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100">分析報告</a>

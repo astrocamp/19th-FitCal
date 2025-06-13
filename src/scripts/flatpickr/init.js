@@ -36,7 +36,7 @@ class StyledFlatpickr {
       altFormat: 'Y年m月d日',
       scrollInput: true,
       shorthandCurrentMonth: true,
-      locale: 'zh_tw',
+      disableMobile: true,
       minDate,
       maxDate,
       onReady: (selectedDates, dateStr, instance) => {

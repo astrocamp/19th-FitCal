@@ -7,12 +7,16 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
 from stores.forms import StoreForm
+from stores.views import handle_store_owner
 
 from .forms import UserForm
 
 
 def index(req):
-    return render(req, 'pages/index.html')
+    if hasattr(req.user, 'store'):
+        return handle_store_owner(req)
+    else:
+        return render(req, 'pages/index.html')
 
 
 # 顯示註冊頁面(會員)
@@ -154,7 +158,10 @@ def create_session(req, next_url=None):
     if user.is_member:
         messages.success(req, '會員登入成功！')
     if not next_url:
-        next_url = req.POST.get('next') or '/stores/'  # 預設跳 stores 頁
+        next_url = (
+            '/stores/' if req.POST.get('next') == '/' else req.POST.get('next')
+        )  # 預設跳 stores 頁
+    print(next_url)
     response = HttpResponse()
     response['HX-Redirect'] = next_url
     return response

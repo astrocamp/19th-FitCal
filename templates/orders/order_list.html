@@ -1,36 +1,40 @@
 {% extends 'layouts/default.html' %} {% load datetime_format %} {% load model_display %} {% block main %}
+<div class="container mx-auto px-4 py-4 sm:py-8">
+  <h1 class="text-xl font-bold text-gray-900 mb-4 sm:mb-6 sm:text-2xl">歷史訂單</h1>
 
-<div class="container mx-auto px-4 py-8 space-y-6">
-  <h1 class="text-2xl font-bold text-gray-900 mb-6">歷史訂單</h1>
-  <!-- 單筆訂單 -->
-  {% for order in orders %}
-  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-    <div class="p-6">
-      <a href="{% url 'orders:show' order.id %}" class="block">
-        <!-- 訂單頭部資訊 -->
-        <div class="flex justify-between items-start">
-          <!-- 左側資訊 -->
-          <div class="space-y-3 gap-4">
-            <!-- 訂單狀態 -->
-            {% include "components/order_status_badge.html" with order=order status=order.order_status %}
+  <!-- 訂單列表容器 -->
+  <div class="space-y-4 sm:space-y-6">
+    {% for order in orders %}
+    <!-- 單筆訂單卡片 -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div class="p-4 sm:p-6">
+        <a href="{% url 'orders:show' order.id %}" class="block">
+          <!-- 訂單頭部資訊 -->
+          <div class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-start">
+            <!-- 左側資訊 -->
+            <div class="space-y-2">
+              <!-- 訂單狀態 -->
+              {% include "components/order_status_badge.html" with order=order status=order.order_status %}
 
-            <div class="flex items-center space-x-2">
-              <span class="text-lg text-gray-500">店家名稱：</span>
-              <span class="font-medium text-gray-900">{{ order.store_name }}</span>
+              <div class="flex items-center space-x-2 pt-1">
+                <span class="text-base text-gray-900 sm:text-lg">店家名稱：</span>
+                <span class="font-medium text-gray-900 text-base sm:text-lg">{{ order.store_name }}</span>
+              </div>
+            </div>
+
+            <!-- 右側資訊 -->
+            <div class="flex flex-col gap-2 text-left space-y-1 sm:text-right">
+              <p class="text-sm text-gray-900 sm:text-lg">建立日期：{{ order.created_at|datetime_format }}</p>
+              <p class="text-base font-semibold text-gray-900 sm:text-lg">總金額：${{ order.total_price }}</p>
             </div>
           </div>
+        </a>
 
-          <!-- 右側資訊 -->
-          <div class="text-right space-y-2">
-            <p class="text-sm text-gray-500">{{ order.created_at|datetime_format }}</p>
-            <p class="text-lg font-semibold text-gray-900">$ {{ order.total_price }}</p>
-          </div>
-        </div>
-      </a>
+        <!-- 商品細項：可縮放 -->
+        {% include "shared/orders/order_item_detail.html" with order=order %}
+      </div>
 
-      <!-- 商品細項：可縮放 -->
-      {% include "shared/orders/order_item_detail.html" with order=order %}
-
+      <!-- 評分區塊 -->
       <div class="border-t border-gray-200 p-4" id="rating-section-{{ order.id }}">
         {% if order.order_status == "COMPLETED" %} {% if not order.rating %}
         <form hx-post="{% url 'stores:rate_store' order.id %}" hx-target="#rating-section-{{ order.id }}" hx-swap="outerHTML" method="POST" class="space-y-2">
@@ -43,13 +47,12 @@
           </div>
           <button type="submit" class="btn btn-sm btn-primary mt-1">送出評分</button>
         </form>
-
         {% else %}
-        <div class="text-sm text-gray-600">✅ 已評分：<strong>{{ order.rating.score }} 分</strong></div>
+        <div class="text-sm text-gray-600 px-2">✅ 已評分：<strong>{{ order.rating.score }} 分</strong></div>
         {% endif %} {% endif %}
       </div>
     </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
 {% endblock main %}

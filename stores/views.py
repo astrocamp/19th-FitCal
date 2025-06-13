@@ -206,7 +206,7 @@ def store_settings(request):
 def delete(req, id):
     store = get_object_or_404(Store, pk=id, user=req.user)
     store.delete()
-    return redirect('users:sign_up')
+    return redirect('users:index')
 
 
 @require_POST
@@ -237,7 +237,7 @@ def rate_store(request, order_id):
         )
 
         return HttpResponse(f"""
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600 px-5 py-3">
                 ✅ 已評分：<strong>{score} 分</strong>
             </div>
         """)

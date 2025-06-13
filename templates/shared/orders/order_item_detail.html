@@ -1,43 +1,47 @@
-<div class="mt-6">
+<div class="mt-4 sm:mt-6">
+  <!-- DaisyUI Collapse component -->
   <div class="collapse collapse-arrow border border-gray-200 rounded-lg bg-gray-50">
     <input type="checkbox" />
     <div class="collapse-title font-medium text-gray-700">
       <div class="flex items-center space-x-2">
         <i class="fa-solid fa-cart-shopping text-gray-400"></i>
-        <span>查看商品細項</span>
+        <span class="text-base">查看商品細項</span>
       </div>
     </div>
-    <div class="collapse-content bg-white">
+    <div class="collapse-content bg-white p-2 sm:p-4">
       <div class="overflow-x-auto">
-        <table class="w-full">
-          <thead>
+        <table class="w-full text-sm">
+          <thead class="hidden sm:table-header-group">
             <tr class="border-b border-gray-200">
-              <th class="py-3 text-left text-sm font-medium text-gray-500">商品名稱</th>
-              <th class="py-3 text-center text-sm font-medium text-gray-500">卡路里 (大卡)</th>
-              <th class="py-3 text-center text-sm font-medium text-gray-500">數量</th>
-              <th class="py-3 text-right text-sm font-medium text-gray-500">單價</th>
-              <th class="py-3 text-right text-sm font-medium text-gray-500">小計</th>
+              <th class="py-3 px-2 text-left font-medium text-gray-500">商品名稱</th>
+              <th class="w-24 py-3 px-2 text-center font-medium text-gray-500">卡路里</th>
+              <th class="w-16 py-3 px-2 text-center font-medium text-gray-500">数量</th>
+              <th class="w-20 py-3 px-2 text-right font-medium text-gray-500">單價</th>
+              <th class="w-24 py-3 px-2 text-right font-medium text-gray-500">小計</th>
             </tr>
           </thead>
           <tbody>
             {% for item in order.orderitem_set.all %}
-            <tr class="border-b border-gray-100">
-              <td class="py-3 text-sm text-gray-900">{{ item.product_name }}</td>
-              <td class="py-3 text-center text-sm text-gray-600">{{ item.product.calories }}</td>
-              <td class="py-3 text-center text-sm text-gray-600">{{ item.quantity }}</td>
-              <td class="py-3 text-right text-sm text-gray-600">$ {{ item.unit_price }}</td>
-              <td class="py-3 text-right text-sm font-medium text-gray-900">$ {{ item.subtotal }}</td>
+            <tr class="block p-4 mb-2 border rounded-md sm:table-row sm:p-0 sm:m-0 sm:border-0 sm:border-b sm:border-gray-100 last:mb-0 sm:last:mb-0">
+              <td class="block pb-2 font-semibold text-gray-900 sm:table-cell sm:py-3 sm:px-2 sm:font-normal">{{ item.product_name }}</td>
+              <td class="block py-1 sm:table-cell sm:w-24 sm:py-3 sm:px-2 text-right sm:text-center text-gray-600 before:content-['卡路里'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">{{ item.product.calories }}</td>
+              <td class="block py-1 sm:table-cell sm:w-16 sm:py-3 sm:px-2 text-right sm:text-center text-gray-600 before:content-['數量'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">{{ item.quantity }}</td>
+              <td class="block py-1 sm:table-cell sm:w-20 sm:py-3 sm:px-2 text-right text-gray-600 before:content-['單價'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">${{ item.unit_price }}</td>
+              <td class="block py-1 sm:table-cell sm:w-20 sm:py-3 sm:px-2 text-right text-gray-600 before:content-['小計'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">${{ item.subtotal }}</td>
             </tr>
             {% endfor %}
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="4" class="py-3 text-right text-sm font-medium text-gray-700">總計</td>
-              <td class="py-3 text-right text-sm font-bold text-gray-900">$ {{ order.total_price }}</td>
+          <tfoot class="block border-t-2 border-gray-200 mt-4 pt-4 sm:table-footer-group sm:border-t-0 sm:mt-0 sm:pt-0">
+            <!-- 總計行 -->
+            <tr class="flex justify-between items-center py-1 sm:table-row">
+              <td colspan="4" class="text-base font-medium text-gray-700 sm:py-3 sm:px-2 sm:text-right sm:text-sm">總計</td>
+              <td class="text-base font-bold text-gray-900 sm:py-3 sm:px-2 sm:text-right sm:text-sm">${{ order.total_price }}</td>
             </tr>
-            <tr>
-              <td colspan="4" class="py-3 text-right text-sm font-medium text-gray-700">總卡路里</td>
-              <td class="py-3 text-right text-sm font-bold text-gray-900">{{ order.total_calories }} kcal</td>
+
+            <!-- 總卡路里 -->
+            <tr class="flex justify-between items-center py-1 sm:table-row">
+              <td colspan="4" class="text-base font-medium text-gray-700 sm:py-3 sm:px-2 sm:text-right sm:text-sm">總卡路里</td>
+              <td class="text-base font-bold text-gray-900 sm:py-3 sm:px-2 sm:text-right sm:text-sm">{{ order.total_calories }} kcal</td>
             </tr>
           </tfoot>
         </table>

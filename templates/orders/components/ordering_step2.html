@@ -1,56 +1,60 @@
 {% load static %}
 <div x-show="step === 2" x-transition>
-  <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+  <h1 class="mb-4 text-center text-xl font-bold text-[#000] sm:text-2xl">建立訂單</h1>
 
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
     <li class="step step-active">
-      <span class="text-[#5a855a] text-lg">確認明細</span>
+      <span class="text-sm text-[#5a855a] sm:text-lg">確認明細</span>
     </li>
-    <li class="step step-active text-[#5a855a] font-semibold text-lg">選擇付款</li>
-    <li class="step step-inactive text-gray-500 text-lg">確認結帳</li>
+    <li class="step step-active">
+      <span class="text-sm font-semibold text-[#5a855a] sm:text-lg">選擇付款</span>
+    </li>
+    <li class="step step-inactive">
+      <span class="text-sm text-gray-500 sm:text-lg">確認結帳</span>
+    </li>
   </ul>
 
   <!-- Main Content Card -->
-  <div class="w-full max-w-xl m-auto mt-7">
+  <div class="w-full sm:max-w-xl sm:m-auto mt-4 sm:mt-7">
     <!-- Total Amount Bar -->
-    <div class="mb-6 flex items-center justify-between rounded-md bg-[#5a855a] p-3 text-white m-auto mt-7">
+    <div class="mb-4 flex items-center justify-between rounded-md bg-[#5a855a] p-2 text-white sm:p-3 sm:mb-6">
       <div class="flex items-center">
-        <span id="ordering_total_quantity_step2" class="mr-3 rounded-md bg-white px-3 py-1 text-lg font-semibold text-[#5a855a]"> {{ cart.total_quantity }}份</span>
-        <span class="text-base font-semibold">應付金額</span>
+        <span id="ordering_total_quantity_step2" class="mr-2 rounded-md bg-white px-2 py-1 text-base font-semibold text-[#5a855a] sm:mr-3 sm:px-3 sm:text-lg"> {{ cart.total_quantity }}份</span>
+        <span class="text-sm font-semibold sm:text-base">應付金額</span>
       </div>
-      <span id="ordering_total_price_step2" class="text-lg font-bold">$ {{ cart.total_price }}</span>
+      <span id="ordering_total_price_step2" class="text-base font-bold sm:text-lg">$ {{ cart.total_price }}</span>
     </div>
 
     <!-- Recipient Information -->
-    <div class="mb-4 rounded-md border border-gray-300 p-4">
+    <div class="mb-4 rounded-md border border-gray-300 p-3 sm:p-4">
       <div class="space-y-4">
         <div>
-          <label for="ordering_member_name" class="mb-2 block text-lg text-gray-700">取貨人姓名：</label>
-          <input type="text" name="ordering_member_name" id="ordering_member_name" x-model="ordering_member_name" class="input input-bordered w-full text-lg" value="{{ cart.member.name }}" />
+          <label for="ordering_member_name" class="mb-2 block text-base text-gray-700 sm:text-lg">取貨人姓名：</label>
+          <input type="text" name="ordering_member_name" id="ordering_member_name" x-model="ordering_member_name" class="input input-bordered w-full text-base sm:text-lg" value="{{ cart.member.name }}" />
         </div>
         <div>
-          <label for="ordering_member_phone_number" class="mb-2 block text-lg text-gray-700">聯絡電話：</label>
-          <input type="text" name="ordering_member_phone_number" id="ordering_member_phone_number" x-model="ordering_member_phone_number" class="input input-bordered w-full text-lg" value="{{ cart.member.phone_number }}" />
+          <label for="ordering_member_phone_number" class="mb-2 block text-base text-gray-700 sm:text-lg">聯絡電話：</label>
+          <input type="text" name="ordering_member_phone_number" id="ordering_member_phone_number" x-model="ordering_member_phone_number" class="input input-bordered w-full text-base sm:text-lg" value="{{ cart.member.phone_number }}" />
         </div>
       </div>
     </div>
 
     <!-- Payment Method -->
-    <div class="mb-8 rounded-md border border-gray-300 p-4">
-      <label for="{{ form.payment_method.id_for_label }}" class="mb-2 block text-lg text-gray-700">付款方式：</label>
+    <div class="mb-6 rounded-md border border-gray-300 p-3 sm:p-4 sm:mb-8">
+      <label for="{{ form.payment_method.id_for_label }}" class="mb-2 block text-base text-gray-700 sm:text-lg">付款方式：</label>
       <div class="space-y-3">
         <!-- Cash Payment Option -->
         <div class="relative flex items-center">
           <input type="radio" id="payment_cash" name="payment_method" value="CASH" x-model="formData.payment_method" class="peer hidden" />
-          <label for="payment_cash" class="flex w-full cursor-pointer items-center rounded-lg border p-4 peer-checked:border-[#5a855a] peer-checked:bg-green-50 hover:bg-gray-50">
+          <label for="payment_cash" class="flex w-full cursor-pointer items-center rounded-lg border p-3 sm:p-4 peer-checked:border-[#5a855a] peer-checked:bg-[#5a855a] peer-checked:text-white hover:bg-gray-100 peer-checked:hover:bg-[#5a855a]">
             <div class="flex items-center space-x-4">
               <div class="flex h-12 w-20 items-center justify-center rounded-full">
-                <i class="fa-solid fa-sack-dollar text-2xl"></i>
+                <i class="fa-solid fa-sack-dollar text-2xl text-gray-500 peer-checked:text-white"></i>
               </div>
-              <span class="font-medium">現金支付</span>
+              <span class="font-medium text-gray-700 peer-checked:text-white">現金支付</span>
             </div>
-            <span class="ml-auto hidden peer-checked:block text-[#5a855a]">
+            <span class="ml-auto hidden peer-checked:block text-white">
               <i class="fas fa-check-circle text-xl"></i>
             </span>
           </label>
@@ -59,29 +63,29 @@
         <!-- LINE Pay Option -->
         <div class="relative flex items-center">
           <input type="radio" id="payment_linepay" name="payment_method" value="LINE_PAY" x-model="formData.payment_method" class="peer hidden" />
-          <label for="payment_linepay" class="flex w-full cursor-pointer items-center rounded-lg border p-4 peer-checked:border-[#5a855a] peer-checked:bg-green-50 hover:bg-gray-50">
+          <label for="payment_linepay" class="flex w-full cursor-pointer items-center rounded-lg border p-3 sm:p-4 peer-checked:border-[#5a855a] peer-checked:bg-[#5a855a] peer-checked:text-white hover:bg-gray-100 peer-checked:hover:bg-[#5a855a]">
             <div class="flex items-center space-x-4">
               <div class="flex h-12 w-20 items-center justify-center rounded-full">
                 <img src="{% static 'images/line_pay_logo.png' %}" alt="LINE Pay" class="w-15" />
               </div>
-              <span class="font-medium">LINE Pay</span>
+              <span class="font-medium text-gray-700 peer-checked:text-white">LINE Pay</span>
             </div>
-            <span class="ml-auto hidden peer-checked:block text-[#5a855a]">
+            <span class="ml-auto hidden peer-checked:block text-white">
               <i class="fas fa-check-circle text-xl"></i>
             </span>
           </label>
         </div>
       </div>
       {% if form.payment_method.errors %}
-      <p class="text-red-600 text-lg mt-1">{{ form.payment_method.errors }}</p>
+      <p class="text-red-600 text-base sm:text-lg mt-1">{{ form.payment_method.errors }}</p>
       {% endif %}
     </div>
 
     <!-- Action Buttons -->
     <div>
       <div class="flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-        <button type="button" @click="step = 1" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">回上一步</button>
-        <button type="button" @click="step = 3" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
+        <button type="button" @click="prevStep()" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">回上一步</button>
+        <button type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
       </div>
     </div>
   </div>

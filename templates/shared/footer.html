@@ -2,17 +2,11 @@
 <div class="max-w-7xl mx-auto footer flex flex-col sm:flex-col md:flex-row justify-between pl-10 pr-10 text-base">
   <nav>
     <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" alt="FitCal" class="w-30" />
-    <div class="mt-5">
-      <p>電話：<a href="tel:+886-123456789" class="link link-hover">+886-123-456-789</a></p>
-      <p>地址：五倍紅寶石學院</p>
-      <p>Email：<a href="mailto:fitcal19th@gmail.com" class="link link-hover">fitcal19th@gmail.com</a></p>
-    </div>
   </nav>
   <nav class="flex flex-col justify-self-end mr-10">
     <h6 class="footer-title">網站資訊</h6>
-    <a href=" # " class="link link-hover"> <i class="fa-solid fa-house fa-fw mr-1"></i>關於我們</a>
-    <a href=" # " class="link link-hover"> <i class="fa-brands fa-line mr-1"></i>聯絡我們</a>
-    <a href=" # " class="link link-hover"> <i class="fa-regular fa-circle-question mr-1"></i>常見問題</a>
+    <a href="{% url 'pages:about_us' %}" class="link link-hover"> <i class="fa-solid fa-house fa-fw mr-1"></i>關於我們</a>
+    <p>Email：<a href="mailto:fitcal19th@gmail.com" class="link link-hover">fitcal19th@gmail.com</a></p>
   </nav>
 </div>
 <div class="mt-8 text-center text-xs text-gray-500">© {% now "Y" %} FITCAL. All rights reserved.</div>

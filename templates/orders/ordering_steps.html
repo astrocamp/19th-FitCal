@@ -25,6 +25,14 @@
         },
         ordering_member_name: '{{ cart.member.name }}',
         ordering_member_phone_number: '{{ cart.member.phone_number }}',
+        nextStep() {
+          this.step++;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        prevStep() {
+          this.step--;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
       }"
     >

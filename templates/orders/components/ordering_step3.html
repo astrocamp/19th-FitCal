@@ -1,59 +1,70 @@
 <div x-show="step === 3" x-transition>
-  <h1 class="mb-4 text-center text-2xl font-bold text-[#000]">建立訂單</h1>
+  <h1 class="mb-4 text-center text-xl font-bold text-[#000] sm:text-2xl">建立訂單</h1>
 
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
     <li class="step step-active">
-      <span class="text-[#5a855a] text-lg">確認明細</span>
+      <span class="text-sm text-[#5a855a] sm:text-lg">確認明細</span>
     </li>
-    <li class="step step-active text-[#5a855a] text-lg">選擇付款</li>
-    <li class="step step-active text-[#5a855a] font-semibold text-lg">確認結帳</li>
+    <li class="step step-active">
+      <span class="text-sm text-[#5a855a] sm:text-lg">選擇付款</span>
+    </li>
+    <li class="step step-active">
+      <span class="text-sm font-semibold text-[#5a855a] sm:text-lg">確認結帳</span>
+    </li>
   </ul>
 
   <!-- Main Content Card -->
-  <div class="w-full max-w-xl m-auto mt-7">
-    <h2 class="mb-5 text-lg font-semibold text-gray-900">確認訂單明細</h2>
+  <div class="w-full sm:max-w-xl sm:m-auto mt-4 sm:mt-7">
+    <h2 class="mb-5 text-base font-semibold text-gray-900 sm:text-lg">確認訂單明細</h2>
 
-    <div class="space-y-0">
+    <div class="space-y-4">
       <!-- container for list items -->
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-lg text-gray-700">訂購門市</span>
-        <span class="text-lg text-gray-900">{{ cart.store.name }}</span>
-      </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-lg text-gray-700">取貨人</span>
-        <span class="text-lg text-gray-900" x-text="ordering_member_name"></span>
+
+      <div class="flex flex-col items-start border-b border-gray-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">訂購門市</span>
+        <span class="mt-1 text-base font-medium text-gray-900 sm:mt-0 sm:text-lg">{{ cart.store.name }}</span>
       </div>
 
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-lg text-gray-700">聯絡電話</span>
-        <span class="text-lg text-gray-900" x-text="ordering_member_phone_number"></span>
+      <div class="flex flex-col items-start border-b border-gray-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">取貨人</span>
+        <span class="mt-1 text-base font-medium text-gray-900 sm:mt-0 sm:text-lg" x-text="ordering_member_name"></span>
       </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-lg text-gray-700">取貨方式</span>
-        <span class="text-lg text-gray-900">自取</span>
+
+      <div class="flex flex-col items-start border-b border-gray-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">聯絡電話</span>
+        <span class="mt-1 text-base font-medium text-gray-900 sm:mt-0 sm:text-lg" x-text="ordering_member_phone_number"></span>
       </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-lg text-gray-700">預計取貨時間</span>
-        <span class="text-lg text-gray-900" x-text="formatDateTime(formData.pickup_time)"></span>
+
+      <div class="flex flex-col items-start border-b border-gray-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">取貨方式</span>
+        <span class="mt-1 text-base font-medium text-gray-900 sm:mt-0 sm:text-lg">自取</span>
       </div>
-      <div class="flex items-center justify-between border-b border-gray-200 py-3">
-        <span class="text-lg text-gray-700">付款方式</span>
-        <span class="text-lg text-gray-900" x-text="paymentLabels[formData.payment_method]"></span>
+
+      <div class="flex flex-col items-start border-b border-gray-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">預計取貨時間</span>
+        <span class="mt-1 text-base font-medium text-gray-900 sm:mt-0 sm:text-lg" x-text="formatDateTime(formData.pickup_time)"></span>
       </div>
-      <div class="flex items-center justify-between py-3">
-        <span class="text-lg text-gray-700">總卡路里</span>
-        <span id="ordering_total_calories_step3" class="text-lg font-semibold text-gray-900"> {{ cart.total_calories }} kcal </span>
+
+      <div class="flex flex-col items-start border-b border-gray-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">付款方式</span>
+        <span class="mt-1 text-base font-medium text-gray-900 sm:mt-0 sm:text-lg" x-text="paymentLabels[formData.payment_method]"></span>
       </div>
-      <div class="flex items-center justify-between py-3">
-        <span class="text-lg text-gray-700">應付金額</span>
-        <span id="ordering_total_price_step3" class="text-lg font-semibold text-gray-900">$ {{ cart.total_price }}</span>
+
+      <div class="flex flex-col items-start pt-2 sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">總卡路里</span>
+        <span id="ordering_total_calories_step3" class="mt-1 text-base font-semibold text-gray-900 sm:mt-0 sm:text-lg"> {{ cart.total_calories }} kcal </span>
+      </div>
+
+      <div class="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
+        <span class="text-base text-gray-700 sm:text-lg">應付金額</span>
+        <span id="ordering_total_price_step3" class="mt-1 text-base font-semibold text-gray-900 sm:mt-0 sm:text-lg">$ {{ cart.total_price }}</span>
       </div>
     </div>
 
     <!-- Action Buttons -->
-    <div class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-      <button type="button" @click="step = 2" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">上一步</button>
+    <div class="mt-6 flex flex-col items-center justify-center space-y-3 sm:mt-8 sm:flex-row sm:space-y-0 sm:space-x-4">
+      <button type="button" @click="prevStep()" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">上一步</button>
       <button type="submit" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">送出訂單</button>
     </div>
   </div>

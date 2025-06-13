@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.core.exceptions import ValidationError
 from django.forms import DateTimeInput, ModelForm, NumberInput
@@ -33,12 +33,15 @@ class OrderForm(ModelForm):
         widgets = {
             'pickup_time': DateTimeInput(
                 attrs={
-                    'type': 'datetime-local',
+                    'type': 'text',
+                    'class': 'flatpickr-input',
                 },
+                format='%Y-%m-%dT%H:%M',
             )
         }
 
     def __init__(self, *args, **kwargs):
+        self.store = kwargs.pop('store', None)
         self.mode = kwargs.pop('mode', 'create')
         super().__init__(*args, **kwargs)
 
@@ -58,7 +61,7 @@ class OrderForm(ModelForm):
         rounded_time = next_10min(now)
 
         if self.mode == 'create':
-            self.fields['pickup_time'].initial = rounded_time
+            self.fields['pickup_time'].initial = self._get_next_valid_time(rounded_time)
 
             self.fields.pop('order_status')
             self.fields.pop('payment_status')
@@ -84,6 +87,27 @@ class OrderForm(ModelForm):
             self.fields.pop('note')
             self.fields.pop('payment_method')
             self.fields.pop('total_price')
+
+    def _get_next_valid_time(self, current_time):
+        """根據店家營業時間，回傳下個合法取餐時間"""
+        if not self.store:
+            return current_time  # 沒有 store 就不處理
+
+        opening_time = self.store.opening_time  # time object
+        closing_time = self.store.closing_time  # time object
+        current_store_time = current_time.time()
+
+        # 若 current_time 在營業時間區間內（含開，不含關） → 合法
+        if opening_time <= current_store_time < closing_time:
+            return current_time
+
+        # 早於開店 → 今日開店時間
+        if current_store_time < opening_time:
+            return datetime.combine(current_time.date(), opening_time)
+
+        # 晚於打烊 → 明日開店時間
+        next_day = current_time.date() + timedelta(days=1)
+        return datetime.combine(next_day, opening_time)
 
     # 在儲存訂單時，依訂單項目計算總金額
     def save(self, commit=True):
