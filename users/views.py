@@ -7,12 +7,16 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
 from stores.forms import StoreForm
+from stores.views import handle_store_owner
 
 from .forms import UserForm
 
 
 def index(req):
-    return render(req, 'pages/index.html')
+    if hasattr(req.user, 'store'):
+        return handle_store_owner(req)
+    else:
+        return render(req, 'pages/index.html')
 
 
 # 顯示註冊頁面(會員)
