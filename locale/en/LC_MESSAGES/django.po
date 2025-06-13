@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-13 03:24+0800\n"
+"POT-Creation-Date: 2025-06-14 01:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,13 +40,12 @@ msgstr "Please enter a positive integer"
 msgid "產品"
 msgstr "Product"
 
-#: .\carts\forms.py:32 .\orders\forms.py:136 .\templates\carts\show.html:46
-#: .\templates\products\show.html:49
-#: .\templates\shared\orders\order_item_detail.html:18
+#: .\carts\forms.py:32 .\orders\forms.py:160 .\templates\carts\show.html:45
+#: .\templates\products\show.html:33
 msgid "數量"
 msgstr "Quantity"
 
-#: .\carts\forms.py:33 .\products\forms.py:35 .\templates\products\show.html:25
+#: .\carts\forms.py:33
 msgid "客製化"
 msgstr "Customization"
 
@@ -62,15 +61,15 @@ msgstr "Item added to cart"
 msgid "購物車更新失敗"
 msgstr "Failed to update cart"
 
-#: .\carts\views.py:159
+#: .\carts\views.py:163
 msgid "購物車已清空"
 msgstr "Cart has been emptied"
 
-#: .\carts\views.py:189
+#: .\carts\views.py:194
 msgid "購物車已清空，請重新選擇商品"
 msgstr "Cart is empty. Please select your items again"
 
-#: .\carts\views.py:201
+#: .\carts\views.py:206
 #, fuzzy, python-format
 #| msgid "成功刪除 %(product)s"
 msgid "成功刪除 %(product_name)s"
@@ -137,8 +136,8 @@ msgid "請輸入正確的日期格式"
 msgstr "Please enter a valid date format"
 
 #: .\members\forms.py:60
-msgid "此欄位僅供查看，無法修改。"
-msgstr "This field is read-only and cannot be edited"
+msgid "生日設定完成後，將無法修改。"
+msgstr "Once your birthday is set, it cannot be changed"
 
 #: .\members\forms.py:67
 msgid "請輸入生日"
@@ -168,13 +167,9 @@ msgstr "Prefer not to say"
 msgid "手機號碼格式錯誤"
 msgstr "Invalid phone number format"
 
-#: .\members\views.py:30
+#: .\members\views.py:35
 msgid "請檢查輸入內容"
 msgstr "Please check your input"
-
-#: .\members\views.py:32
-msgid "沒有權限"
-msgstr "Permission denied"
 
 #: .\middleware\block_merchant_cart.py:14
 msgid "您沒有購物車功能。"
@@ -212,40 +207,32 @@ msgstr "Canceled and Refunded"
 msgid "現金"
 msgstr "Cash"
 
-#: .\orders\enums.py:17
-msgid "信用卡"
-msgstr "Credit Card"
-
-#: .\orders\enums.py:18
-msgid "LINE Pay"
-msgstr "LINE Pay"
-
-#: .\orders\enums.py:22
+#: .\orders\enums.py:21
 msgid "未付款"
 msgstr "Unpaid"
 
-#: .\orders\enums.py:23
+#: .\orders\enums.py:22
 msgid "已付款"
 msgstr "Paid"
 
-#: .\orders\enums.py:24
+#: .\orders\enums.py:23
 msgid "已退款"
 msgstr "Refunded"
 
-#: .\orders\enums.py:28
+#: .\orders\enums.py:27
 msgid "會員取消"
 msgstr "Cancelled by member"
 
-#: .\orders\enums.py:29
+#: .\orders\enums.py:28
 msgid "店家取消"
 msgstr "Cancelled by store"
 
-#: .\orders\enums.py:30
+#: .\orders\enums.py:29
 msgid "系統自動取消"
 msgstr "Automatically cancelled by system"
 
-#: .\orders\forms.py:25 .\templates\orders\components\ordering_step1.html:48
-#: .\templates\orders\components\ordering_step3.html:38
+#: .\orders\forms.py:25 .\templates\orders\components\ordering_step1.html:66
+#: .\templates\orders\components\ordering_step3.html:46
 msgid "預計取貨時間"
 msgstr "Estimated Pickup Time"
 
@@ -254,7 +241,7 @@ msgid "訂單狀態"
 msgstr "Order Status"
 
 #: .\orders\forms.py:28 .\templates\components\payment_info.html:8
-#: .\templates\orders\components\ordering_step3.html:42
+#: .\templates\orders\components\ordering_step3.html:51
 msgid "付款方式"
 msgstr "Payment Method"
 
@@ -270,19 +257,19 @@ msgstr "Total Amount"
 msgid "客製化選項"
 msgstr "Customization Options"
 
-#: .\orders\forms.py:115
+#: .\orders\forms.py:139
 msgid "請選擇比現在晚至少10分鐘的時間"
 msgstr "Please select a time at least 10 minutes later than now"
 
-#: .\orders\forms.py:119
+#: .\orders\forms.py:143
 msgid "取貨時間不得超過7天後"
 msgstr "Pickup time cannot be more than 7 days from now"
 
-#: .\orders\forms.py:125
+#: .\orders\forms.py:149
 msgid "請選擇在原訂時間後2小時內的時間"
 msgstr "Please select a time within 2 hours after the original pickup time"
 
-#: .\orders\forms.py:135 .\templates\shared\orders\order_item_detail.html:19
+#: .\orders\forms.py:159 .\templates\shared\orders\order_item_detail.html:20
 msgid "單價"
 msgstr "Unit Price"
 
@@ -330,33 +317,31 @@ msgstr "Current file"
 msgid "更新檔案"
 msgstr "Update file"
 
-#: .\products\forms.py:28 .\templates\shared\orders\order_item_detail.html:16
+#: .\products\forms.py:27 .\templates\shared\orders\order_item_detail.html:17
 msgid "商品名稱"
 msgstr "Product Name"
 
-#: .\products\forms.py:29
+#: .\products\forms.py:28
 msgid "商品類別"
 msgstr "Product category"
 
-#: .\products\forms.py:30 .\templates\products\product_card.html:5
+#: .\products\forms.py:29 .\templates\products\product_card.html:5
 msgid "商品圖片"
 msgstr "Product image"
 
-#: .\products\forms.py:31
+#: .\products\forms.py:30
 msgid "商品介紹"
 msgstr "Product description"
 
-#: .\products\forms.py:32 .\templates\products\product_card.html:15
-#: .\templates\products\show.html:23
-#: .\templates\shared\orders\order_item_detail.html:17
+#: .\products\forms.py:31 .\templates\shared\orders\order_item_detail.html:18
 msgid "卡路里"
 msgstr "Calories"
 
-#: .\products\forms.py:33 .\templates\products\show.html:24
+#: .\products\forms.py:32
 msgid "可販售數量"
 msgstr "Available quantity"
 
-#: .\products\forms.py:34 .\templates\products\product_card.html:14
+#: .\products\forms.py:33
 msgid "價格"
 msgstr "Price"
 
@@ -364,7 +349,7 @@ msgstr "Price"
 msgid "新增成功"
 msgstr "Successfully added"
 
-#: .\products\views.py:88 .\stores\views.py:129
+#: .\products\views.py:88 .\stores\views.py:147
 msgid "更新成功"
 msgstr "Successfully updated"
 
@@ -392,7 +377,7 @@ msgstr "Opening time cannot be empty"
 msgid "打烊時間不能空白"
 msgstr "Closing time cannot be empty"
 
-#: .\stores\forms.py:77 .\templates\users\sign_up_store.html:42
+#: .\stores\forms.py:77 .\templates\users\sign_up_store.html:53
 msgid "店家名稱"
 msgstr "Store Name"
 
@@ -408,11 +393,11 @@ msgstr "Mobile number"
 msgid "統編"
 msgstr "Unified Business Number"
 
-#: .\stores\forms.py:81 .\templates\users\sign_up_store.html:62
+#: .\stores\forms.py:81 .\templates\users\sign_up_store.html:85
 msgid "開店時間"
 msgstr "Opening Time"
 
-#: .\stores\forms.py:82 .\templates\users\sign_up_store.html:67
+#: .\stores\forms.py:82 .\templates\users\sign_up_store.html:93
 msgid "打烊時間"
 msgstr "Closing Time"
 
@@ -464,67 +449,63 @@ msgstr "Unified Business Number must be 8 digits"
 msgid "創建成功"
 msgstr "Created successfully"
 
-#: .\stores\views.py:155
+#: .\stores\views.py:192
 msgid "商家資訊已成功更新！"
 msgstr "Store information updated successfully!"
 
-#: .\stores\views.py:158
+#: .\stores\views.py:195
 msgid "請檢查您的輸入，有錯誤發生！"
 msgstr "Please check your input. An error has occurred!"
 
-#: .\stores\views.py:176
-msgid "已刪除"
-msgstr "Deleted"
-
-#: .\stores\views.py:187
+#: .\stores\views.py:223
 msgid "訂單尚未完成，無法評分"
 msgstr "The order is not completed yet and cannot be rated."
 
-#: .\stores\views.py:190
+#: .\stores\views.py:226
 msgid "此訂單已評分"
 msgstr "This order has already been rated."
 
-#: .\stores\views.py:195
+#: .\stores\views.py:231
 msgid "請提供有效的分數"
 msgstr "Please provide a valid rating."
 
-#: .\stores\views.py:198
+#: .\stores\views.py:234
 msgid "分數必須在 1 到 5 分之間"
 msgstr "The rating must be between 1 and 5."
 
-#: .\stores\views.py:209
+#: .\stores\views.py:249 .\templates\orders\order_list.html:51
 msgid "已評分："
 msgstr "Rated:"
 
-#: .\stores\views.py:215
+#: .\stores\views.py:256
 msgid "伺服器發生錯誤，請稍後再試"
 msgstr "A server error occurred. Please try again later."
 
-#: .\stores\views.py:321
+#: .\stores\views.py:362
 msgid "類別名稱不能為空"
 msgstr "Category name cannot be empty"
 
-#: .\stores\views.py:325
+#: .\stores\views.py:366
 msgid "此類別已存在"
 msgstr "This category already exists"
 
-#: .\stores\views.py:329
+#: .\stores\views.py:370
 msgid "類別創建成功"
 msgstr "Category created successfully"
 
-#: .\stores\views.py:347
+#: .\stores\views.py:388
 msgid "此類別名稱已存在"
 msgstr "This category name already exists"
 
-#: .\stores\views.py:352
+#: .\stores\views.py:393
 msgid "類別名稱已更新"
 msgstr "Category name updated"
 
-#: .\stores\views.py:354
+#: .\stores\views.py:395
 msgid "請輸入有效的類別名稱"
 msgstr "Please enter a valid category name"
 
-#: .\stores\views.py:370
+#: .\stores\views.py:411
 msgid "類別已刪除"
 msgstr "Category deleted"
 
@@ -560,15 +541,16 @@ msgstr "Store Logo"
 msgid "無"
 msgstr "None"
 
-#: .\templates\carts\index.html:27 .\templates\carts\show.html:71
+#: .\templates\carts\index.html:27 .\templates\carts\show.html:68
 msgid "總卡路里："
 msgstr "Total Calories:"
 
-#: .\templates\carts\index.html:28 .\templates\carts\show.html:72
+#: .\templates\carts\index.html:28 .\templates\carts\show.html:69
+#: .\templates\orders\order_list.html:28
 msgid "總金額："
 msgstr "Total Amount:"
 
-#: .\templates\carts\index.html:28 .\templates\carts\show.html:72
+#: .\templates\carts\index.html:28 .\templates\carts\show.html:69
 msgid "元"
 msgstr "NT$"
 
@@ -580,7 +562,7 @@ msgstr "View Details"
 msgid "是否要刪除？"
 msgstr "Are you sure you want to delete?"
 
-#: .\templates\carts\index.html:35 .\templates\products\show.html:71
+#: .\templates\carts\index.html:35
 msgid "刪除"
 msgstr "Delete"
 
@@ -592,55 +574,64 @@ msgstr "There are no items in your cart."
 msgid "新增商品到購物車"
 msgstr "Add Item to Cart"
 
-#: .\templates\carts\new.html:21 .\templates\products\show.html:63
+#: .\templates\carts\new.html:21 .\templates\products\show.html:41
 msgid "加入購物車"
 msgstr "Add to Cart"
 
-#: .\templates\carts\show.html:5 .\templates\stores\show.html:7
-msgid "店家 Logo"
-msgstr "Store Logo"
+#: .\templates\carts\show.html:5
+msgid "店家"
+msgstr "Store"
 
 #: .\templates\carts\show.html:12 .\templates\stores\show.html:15
-#: .\templates\stores\store_card.html:19
+#: .\templates\stores\store_card.html:21
 msgid "營業時間："
 msgstr "Business Hours:"
 
-#: .\templates\carts\show.html:14 .\templates\stores\show.html:17
-msgid "距離："
-msgstr "Distance:"
-
-#: .\templates\carts\show.html:14 .\templates\stores\show.html:17
-#: .\templates\stores\store_card.html:22
-msgid "公里"
-msgstr "km"
+#: .\templates\carts\show.html:14
+msgid "距離：2.1 公里"
+msgstr ""
 
 #: .\templates\carts\show.html:29
 msgid "無圖片"
 msgstr "No Image"
 
-#: .\templates\carts\show.html:50
+#: .\templates\carts\show.html:48
 msgid "件"
 msgstr "pcs"
 
-#: .\templates\carts\show.html:56
+#: .\templates\carts\show.html:52
 msgid "確認刪除商品？"
 msgstr "Confirm deleting this item?"
 
-#: .\templates\carts\show.html:89
+#: .\templates\carts\show.html:86
 msgid "結帳"
 msgstr "Checkout"
 
 #: .\templates\chatbot\widget.html:17
-msgid "FitCal智慧客服小幫手"
+#, fuzzy
+#| msgid "FitCal智慧客服小幫手"
+msgid "智慧客服小幫手"
 msgstr "FitCal Smart Assistant"
 
-#: .\templates\chatbot\widget.html:36
+##: .\templates\chatbot\widget.html:24
+msgid ""
+"您好，我是 FitCal 智慧客服，任何網站相關問題都可以詢問我，也歡迎掃描底下 QR "
+"Code 來加入我們的"
+msgstr ""
+"Hi there! I’m FitCal’s smart assistant. Feel free to ask me any questions about the website. "
+"You’re also welcome to scan the QR code below to join our"
+
+#: .\templates\chatbot\widget.html:25
+msgid "官方 LINE 帳號"
+msgstr "official LINE account"
+
+#: .\templates\chatbot\widget.html:25
+msgid "可以在裡面獲得您的訂單進度相關資訊唷～"
+msgstr "You can check your order status there too!"
+
+#: .\templates\chatbot\widget.html:34
 msgid "輸入訊息..."
 msgstr "Enter your message..."
-
-#: .\templates\chatbot\widget.html:37
-msgid "送出"
-msgstr "Send"
 
 #: .\templates\components\order_actions.html:3
 #: .\templates\shared\orders\order_status_button.html:2
@@ -661,9 +652,9 @@ msgid "取貨人姓名"
 msgstr "Pickup Person"
 
 #: .\templates\components\order_info_table.html:16
-#: .\templates\orders\components\ordering_step3.html:30
+#: .\templates\orders\components\ordering_step3.html:36
 #: .\templates\shared\orders\_order_detail_modal.html:33
-#: .\templates\users\sign_up_store.html:52
+#: .\templates\users\sign_up_store.html:69
 msgid "聯絡電話"
 msgstr "Contact Number"
 
@@ -707,11 +698,11 @@ msgid "付款金額"
 msgstr "Payment Amount"
 
 #: .\templates\components\pickup_number.html:3
-msgid "取餐號："
-msgstr "Pickup Number:"
+msgid "取餐號 -"
+msgstr "Pickup Number -"
 
 #: .\templates\components\store_info.html:6
-#: .\templates\orders\order_list.html:18
+#: .\templates\orders\order_list.html:20
 #: .\templates\stores\business\index.html:4 .\templates\stores\index.html:17
 msgid "店家名稱："
 msgstr "Store Name:"
@@ -738,20 +729,20 @@ msgstr "Favorited Products"
 msgid "尚未收藏任何商品"
 msgstr "No products have been added to favorites yet"
 
-#: .\templates\members\edit.html:6 .\templates\members\new.html:6
+#: .\templates\members\edit.html:6 .\templates\members\new.html:5
 msgid "編輯會員資料"
 msgstr "Edit Member Profile"
 
 #: .\templates\members\edit.html:9 .\templates\members\index.html:4
-#: .\templates\members\new.html:9
+#: .\templates\members\new.html:8
 msgid "頭像"
 msgstr "Avatar"
 
-#: .\templates\members\edit.html:24
+#: .\templates\members\edit.html:26
 msgid "更新"
 msgstr "Update"
 
-#: .\templates\members\edit.html:25 .\templates\members\new.html:25
+#: .\templates\members\edit.html:27 .\templates\members\new.html:30
 msgid "取消"
 msgstr "Cancel"
 
@@ -763,8 +754,8 @@ msgstr "Favorited Stores"
 msgid "目前尚未收藏任何店家。"
 msgstr "No stores have been added to favorites yet."
 
-#: .\templates\members\index.html:3 .\templates\shared\navbar.html:69
-#: .\templates\shared\navbar.html:92
+#: .\templates\members\index.html:3 .\templates\shared\navbar.html:68
+#: .\templates\shared\navbar.html:91
 msgid "會員資料"
 msgstr "Member Information"
 
@@ -773,7 +764,6 @@ msgid "姓名："
 msgstr "Name:"
 
 #: .\templates\members\index.html:7 .\templates\members\show.html:4
-#: .\templates\shared\footer.html:6
 msgid "電話："
 msgstr "Phone:"
 
@@ -807,7 +797,7 @@ msgstr ""
 msgid "刪除帳號與會員"
 msgstr "Delete Account and Membership"
 
-#: .\templates\members\new.html:24
+#: .\templates\members\new.html:29
 msgid "確定"
 msgstr "Confirm"
 
@@ -827,8 +817,8 @@ msgstr "Google:"
 msgid "更新資料"
 msgstr "Update Info"
 
-#: .\templates\members\show.html:20 .\templates\shared\navbar.html:76
-#: .\templates\shared\navbar.html:108
+#: .\templates\members\show.html:20 .\templates\shared\navbar.html:75
+#: .\templates\shared\navbar.html:107
 msgid "登出"
 msgstr "Log Out"
 
@@ -844,115 +834,140 @@ msgstr "Create Order"
 msgid "確認明細"
 msgstr "Confirm Details"
 
-#: .\templates\orders\components\ordering_step1.html:10
-#: .\templates\orders\components\ordering_step2.html:10
-#: .\templates\orders\components\ordering_step3.html:10
-msgid "選擇付款"
-msgstr "Select Payment"
-
 #: .\templates\orders\components\ordering_step1.html:11
 #: .\templates\orders\components\ordering_step2.html:11
 #: .\templates\orders\components\ordering_step3.html:11
+msgid "選擇付款"
+msgstr "Select Payment"
+
+#: .\templates\orders\components\ordering_step1.html:14
+#: .\templates\orders\components\ordering_step2.html:14
+#: .\templates\orders\components\ordering_step3.html:14
 msgid "確認結帳"
 msgstr "Confirm Checkout"
 
-#: .\templates\orders\components\ordering_step1.html:32
+#: .\templates\orders\components\ordering_step1.html:23
+#, fuzzy
+#| msgid "新增店家資訊"
+msgid "店家資訊"
+msgstr "Add Store Information"
+
+#: .\templates\orders\components\ordering_step1.html:50
 msgid "取貨資訊"
 msgstr "Pickup Info"
 
-#: .\templates\orders\components\ordering_step1.html:40
+#: .\templates\orders\components\ordering_step1.html:58
 msgid "取貨方式：自取"
 msgstr "Pickup Method: Self Pickup"
 
-#: .\templates\orders\components\ordering_step1.html:57
+#: .\templates\orders\components\ordering_step1.html:75
 msgid "購物內容"
 msgstr "Shopping Details"
 
-#: .\templates\orders\components\ordering_step1.html:72
-msgid "確定要刪除 {{ item.product.name }}？"
+#: .\templates\orders\components\ordering_step1.html:90
+#, fuzzy, python-format
+#| msgid "確定要刪除 {{ item.product.name }}？"
+msgid "確定要刪除 %(product_name)s 嗎？"
 msgstr "Are you sure you want to delete {{ item.product.name }}?"
 
-#: .\templates\orders\components\ordering_step1.html:80
+#: .\templates\orders\components\ordering_step1.html:98
 msgid "無商品，趕快去加購商品吧！"
 msgstr "No items yet. Go add some products now!"
 
-#: .\templates\orders\components\ordering_step1.html:87
-#: .\templates\orders\components\ordering_step3.html:46
-#: .\templates\shared\orders\order_item_detail.html:40
+#: .\templates\orders\components\ordering_step1.html:105
+#: .\templates\orders\components\ordering_step3.html:56
+#: .\templates\shared\orders\order_item_detail.html:44
 msgid "總卡路里"
 msgstr "Total Calories"
 
-#: .\templates\orders\components\ordering_step1.html:97
+#: .\templates\orders\components\ordering_step1.html:115
 msgid "結帳明細"
 msgstr "Checkout Summary"
 
-#: .\templates\orders\components\ordering_step1.html:101
-msgid "商品 X"
-msgstr "Product X"
+#: .\templates\orders\components\ordering_step1.html:119
+msgid "商品"
+msgstr "Product"
 
-#: .\templates\orders\components\ordering_step1.html:105
-#: .\templates\orders\components\ordering_step2.html:20
-#: .\templates\orders\components\ordering_step3.html:50
-msgid "應付金額"
-msgstr "Amount Due"
-
-#: .\templates\orders\components\ordering_step1.html:113
+#: .\templates\orders\components\ordering_step1.html:131
 msgid "繼續加購"
 msgstr "Continue Shopping"
 
-#: .\templates\orders\components\ordering_step1.html:114
-#: .\templates\orders\components\ordering_step2.html:51
+#: .\templates\orders\components\ordering_step1.html:132
+#: .\templates\orders\components\ordering_step2.html:88
 msgid "下一步"
 msgstr "Next Step"
 
-#: .\templates\orders\components\ordering_step2.html:29
+#: .\templates\orders\components\ordering_step2.html:24
+#: .\templates\orders\components\ordering_step3.html:61
+msgid "應付金額"
+msgstr "Amount Due"
+
+#: .\templates\orders\components\ordering_step2.html:33
 msgid "取貨人姓名："
 msgstr "Pickup Name:"
 
-#: .\templates\orders\components\ordering_step2.html:33
+#: .\templates\orders\components\ordering_step2.html:37
 msgid "聯絡電話："
 msgstr "Contact Phone:"
 
-#: .\templates\orders\components\ordering_step2.html:41
+#: .\templates\orders\components\ordering_step2.html:45
 msgid "付款方式："
 msgstr "Payment Method:"
 
-#: .\templates\orders\components\ordering_step2.html:50
-msgid "回上一步"
-msgstr "Previous Step"
+#: .\templates\orders\components\ordering_step2.html:55
+msgid "現金支付"
+msgstr ""
 
-#: .\templates\orders\components\ordering_step3.html:16
+#: .\templates\orders\components\ordering_step3.html:20
 msgid "確認訂單明細"
 msgstr "Confirm Order Details"
 
-#: .\templates\orders\components\ordering_step3.html:21
+#: .\templates\orders\components\ordering_step3.html:26
 msgid "訂購門市"
 msgstr "Order Store"
 
-#: .\templates\orders\components\ordering_step3.html:25
+#: .\templates\orders\components\ordering_step3.html:31
 msgid "取貨人"
 msgstr "Pickup Person"
 
-#: .\templates\orders\components\ordering_step3.html:34
+#: .\templates\orders\components\ordering_step3.html:41
 msgid "取貨方式"
 msgstr "Pickup Method"
 
-#: .\templates\orders\components\ordering_step3.html:35
+#: .\templates\orders\components\ordering_step3.html:42
 msgid "自取"
 msgstr "Pickup"
 
-#: .\templates\orders\components\ordering_step3.html:57
-msgid "上一步"
-msgstr "Previous"
-
-#: .\templates\orders\components\ordering_step3.html:58
+#: .\templates\orders\components\ordering_step3.html:69
 msgid "送出訂單"
 msgstr "Place Order"
 
-#: .\templates\orders\order_list.html:4 .\templates\shared\navbar.html:72
-#: .\templates\shared\navbar.html:103
+#: .\templates\orders\order_list.html:3 .\templates\shared\navbar.html:71
+#: .\templates\shared\navbar.html:102
 msgid "歷史訂單"
 msgstr "Order History"
+
+#: .\templates\orders\order_list.html:27
+msgid "建立日期："
+msgstr "Created on:"
+
+#: .\templates\orders\order_list.html:42
+msgid "對本次訂單的評分："
+msgstr "Rating for this order:"
+
+#: .\templates\orders\order_list.html:48
+msgid "送出評分"
+msgstr "Submit Rating"
+
+#: .\templates\orders\order_list.html:51
+#: .\templates\stores\business\index.html:10 .\templates\stores\index.html:23
+#: .\templates\stores\rating_button.html:5
+msgid "分"
+msgstr "points"
+
+#: .\templates\orders\ordering_steps.html:14
+msgid "現金付款"
+msgstr ""
 
 #: .\templates\pages\index.html:10
 #, fuzzy
@@ -987,106 +1002,146 @@ msgstr "Start Exploring Meals"
 msgid "商家加入"
 msgstr "Join as a Merchant"
 
+#: .\templates\pages\index.html:34
 msgid "健康點餐，輕鬆生活"
 msgstr "Healthy Ordering, Effortless Living"
 
+#: .\templates\pages\index.html:35
 msgid "智慧飲食，盡在指尖"
 msgstr "Smart Eating at Your Fingertips"
 
+#: .\templates\pages\index.html:36
 msgid ""
 "我們的平台讓您在享受美食的同時，輕鬆掌握每一份餐點的健康資訊。從點餐到支付，"
 "再到售後服務，全程為您打造流暢、個人化的體驗。"
 msgstr ""
-"Our platform lets you enjoy delicious meals while effortlessly tracking health information for every item. "
-"From ordering to payment and post-sale services, we provide a smooth and personalized experience."
+"Our platform lets you enjoy delicious meals while effortlessly tracking "
+"health information for every item. From ordering to payment and post-sale "
+"services, we provide a smooth and personalized experience."
 
+#: .\templates\pages\index.html:41
 msgid "卡路里智能管理。"
 msgstr "Smart Calorie Management."
 
+#: .\templates\pages\index.html:43
 msgid ""
 "無論是單一商品還是整筆訂單，所有卡路里資訊一目瞭然，助您輕鬆規劃每日飲食。"
 msgstr ""
-"Whether it’s a single item or an entire order, calorie information is clearly displayed to help you easily plan your daily diet."
+"Whether it’s a single item or an entire order, calorie information is "
+"clearly displayed to help you easily plan your daily diet."
 
+#: .\templates\pages\index.html:48
 msgid "訂單與店家互動。"
 msgstr "Order and Store Interaction."
 
+#: .\templates\pages\index.html:50
 msgid ""
 "即時查看店家平均評分，對每筆訂單和商品進行收藏，並透過多元登入方式快速開啟美"
 "食旅程。"
 msgstr ""
-"View store ratings in real time, favorite any order or item, and start your food journey with multiple sign-in options."
+"View store ratings in real time, favorite any order or item, and start your "
+"food journey with multiple sign-in options."
 
+#: .\templates\pages\index.html:55
 msgid "便捷支付與即時通訊。"
 msgstr "Convenient Payment and Instant Communication."
 
+#: .\templates\pages\index.html:57
 msgid ""
 "支援 Line 線上支付與多種登入方式（含 Google、Line），訂單狀態即時通知，還有 "
 "AI 客服機器人隨時為您提供協助。"
 msgstr ""
-"Supports LINE Pay and multiple login methods (including Google and LINE). Get real-time order updates and assistance from our AI customer service bot anytime."
+"Supports LINE Pay and multiple login methods (including Google and LINE). "
+"Get real-time order updates and assistance from our AI customer service bot "
+"anytime."
 
+#: .\templates\pages\index.html:63
 msgid "消費者端產品截圖"
 msgstr "Customer-Side Product Screenshots"
 
+#: .\templates\pages\index.html:73
 msgid "店家端產品截圖"
 msgstr "Merchant-Side Product Screenshots"
 
+#: .\templates\pages\index.html:78
 msgid "高效管理，輕鬆營運"
 msgstr "Efficient Management, Seamless Operations"
 
+#: .\templates\pages\index.html:79
 msgid "智能後台，助您事業騰飛"
 msgstr "Smart Backend to Empower Your Business"
 
+#: .\templates\pages\index.html:80
 msgid ""
 "我們為店家提供一套功能強大且直觀的後台管理系統，從商品上架到訂單處理，再到數"
 "據分析，全面助力您提升營運效率，掌握市場動態。"
 msgstr ""
-"We provide merchants with a powerful and intuitive backend system. From product listings to order processing and data analysis, we help you boost operational efficiency and stay ahead of market trends."
+"We provide merchants with a powerful and intuitive backend system. From "
+"product listings to order processing and data analysis, we help you boost "
+"operational efficiency and stay ahead of market trends."
 
+#: .\templates\pages\index.html:85
 msgid "智能商品管理。"
 msgstr "Smart Product Management."
 
+#: .\templates\pages\index.html:87
 msgid ""
 "新增商品時，AI 自動辨識圖片並分析卡路里，讓您輕鬆上架。還能自由新增商品類別，"
 "並拖曳排序菜單，彈性調整前台顯示順序。"
 msgstr ""
-"When adding new products, AI automatically recognizes images and estimates calorie content for easy listing. You can also create custom categories and drag to reorder menu items flexibly."
+"When adding new products, AI automatically recognizes images and estimates "
+"calorie content for easy listing. You can also create custom categories and "
+"drag to reorder menu items flexibly."
 
+#: .\templates\pages\index.html:92
 msgid "訂單與數據分析。"
 msgstr "Order and Data Analysis."
 
+#: .\templates\pages\index.html:94
 msgid ""
 "訂單自動分類為當日、預約與歷史訂單，以精美卡片呈現不同狀態。詳細的分析報表助"
 "您洞察營收、收藏及評分變化，做出精準決策。"
 msgstr ""
-"Orders are automatically categorized into today’s, scheduled, and past orders, displayed with elegant cards. Detailed analytics help you understand revenue, favorites, and rating trends for precise decision-making."
+"Orders are automatically categorized into today’s, scheduled, and past "
+"orders, displayed with elegant cards. Detailed analytics help you understand "
+"revenue, favorites, and rating trends for precise decision-making."
 
+#: .\templates\pages\index.html:99
 msgid "商家門面自訂。"
 msgstr "Customizable Storefront."
 
+#: .\templates\pages\index.html:101
 msgid ""
 "彈性變更您的商家 Logo 和 Banner 圖片，輕鬆打造專屬品牌風格，吸引更多顧客。"
 msgstr ""
-"Easily update your store’s logo and banner to create a unique brand identity and attract more customers."
+"Easily update your store’s logo and banner to create a unique brand identity "
+"and attract more customers."
 
-#: .\templates\products\show.html:30
-msgid "飯量"
-msgstr "Rice portion"
+#: .\templates\products\product_card.html:16
+#, fuzzy
+#| msgid "價格"
+msgid "價格："
+msgstr "Price"
 
-#: .\templates\products\show.html:33
-msgid "吃飽飽"
-msgstr "Full portion"
+#: .\templates\products\product_card.html:17
+#, fuzzy
+#| msgid "總卡路里："
+msgid "卡路里："
+msgstr "Total Calories:"
 
-#: .\templates\products\show.html:37
-msgid "不要那麼多"
-msgstr "Less rice"
+#: .\templates\products\show.html:24
+#, fuzzy
+#| msgid "卡路里:"
+msgid "卡路里: "
+msgstr "Calories:"
 
-#: .\templates\products\show.html:41
-msgid "迷你飯"
-msgstr "Mini rice"
+#: .\templates\products\show.html:25
+#, fuzzy
+#| msgid "可販售數量"
+msgid "可販售數量:"
+msgstr "Available quantity"
 
-#: .\templates\products\show.html:68
+#: .\templates\products\show.html:46
 #, fuzzy
 #| msgid "編輯："
 msgid "編輯"
@@ -1115,28 +1170,12 @@ msgid "商家"
 msgstr "Store:"
 
 #: .\templates\shared\footer.html:7
-msgid "地址：五倍紅寶石學院"
-msgstr "Address: 5xRuby Academy"
-
-#: .\templates\shared\footer.html:8
-msgid "Email："
-msgstr "Email:"
-
-#: .\templates\shared\footer.html:12
 msgid "網站資訊"
 msgstr "Site Information"
 
-#: .\templates\shared\footer.html:13
+#: .\templates\shared\footer.html:8
 msgid "關於我們"
 msgstr "About Us"
-
-#: .\templates\shared\footer.html:14
-msgid "聯絡我們"
-msgstr "Contact Us"
-
-#: .\templates\shared\footer.html:15
-msgid "常見問題"
-msgstr "FAQ"
 
 #: .\templates\shared\navbar.html:26 .\templates\shared\navbar.html:128
 msgid "搜尋商家、餐點"
@@ -1146,19 +1185,19 @@ msgstr "Search stores and meals"
 msgid "搜尋"
 msgstr "Search"
 
-#: .\templates\shared\navbar.html:41 .\templates\shared\navbar.html:140
+#: .\templates\shared\navbar.html:41 .\templates\shared\navbar.html:141
 msgid "最多卡路里(非必填)："
 msgstr "Maximum calories (optional):"
 
-#: .\templates\shared\navbar.html:70 .\templates\shared\navbar.html:96
+#: .\templates\shared\navbar.html:69 .\templates\shared\navbar.html:95
 msgid "收藏商家"
 msgstr "Favorite Stores"
 
-#: .\templates\shared\navbar.html:71 .\templates\shared\navbar.html:100
+#: .\templates\shared\navbar.html:70 .\templates\shared\navbar.html:99
 msgid "收藏商品"
 msgstr "Favorite Items"
 
-#: .\templates\shared\navbar.html:117
+#: .\templates\shared\navbar.html:116
 msgid "登入 / 註冊"
 msgstr "Login / Register"
 
@@ -1194,15 +1233,17 @@ msgstr "Total:"
 msgid "關閉"
 msgstr "Close"
 
-#: .\templates\shared\orders\order_item_detail.html:8
-msgid "查看商品細項"
-msgstr "View Product Details"
+#: .\templates\shared\orders\order_item_detail.html:19
+#, fuzzy
+#| msgid "數量"
+msgid "数量"
+msgstr "Quantity"
 
-#: .\templates\shared\orders\order_item_detail.html:20
+#: .\templates\shared\orders\order_item_detail.html:21
 msgid "小計"
 msgstr "Subtotal"
 
-#: .\templates\shared\orders\order_item_detail.html:36
+#: .\templates\shared\orders\order_item_detail.html:38
 #, fuzzy
 #| msgid "總計："
 msgid "總計"
@@ -1253,11 +1294,6 @@ msgstr "Closing Time:"
 msgid "平均評分："
 msgstr "Average Rating:"
 
-#: .\templates\stores\business\index.html:10 .\templates\stores\index.html:23
-#: .\templates\stores\rating_button.html:5
-msgid "分"
-msgstr "points"
-
 #: .\templates\stores\business\index.html:13 .\templates\stores\index.html:26
 msgid "編輯店家資料"
 msgstr "Edit Store Information"
@@ -1306,6 +1342,18 @@ msgstr "Rated"
 msgid "店家封面"
 msgstr "Store Cover"
 
+#: .\templates\stores\show.html:7
+msgid "店家 Logo"
+msgstr "Store Logo"
+
+#: .\templates\stores\show.html:17
+msgid "距離："
+msgstr "Distance:"
+
+#: .\templates\stores\show.html:17 .\templates\stores\store_card.html:24
+msgid "公里"
+msgstr "km"
+
 #: .\templates\stores\show.html:32
 msgid "刪除帳號"
 msgstr "Delete Account"
@@ -1346,7 +1394,7 @@ msgstr "Don't have an account?"
 msgid "快速註冊"
 msgstr "Quick Sign Up"
 
-#: .\templates\users\sign_in.html:16 .\templates\users\sign_in_store.html:29
+#: .\templates\users\sign_in.html:16 .\templates\users\sign_in_store.html:30
 #: .\templates\users\sign_up.html:14
 msgid "電子郵件："
 msgstr "Email:"
@@ -1355,17 +1403,17 @@ msgstr "Email:"
 msgid "example@gmail.com"
 msgstr "example@gmail.com"
 
-#: .\templates\users\sign_in.html:21 .\templates\users\sign_in_store.html:34
+#: .\templates\users\sign_in.html:21 .\templates\users\sign_in_store.html:35
 #: .\templates\users\sign_up.html:24
 msgid "密碼："
 msgstr "Password:"
 
-#: .\templates\users\sign_in.html:22 .\templates\users\sign_in_store.html:35
+#: .\templates\users\sign_in.html:22 .\templates\users\sign_in_store.html:36
 #: .\templates\users\sign_up.html:25 .\users\forms.py:23
 msgid "請輸入密碼"
 msgstr "Please enter your password"
 
-#: .\templates\users\sign_in.html:25 .\templates\users\sign_in_store.html:38
+#: .\templates\users\sign_in.html:25 .\templates\users\sign_in_store.html:39
 msgid "登入"
 msgstr "Log In"
 
@@ -1373,15 +1421,15 @@ msgstr "Log In"
 msgid "其他登入方式"
 msgstr "Other login methods"
 
-#: .\templates\users\sign_in_store.html:19
+#: .\templates\users\sign_in_store.html:20
 msgid "歡迎回來"
 msgstr "Welcome back"
 
-#: .\templates\users\sign_in_store.html:41
+#: .\templates\users\sign_in_store.html:42
 msgid "還不是店家？"
 msgstr "Not a store owner yet?"
 
-#: .\templates\users\sign_in_store.html:41
+#: .\templates\users\sign_in_store.html:42
 msgid "先來註冊"
 msgstr "Register now"
 
@@ -1405,36 +1453,36 @@ msgstr "Already have an account?"
 msgid "返回登入"
 msgstr "Back to login"
 
-#: .\templates\users\sign_up_store.html:19
-#: .\templates\users\sign_up_store.html:71
+#: .\templates\users\sign_up_store.html:20
+#: .\templates\users\sign_up_store.html:99
 msgid "註冊店家"
 msgstr "Register as a Store"
 
-#: .\templates\users\sign_up_store.html:26 .\users\forms.py:16
+#: .\templates\users\sign_up_store.html:28 .\users\forms.py:16
 msgid "電子郵件"
 msgstr "Email"
 
-#: .\templates\users\sign_up_store.html:31 .\users\forms.py:17
+#: .\templates\users\sign_up_store.html:36 .\users\forms.py:17
 msgid "密碼"
 msgstr "Password"
 
-#: .\templates\users\sign_up_store.html:36 .\users\forms.py:18
+#: .\templates\users\sign_up_store.html:44 .\users\forms.py:18
 msgid "確認密碼"
 msgstr "Confirm Password"
 
-#: .\templates\users\sign_up_store.html:47
+#: .\templates\users\sign_up_store.html:61
 msgid "店家地址"
 msgstr "Store Address"
 
-#: .\templates\users\sign_up_store.html:57
+#: .\templates\users\sign_up_store.html:77
 msgid "統一編號"
 msgstr "Unified Business Number"
 
-#: .\templates\users\sign_up_store.html:75
+#: .\templates\users\sign_up_store.html:104
 msgid "已有店家帳號？"
 msgstr "Already have a store account?"
 
-#: .\templates\users\sign_up_store.html:76
+#: .\templates\users\sign_up_store.html:105
 msgid "前往登入"
 msgstr "Go to Login"
 
@@ -1492,41 +1540,98 @@ msgstr ""
 "The password is too similar to your email address,please choose a different "
 "one."
 
-#: .\users\views.py:22
+#: .\users\views.py:26
 msgid "你已經登入，不能註冊新帳號"
 msgstr "You are already logged in and cannot register a new account."
 
-#: .\users\views.py:38 .\users\views.py:125 .\users\views.py:133
+#: .\users\views.py:42 .\users\views.py:129 .\users\views.py:137
 msgid "你已登入"
 msgstr "You are already logged in."
 
-#: .\users\views.py:54
+#: .\users\views.py:58
 msgid "你已經登入，不能再建立新帳號"
 msgstr "You are already logged in and cannot create another account."
 
-#: .\users\views.py:92
+#: .\users\views.py:96
 msgid "你已登入，不能再建立帳號"
 msgstr "You are already logged in and cannot create another account."
 
-#: .\users\views.py:151
+#: .\users\views.py:155
 msgid "帳號或密碼錯誤，請再試一次。"
 msgstr "Incorrect email or password. Please try again."
 
-#: .\users\views.py:156
+#: .\users\views.py:160
 msgid "會員登入成功！"
 msgstr "Member login successful!"
 
-#: .\users\views.py:172
+#: .\users\views.py:179
 msgid "帳號或密碼錯誤，或此帳號非店家"
 msgstr "Incorrect email or password, or this account is not a store owner."
 
-#: .\users\views.py:182
+#: .\users\views.py:189
 msgid "店家登入成功！"
 msgstr "Store login successful!"
 
-#: .\users\views.py:190
+#: .\users\views.py:197
 msgid "已登出！"
 msgstr "You have been logged out."
+
+#~ msgid "此欄位僅供查看，無法修改。"
+#~ msgstr "This field is read-only and cannot be edited"
+
+#~ msgid "沒有權限"
+#~ msgstr "Permission denied"
+
+#~ msgid "信用卡"
+#~ msgstr "Credit Card"
+
+#~ msgid "LINE Pay"
+#~ msgstr "LINE Pay"
+
+#~ msgid "已刪除"
+#~ msgstr "Deleted"
+
+#~ msgid "送出"
+#~ msgstr "Send"
+
+#~ msgid "取餐號："
+#~ msgstr "Pickup Number:"
+
+#~ msgid "商品 X"
+#~ msgstr "Product X"
+
+#~ msgid "回上一步"
+#~ msgstr "Previous Step"
+
+#~ msgid "上一步"
+#~ msgstr "Previous"
+
+#~ msgid "飯量"
+#~ msgstr "Rice portion"
+
+#~ msgid "吃飽飽"
+#~ msgstr "Full portion"
+
+#~ msgid "不要那麼多"
+#~ msgstr "Less rice"
+
+#~ msgid "迷你飯"
+#~ msgstr "Mini rice"
+
+#~ msgid "地址：五倍紅寶石學院"
+#~ msgstr "Address: 5xRuby Academy"
+
+#~ msgid "Email："
+#~ msgstr "Email:"
+
+#~ msgid "聯絡我們"
+#~ msgstr "Contact Us"
+
+#~ msgid "常見問題"
+#~ msgstr "FAQ"
+
+#~ msgid "查看商品細項"
+#~ msgstr "View Product Details"
 
 #~ msgid "數量："
 #~ msgstr "Quantity:"
@@ -1548,9 +1653,6 @@ msgstr "You have been logged out."
 
 #~ msgid "已評分為"
 #~ msgstr "Rated as"
-
-#~ msgid "送出評分"
-#~ msgstr "Submit Rating"
 
 #~ msgid "結帳金額"
 #~ msgstr "Checkout Amount"
@@ -1604,9 +1706,6 @@ msgstr "You have been logged out."
 #~ msgid "會員"
 #~ msgstr "Member"
 
-#~ msgid "店家"
-#~ msgstr "Store"
-
 #~ msgid "購物車商品"
 #~ msgstr "Cart Item"
 
@@ -1615,9 +1714,6 @@ msgstr "You have been logged out."
 
 #~ msgid "購物車"
 #~ msgstr "Cart"
-
-#~ msgid "商品"
-#~ msgstr "Product"
 
 #~ msgid "會員UUID"
 #~ msgstr "Member UUID"
