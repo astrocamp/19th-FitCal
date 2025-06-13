@@ -2,7 +2,8 @@
 <div x-data="{ open: true }" x-show="open" class="relative z-10" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-gray-500/75 transition-opacity md:block" aria-hidden="true"></div>
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-    <div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+    <!-- 加上 pt-[150px] 手機，md 以上 pt-[100px]，避開 navbar 並留空間 -->
+    <div class="flex min-h-full items-start justify-center text-center md:items-center md:px-2 lg:px-4 pt-[150px] md:pt-[100px]">
       <div class="transform text-left text-base transition md:my-8 max-w-md w-full mx-auto px-4">
         <div class="relative flex w-full items-center overflow-hidden bg-white px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-lg">
           <!-- 關閉按鈕 -->
@@ -47,5 +48,5 @@
       </div>
     </div>
   </div>
-  {% endblock main %}
 </div>
+{% endblock main %}

@@ -8,7 +8,9 @@
       <img src="{{  store.logo_url }}" alt="Logo" class="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white" />
 
       <!-- 愛心，後續這個可以用annotate操作，一次查詢全部的店家是否有被該會員收藏 -->
+      {% if user.is_authenticated %}
       <div x-data class="absolute top-2 right-2 p-1.5 rounded-full hover:bg-red-50 cursor-pointer flex items-center" @click.stop>{% include "shared/favorite_btn.html" with store=store member=user.member %}</div>
+      {% endif %}
     </div>
 
     <!-- 商家資訊 -->

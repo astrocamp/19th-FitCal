@@ -49,38 +49,56 @@ def create_store(request):
     return render(request, 'stores/new.html', {'form': form})
 
 
-@login_required
 def index(request):
-    user = request.user
+    # Store owner logic
+    if request.user.is_authenticated and request.user.is_store:
+        return handle_store_owner(request)
 
-    if user.is_store:
-        try:
-            store = user.store
-            store.avg_rating = (
-                Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg']
-                or 0
-            )
-            stats = store_management(request)
-            return render(
-                request,
-                'stores/store_management.html',
-                {'store': store, 'stats': stats},
-            )
-        except Store.DoesNotExist:
-            return redirect('stores:new')
+    # Member and unauthenticated user logic
+    return handle_public_view(request)
 
-    # 會員邏輯
-    stores = Store.objects.all()
-    member = getattr(user, 'member', None) if user.is_member else None
 
-    for store in stores:
+def handle_store_owner(request):
+    """Handle store owner dashboard view"""
+    try:
+        store = request.user.store
         store.avg_rating = (
             Rating.objects.filter(store=store).aggregate(avg=Avg('score'))['avg'] or 0
         )
+        stats = store_management(request)
+        return render(
+            request,
+            'stores/store_management.html',
+            {'store': store, 'stats': stats},
+        )
+    except Store.DoesNotExist:
+        return redirect('stores:new')
+
+
+def handle_public_view(request):
+    """Handle public view for members and unauthenticated users"""
+    # 預先載入評分資訊以減少資料庫查詢
+    stores = Store.objects.annotate(
+        avg_rating=Avg(
+            'rating__score'
+        )  # Changed from 'ratings__score' to 'rating__score'
+    ).all()
+
+    # Get member if user is authenticated and is a member
+    member = None
+    if request.user.is_authenticated and request.user.is_member:
+        member = getattr(request.user, 'member', None)
+
+        # 只為已登入會員載入個人評分
         if member:
-            store.member_rating = Rating.objects.filter(
-                store=store, member=member
-            ).first()
+            member_ratings = Rating.objects.filter(member=member).values_list(
+                'store_id', 'score'
+            )
+            member_ratings_dict = dict(member_ratings)
+
+            # 將會員評分加入店家資訊
+            for store in stores:
+                store.member_rating = member_ratings_dict.get(store.id)
 
     context = {
         'stores': stores,
@@ -126,12 +144,31 @@ def show(req, id):
             return redirect('stores:show', id=store.id)
         return render(req, 'stores/edit.html', {'store': store, 'form': form})
 
+    if hasattr(req.user, 'member'):
+        cart = store.carts.filter(member=req.user.member).first()
+        if cart:
+            cart_total_price = cart.total_price
+            cart_total_calories = cart.total_calories
+            cart_total_quantity = cart.total_quantity
+        else:
+            cart_total_price = 0
+            cart_total_calories = 0
+            cart_total_quantity = 0
+    else:
+        cart = None
+        cart_total_price = 0
+        cart_total_calories = 0
+        cart_total_quantity = 0
     return render(
         req,
         'stores/show.html',
         {
             'store': store,
             'categories': categories,
+            'cart': cart,
+            'cart_total_price': cart_total_price,
+            'cart_total_quantity': cart_total_quantity,
+            'cart_total_calories': cart_total_calories,
         },
     )
 
