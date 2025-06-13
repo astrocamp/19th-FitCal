@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 01:56+0800\n"
+"POT-Creation-Date: 2025-06-14 02:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,7 @@ msgstr "Product"
 
 #: .\carts\forms.py:32 .\orders\forms.py:160 .\templates\carts\show.html:45
 #: .\templates\products\show.html:33
+#: .\templates\shared\orders\order_item_detail.html:19
 msgid "數量"
 msgstr "Quantity"
 
@@ -329,7 +330,7 @@ msgstr "Product category"
 msgid "商品圖片"
 msgstr "Product image"
 
-#: .\products\forms.py:30
+#: .\products\forms.py:30 .\templates\products\index.html:21
 msgid "商品介紹"
 msgstr "Product description"
 
@@ -613,13 +614,14 @@ msgstr "Checkout"
 msgid "智慧客服小幫手"
 msgstr "FitCal Smart Assistant"
 
-##: .\templates\chatbot\widget.html:24
+# #: .\templates\chatbot\widget.html:24
+#: .\templates\chatbot\widget.html:24
 msgid ""
 "您好，我是 FitCal 智慧客服，任何網站相關問題都可以詢問我，也歡迎掃描底下 QR "
 "Code 來加入我們的"
 msgstr ""
-"Hi there! I’m FitCal’s smart assistant. Feel free to ask me any questions about the website. "
-"You’re also welcome to scan the QR code below to join our"
+"Hi there! I’m FitCal’s smart assistant. Feel free to ask me any questions "
+"about the website. You’re also welcome to scan the QR code below to join our"
 
 #: .\templates\chatbot\widget.html:25
 msgid "官方 LINE 帳號"
@@ -944,6 +946,7 @@ msgstr "Place Order"
 
 #: .\templates\orders\order_list.html:3 .\templates\shared\navbar.html:71
 #: .\templates\shared\navbar.html:102
+#: .\templates\shared\orders\_order_list.html:7
 msgid "歷史訂單"
 msgstr "Order History"
 
@@ -1117,17 +1120,45 @@ msgstr ""
 "Easily update your store’s logo and banner to create a unique brand identity "
 "and attract more customers."
 
-#: .\templates\products\product_card.html:16
+#: .\templates\products\index.html:6 .\templates\stores\show.html:47
+msgid "新增商品"
+msgstr "Add Product"
+
+#: .\templates\products\index.html:18
+#, fuzzy
+#| msgid "商品名稱"
+msgid "商品名稱："
+msgstr "Product Name"
+
+#: .\templates\products\index.html:22 .\templates\products\product_card.html:17
+#, fuzzy
+#| msgid "總卡路里："
+msgid "卡路里："
+msgstr "Total Calories:"
+
+#: .\templates\products\index.html:23
+#, fuzzy
+#| msgid "可販售數量"
+msgid "可販售數量："
+msgstr "Available quantity"
+
+#: .\templates\products\index.html:24 .\templates\products\product_card.html:16
 #, fuzzy
 #| msgid "價格"
 msgid "價格："
 msgstr "Price"
 
-#: .\templates\products\product_card.html:17
-#, fuzzy
-#| msgid "總卡路里："
-msgid "卡路里："
-msgstr "Total Calories:"
+#: .\templates\products\index.html:25
+msgid "客製化："
+msgstr "Customization:"
+
+#: .\templates\products\index.html:30
+msgid "目前沒有產品"
+msgstr "No products available at the moment"
+
+#: .\templates\products\index.html:33
+msgid "查看收藏"
+msgstr "View Favorites"
 
 #: .\templates\products\show.html:24
 #, fuzzy
@@ -1233,11 +1264,17 @@ msgstr "Total:"
 msgid "關閉"
 msgstr "Close"
 
-#: .\templates\shared\orders\order_item_detail.html:19
-#, fuzzy
-#| msgid "數量"
-msgid "数量"
-msgstr "Quantity"
+#: .\templates\shared\orders\_order_list.html:3
+msgid "今日訂單"
+msgstr "Today's Orders"
+
+#: .\templates\shared\orders\_order_list.html:5
+msgid "預約訂單"
+msgstr "Scheduled Orders"
+
+#: .\templates\shared\orders\order_item_detail.html:9
+msgid "查看商品細項"
+msgstr "View Product Details"
 
 #: .\templates\shared\orders\order_item_detail.html:21
 msgid "小計"
@@ -1365,10 +1402,6 @@ msgstr "Add Category"
 #: .\templates\stores\show.html:44
 msgid "暫無分類"
 msgstr "No Category"
-
-#: .\templates\stores\show.html:47
-msgid "新增商品"
-msgstr "Add Product"
 
 #: .\templates\stores\store_management.html:15
 msgid "今日營業概況"
@@ -1576,6 +1609,11 @@ msgstr "Store login successful!"
 msgid "已登出！"
 msgstr "You have been logged out."
 
+#, fuzzy
+#~| msgid "數量"
+#~ msgid "数量"
+#~ msgstr "Quantity"
+
 #~ msgid "此欄位僅供查看，無法修改。"
 #~ msgstr "This field is read-only and cannot be edited"
 
@@ -1629,9 +1667,6 @@ msgstr "You have been logged out."
 
 #~ msgid "常見問題"
 #~ msgstr "FAQ"
-
-#~ msgid "查看商品細項"
-#~ msgstr "View Product Details"
 
 #~ msgid "數量："
 #~ msgstr "Quantity:"
