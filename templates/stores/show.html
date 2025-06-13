@@ -13,7 +13,7 @@
         <span class="text-yellow-500">{{ store.avg_rating|floatformat:1 }} ⭐ </span>
       </div>
       <div class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</div>
-      <div class="text-sm text-gray-600" x-data="storeDistance('{{ store.id }}','{% url 'locations:store_distance' %}')" x-init="fetchDistance()">
+      <div class="text-sm text-gray-600" x-data="storeDistance('{% url 'locations:store_distance' %}', '{{ store.id }}')" x-init="fetchDistance()">
         <span x-text="displayText"></span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ store.address }}+{{ store.name }}" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 hover:underline">{{ store.address }}</a>　｜　 📞
         <a href="tel:{{ store.phone_number|cut:'-' }}" class="font-bold text-blue-600 hover:underline">{{ store.phone_number }}</a>
       </div>
