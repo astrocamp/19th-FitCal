@@ -201,6 +201,7 @@ def store_settings(request):
         form = StoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
             form.save()
+            add_location(store, store.address)
             messages.success(request, '商家資訊已成功更新！')
             return redirect('stores:store_settings')
         else:
