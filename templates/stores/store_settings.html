@@ -74,6 +74,10 @@
         <button type="submit" class="btn btn-primary px-8 py-3 text-lg">儲存設定</button>
       </div>
     </form>
+    <form method="post" action="{% url 'stores:delete' user.store.id %}" class="mt-8 flex justify-end" onsubmit="return confirm('是否確認刪除平台店家？')">
+      {% csrf_token %}
+      <button type="submit" class="btn bg-red-600 px-8 py-3 text-lg">刪除店家</button>
+    </form>
   </div>
 </main>
 {% endblock main %}

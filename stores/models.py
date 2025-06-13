@@ -44,7 +44,7 @@ class Store(models.Model):
         self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
         self.products.update(deleted_at=self.deleted_at)
         self.user.delete(using=using, keep_parents=keep_parents)
-        self.categories.delete(using=using, keep_parents=keep_parents)
+        self.categories.all().delete()
 
     def __str__(self):
         return self.name
