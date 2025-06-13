@@ -20,20 +20,13 @@
 <!-- 商品明細 -->
 <div class="space-y-4">
   {% for item in cart_item %}
-  <div id="cart-item-{{ item.id }}"
-      x-data="cartItem({{ item.quantity }}, '{{ item.id }}', '{% url 'carts:update_cart_item' item.id %}', {{ item.product.quantity }})"
-      class="flex items-center gap-4 border rounded-lg p-3 sm:p-4">
-
+  <div id="cart-item-{{ item.id }}" x-data="cartItem({{ item.quantity }}, '{{ item.id }}', '{% url 'carts:update_cart_item' item.id %}', {{ item.product.quantity }})" class="flex items-center gap-4 border rounded-lg p-3 sm:p-4">
     <!-- 商品圖片 -->
     <div class="flex-shrink-0">
       {% if item.product.image %}
-      <img src="{{ item.product.image.url }}"
-          alt="{{ item.product.name }}"
-          class="w-20 h-20 object-cover rounded-md border border-gray-200" />
+      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-20 h-20 object-cover rounded-md border border-gray-200" />
       {% else %}
-      <div class="w-20 h-20 bg-gray-100 flex items-center justify-center text-gray-400 text-sm rounded-md border">
-        無圖片
-      </div>
+      <div class="w-20 h-20 bg-gray-100 flex items-center justify-center text-gray-400 text-sm rounded-md border">無圖片</div>
       {% endif %}
     </div>
 
@@ -51,18 +44,12 @@
         <div class="flex items-center gap-3 mt-2 sm:mt-0">
           <label for="{{ item.id }}_edit_qty" class="sr-only">數量</label>
           <div class="flex items-center gap-1">
-            <input id="{{ item.id }}_edit_qty" type="number" min="1"
-                  x-model.number="qty"
-                  @blur="isDelete"
-                  @keydown.enter.prevent="isDelete"
-                  class="w-16 border rounded-md px-2 py-1 text-center text-sm" />
+            <input id="{{ item.id }}_edit_qty" type="number" min="1" x-model.number="qty" @blur="isDelete" @keydown.enter.prevent="isDelete" class="w-16 border rounded-md px-2 py-1 text-center text-sm" />
             <span class="text-gray-500 text-xs">件</span>
           </div>
 
           <!-- 刪除按鈕 -->
-          <form action="{% url 'carts:delete_cart_item' item.id %}"
-                method="post"
-                onsubmit="return confirm('確認刪除商品？')">
+          <form action="{% url 'carts:delete_cart_item' item.id %}" method="post" onsubmit="return confirm('確認刪除商品？')">
             {% csrf_token %}
             <button type="submit" class="text-red-600 hover:text-red-700 text-xl transition-colors">
               <i class="fas fa-trash"></i>
@@ -76,28 +63,27 @@
 </div>
 
 <!-- 總卡路里、總金額區塊 -->
-<div class="mt-8 flex flex-col md:flex-row md:items-center md:justify-between">
-  <div class="text-lg font-semibold text-right md:text-left mb-4 md:mb-0">
+<div class="mt-8 flex justify-between md:items-center">
+  <div class="text-lg font-semibold md:text-left mb-4 md:mb-0">
     <p>總卡路里：<span id="totalCalories">{{ cart.total_calories }}</span> kcal</p>
-    <p>總金額：<span id="totalPrice">{{ cart.total_price }}</span> 元</p> 
+    <p>總金額：<span id="totalPrice">{{ cart.total_price }}</span> 元</p>
   </div>
 
   <!-- Alpine 包裹區塊 -->
-  <div x-data="{
+  <div
+    x-data="{
     proceedCheckout() {
       // 觸發所有 input 的 blur
       document.querySelectorAll('input[id$=_edit_qty]').forEach(input => input.blur());
 
       // 稍等 300ms 再跳轉
       setTimeout(() => {
-        window.location.href = '{% url "orders:new" %}?cart_id={{ cart.id }}';
+        window.location.href = '{% url 'orders:new' %}?cart_id={{ cart.id }}';
       }, 300);
     }
-  }">
-    <button @click="proceedCheckout"
-      class="bg-[#5a855a] hover:bg-[#2e4e2e] text-white px-6 py-2 rounded-lg text-lg shadow-md">
-      結帳
-    </button>
+  }"
+  >
+    <button @click="proceedCheckout" class="bg-[#5a855a] hover:bg-[#2e4e2e] text-white px-6 py-2 rounded-lg text-lg shadow-md">結帳</button>
   </div>
 </div>
 {% endblock main %}
