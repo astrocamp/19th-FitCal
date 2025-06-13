@@ -237,7 +237,7 @@ def rate_store(request, order_id):
         )
 
         return HttpResponse(f"""
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600 px-5 py-3">
                 ✅ 已評分：<strong>{score} 分</strong>
             </div>
         """)
