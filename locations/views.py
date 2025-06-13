@@ -49,17 +49,31 @@ def add_location(store, addr):
 def store_distance(request):
     lat = float(request.GET.get('lat'))
     lng = float(request.GET.get('lng'))
-    store_id = request.GET.get('store_id')
-    # 原生SQL語法，爲了取得非直線距離，所以在直線距離的基礎上*1.4倍，提供估算出來的路線距離
-    sql = """
-    SELECT id, point,
-        ST_Distance(
-            point,
-            ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography
-        ) / 700.0 AS distance_km
-    FROM locations_location
-    WHERE store_id = %s
-    """
-    locations = Location.objects.raw(sql, [lng, lat, store_id])
-    for loc in locations:
-        return JsonResponse({'distance_km': f'{loc.distance_km:.1f}'})
+    store_id = request.GET.get('store_id', None)
+    if store_id:
+        # 原生SQL語法，爲了取得非直線距離，所以在直線距離的基礎上*1.4倍，提供估算出來的路線距離
+        sql = """
+        SELECT id, point,
+            ST_Distance(
+                point,
+                ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography
+            ) / 700.0 AS distance_km
+        FROM locations_location
+        WHERE store_id = %s
+        """
+        locations = Location.objects.raw(sql, [lng, lat, store_id])
+        for loc in locations:
+            print(loc.distance_km)
+            return JsonResponse({'distance_km': f'{loc.distance_km:.1f}'})
+    else:
+        sql = """
+        SELECT id,
+            ST_Distance(
+                point,
+                ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography
+            ) / 700.0 AS distance_km
+        FROM locations_location
+        """
+        locations = Location.objects.raw(sql, [lng, lat])
+        data = {str(loc.store_id): f'{loc.distance_km:.1f}' for loc in locations}
+        return JsonResponse(data)
