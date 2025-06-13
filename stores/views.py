@@ -206,7 +206,7 @@ def store_settings(request):
 def delete(req, id):
     store = get_object_or_404(Store, pk=id, user=req.user)
     store.delete()
-    return redirect('users:sign_up')
+    return redirect('users:index')
 
 
 @require_POST

@@ -65,7 +65,7 @@ def edit(request, id):
 def delete(request, id):
     member = get_object_or_404(Member, pk=id, user=request.user)
     member.delete()
-    return redirect('users:sign_up')
+    return redirect('users:index')
 
 
 @require_POST

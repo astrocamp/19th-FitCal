@@ -11,7 +11,7 @@
   <p class="mb-2"><span class="font-bold">更新時間：</span>{{ member.updated_at|date:'Y-m-d H:i' }}</p>
   <div class="flex flex-wrap gap-4 mt-4">
     <a href="{% url 'members:edit' member.id %}" class="inline-block mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">編輯資料</a>
-    <form action="{% url 'members:delete' member.id %}" method="post" onsubmit="return confirm(是否確認刪除帳號與會員？此操作無法復原！');">
+    <form action="{% url 'members:delete' member.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與會員？此操作無法復原！');">
       {% csrf_token %}
       <button type="submit" class="inline-block mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800">刪除帳號與會員</button>
     </form>
