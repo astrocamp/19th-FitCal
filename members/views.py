@@ -10,9 +10,13 @@ from .forms import MemberForm
 from .models import Member
 
 
-def new(req):
+def new(request):
+    next_url = request.GET.get('next') or request.META.get('HTTP_REFERER')
+    if next_url:
+        request.session['next_url'] = next_url
+
     form = MemberForm()
-    return render(req, 'members/new.html', {'form': form})
+    return render(request, 'members/new.html', {'form': form})
 
 
 @transaction.atomic
@@ -23,12 +27,12 @@ def create_member(request):
             member = form.save(commit=False)
             member.user = request.user
             member.save()
-            next_url = request.POST.get('next')
+            next_url = request.session.pop('next_url', None)
+            messages.success(request, '新增會員資料成功')
             return redirect(next_url or 'members:show', id=member.id)
         else:
             messages.error(request, '請檢查輸入內容')
             return render(request, 'members/new.html', {'form': form}, status=400)
-    messages.error(request, '沒有權限')
     return redirect('stores:index')
 
 
