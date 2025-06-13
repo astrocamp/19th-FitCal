@@ -69,7 +69,7 @@ class Member(models.Model):
         self.favorite_records.all().delete()
         self.collection_set.all().delete()
         self.save(using=using, update_fields=['deleted_at', 'deleted_email'])
-        self.user.delete(using=using, keep_parents=keep_parents)
+        self.user.delete()
 
 
 class Favorite(models.Model):
