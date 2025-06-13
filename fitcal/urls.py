@@ -25,4 +25,5 @@ urlpatterns = [
         products_views.estimate_calories_from_image,
         name='estimate_calories_api',
     ),
+    path('', include('pages.urls')),
 ]

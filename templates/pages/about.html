@@ -1,0 +1,83 @@
+{% extends "layouts/default.html" %} {% block main %}{% load static %}
+<div class="bg-white py-24 sm:py-32">
+  <div class="mx-auto grid max-w-7xl gap-20 px-6 lg:px-8 xl:grid-cols-3">
+    <div class="max-w-xl">
+      <h2 class="text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl">認識我們的團隊</h2>
+      <p class="mt-6 text-lg/8 text-gray-600">我們是一群充滿熱情與活力的夥伴，致力於提供最優質的美食平台服務，為使用者帶來卓越的體驗。</p>
+    </div>
+    <ul role="list" class="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
+      <li>
+        <div class="flex items-center gap-x-6">
+          <img class="size-16 rounded-full object-cover" src="{% static 'images/s104103045.webp' %}" alt="鄒幸娟的頭像" />
+          <div>
+            <h3 class="text-base/7 font-semibold tracking-tight text-gray-900">鄒幸娟</h3>
+            <p class="text-sm/6 font-semibold text-[#3A8D3D]">AI / 會員系統開發</p>
+            <p class="text-sm/6 text-gray-500 mt-1">負責功能: AI 客服, 會員系統, 商家收藏</p>
+            <a href="mailto:s104103045@gmail.com" class="text-xs text-green-500 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="flex items-center gap-x-6">
+          <img class="size-16 rounded-full object-cover" src="{% static 'images/a0984368815.webp' %}" alt="洪世賢的頭像" />
+          <div>
+            <h3 class="text-base/7 font-semibold tracking-tight text-gray-900">洪世賢</h3>
+            <p class="text-sm/6 font-semibold text-[#3A8D3D]">後端系統整合</p>
+            <p class="text-sm/6 text-gray-500 mt-1">負責功能: 系統排程, 自動寄信, 第三方登入, 商品收藏</p>
+            <a href="mailto:a0984368815@gmail.com" class="text-xs text-green-500 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="flex items-center gap-x-6">
+          <img class="size-16 rounded-full object-cover" src="{% static 'images/peiching913.webp' %}" alt="黃姵青的頭像" />
+          <div>
+            <h3 class="text-base/7 font-semibold tracking-tight text-gray-900">黃姵青</h3>
+            <p class="text-sm/6 font-semibold text-[#3A8D3D]">數據與功能開發</p>
+            <p class="text-sm/6 text-gray-500 mt-1">負責功能: 報表匯出, AWS S3 圖片上傳, 卡路里搜尋, 通知視窗</p>
+            <a href="mailto:peiching913@gmail.com" class="text-xs text-green-500 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="flex items-center gap-x-6">
+          <img class="size-16 rounded-full object-cover" src="{% static 'images/ab000641.webp' %}" alt="黃韋翰的頭像" />
+          <div>
+            <h3 class="text-base/7 font-semibold tracking-tight text-gray-900">黃韋翰</h3>
+            <p class="text-sm/6 font-semibold text-[#3A8D3D]">AI 與數據分析</p>
+            <p class="text-sm/6 text-gray-500 mt-1">負責功能: AI 卡路里分析, 圖表分析, 商家評分</p>
+            <a href="mailto:ab000641@gmail.com" class="text-xs text-green-500 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="flex items-center gap-x-6">
+          <img class="size-16 rounded-full object-cover" src="{% static 'images/nivekyang12014.webp' %}" alt="楊凱崴的頭像" />
+          <div>
+            <h3 class="text-base/7 font-semibold tracking-tight text-gray-900">楊凱崴</h3>
+            <p class="text-sm/6 font-semibold text-[#3A8D3D]">金流與訊息整合</p>
+            <p class="text-sm/6 text-gray-500 mt-1">負責功能: 串接 LINE PAY, 串接 LINE BOT, 建構訂單系統</p>
+            <a href="mailto:nivekyang12014@gmail.com" class="text-xs text-green-500 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <div class="flex items-center gap-x-6">
+          <img class="size-16 rounded-full object-cover" src="{% static 'images/1995andywang.webp' %}" alt="王嘉禾的頭像" />
+          <div>
+            <h3 class="text-base/7 font-semibold tracking-tight text-gray-900">王嘉禾</h3>
+            <p class="text-sm/6 font-semibold text-[#3A8D3D]">系統部署與核心規劃</p>
+            <p class="text-sm/6 text-gray-500 mt-1">負責功能: 網站部署, 購物車, 地圖定位, 統籌規劃</p>
+            <a href="mailto:1995andywang@gmail.com" class="text-xs text-green-500 hover:underline">GitHub</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock main %}
