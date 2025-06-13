@@ -113,7 +113,7 @@
         <div class="md:w-1/2 space-y-4">
           {% for field in form %}
           <div class="{% if field.name == 'description' %}h-20{% endif %}">
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}<span class="text-red-500">*</span></label>
             {% if field.name == 'category' %} {{ field|add_class:"select select-bordered w-full" }} {% elif field.name == 'image' %} {# 直接將 Alpine.js 的 @change 事件綁定到 Django 的檔案輸入框上 #}
             <input type="file" name="{{ field.name }}" class="file-input file-input-bordered w-full" @change="handleImageChange($event)" />
             {# 移除原有的「選擇圖片」按鈕，因為檔案輸入框本身就可點擊 #}
