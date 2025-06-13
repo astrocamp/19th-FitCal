@@ -1,9 +1,9 @@
-{% extends 'layouts/default.html' %} {% block main %}
+{% extends 'layouts/default.html' %}{% load i18n %}% {% block main %}
 <h2>商品首頁</h2>
 
 <!-- 新增商品按鈕 -->
 {% for store in stores %}
-<a href="{% url 'products:new' store.id %}">新增商品</a>
+<a href="{% url 'products:new' store.id %}">{% trans "新增商品" %}</a>
 {% endfor %}
 <!-- 產品列表 -->
 <ul>
@@ -15,20 +15,20 @@
   <li>
     <a href="{% url 'products:show' product.id %}" class="block border-2 rounded-sm mb-2">
       <section>
-        <h3>商品名稱：{{ product.name }}</h3>
+        <h3>{% trans "商品名稱：" %}{{ product.name }}</h3>
         <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 200px; height: 200px" />
         <br />
-        <h3>商品介紹{{ product.description }}</h3>
-        <h3>卡路里：{{ product.calories }}</h3>
-        <h3>可販售數量：{{ product.quantity }}</h3>
-        <h3>價格：{{ product.price }}</h3>
-        <h3>客製化：{{ product.customize }}</h3>
+        <h3>{% trans "商品介紹" %}{{ product.description }}</h3>
+        <h3>{% trans "卡路里：" %}{{ product.calories }}</h3>
+        <h3>{% trans "可販售數量：" %}{{ product.quantity }}</h3>
+        <h3>{% trans "價格：" %}{{ product.price }}</h3>
+        <h3>{% trans "客製化：" %}{{ product.customize }}</h3>
       </section>
     </a>
   </li>
   {% empty %}
-  <li>目前沒有產品</li>
+  <li>{% trans "目前沒有產品" %}</li>
   {% endfor %}
 </ul>
-<a href="{% url 'members:collections' %}">查看收藏❤️</a>
+<a href="{% url 'members:collections' %}">{% trans "查看收藏" %}❤️</a>
 {% endblock %}
