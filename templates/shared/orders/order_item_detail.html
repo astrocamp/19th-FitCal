@@ -26,8 +26,8 @@
               <td class="block pb-2 font-semibold text-gray-900 sm:table-cell sm:py-3 sm:px-2 sm:font-normal">{{ item.product_name }}</td>
               <td class="block py-1 sm:table-cell sm:w-24 sm:py-3 sm:px-2 text-right sm:text-center text-gray-600 before:content-['卡路里'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">{{ item.product.calories }}</td>
               <td class="block py-1 sm:table-cell sm:w-16 sm:py-3 sm:px-2 text-right sm:text-center text-gray-600 before:content-['數量'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">{{ item.quantity }}</td>
-              <td class="block py-1 sm:table-cell sm:w-20 sm:py-3 sm:px-2 text-right text-gray-600 before:content-['單價'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">$ {{ item.unit_price }}</td>
-              <td class="block pt-2 mt-2 border-t sm:border-t-0 sm:pt-0 sm:mt-0 sm:table-cell sm:w-24 sm:py-3 sm:px-2 text-right font-medium text-gray-900 before:content-['小計'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">$ {{ item.subtotal }}</td>
+              <td class="block py-1 sm:table-cell sm:w-20 sm:py-3 sm:px-2 text-right text-gray-600 before:content-['單價'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">${{ item.unit_price }}</td>
+              <td class="block py-1 sm:table-cell sm:w-20 sm:py-3 sm:px-2 text-right text-gray-600 before:content-['小計'] before:float-left before:font-medium before:text-gray-500 sm:before:content-none">${{ item.subtotal }}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -35,10 +35,10 @@
             <!-- 總計行 -->
             <tr class="flex justify-between items-center py-1 sm:table-row">
               <td colspan="4" class="text-base font-medium text-gray-700 sm:py-3 sm:px-2 sm:text-right sm:text-sm">總計</td>
-              <td class="text-base font-bold text-gray-900 sm:py-3 sm:px-2 sm:text-right sm:text-sm">$ {{ order.total_price }}</td>
+              <td class="text-base font-bold text-gray-900 sm:py-3 sm:px-2 sm:text-right sm:text-sm">${{ order.total_price }}</td>
             </tr>
 
-            <!-- 總卡路里行 -->
+            <!-- 總卡路里 -->
             <tr class="flex justify-between items-center py-1 sm:table-row">
               <td colspan="4" class="text-base font-medium text-gray-700 sm:py-3 sm:px-2 sm:text-right sm:text-sm">總卡路里</td>
               <td class="text-base font-bold text-gray-900 sm:py-3 sm:px-2 sm:text-right sm:text-sm">{{ order.total_calories }} kcal</td>
