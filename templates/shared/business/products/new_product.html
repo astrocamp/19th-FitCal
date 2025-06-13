@@ -1,4 +1,5 @@
-{% load widget_tweaks %}
+{% load widget_tweaks %} {% load static %} {# 確保這裡有載入 static 標籤 #}
+
 <div id="new-product" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
   <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
     <div class="h-[90vh] overflow-y-auto">
@@ -19,23 +20,43 @@
         class="flex flex-col md:flex-row gap-6 px-6 pb-6"
         x-data="{
                 imageUrl: '',             // 圖片預覽 URL
-                selectedFile: null,       // 儲存選取的圖片檔案物件
+                selectedFile: null,       // 儲存選取的圖片檔案物件 (原始檔案)
+                processedFile: null,      // 儲存處理過後的圖片 Blob
                 loadingEstimation: false, // 估算是否正在進行
                 estimationError: '',      // 估算錯誤訊息
                 estimatedCalories: '',    // AI 估算出的卡路里值
 
-                handleImageChange(event) {
+                // 處理圖片選擇並進行預處理
+                async handleImageChange(event) {
                     const file = event.target.files[0];
-                    this.selectedFile = file;
-                    this.imageUrl = file ? URL.createObjectURL(file) : '';
+                    this.selectedFile = file; // 儲存原始檔案
+                    this.imageUrl = file ? URL.createObjectURL(file) : ''; // 創建預覽 URL
+
                     this.estimationError = ''; // 清除之前的錯誤訊息
                     this.estimatedCalories = ''; // 清除之前的估算結果
+
+                    if (file) {
+                        try {
+                            // 調用圖片預處理函數
+                            // 目標：最長邊 1920px，JPEG 品質 0.8
+                            const processedBlob = await this.resizeAndCompressImage(file, 1920, 1920, 0.8);
+                            this.processedFile = processedBlob; // 儲存處理後的 Blob
+                            console.log(`圖片處理完成。原始大小: ${(file.size / 1024 / 1024).toFixed(2)} MB, 處理後大小: ${(processedBlob.size / 1024 / 1024).toFixed(2)} MB`);
+                        } catch (error) {
+                            console.error('圖片預處理失敗:', error);
+                            this.estimationError = '圖片處理失敗，請嘗試其他圖片或稍後再試。';
+                            this.processedFile = null;
+                        }
+                    } else {
+                        this.processedFile = null;
+                    }
                 },
 
+                // 估算卡路里方法
                 async estimateCalories(event) {
                     event.preventDefault(); // 防止按鈕觸發表單提交
-                    if (!this.selectedFile) {
-                        this.estimationError = '請先選擇一張圖片！';
+                    if (!this.processedFile) { // 使用處理後的圖片
+                        this.estimationError = '請先選擇一張圖片並等待處理完成！';
                         return;
                     }
 
@@ -43,17 +64,18 @@
                     this.estimationError = ''; // 清除之前的錯誤
                     this.estimatedCalories = ''; // 清除之前的估算結果
 
+                    // 將處理後的 Blob 讀取為 Base64 (如果後端 API 需要 Base64)
                     const reader = new FileReader();
                     reader.onload = async () => {
                         const base64Image = reader.result.split(',')[1]; // 獲取 Base64 數據部分
-                        const mimeType = this.selectedFile.type;
+                        const mimeType = this.processedFile.type; // 使用處理後的檔案類型
 
                         try {
                             const response = await fetch('/products/estimate_calories/', { // 請確認這個 URL 路徑是否正確
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
-                                    'X-CSRFToken': this.getCookie('csrftoken') // 確保這個函數可用
+                                    'X-CSRFToken': this.getCookie('csrftoken')
                                 },
                                 body: JSON.stringify({
                                     image_base64: base64Image,
@@ -63,10 +85,9 @@
 
                             const data = await response.json();
 
-                            if (data.success) {
-                                // 新增的判斷邏輯：如果估算結果為 0 或顯示為非數字（例如無法辨識的文字）
+                            if (response.ok && data.success) { // 檢查 HTTP 狀態碼和後端 success 標誌
                                 const parsedCalories = parseFloat(data.estimated_calories);
-                                if (isNaN(parsedCalories) || parsedCalories === 0) {
+                                if (isNaN(parsedCalories) || parsedCalories <= 0) { // 判斷是否為有效數字且大於0
                                     this.estimationError = '無法成功分析卡路里，請手動輸入或嘗試其他圖片。';
                                     this.estimatedCalories = ''; // 清空卡路里欄位
                                     alert(this.estimationError);
@@ -75,8 +96,8 @@
                                     alert(`卡路里估算結果：${parsedCalories} kcal`);
                                 }
                             } else {
-                                // API 返回失敗的情況
-                                this.estimationError = data.message || '未能估算出卡路里，請手動輸入或嘗試其他圖片。';
+                                // API 返回失敗的情況，可能 HTTP 狀態碼不是 200 或 success 為 false
+                                this.estimationError = data.message || `未能估算出卡路里，請手動輸入或嘗試其他圖片。錯誤狀態: ${response.status}`;
                                 alert(this.estimationError);
                             }
                         } catch (error) {
@@ -87,17 +108,63 @@
                             this.loadingEstimation = false;
                         }
                     };
-                    reader.readAsDataURL(this.selectedFile);
+                    // 讀取處理後的檔案
+                    reader.readAsDataURL(this.processedFile);
                 },
 
-                // 獲取 CSRF Token 的輔助函數 (請確保它在你的 app.js 或其他地方可用)
+                // 圖片縮放與壓縮函數 (直接嵌入 Alpine.js x-data 中)
+                resizeAndCompressImage(file, maxWidth, maxHeight, quality) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const img = new Image();
+                            img.onload = () => {
+                                let width = img.width;
+                                let height = img.height;
+
+                                // 保持長寬比，限制最長邊
+                                if (width > height) {
+                                    if (width > maxWidth) {
+                                        height *= maxWidth / width;
+                                        width = maxWidth;
+                                    }
+                                } else {
+                                    if (height > maxHeight) {
+                                        width *= maxHeight / height;
+                                        height = maxHeight;
+                                    }
+                                }
+
+                                const canvas = document.createElement('canvas');
+                                canvas.width = width;
+                                canvas.height = height;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, width, height);
+
+                                // 將 Canvas 內容輸出為 Blob (二進位數據)，指定 JPEG 格式和品質
+                                canvas.toBlob((blob) => {
+                                    if (blob) {
+                                        resolve(blob);
+                                    } else {
+                                        reject(new Error('Canvas to Blob conversion failed.'));
+                                    }
+                                }, 'image/jpeg', quality);
+                            };
+                            img.onerror = (e) => reject(new Error('Failed to load image.'));
+                            img.src = event.target.result;
+                        };
+                        reader.onerror = (e) => reject(new Error('Failed to read file.'));
+                        reader.readAsDataURL(file);
+                    });
+                },
+
+                // 獲取 CSRF Token 的輔助函數 (無需單獨文件，直接在 x-data 中定義)
                 getCookie(name) {
                     let cookieValue = null;
                     if (document.cookie && document.cookie !== '') {
                         const cookies = document.cookie.split(';');
                         for (let i = 0; i < cookies.length; i++) {
                             const cookie = cookies[i].trim();
-                            // Does this cookie string begin with the name we want?
                             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                                 break;
@@ -113,12 +180,13 @@
         <div class="md:w-1/2 space-y-4">
           {% for field in form %}
           <div class="{% if field.name == 'description' %}h-20{% endif %}">
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}<span class="text-red-500">*</span></label>
-            {% if field.name == 'category' %} {{ field|add_class:"select select-bordered w-full" }} {% elif field.name == 'image' %} {# 直接將 Alpine.js 的 @change 事件綁定到 Django 的檔案輸入框上 #}
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+            {% if field.name == 'category' %} {{ field|add_class:"select select-bordered w-full" }} {% elif field.name == 'image' %} {# 將 @change 事件綁定到 handleImageChange 處理圖片預覽和預處理 #}
             <input type="file" name="{{ field.name }}" class="file-input file-input-bordered w-full" @change="handleImageChange($event)" />
-            {# 移除原有的「選擇圖片」按鈕，因為檔案輸入框本身就可點擊 #}
-            <button type="button" x-show="imageUrl" @click="selectedFile = null; imageUrl = ''; estimationError = ''; estimatedCalories = ''; event.target.closest('div').querySelector('input[type=file]').value = '';" class="btn btn-outline btn-sm mt-2 ml-2">清除圖片</button>
+            {# 清除圖片按鈕 #}
+            <button type="button" x-show="imageUrl" @click="selectedFile = null; processedFile = null; imageUrl = ''; estimationError = ''; estimatedCalories = ''; event.target.closest('div').querySelector('input[type=file]').value = '';" class="btn btn-outline btn-sm mt-2 ml-2">清除圖片</button>
 
+            {# 估算卡路里按鈕 #}
             <button type="button" x-show="imageUrl && !loadingEstimation" @click="estimateCalories($event)" class="btn btn-secondary btn-sm mt-2 ml-2" :disabled="loadingEstimation">估算卡路里</button>
             <p x-show="loadingEstimation" class="text-blue-500 text-sm mt-1">AI 正在努力估算中，請稍候...</p>
             <p x-show="estimationError" class="text-red-500 text-sm mt-1" x-text="estimationError"></p>
