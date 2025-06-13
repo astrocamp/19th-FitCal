@@ -21,7 +21,6 @@ class ProductForm(ModelForm):
             'calories',
             'quantity',
             'price',
-            'customize',
         ]
         labels = {
             'name': '商品名稱',
@@ -31,7 +30,6 @@ class ProductForm(ModelForm):
             'calories': '卡路里',
             'quantity': '可販售數量',
             'price': '價格',
-            'customize': '客製化',
         }
         widgets = {
             'image': NoLabelClearableFileInput,
