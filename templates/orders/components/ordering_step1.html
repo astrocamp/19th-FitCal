@@ -124,7 +124,7 @@
     <!-- Action Buttons -->
     <div class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
       <a href="{% url 'stores:show' cart.store.id %}" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">繼續加購</a>
-      <button id="next-step-btn" type="button" @click="step = 2" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
+      <button id="next-step-btn" type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
     </div>
   </div>
 </div>

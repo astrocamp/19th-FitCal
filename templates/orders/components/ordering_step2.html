@@ -43,12 +43,12 @@
         <!-- Cash Payment Option -->
         <div class="relative flex items-center">
           <input type="radio" id="payment_cash" name="payment_method" value="CASH" x-model="formData.payment_method" class="peer hidden" />
-          <label for="payment_cash" class="flex w-full cursor-pointer items-center rounded-lg border p-4 peer-checked:border-[#5a855a] peer-checked:bg-green-50 hover:bg-gray-50">
+          <label for="payment_cash" class="flex w-full cursor-pointer items-center rounded-lg border p-4 peer-checked:border-[#5a855a] peer-checked:bg-[#5a855a] hover:bg-[#2e4e2e]">
             <div class="flex items-center space-x-4">
               <div class="flex h-12 w-20 items-center justify-center rounded-full">
-                <i class="fa-solid fa-sack-dollar text-2xl"></i>
+                <i class="fa-solid fa-sack-dollar text-2xl text-gray-300"></i>
               </div>
-              <span class="font-medium">現金支付</span>
+              <span class="font-medium text-gray-300">現金支付</span>
             </div>
             <span class="ml-auto hidden peer-checked:block text-[#5a855a]">
               <i class="fas fa-check-circle text-xl"></i>
@@ -59,12 +59,12 @@
         <!-- LINE Pay Option -->
         <div class="relative flex items-center">
           <input type="radio" id="payment_linepay" name="payment_method" value="LINE_PAY" x-model="formData.payment_method" class="peer hidden" />
-          <label for="payment_linepay" class="flex w-full cursor-pointer items-center rounded-lg border p-4 peer-checked:border-[#5a855a] peer-checked:bg-green-50 hover:bg-gray-50">
+          <label for="payment_linepay" class="flex w-full cursor-pointer items-center rounded-lg border p-4 peer-checked:border-[#5a855a] peer-checked:bg-[#5a855a] hover:bg-[#2e4e2e]">
             <div class="flex items-center space-x-4">
               <div class="flex h-12 w-20 items-center justify-center rounded-full">
                 <img src="{% static 'images/line_pay_logo.png' %}" alt="LINE Pay" class="w-15" />
               </div>
-              <span class="font-medium">LINE Pay</span>
+              <span class="font-medium text-gray-300">LINE Pay</span>
             </div>
             <span class="ml-auto hidden peer-checked:block text-[#5a855a]">
               <i class="fas fa-check-circle text-xl"></i>
@@ -80,8 +80,8 @@
     <!-- Action Buttons -->
     <div>
       <div class="flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-        <button type="button" @click="step = 1" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">回上一步</button>
-        <button type="button" @click="step = 3" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
+        <button type="button" @click="prevStep()" class="btn w-full border-gray-800 text-gray-800 text-lg btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto">回上一步</button>
+        <button type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-lg hover:bg-[#2e4e2e] sm:w-auto">下一步</button>
       </div>
     </div>
   </div>
