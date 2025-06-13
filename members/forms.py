@@ -56,7 +56,7 @@ class MemberForm(ModelForm):
 
         if not self.is_create:
             self.fields['date_of_birth'].widget.attrs['readonly'] = True
-            self.fields['date_of_birth'].help_text = '此欄位僅供查看，無法修改。'
+            self.fields['date_of_birth'].help_text = '生日設定完成後，將無法修改。'
 
     def clean_date_of_birth(self):
         birthday = self.cleaned_data.get('date_of_birth')
