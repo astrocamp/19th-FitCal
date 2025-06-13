@@ -126,12 +126,25 @@ def show(req, id):
             return redirect('stores:show', id=store.id)
         return render(req, 'stores/edit.html', {'store': store, 'form': form})
 
+    cart = store.carts.filter(member=req.user.member).first()
+    if cart:
+        cart_total_price = cart.total_price
+        cart_total_calories = cart.total_calories
+        cart_total_quantity = cart.total_quantity
+    else:
+        cart_total_price = 0
+        cart_total_calories = 0
+        cart_total_quantity = 0
     return render(
         req,
         'stores/show.html',
         {
             'store': store,
             'categories': categories,
+            'cart': cart,
+            'cart_total_price': cart_total_price,
+            'cart_total_quantity': cart_total_calories,
+            'cart_total_calories': cart_total_quantity,
         },
     )
 

@@ -1,5 +1,5 @@
 {% load static %}
-<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2 relative md:h-16 h-32">
+<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2 relative h-16">
   <!-- LOGO區 -->
   <div class="flex justify-between items-center w-full">
     <div class="shrink-0">
@@ -11,7 +11,7 @@
     </div>
     <div class="flex-none flex items-center gap-3">
       <!--- search bar -->
-      {% load static %} {% comment %} 初始資料注入 {% endcomment %} {% if user.is_authenticated %}
+      {% load static %} {% comment %} 初始資料注入 {% endcomment %}
       <script>
         window.__initialSearchKeyword = "{{ request.GET.q|default:'' }}";
         window.__initialMaxCalories = parseInt("{{ request.GET.max_calories|default:'0' }}");
@@ -41,7 +41,6 @@
           </div>
         </div>
       </form>
-      {% endif %}
       <!--- 已登入購物車和個人資料狀態 -->
       {% if user.is_authenticated %}
       <!--- 購物車 -->
@@ -119,8 +118,8 @@
     </div>
   </div>
   <!--- 手機版搜尋欄 -->
-  <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg" @click.away="showFilter = false">
-    <div class="flex gap-3 justify-start mt-4 md:hidden relative">
+  <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg mx-auto pb-1 px-1" @click.away="showFilter = false">
+    <div class="flex gap-3 justify-start md:hidden relative">
       <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-full" value="{{ request.GET.q }}" />
 
       <!-- 🔘 篩選 icon button -->
