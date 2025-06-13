@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 
 import environ
@@ -37,10 +38,17 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 CSRF_TRUSTED_ORIGINS = ['https://fitcal-life.com', 'https://www.fitcal-life.com']
 CSRF_COOKIE_SECURE = env('CSRF_COOKIE_SECURE')
 SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
-
+if sys.platform.startswith('win'):
+    GDAL_LIBRARY_PATH = (
+        BASE_DIR / '.venv' / 'Lib' / 'site-packages' / 'osgeo' / 'gdal.dll'
+    )
+    GEOS_LIBRARY_PATH = (
+        BASE_DIR / '.venv' / 'Lib' / 'site-packages' / 'osgeo' / 'geos_c.dll'
+    )
 # Application definition
 
 INSTALLED_APPS = [
+    'locations',
     'users',
     'pages',
     'members',
@@ -169,7 +177,10 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 DATABASES = {
     # 自動解析 DATABASE_URL
-    'default': env.db()
+    'default': {
+        **env.db(),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+    }
 }
 
 

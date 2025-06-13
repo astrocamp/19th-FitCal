@@ -24,4 +24,5 @@ urlpatterns = [
         name='estimate_calories_api',
     ),
     path('', include('pages.urls')),
+    path('locations/', include('locations.urls', namespace='locations')),
 ]
