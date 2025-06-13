@@ -1,7 +1,7 @@
 {% load static %}
-<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2 relative h-16">
+<div x-data="{ open: false }" class="bg-base-100 max-w-7xl mx-auto flex-wrap md:flex-nowrap items-center justify-between px-4 py-2 relative">
   <!-- LOGO區 -->
-  <div class="flex justify-between items-center w-full">
+  <div class="flex justify-between items-center w-full mb-2 md:mb-0">
     <div class="shrink-0">
       {% if user.is_authenticated %}
       <a href="{% url 'stores:index' %}"><img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/FitCal-Logo(new).webp" class="h-12 w-auto object-contain pr-2" /></a>
@@ -118,9 +118,10 @@
     </div>
   </div>
   <!--- 手機版搜尋欄 -->
-  <form x-data="searchFormComponent()" id="searchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg mx-auto pb-1 px-1" @click.away="showFilter = false">
-    <div class="flex gap-3 justify-start md:hidden relative">
-      <input id="searchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-full" value="{{ request.GET.q }}" />
+  <!--- 手機版搜尋欄 -->
+  <form x-data="searchFormComponent()" id="mobileSearchForm" action="{% url 'search:index' %}" method="get" class="relative w-full max-w-lg mx-auto pb-1 px-1 md:hidden" @click.away="showFilter = false">
+    <div class="flex gap-3 justify-start relative">
+      <input id="mobileSearchInput" name="q" type="text" placeholder="搜尋商家、餐點" class="input input-bordered w-full" value="{{ request.GET.q }}" />
 
       <!-- 🔘 篩選 icon button -->
       <button type="button" @click="showFilter = !showFilter" class="btn">
@@ -128,12 +129,13 @@
       </button>
 
       <!-- 🔘 搜尋按鈕 -->
-      <button id="searchBtn" type="submit" class="btn">搜尋</button>
-      <!-- 下排：拉霸，使用絕對定位 -->
-      <div id="calorieFilter" class="absolute left-0 w-full bg-white shadow-lg rounded mt-12 z-10 transition-all duration-300 overflow-hidden" x-ref="filter" x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
+      <button id="mobileSearchBtn" type="submit" class="btn">搜尋</button>
+
+      <!-- 下排：拉霸 -->
+      <div id="mobileCalorieFilter" class="absolute left-0 w-full bg-white shadow-lg rounded mt-12 z-10 transition-all duration-300 overflow-hidden" x-ref="filter" x-bind:style="showFilter ? 'max-height:' + $refs.filter.scrollHeight + 'px' : 'max-height: 0;'">
         <div class="p-2">
-          <label for="max_calories" class="block text-xs mb-1"> 最多卡路里(非必填)：<span x-text="maxCalories"></span> </label>
-          <input type="range" id="max_calories" name="max_calories" min="0" max="1000" step="10" x-model="maxCalories" class="range w-full" />
+          <label for="max_calories_mobile" class="block text-xs mb-1"> 最多卡路里(非必填)：<span x-text="maxCalories"></span> </label>
+          <input type="range" id="max_calories_mobile" name="max_calories" min="0" max="1000" step="10" x-model="maxCalories" class="range w-full" />
         </div>
       </div>
     </div>
