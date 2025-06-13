@@ -66,5 +66,5 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
                 email=user.email,
                 defaults={'verified': True, 'primary': True},
             )
-
+        sociallogin.state['process'] = 'connect'
         return user
