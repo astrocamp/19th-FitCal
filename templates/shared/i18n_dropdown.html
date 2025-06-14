@@ -1,0 +1,19 @@
+<div x-data="{ open: false }" class="relative inline-block text-left">
+  <button @click="open = !open" class="inline-flex items-center py-2 rounded hover:bg-gray-100">
+    <i class="fas fa-globe text-gray-700 text-xl"></i>
+  </button>
+
+  <div x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-28 bg-white rounded shadow border z-50">
+    <form method="post" action="{% url 'set_language' %}" class="block">
+      {% csrf_token %}
+      <input type="hidden" name="language" value="zh-hant" />
+      <button type="submit" class="w-full text-center text-sm py-2 hover:bg-gray-100 {% if LANGUAGE_CODE == 'zh-hant' %} text-emerald-600{% endif %}">{% if LANGUAGE_CODE == 'zh-hant' %}✓ {% endif %}繁體中文</button>
+    </form>
+
+    <form method="post" action="{% url 'set_language' %}" class="block">
+      {% csrf_token %}
+      <input type="hidden" name="language" value="en" />
+      <button type="submit" class="w-full text-center text-sm py-2 hover:bg-gray-100 {% if LANGUAGE_CODE == 'en' %} text-emerald-600{% endif %}">{% if LANGUAGE_CODE == 'en' %}✓ {% endif %}English</button>
+    </form>
+  </div>
+</div>

@@ -1,12 +1,12 @@
-{% extends 'layouts/default.html' %} {% block main %} {% load widget_tweaks %}
+{% extends 'layouts/default.html' %}{% load i18n %} {% block main %} {% load widget_tweaks %}
 
 <form method="POST" action="{% url 'members:show' member.id %}" class="max-w-xl mx-auto bg-white text-black p-6 mt-10 rounded-2xl shadow-lg">
   {% csrf_token %}
 
-  <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">編輯會員資料</h2>
+  <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">{% trans "編輯會員資料" %}</h2>
 
   <div class="flex flex-col items-center mb-6">
-    <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/member-logo.webp" alt="頭像" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
+    <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/default/member-logo.webp" alt="{% trans '頭像' %}" class="w-32 h-32 object-cover rounded-full mb-4 border border-black" />
   </div>
 
   <div x-data="dataPicker" x-init="init" class="space-y-4">
@@ -23,8 +23,8 @@
   </div>
 
   <div class="flex gap-4 mt-6">
-    <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">更新</button>
-    <a href="{% url 'members:index' %}" class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">取消</a>
+    <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">{% trans "更新" %}</button>
+    <a href="{% url 'members:index' %}" class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">{% trans "取消" %}</a>
   </div>
 </form>
 

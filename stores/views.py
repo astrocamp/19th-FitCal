@@ -19,6 +19,8 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.timezone import timedelta
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from common.decorator import store_required
@@ -45,6 +47,7 @@ def create_store(request):
             store = form.save(commit=False)
             store.user = request.user
             store.save()
+            messages.success(request, _('創建成功'))
             return redirect('stores:show', store.id)
     form = StoreForm()
     return render(request, 'stores/new.html', {'form': form})
@@ -157,6 +160,7 @@ def show(req, id):
         if form.is_valid():
             form.save()
             add_location(store, store.address)
+            messages.success(req, _('更新成功'))
             return redirect('stores:show', id=store.id)
         return render(req, 'stores/edit.html', {'store': store, 'form': form})
 
@@ -202,10 +206,10 @@ def store_settings(request):
         if form.is_valid():
             form.save()
             add_location(store, store.address)
-            messages.success(request, '商家資訊已成功更新！')
+            messages.success(request, _('商家資訊已成功更新！'))
             return redirect('stores:store_settings')
         else:
-            messages.error(request, '請檢查您的輸入，有錯誤發生！')
+            messages.error(request, _('請檢查您的輸入，有錯誤發生！'))
     else:
         form = StoreForm(instance=store)
 
@@ -233,18 +237,18 @@ def rate_store(request, order_id):
         order = get_object_or_404(Order, id=order_id, member=request.user.member)
 
         if order.order_status != 'COMPLETED':
-            return HttpResponseBadRequest('訂單尚未完成，無法評分')
+            return HttpResponseBadRequest(_('訂單尚未完成，無法評分'))
 
         if hasattr(order, 'rating'):
-            return HttpResponseBadRequest('此訂單已評分')
+            return HttpResponseBadRequest(_('此訂單已評分'))
 
         try:
             score = int(request.POST.get('score', 0))
         except (TypeError, ValueError):
-            return HttpResponseBadRequest('請提供有效的分數')
+            return HttpResponseBadRequest(_('請提供有效的分數'))
 
         if score < 1 or score > 5:
-            return HttpResponseBadRequest('分數必須在 1 到 5 分之間')
+            return HttpResponseBadRequest(_('分數必須在 1 到 5 分之間'))
 
         Rating.objects.create(
             member=request.user.member,
@@ -254,14 +258,14 @@ def rate_store(request, order_id):
         )
 
         return HttpResponse(f"""
-            <div class="text-sm text-gray-600 px-5 py-3">
-                ✅ 已評分：<strong>{score} 分</strong>
+            <div class="text-sm text-gray-600">
+                ✅ {_('已評分：')}<strong>{score} 分</strong>
             </div>
         """)
 
     except Exception as e:
         return JsonResponse(
-            {'error': '伺服器發生錯誤，請稍後再試', 'debug': str(e)}, status=500
+            {'error': _('伺服器發生錯誤，請稍後再試'), 'debug': str(e)}, status=500
         )
 
 
@@ -367,15 +371,15 @@ def category_create(request, store_id):
     store = get_object_or_404(Store, id=store_id)
     name = request.POST.get('name')
     if not name:
-        messages.error(request, '類別名稱不能為空')
+        messages.error(request, _('類別名稱不能為空'))
         return render(request, 'shared/messages.html')
     # 檢查類別名稱是否已經存在於該商店下
     if store.categories.filter(name=name).exists():
-        messages.error(request, '此類別已存在')
+        messages.error(request, _('此類別已存在'))
         return render(request, 'shared/messages.html')
 
     store.categories.create(name=name)
-    messages.success(request, '類別創建成功')
+    messages.success(request, _('類別創建成功'))
     response = HttpResponse()
     response['HX-Redirect'] = reverse('stores:management')
     return response
@@ -393,14 +397,14 @@ def category_edit(request, category_id):
             .exclude(id=category.id)
             .exists()
         ):
-            messages.error(request, '此類別名稱已存在')
+            messages.error(request, _('此類別名稱已存在'))
             return render(request, 'shared/messages.html')
         elif new_name != category.name:
             category.name = new_name
             category.save()
-            messages.success(request, '類別名稱已更新')
+            messages.success(request, _('類別名稱已更新'))
     else:
-        messages.error(request, '請輸入有效的類別名稱')
+        messages.error(request, _('請輸入有效的類別名稱'))
     response = HttpResponse()
     response['HX-Redirect'] = reverse('stores:management')
     return response
@@ -416,8 +420,8 @@ def category_delete(request, category_id):
         return HttpResponseBadRequest('Unauthorized access.')
 
     category.delete()
-    messages.success(request, '類別已刪除')
-    return redirect('stores:management')
+    messages.success(request, _('類別已刪除'))
+    return redirect('stores:management', store.id)
 
 
 @store_required

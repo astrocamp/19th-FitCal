@@ -11,7 +11,7 @@
           payment_method: '{{ form.payment_method.value }}'
         },
         paymentLabels: {
-          CASH: '現金付款',
+          CASH: '{{ _('現金付款')|escapejs }}',
           LINE_PAY: 'LINE Pay',
         },
         formatDateTime(date) {

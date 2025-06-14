@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="bg-white rounded-xl shadow-md overflow-hidden relative">
   <a href="{% url 'stores:show' store.id %}">
     <!-- 商家圖片 -->
     <div class="relative">
-      <img src="{{ store.cover_url }}" alt="店家封面" class="w-full h-48 object-cover" />
+      <img src="{{ store.cover_url }}" alt="{% trans '店家封面' %}" class="w-full h-48 object-cover" />
 
       <!-- Logo -->
       <img src="{{  store.logo_url }}" alt="Logo" class="absolute top-2 left-2 w-10 h-10 rounded-full border-2 border-white" />
@@ -17,7 +18,7 @@
     <div class="p-4">
       <h2 class="text-lg font-semibold">{{ store.name }}</h2>
       <p class="text-sm text-gray-600">{{ store.address }}</p>
-      <p class="text-sm text-gray-600">營業時間：{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</p>
+      <p class="text-sm text-gray-600">{% trans "營業時間：" %}{{ store.opening_time }}<span>~</span>{{ store.closing_time }}</p>
       <div class="flex items-center justify-between mt-2 text-sm text-gray-500" x>
         <span class="store-distance" data-store-id="{{ store.id }}"></span>
         <span>⭐ {{ store.avg_rating|floatformat:1 }}</span>

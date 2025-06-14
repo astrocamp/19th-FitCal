@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="mb-6">
   <div class="flex items-start">
     <div>
       <div class="mb-2">
-        <div class="inline-block py-2 font-semibold">店家名稱: {{ store.name }}</div>
+        <div class="inline-block py-2 font-semibold">{% trans "店家名稱：" %}{{ store.name }}</div>
       </div>
       <ul class="space-y-2">
         {% if store.phone_number %}

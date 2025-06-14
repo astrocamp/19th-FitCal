@@ -1,16 +1,17 @@
+{% load i18n %}
 <div x-show="step === 1" x-transition>
-  <h1 class="mb-4 text-center text-xl font-bold text-[#000] sm:text-2xl">建立訂單</h1>
+  <h1 class="mb-4 text-center text-xl font-bold text-[#000] sm:text-2xl">{% trans "建立訂單" %}</h1>
 
   <!-- Progress Steps -->
   <ul class="steps my-4 w-full">
     <li class="step step-active">
-      <span class="text-[#5a855a] font-semibold text-base sm:text-lg">確認明細</span>
+      <span class="text-[#5a855a] font-semibold text-base sm:text-lg">{% trans "確認明細" %}</span>
     </li>
     <li class="step step-inactive text-gray-500">
-      <span class="text-base sm:text-lg">選擇付款</span>
+      <span class="text-base sm:text-lg">{% trans "選擇付款" %}</span>
     </li>
     <li class="step step-inactive text-gray-500">
-      <span class="text-base sm:text-lg">確認結帳</span>
+      <span class="text-base sm:text-lg">{% trans "確認結帳" %}</span>
     </li>
   </ul>
 
@@ -19,7 +20,7 @@
     <!-- Store Information -->
     <div class="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm">
       <div class="border-b border-gray-200 bg-gray-50 px-4 py-3">
-        <h3 class="text-base font-semibold text-gray-700 sm:text-lg">店家資訊</h3>
+        <h3 class="text-base font-semibold text-gray-700 sm:text-lg">{% trans "店家資訊" %}</h3>
       </div>
 
       <div class="p-4">
@@ -46,7 +47,7 @@
     <!-- Pickup Information -->
     <div class="mb-6 rounded-lg border border-gray-200 bg-white shadow-sm">
       <div class="border-b border-gray-200 bg-gray-50 px-4 py-3">
-        <h3 class="text-base font-semibold text-gray-700 sm:text-lg">取貨資訊</h3>
+        <h3 class="text-base font-semibold text-gray-700 sm:text-lg">{% trans "取貨資訊" %}</h3>
       </div>
 
       <div class="p-4">
@@ -54,7 +55,7 @@
           <div class="mr-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#5a855a] text-white">
             <i class="fa-solid fa-store"></i>
           </div>
-          <span class="text-base font-medium text-gray-700 sm:text-lg">取貨方式：自取</span>
+          <span class="text-base font-medium text-gray-700 sm:text-lg">{% trans "取貨方式：自取" %}</span>
         </div>
 
         <div class="flex flex-col">
@@ -62,7 +63,7 @@
             <div class="mr-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#5a855a] text-white">
               <i class="fa-regular fa-clock"></i>
             </div>
-            <label for="{{ form.pickup_time.id_for_label }}" class="text-base font-medium text-gray-700 sm:text-lg"> 預計取貨時間 </label>
+            <label for="{{ form.pickup_time.id_for_label }}" class="text-base font-medium text-gray-700 sm:text-lg"> {% trans "預計取貨時間" %} </label>
             <span class="ml-2 text-base sm:ml-4 sm:text-lg">{{ form.pickup_time }}</span>
           </div>
         </div>
@@ -71,7 +72,7 @@
     <!-- Shopping Contents -->
     <div class="mb-4 border-y border-gray-300">
       <div class="bg-gray-50 px-4 py-2">
-        <p class="text-base font-semibold text-gray-700 sm:text-lg">購物內容</p>
+        <p class="text-base font-semibold text-gray-700 sm:text-lg">{% trans "購物內容" %}</p>
       </div>
       {% if cart_items %}
       <div id="cart-items" class="bg-white p-4 space-y-4">
@@ -79,14 +80,14 @@
         <div id="item-{{ item.id }}" class="flex items-center justify-between">
           <div>
             <p class="text-base font-medium text-gray-800 sm:text-lg">{{ item.product.name }}</p>
-            <p class="text-base text-gray-600 sm:text-lg">$ {{ item.product.price|floatformat:0 }} / {{ item.quantity }} 份</p>
+            <p class="text-base text-gray-600 sm:text-lg">$ {{ item.product.price|floatformat:0 }} / {{ item.quantity }} {% trans "份" %}</p>
           </div>
 
           <div class="flex items-center space-x-2 sm:space-x-3">
             <a href="{% url 'carts:show' cart.id %}" class="text-gray-600 hover:text-blue-800 p-2">
               <i class="fa-solid fa-pen"></i>
             </a>
-            <button hx-delete="{% url 'carts:delete_item_from_ordering' item.id %}" hx-target="#item-{{ item.id }}" hx-swap="outerHTML" hx-confirm="確定要刪除 {{ item.product.name }} 嗎？" class="text-gray-600 hover:text-red-600 p-2">
+            <button hx-delete="{% url 'carts:delete_item_from_ordering' item.id %}" hx-target="#item-{{ item.id }}" hx-swap="outerHTML" hx-confirm="{% blocktrans with product_name=item.product.name %}確定要刪除 {{ product_name }} 嗎？{% endblocktrans %}" class="text-gray-600 hover:text-red-600 p-2">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -94,14 +95,14 @@
         {% endfor %}
       </div>
       {% else %}
-      <div id="empty-message" class="text-center text-gray-500 py-4 text-base sm:text-lg">無商品，趕快去加購商品吧！</div>
+      <div id="empty-message" class="text-center text-gray-500 py-4 text-base sm:text-lg">{% trans "無商品，趕快去加購商品吧！" %}</div>
       {% endif %}
     </div>
 
     <!-- Total Calories-->
     <div class="mb-4 border-y border-gray-300">
       <div class="bg-gray-50 px-4 py-2">
-        <p class="text-base font-semibold text-gray-700 sm:text-lg">總卡路里</p>
+        <p class="text-base font-semibold text-gray-700 sm:text-lg">{% trans "總卡路里" %}</p>
       </div>
       <div class="p-4 text-base text-gray-700 sm:text-lg">
         <span id="ordering_total_calories">{{ cart.total_calories }} kcal</span>
@@ -111,15 +112,15 @@
     <!-- Billing Details -->
     <div class="border-y border-gray-300">
       <div class="bg-gray-50 px-4 py-2">
-        <p class="text-base font-semibold text-gray-700 sm:text-lg">結帳明細</p>
+        <p class="text-base font-semibold text-gray-700 sm:text-lg">{% trans "結帳明細" %}</p>
       </div>
       <div id="cart-summary-section" class="space-y-2 p-4">
         <div class="flex justify-between text-base text-gray-700 sm:text-lg">
-          <span id="ordering_total_quantity">商品 X {{ cart.total_quantity }}</span>
+          <span id="ordering_total_quantity">{% trans "商品" %} X {{ cart.total_quantity }}</span>
           <span id="ordering_total_price_brief">$ {{ cart.total_price }}</span>
         </div>
         <div class="flex justify-between text-base font-semibold text-gray-800 sm:text-lg">
-          <span>應付金額</span>
+          <span>{% trans "應付金額" %}</span>
           <span id="ordering_total_price_final">$ {{ cart.total_price }}</span>
         </div>
       </div>
@@ -127,8 +128,8 @@
 
     <!-- Action Buttons -->
     <div class="mt-8 flex flex-col items-center justify-center space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-      <a href="{% url 'stores:show' cart.store.id %}" class="btn w-full border-gray-800 text-gray-800 text-base btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto sm:text-lg">繼續加購</a>
-      <button id="next-step-btn" type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-base hover:bg-[#2e4e2e] sm:w-auto sm:text-lg">下一步</button>
+      <a href="{% url 'stores:show' cart.store.id %}" class="btn w-full border-gray-800 text-gray-800 text-base btn-outline hover:border-gray-800 hover:bg-gray-800 hover:text-white sm:w-auto sm:text-lg">{% trans "繼續加購" %}</a>
+      <button id="next-step-btn" type="button" @click="nextStep()" class="btn w-full border-none bg-[#5a855a] text-white text-base hover:bg-[#2e4e2e] sm:w-auto sm:text-lg">{% trans "下一步" %}</button>
     </div>
   </div>
 </div>

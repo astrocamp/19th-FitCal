@@ -1,9 +1,8 @@
-{% if tab == "today" %} {% include "shared/orders/_order_list_card.html" with orders=orders %} {% else %} {% include "shared/orders/_order_list_table.html" with orders=orders %} {% endif %}
-
+{% if tab == "today" %} {% include "shared/orders/_order_list_card.html" with orders=orders %} {% else %} {% include "shared/orders/_order_list_table.html" with orders=orders %} {% endif %} {% load i18n %}
 <div id="order-tabs" hx-swap-oob="true" class="flex border-b border-gray-300 text-sm font-medium">
-  <button class="px-4 py-2 hover:text-blue-600 data-[active=true]:text-blue-600 data-[active=true]:border-b-2 data-[active=true]:border-blue-600" hx-get="{% url 'stores:order_list' user.store.id %}?tab=today" hx-target="#orders-content" hx-swap="innerHTML" data-active="{% if tab == 'today' %}true{% else %}false{% endif %}">今日訂單</button>
+  <button class="px-4 py-2 hover:text-blue-600 data-[active=true]:text-blue-600 data-[active=true]:border-b-2 data-[active=true]:border-blue-600" hx-get="{% url 'stores:order_list' user.store.id %}?tab=today" hx-target="#orders-content" hx-swap="innerHTML" data-active="{% if tab == 'today' %}true{% else %}false{% endif %}">{% trans "今日訂單" %}</button>
 
-  <button class="px-4 py-2 hover:text-blue-600 data-[active=true]:text-blue-600 data-[active=true]:border-b-2 data-[active=true]:border-blue-600" hx-get="{% url 'stores:order_list' user.store.id %}?tab=reservation" hx-target="#orders-content" hx-swap="innerHTML" data-active="{% if tab == 'reservation' %}true{% else %}false{% endif %}">預約訂單</button>
+  <button class="px-4 py-2 hover:text-blue-600 data-[active=true]:text-blue-600 data-[active=true]:border-b-2 data-[active=true]:border-blue-600" hx-get="{% url 'stores:order_list' user.store.id %}?tab=reservation" hx-target="#orders-content" hx-swap="innerHTML" data-active="{% if tab == 'reservation' %}true{% else %}false{% endif %}">{% trans "預約訂單" %}</button>
 
-  <button class="px-4 py-2 hover:text-blue-600 data-[active=true]:text-blue-600 data-[active=true]:border-b-2 data-[active=true]:border-blue-600" hx-get="{% url 'stores:order_list' user.store.id %}?tab=history" hx-target="#orders-content" hx-swap="innerHTML" data-active="{% if tab == 'history' %}true{% else %}false{% endif %}">歷史訂單</button>
+  <button class="px-4 py-2 hover:text-blue-600 data-[active=true]:text-blue-600 data-[active=true]:border-b-2 data-[active=true]:border-blue-600" hx-get="{% url 'stores:order_list' user.store.id %}?tab=history" hx-target="#orders-content" hx-swap="innerHTML" data-active="{% if tab == 'history' %}true{% else %}false{% endif %}">{% trans "歷史訂單" %}</button>
 </div>

@@ -1,17 +1,17 @@
-{% load socialaccount %} {% load widget_tweaks %}
+{% load socialaccount %} {% load widget_tweaks %}{% load i18n %}
 
   <!--卡片-->
   <div class="w-full max-w-sm p-6 bg-white rounded shadow " onclick="event.stopPropagation()">
     <div class="flex justify-end">
       <button onclick="document.getElementById('signupModal').classList.add('hidden')">X</button>
     </div>
-    <h2 class="text-center text-lg font-bold mb-2">歡迎，註冊成為 Fitcal 會員</h2>
+    <h2 class="text-center text-lg font-bold mb-2">{% trans "歡迎，註冊成為 Fitcal 會員" %}</h2>
 
     <p class="text-center text-sm">Fit Your Calories, Fit Your Life!</p>
     <form method="post" hx-post="{% url 'users:create_user' %}" hx-target="#signupModal" hx-swap="innerHTML" class="space-y-3 mt-4">
       <input x-data type="hidden" name="next" :value="window.location.pathname" />
       <div class="mb-1 relative">
-        <label for="email" class="block text-sm font-medium">電子郵件：</label>
+        <label for="email" class="block text-sm font-medium">{% trans "電子郵件：" %}</label>
         <input type="email" name="email" value="{{ userform.email.value }}" placeholder="example@gmail.com" class="w-full border px-3 py-1.5 rounded mt-1" />
         {% if userform.errors.email %}
         <div class="absolute flex items-center text-red-500 text-xs mt-1">
@@ -21,8 +21,8 @@
         {% endif %}
       </div>
       <div class="mb-1 relative">
-        <label for="password1" class="block text-sm font-medium mt-5">密碼：</label>
-        <input type="password" name="password1" placeholder="請輸入密碼" class="w-full border px-3 py-1.5 rounded mt-1" />
+        <label for="password1" class="block text-sm font-medium mt-5">{% trans "密碼：" %}</label>
+        <input type="password" name="password1" placeholder="{% trans '請輸入密碼' %}" class="w-full border px-3 py-1.5 rounded mt-1" />
         {% if userform.errors.password1 %}
         <div class="flex items-center text-red-500 text-xs absolute mt-1">
           <span>*</span>
@@ -31,8 +31,8 @@
         {% endif %}
       </div>
       <div class="mb-1 relative">
-        <label for="password2" class="block text-sm font-medium mt-5">密碼：</label>
-        <input type="password" name="password2" placeholder="請再次輸入密碼" class="w-full border px-3 py-1.5 rounded mt-1" />
+        <label for="password2" class="block text-sm font-medium mt-5">{% trans "確認密碼：" %}</label>
+        <input type="password" name="password2" placeholder="{% trans '請再次輸入密碼' %}" class="w-full border px-3 py-1.5 rounded mt-1" />
         {% if userform.errors.password2 %}
         <div class="flex items-center text-red-500 text-xs mt-1 absolute">
           <span>*</span>
@@ -43,7 +43,7 @@
       <br />
       <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">註冊</button>
     </form>
-    <p class="text-center text-sm mb-4 mt-8">已有帳號？<button type="button" onclick="document.getElementById('signupModal').classList.add('hidden');document.getElementById('signinModal').classList.remove('hidden')" class="btn-active text-blue-600 font-semibold ml-1">返回登入</button></p>
+    <p class="text-center text-sm mb-4 mt-8">{% trans "已有帳號？" %}<button type="button" onclick="document.getElementById('signupModal').classList.add('hidden');document.getElementById('signinModal').classList.remove('hidden')" class="btn-active text-blue-600 font-semibold ml-1">{% trans "返回登入" %}</button></p>
 
   </div>
 </div>

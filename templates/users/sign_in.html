@@ -1,34 +1,31 @@
-{% load socialaccount %} {% include "shared/messages.html" %}
+{% load socialaccount %} {% load i18n %} {% include "shared/messages.html" %}
 <!--卡片-->
 <div class="w-full max-w-sm p-6 bg-white rounded shadow" onclick="event.stopPropagation()">
   <div class="flex justify-end">
     <button onclick="document.getElementById('signinModal').classList.add('hidden')">X</button>
   </div>
-  <h2 class="text-center text-lg font-bold mb-2">歡迎使用 Fitcal 線上點餐平台</h2>
+  <h2 class="text-center text-lg font-bold mb-2">{% trans "歡迎使用 Fitcal 線上點餐平台" %}</h2>
 
-  {% comment %}
-  <p class="text-center text-sm mb-4">Fit Your Calories, Fit Your Life.</p>
-  {% endcomment %}
-  <p class="text-center text-sm mt-2">還沒有帳號?<button type="button" onclick="document.getElementById('signinModal').classList.add('hidden');document.getElementById('signupModal').classList.remove('hidden')" class="btn-active text-blue-600 font-semibold ml-2">快速註冊</button></p>
+  <p class="text-center text-sm mt-2">{% trans "還沒有帳號?" %}<button type="button" onclick="document.getElementById('signinModal').classList.add('hidden');document.getElementById('signupModal').classList.remove('hidden')" class="btn-active text-blue-600 font-semibold ml-2">{% trans "快速註冊" %}</button></p>
   <form method="post" hx-post="{% url 'users:create_session' %}" hx-swap="innerHTML" hx-target="#signinModal" class="space-y-3 mt-8">
     {% csrf_token %} {% if error %}
     <p class="text-red-500 text-sm text-center">{{ error }}</p>
     {% endif %}
     <input x-data type="hidden" name="next" :value="window.location.pathname" />
     <div>
-      <label for="email" class="block text-sm font-medium">電子郵件：</label>
-      <input type="email" name="email" placeholder="example@gmail.com" class="w-full border px-3 py-2 rounded mt-1" />
+      <label for="email" class="block text-sm font-medium">{% trans "電子郵件：" %}</label>
+      <input type="email" name="email" placeholder="{% trans 'example@gmail.com' %}" class="w-full border px-3 py-2 rounded mt-1" />
     </div>
 
     <div>
-      <label for="password" class="block text-sm font-medium mt-4">密碼：</label>
-      <input type="password" name="password" placeholder="請輸入密碼" class="w-full border px-3 py-2 rounded mt-1" />
+      <label for="password" class="block text-sm font-medium mt-4">{% trans "密碼：" %}</label>
+      <input type="password" name="password" placeholder="{% trans '請輸入密碼' %}" class="w-full border px-3 py-2 rounded mt-1" />
     </div>
 
-    <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white py-2 rounded mt-4">登入</button>
+    <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white py-2 rounded mt-4">{% trans "登入" %}</button>
   </form>
   <br />
-  <div class="my-4 text-center text-sm text-gray-500">------ 其他登入方式 ------</div>
+  <div class="my-4 text-center text-sm text-gray-500">------ {% trans "其他登入方式" %} ------</div>
   <div class="flex items-center justify-center gap-8 mb-4">
     <a href="{% provider_login_url 'google' %}" class="flex items-center max-w-10">
       <img src="https://5x-fitcal.s3.ap-northeast-1.amazonaws.com/media/3party-logo/google-logo.webp" />

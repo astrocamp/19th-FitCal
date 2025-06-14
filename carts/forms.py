@@ -1,4 +1,5 @@
 from django.forms import IntegerField, ModelForm, NumberInput
+from django.utils.translation import gettext_lazy as _
 
 from .models import Cart, CartItem
 
@@ -8,8 +9,8 @@ class CartForm(ModelForm):
         model = Cart
         fields = ['store', 'note']
         labels = {
-            'store': '商店',
-            'note': '備註',
+            'store': _('商店'),
+            'note': _('備註'),
         }
 
 
@@ -18,8 +19,8 @@ class CartItemForm(ModelForm):
         min_value=1,
         widget=NumberInput(attrs={'min': 1, 'step': 1}),
         error_messages={
-            'min_value': '數量不能小於 1',
-            'invalid': '請輸入正整數',
+            'min_value': _('數量不能小於 1'),
+            'invalid': _('請輸入正整數'),
         },
     )
 
@@ -27,7 +28,7 @@ class CartItemForm(ModelForm):
         model = CartItem
         fields = ['product', 'quantity', 'customize']
         labels = {
-            'product': '產品',
-            'quantity': '數量',
-            'customize': '客製化',
+            'product': _('產品'),
+            'quantity': _('數量'),
+            'customize': _('客製化'),
         }

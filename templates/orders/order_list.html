@@ -1,6 +1,6 @@
-{% extends 'layouts/default.html' %} {% load datetime_format %} {% load model_display %} {% block main %}
+{% extends 'layouts/default.html' %} {% load i18n %}{% load datetime_format %} {% load model_display %} {% block main %}
 <div class="container mx-auto px-4 py-4 sm:py-8">
-  <h1 class="text-xl font-bold text-gray-900 mb-4 sm:mb-6 sm:text-2xl">歷史訂單</h1>
+  <h1 class="text-xl font-bold text-gray-900 mb-4 sm:mb-6 sm:text-2xl">{% trans "歷史訂單" %}</h1>
 
   <!-- 訂單列表容器 -->
   <div class="space-y-4 sm:space-y-6">
@@ -17,15 +17,15 @@
               {% include "components/order_status_badge.html" with order=order status=order.order_status %}
 
               <div class="flex items-center space-x-2 pt-1">
-                <span class="text-base text-gray-900 sm:text-lg">店家名稱：</span>
+                <span class="text-base text-gray-900 sm:text-lg">{% trans "店家名稱：" %}</span>
                 <span class="font-medium text-gray-900 text-base sm:text-lg">{{ order.store_name }}</span>
               </div>
             </div>
 
             <!-- 右側資訊 -->
             <div class="flex flex-col gap-2 text-left space-y-1 sm:text-right">
-              <p class="text-sm text-gray-900 sm:text-lg">建立日期：{{ order.created_at|datetime_format }}</p>
-              <p class="text-base font-semibold text-gray-900 sm:text-lg">總金額：${{ order.total_price }}</p>
+              <p class="text-sm text-gray-900 sm:text-lg">{% trans "建立日期：" %}{{ order.created_at|datetime_format }}</p>
+              <p class="text-base font-semibold text-gray-900 sm:text-lg">{% trans "總金額：" %}${{ order.total_price }}</p>
             </div>
           </div>
         </a>
@@ -39,16 +39,16 @@
         {% if order.order_status == "COMPLETED" %} {% if not order.rating %}
         <form hx-post="{% url 'stores:rate_store' order.id %}" hx-target="#rating-section-{{ order.id }}" hx-swap="outerHTML" method="POST" class="space-y-2">
           {% csrf_token %}
-          <label class="block text-sm font-medium text-gray-700">對本次訂單的評分：</label>
+          <label class="block text-sm font-medium text-gray-700">{% trans "對本次訂單的評分：" %}</label>
           <div class="rating rating-sm">
             {% for i in "12345" %}
             <input type="radio" name="score" value="{{ forloop.counter }}" class="mask mask-star-2 bg-yellow-400" required />
             {% endfor %}
           </div>
-          <button type="submit" class="btn btn-sm btn-primary mt-1">送出評分</button>
+          <button type="submit" class="btn btn-sm btn-primary mt-1">{% trans "送出評分" %}</button>
         </form>
         {% else %}
-        <div class="text-sm text-gray-600 px-2">✅ 已評分：<strong>{{ order.rating.score }} 分</strong></div>
+        <div class="text-sm text-gray-600 px-2">✅ {% trans "已評分：" %}<strong>{{ order.rating.score }} {% trans "分" %}</strong></div>
         {% endif %} {% endif %}
       </div>
     </div>

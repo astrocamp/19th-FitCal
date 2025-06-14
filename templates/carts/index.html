@@ -1,5 +1,5 @@
-{% extends "layouts/default.html" %} {% block main %}
-<h1 class="text-2xl font-semibold mb-6">{{ user.member.name }} 的購物車</h1>
+{% extends "layouts/default.html" %} {% load i18n %} {% block main %}
+<h1 class="text-2xl font-semibold mb-6">{{ user.member.name }} {% trans "的購物車" %}</h1>
 
 {% if carts %}
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -7,32 +7,32 @@
   <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col justify-between">
     <!-- 商家橫幅圖片 -->
     {% if cart.store.cover_url %}
-    <img src="{{ cart.store.cover_url }}" alt="商家橫幅" class="w-full h-24 object-cover" />
+    <img src="{{ cart.store.cover_url }}" alt="{% trans '商家橫幅' %}" class="w-full h-24 object-cover" />
     {% else %}
-    <div class="w-full h-24 bg-gray-200 flex items-center justify-center text-gray-400 text-sm">無橫幅圖片</div>
+    <div class="w-full h-24 bg-gray-200 flex items-center justify-center text-gray-400 text-sm">{% trans '無橫幅圖片' %}</div>
     {% endif %}
 
     <!-- 商家資訊區塊 -->
     <div class="p-4 flex flex-col flex-1">
       <div class="flex items-center mb-2">
         {% if cart.store.logo_url %}
-        <img src="{{ cart.store.logo_url }}" alt="商家Logo" class="w-10 h-10 rounded-full object-cover mr-2 border border-gray-300" />
+        <img src="{{ cart.store.logo_url }}" alt="{% trans '商家Logo' %}" class="w-10 h-10 rounded-full object-cover mr-2 border border-gray-300" />
         {% else %}
-        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm text-gray-500 mr-2">無</div>
+        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-sm text-gray-500 mr-2">{% trans '無' %}</div>
         {% endif %}
         <h2 class="text-lg font-medium text-[#3a643a] truncate">{{ cart.store.name }}</h2>
       </div>
 
       <div class="text-sm text-gray-600 mb-4 space-y-1">
-        <p>總卡路里：<span class="font-semibold text-black">{{ cart.total_calories }}</span> kcal</p>
-        <p>總金額：<span class="font-semibold text-black">{{ cart.total_price }}</span> 元</p>
+        <p>{% trans "總卡路里：" %}<span class="font-semibold text-black">{{ cart.total_calories }}</span> kcal</p>
+        <p>{% trans "總金額：" %}<span class="font-semibold text-black">{{ cart.total_price }}</span>{% trans "元" %}</p>
       </div>
 
       <div class="mt-auto">
-        <a href="{% url 'carts:show' cart.id %}" class="block w-full text-center bg-[#5a855a] text-white py-1.5 rounded-md hover:bg-[#2e4e2e] transition-colors mb-2">查看明細</a>
-        <form action="{% url 'carts:delete_cart' cart.id %}" method="post" onsubmit="return confirm('是否要刪除？')">
+        <a href="{% url 'carts:show' cart.id %}" class="block w-full text-center bg-[#5a855a] text-white py-1.5 rounded-md hover:bg-[#2e4e2e] transition-colors mb-2">{% trans "查看明細" %}</a>
+        <form action="{% url 'carts:delete_cart' cart.id %}" method="post" onsubmit="return confirm('{% trans '是否要刪除？' %}')">
           {% csrf_token %}
-          <button type="submit" class="w-full rounded-md bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 text-sm font-medium transition-colors">刪除</button>
+          <button type="submit" class="w-full rounded-md bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 text-sm font-medium transition-colors">{% trans "刪除" %}</button>
         </form>
       </div>
     </div>
@@ -40,5 +40,5 @@
   {% endfor %}
 </div>
 {% else %}
-<p class="text-gray-500">購物車內沒有任何商品。</p>
+<p class="text-gray-500">{% trans "購物車內沒有任何商品。" %}</p>
 {% endif %} {% endblock main %}

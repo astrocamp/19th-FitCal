@@ -1,17 +1,17 @@
-{% extends "layouts/default.html" %} {% block main %}
+{% extends "layouts/default.html" %}{% load i18n %} {% block main %}
 <!-- 店家資訊區塊 -->
 <div class="flex flex-col mt-5 mb-9 sm:flex-row items-start sm:items-center gap-4">
   <!-- LOGO -->
-  <img src="{{ cart.store.logo_url|default:'https://fakeimg.pl/50x50/' }}" alt="店家 Logo" class="w-24 h-24 rounded-lg object-cover border" />
+  <img src="{{ cart.store.logo_url|default:'https://fakeimg.pl/50x50/' }}" alt="{% trans '店家' %} Logo" class="w-24 h-24 rounded-lg object-cover border" />
 
   <!-- 商家詳細資訊 -->
   <div class="space-y-1">
     <div class="flex items-center gap-2 text-xl font-bold">
       <span>{{ cart.store.name }}</span>
     </div>
-    <div class="text-sm text-gray-600">營業時間：{{ cart.store.opening_time }}<span>~</span>{{ cart.store.closing_time }}</div>
+    <div class="text-sm text-gray-600">{% trans "營業時間：" %}{{ cart.store.opening_time }}<span>~</span>{{ cart.store.closing_time }}</div>
     <div class="text-sm text-gray-600">
-      <span>距離：2.1 公里</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ cart.store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ cart.store.address }}</a>　｜　 📞
+      <span>{% trans "距離：2.1 公里" %}</span>　｜　 <a href="https://www.google.com/maps/search/?api=1&query={{ cart.store.name|urlencode }}+near+" class="font-bold text-blue-600 hover:underline">{{ cart.store.address }}</a>　｜　 📞
       <a href="tel:{{ cart.store.phone_number|cut:'-' }}" class="font-bold text-blue-600 hover:underline">{{ cart.store.phone_number }}</a>
     </div>
   </div>
@@ -26,7 +26,7 @@
       {% if item.product.image %}
       <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-20 h-20 object-cover rounded-md border border-gray-200" />
       {% else %}
-      <div class="w-20 h-20 bg-gray-100 flex items-center justify-center text-gray-400 text-sm rounded-md border">無圖片</div>
+      <div class="w-20 h-20 bg-gray-100 flex items-center justify-center text-gray-400 text-sm rounded-md border">{% trans "無圖片" %}</div>
       {% endif %}
     </div>
 
@@ -42,14 +42,14 @@
 
         <!-- 數量與刪除 -->
         <div class="flex items-center gap-3 mt-2 sm:mt-0">
-          <label for="{{ item.id }}_edit_qty" class="sr-only">數量</label>
+          <label for="{{ item.id }}_edit_qty" class="sr-only">{% trans "數量" %}</label>
           <div class="flex items-center gap-1">
             <input id="{{ item.id }}_edit_qty" type="number" min="1" x-model.number="qty" @blur="isDelete" @keydown.enter.prevent="isDelete" class="w-16 border rounded-md px-2 py-1 text-center text-sm" />
-            <span class="text-gray-500 text-xs">件</span>
+            <span class="text-gray-500 text-xs">{% trans "件" %}</span>
           </div>
 
           <!-- 刪除按鈕 -->
-          <form action="{% url 'carts:delete_cart_item' item.id %}" method="post" onsubmit="return confirm('確認刪除商品？')">
+          <form action="{% url 'carts:delete_cart_item' item.id %}" method="post" onsubmit="return confirm('{{ _('確認刪除商品？')|escapejs }}')">
             {% csrf_token %}
             <button type="submit" class="text-red-600 hover:text-red-700 text-xl transition-colors">
               <i class="fas fa-trash"></i>
@@ -65,8 +65,8 @@
 <!-- 總卡路里、總金額區塊 -->
 <div class="mt-8 flex justify-between md:items-center">
   <div class="text-lg font-semibold md:text-left mb-4 md:mb-0">
-    <p>總卡路里：<span id="totalCalories">{{ cart.total_calories }}</span> kcal</p>
-    <p>總金額：<span id="totalPrice">{{ cart.total_price }}</span> 元</p>
+    <p>{% trans "總卡路里：" %}<span id="totalCalories">{{ cart.total_calories }}</span> kcal</p>
+    <p>{% trans "總金額：" %}<span id="totalPrice">{{ cart.total_price }}</span> {% trans "元" %}</p>
   </div>
 
   <!-- Alpine 包裹區塊 -->
@@ -83,7 +83,7 @@
     }
   }"
   >
-    <button @click="proceedCheckout" class="bg-[#5a855a] hover:bg-[#2e4e2e] text-white px-6 py-2 rounded-lg text-lg shadow-md">結帳</button>
+    <button @click="proceedCheckout" class="bg-[#5a855a] hover:bg-[#2e4e2e] text-white px-6 py-2 rounded-lg text-lg shadow-md">{% trans "結帳" %}</button>
   </div>
 </div>
 {% endblock main %}

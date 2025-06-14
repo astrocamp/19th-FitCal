@@ -1,4 +1,4 @@
-{% extends "layouts/default.html" %} {% block main %}{% load static %}
+{% extends "layouts/default.html" %} {% load i18n %} {% block main %}{% load static %}
 <div>
   <div class="relative z-0 isolate px-6 pt-14 lg:px-8">
     <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl pointer-events-none sm:-top-80" aria-hidden="true">
@@ -7,16 +7,16 @@
 
     <div class="mx-auto max-w-4xl py-12 sm:py-20 lg:py-24">
       <div class="text-center">
-        <h1 class="text-5xl font-semibold tracking-tight text-balance text-[#3A8D3D] sm:text-7xl whitespace-pre-line">FitCal 讓你吃得更聰明</h1>
+        <h1 class="text-5xl font-semibold tracking-tight text-balance text-[#3A8D3D] sm:text-7xl whitespace-pre-line">FitCal {% trans "讓你吃得更聰明" %}</h1>
         <p class="text-center text-lg sm:text-xl font-medium leading-normal text-pretty text-gray-700 whitespace-pre-line">
-          想吃美食又怕熱量爆表？ FitCal 幫你搞定！<br />
-          不只能自由選餐、掌握每一口的卡路里，還能收藏最愛店家、留下真心評價。<br />
-          店家也能靠後台報表看清賺錢關鍵，輕鬆管理菜單與訂單。從今天起，吃得聰明、活得漂亮！<br />
+          {% trans "想吃美食又怕熱量爆表？ FitCal 幫你搞定！" %}<br />
+          {% trans "不只能自由選餐、掌握每一口的卡路里，還能收藏最愛店家、留下真心評價。" %}<br />
+          {% trans "店家也能靠後台報表看清賺錢關鍵，輕鬆管理菜單與訂單。從今天起，吃得聰明、活得漂亮！" %}<br />
           Fit Your Calories, Fit Your Life.
         </p>
         <div class="mt-10 flex items-center justify-center gap-x-6 flex-wrap">
-          <a href="{% url 'stores:index' %}" class="btn btn-lg rounded-md bg-[#3A8D3D] px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-[#64B564] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3A8D3D]"><i class="fa-solid fa-utensils"></i>開始探索餐點 </a>
-          <a href="{% url 'users:sign_in_store' %}" class="text-sm/6 font-semibold text-[#3A8D3D] hover:text-[#64B564]"> 商家加入 <span aria-hidden="true">→</span> </a>
+          <a href="{% url 'stores:index' %}" class="btn btn-lg rounded-md bg-[#3A8D3D] px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-[#64B564] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3A8D3D]"><i class="fa-solid fa-utensils"></i>{% trans "開始探索餐點" %} </a>
+          <a href="{% url 'users:sign_in_store' %}" class="text-sm/6 font-semibold text-[#3A8D3D] hover:text-[#64B564]"> {% trans "商家加入" %} <span aria-hidden="true">→</span> </a>
         </div>
       </div>
     </div>
@@ -31,36 +31,36 @@
     <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
       <div class="lg:pt-4 lg:pr-8">
         <div class="lg:max-w-lg">
-          <h2 class="text-base/7 font-semibold text-[#3A8D3D]">健康點餐，輕鬆生活</h2>
-          <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">智慧飲食，盡在指尖</p>
-          <p class="mt-6 text-lg/8 text-gray-600">我們的平台讓您在享受美食的同時，輕鬆掌握每一份餐點的健康資訊。從點餐到支付，再到售後服務，全程為您打造流暢、個人化的體驗。</p>
+          <h2 class="text-base/7 font-semibold text-[#3A8D3D]">{% trans "健康點餐，輕鬆生活" %}</h2>
+          <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">{% trans "智慧飲食，盡在指尖" %}</p>
+          <p class="mt-6 text-lg/8 text-gray-600">{% trans "我們的平台讓您在享受美食的同時，輕鬆掌握每一份餐點的健康資訊。從點餐到支付，再到售後服務，全程為您打造流暢、個人化的體驗。" %}</p>
           <dl class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
             <div class="relative pl-9">
               <dt class="inline font-semibold text-gray-900">
                 <span class="absolute top-0 left-0 text-[#3A8D3D] text-lg font-bold">1.</span>
-                卡路里智能管理。
+                {% trans "卡路里智能管理。" %}
               </dt>
-              <dd class="inline">無論是單一商品還是整筆訂單，所有卡路里資訊一目瞭然，助您輕鬆規劃每日飲食。</dd>
+              <dd class="inline">{% trans "無論是單一商品還是整筆訂單，所有卡路里資訊一目瞭然，助您輕鬆規劃每日飲食。" %}</dd>
             </div>
             <div class="relative pl-9">
               <dt class="inline font-semibold text-gray-900">
                 <span class="absolute top-0 left-0 text-[#3A8D3D] text-lg font-bold">2.</span>
-                訂單與店家互動。
+                {% trans "訂單與店家互動。" %}
               </dt>
-              <dd class="inline">即時查看店家平均評分，對每筆訂單和商品進行收藏，並透過多元登入方式快速開啟美食旅程。</dd>
+              <dd class="inline">{% trans "即時查看店家平均評分，對每筆訂單和商品進行收藏，並透過多元登入方式快速開啟美食旅程。" %}</dd>
             </div>
             <div class="relative pl-9">
               <dt class="inline font-semibold text-gray-900">
                 <span class="absolute top-0 left-0 text-[#3A8D3D] text-lg font-bold">3.</span>
-                便捷支付與即時通訊。
+                {% trans "便捷支付與即時通訊。" %}
               </dt>
-              <dd class="inline">支援 Line 線上支付與多種登入方式（含 Google、Line），訂單狀態即時通知，還有 AI 客服機器人隨時為您提供協助。</dd>
+              <dd class="inline">{% trans "支援 Line 線上支付與多種登入方式（含 Google、Line），訂單狀態即時通知，還有 AI 客服機器人隨時為您提供協助。" %}</dd>
             </div>
           </dl>
         </div>
       </div>
       <div class="flex justify-center items-center">
-        <img src="{% static 'images/member_side.png' %}" alt="消費者端產品截圖" class="w-full max-w-5xl rounded-xl shadow-xl ring-1 ring-gray-400/10 xl:ml-0 lg:max-w-6xl" width="2432" height="1442" />
+        <img src="{% static 'images/member_side.png' %}" alt="{% trans '消費者端產品截圖' %}" class="w-full max-w-5xl rounded-xl shadow-xl ring-1 ring-gray-400/10 xl:ml-0 lg:max-w-6xl" width="2432" height="1442" />
       </div>
     </div>
   </div>
@@ -70,35 +70,35 @@
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <div class="mx-auto grid max-w-full grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
       <div class="flex justify-center items-center order-2 lg:order-none">
-        <img src="{% static 'images/store_side.png' %}" alt="店家端產品截圖" class="w-full max-w-5xl rounded-xl shadow-xl ring-1 ring-gray-400/10 xl:ml-0 lg:max-w-6xl" width="2432" height="1442" />
+        <img src="{% static 'images/store_side.png' %}" alt="{% trans '店家端產品截圖' %}" class="w-full max-w-5xl rounded-xl shadow-xl ring-1 ring-gray-400/10 xl:ml-0 lg:max-w-6xl" width="2432" height="1442" />
       </div>
 
       <div class="lg:pt-4 lg:pl-8 order-1 lg:order-none">
         <div class="lg:max-w-lg">
-          <h2 class="text-base/7 font-semibold text-[#3A8D3D]">高效管理，輕鬆營運</h2>
-          <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">智能後台，助您事業騰飛</p>
-          <p class="mt-6 text-lg/8 text-gray-600">我們為店家提供一套功能強大且直觀的後台管理系統，從商品上架到訂單處理，再到數據分析，全面助力您提升營運效率，掌握市場動態。</p>
+          <h2 class="text-base/7 font-semibold text-[#3A8D3D]">{% trans "高效管理，輕鬆營運" %}</h2>
+          <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">{% trans "智能後台，助您事業騰飛" %}</p>
+          <p class="mt-6 text-lg/8 text-gray-600">{% trans "我們為店家提供一套功能強大且直觀的後台管理系統，從商品上架到訂單處理，再到數據分析，全面助力您提升營運效率，掌握市場動態。" %}</p>
           <dl class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
             <div class="relative pl-9">
               <dt class="inline font-semibold text-gray-900">
                 <span class="absolute top-0 left-0 text-[#3A8D3D] text-lg font-bold">1.</span>
-                AI 智能商品管理。
+                AI {% trans "智能商品管理。" %}
               </dt>
-              <dd class="inline">新增商品時，AI 自動辨識圖片並分析卡路里，讓您輕鬆上架。還能自由新增商品類別，並拖曳排序菜單，彈性調整前台顯示順序。</dd>
+              <dd class="inline">{% trans "新增商品時，AI 自動辨識圖片並分析卡路里，讓您輕鬆上架。還能自由新增商品類別，並拖曳排序菜單，彈性調整前台顯示順序。" %}</dd>
             </div>
             <div class="relative pl-9">
               <dt class="inline font-semibold text-gray-900">
                 <span class="absolute top-0 left-0 text-[#3A8D3D] text-lg font-bold">2.</span>
-                訂單與數據分析。
+                {% trans "訂單與數據分析。" %}
               </dt>
-              <dd class="inline">訂單自動分類為當日、預約與歷史訂單，以精美卡片呈現不同狀態。詳細的分析報表助您洞察營收、收藏及評分變化，做出精準決策。</dd>
+              <dd class="inline">{% trans "訂單自動分類為當日、預約與歷史訂單，以精美卡片呈現不同狀態。詳細的分析報表助您洞察營收、收藏及評分變化，做出精準決策。" %}</dd>
             </div>
             <div class="relative pl-9">
               <dt class="inline font-semibold text-gray-900">
                 <span class="absolute top-0 left-0 text-[#3A8D3D] text-lg font-bold">3.</span>
-                商家門面自訂。
+                {% trans "商家門面自訂。" %}
               </dt>
-              <dd class="inline">彈性變更您的商家 Logo 和 Banner 圖片，輕鬆打造專屬品牌風格，吸引更多顧客。</dd>
+              <dd class="inline">{% trans "彈性變更您的商家 Logo 和 Banner 圖片，輕鬆打造專屬品牌風格，吸引更多顧客。" %}</dd>
             </div>
           </dl>
         </div>
