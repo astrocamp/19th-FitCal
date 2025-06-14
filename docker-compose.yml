@@ -1,6 +1,6 @@
 services:
   web:
-    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v2.1
+    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v2.2
     build:
       context: .
       dockerfile: docker/Dockerfile
@@ -35,7 +35,7 @@ services:
     restart: on-failure
 
   celery:
-    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v2.1
+    image: 014420964444.dkr.ecr.ap-northeast-1.amazonaws.com/fitcal-web:v2.2
     build:
       context: .
       dockerfile: docker/Dockerfile
