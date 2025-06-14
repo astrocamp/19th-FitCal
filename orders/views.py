@@ -4,6 +4,7 @@ from django.db import transaction
 from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import condition
 
 from carts.models import Cart
@@ -110,7 +111,7 @@ def index(req):
 
             # 刪除購物車
             cart.delete()
-            messages.success(req, '訂單建立成功')
+            messages.success(req, _('訂單建立成功'))
             return redirect('orders:show', id=order.id)
 
         return render(
@@ -206,9 +207,9 @@ def cancel(request, id):
     if success:
         order.order_status = OrderStatus.CANCELED
         order.save()
-        messages.success(request, '訂單已取消')
+        messages.success(request, _('訂單已取消'))
     else:
-        messages.error(request, '此訂單無法取消')
+        messages.error(request, _('此訂單無法取消'))
 
     # 重新獲取訂單以確保狀態正確
     order.refresh_from_db()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 02:21+0800\n"
+"POT-Creation-Date: 2025-06-14 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgid "產品"
 msgstr "Product"
 
 #: .\carts\forms.py:32 .\orders\forms.py:160 .\templates\carts\show.html:45
-#: .\templates\products\show.html:33
+#: .\templates\products\show.html:34
 #: .\templates\shared\orders\order_item_detail.html:19
 msgid "數量"
 msgstr "Quantity"
@@ -273,6 +273,18 @@ msgstr "Please select a time within 2 hours after the original pickup time"
 #: .\orders\forms.py:159 .\templates\shared\orders\order_item_detail.html:20
 msgid "單價"
 msgstr "Unit Price"
+
+#: .\orders\views.py:114
+msgid "訂單建立成功"
+msgstr "Order created successfully"
+
+#: .\orders\views.py:210
+msgid "訂單已取消"
+msgstr "Order canceled"
+
+#: .\orders\views.py:212
+msgid "此訂單無法取消"
+msgstr "This order cannot be canceled"
 
 #: .\payment\views.py:31
 msgid "找不到訂單資訊"
@@ -552,6 +564,7 @@ msgid "總金額："
 msgstr "Total Amount:"
 
 #: .\templates\carts\index.html:28 .\templates\carts\show.html:69
+#: .\templates\stores\bottom_cart_icon.html:6
 msgid "元"
 msgstr "NT$"
 
@@ -575,7 +588,7 @@ msgstr "There are no items in your cart."
 msgid "新增商品到購物車"
 msgstr "Add Item to Cart"
 
-#: .\templates\carts\new.html:21 .\templates\products\show.html:41
+#: .\templates\carts\new.html:21 .\templates\products\show.html:42
 msgid "加入購物車"
 msgstr "Add to Cart"
 
@@ -590,13 +603,13 @@ msgstr "Business Hours:"
 
 #: .\templates\carts\show.html:14
 msgid "距離：2.1 公里"
-msgstr ""
+msgstr "Distance: 2.1 km"
 
 #: .\templates\carts\show.html:29
 msgid "無圖片"
 msgstr "No Image"
 
-#: .\templates\carts\show.html:48
+#: .\templates\carts\show.html:48 .\templates\stores\bottom_cart_icon.html:6
 msgid "件"
 msgstr "pcs"
 
@@ -609,10 +622,8 @@ msgid "結帳"
 msgstr "Checkout"
 
 #: .\templates\chatbot\widget.html:17
-#, fuzzy
-#| msgid "FitCal智慧客服小幫手"
 msgid "智慧客服小幫手"
-msgstr "FitCal Smart Assistant"
+msgstr "Smart Assistant"
 
 # #: .\templates\chatbot\widget.html:24
 #: .\templates\chatbot\widget.html:24
@@ -685,8 +696,6 @@ msgid "總卡路里:"
 msgstr "Total Calories:"
 
 #: .\templates\components\order_items.html:20
-#, fuzzy
-#| msgid "總計："
 msgid "總計:"
 msgstr "Total:"
 
@@ -866,6 +875,11 @@ msgstr "Pickup Method: Self Pickup"
 msgid "購物內容"
 msgstr "Shopping Details"
 
+#: .\templates\orders\components\ordering_step1.html:83
+#, fuzzy
+msgid "份"
+msgstr "pcs"
+
 #: .\templates\orders\components\ordering_step1.html:90
 #, fuzzy, python-format
 #| msgid "確定要刪除 {{ item.product.name }}？"
@@ -879,6 +893,7 @@ msgstr "No items yet. Go add some products now!"
 #: .\templates\orders\components\ordering_step1.html:105
 #: .\templates\orders\components\ordering_step3.html:56
 #: .\templates\shared\orders\order_item_detail.html:44
+#: .\templates\stores\bottom_cart_icon.html:7
 msgid "總卡路里"
 msgstr "Total Calories"
 
@@ -890,6 +905,12 @@ msgstr "Checkout Summary"
 msgid "商品"
 msgstr "Product"
 
+#: .\templates\orders\components\ordering_step1.html:123
+#: .\templates\orders\components\ordering_step2.html:24
+#: .\templates\orders\components\ordering_step3.html:61
+msgid "應付金額"
+msgstr "Amount Due"
+
 #: .\templates\orders\components\ordering_step1.html:131
 msgid "繼續加購"
 msgstr "Continue Shopping"
@@ -898,11 +919,6 @@ msgstr "Continue Shopping"
 #: .\templates\orders\components\ordering_step2.html:88
 msgid "下一步"
 msgstr "Next Step"
-
-#: .\templates\orders\components\ordering_step2.html:24
-#: .\templates\orders\components\ordering_step3.html:61
-msgid "應付金額"
-msgstr "Amount Due"
 
 #: .\templates\orders\components\ordering_step2.html:33
 msgid "取貨人姓名："
@@ -918,7 +934,7 @@ msgstr "Payment Method:"
 
 #: .\templates\orders\components\ordering_step2.html:55
 msgid "現金支付"
-msgstr ""
+msgstr "Cash Payment"
 
 #: .\templates\orders\components\ordering_step3.html:20
 msgid "確認訂單明細"
@@ -970,12 +986,10 @@ msgstr "points"
 
 #: .\templates\orders\ordering_steps.html:14
 msgid "現金付款"
-msgstr ""
+msgstr "Cash Payment"
 
 #: .\templates\pages\index.html:10
-#, fuzzy
-#| msgid "讓你吃得更聰明"
-msgid "FitCal 讓你吃得更聰明"
+msgid "讓你吃得更聰明"
 msgstr "Eat Smarter"
 
 #: .\templates\pages\index.html:12
@@ -1132,7 +1146,6 @@ msgstr "Product Name"
 
 #: .\templates\products\index.html:22 .\templates\products\product_card.html:17
 #, fuzzy
-#| msgid "總卡路里："
 msgid "卡路里："
 msgstr "Total Calories:"
 
@@ -1160,19 +1173,19 @@ msgstr "No products available at the moment"
 msgid "查看收藏"
 msgstr "View Favorites"
 
-#: .\templates\products\show.html:24
+#: .\templates\products\show.html:25
 #, fuzzy
 #| msgid "卡路里:"
 msgid "卡路里: "
 msgstr "Calories:"
 
-#: .\templates\products\show.html:25
+#: .\templates\products\show.html:26
 #, fuzzy
 #| msgid "可販售數量"
 msgid "可販售數量:"
 msgstr "Available quantity"
 
-#: .\templates\products\show.html:46
+#: .\templates\products\show.html:47
 #, fuzzy
 #| msgid "編輯："
 msgid "編輯"
@@ -1281,8 +1294,6 @@ msgid "小計"
 msgstr "Subtotal"
 
 #: .\templates\shared\orders\order_item_detail.html:38
-#, fuzzy
-#| msgid "總計："
 msgid "總計"
 msgstr "Total:"
 
@@ -1710,15 +1721,6 @@ msgstr "You have been logged out."
 #, python-format
 #~ msgid "$ %(price)s"
 #~ msgstr "$%(price)s"
-
-#~ msgid "訂單建立成功"
-#~ msgstr "Order created successfully"
-
-#~ msgid "訂單已取消"
-#~ msgstr "Order canceled"
-
-#~ msgid "此訂單無法取消"
-#~ msgstr "This order cannot be canceled"
 
 #~ msgid "此訂單無法開始準備"
 #~ msgstr "This order cannot be prepared"

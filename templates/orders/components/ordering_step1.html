@@ -80,7 +80,7 @@
         <div id="item-{{ item.id }}" class="flex items-center justify-between">
           <div>
             <p class="text-base font-medium text-gray-800 sm:text-lg">{{ item.product.name }}</p>
-            <p class="text-base text-gray-600 sm:text-lg">$ {{ item.product.price|floatformat:0 }} / {{ item.quantity }} 份</p>
+            <p class="text-base text-gray-600 sm:text-lg">$ {{ item.product.price|floatformat:0 }} / {{ item.quantity }} {% trans "份" %}</p>
           </div>
 
           <div class="flex items-center space-x-2 sm:space-x-3">
@@ -120,7 +120,7 @@
           <span id="ordering_total_price_brief">$ {{ cart.total_price }}</span>
         </div>
         <div class="flex justify-between text-base font-semibold text-gray-800 sm:text-lg">
-          <span>應付金額</span>
+          <span>{% trans "應付金額" %}</span>
           <span id="ordering_total_price_final">$ {{ cart.total_price }}</span>
         </div>
       </div>
