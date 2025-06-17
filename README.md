@@ -18,44 +18,49 @@
   Fit Your Calories, Fit Your Life.<br>
   讓FitCal在健康的道路上助力你前行！<br><br>
 
-<a href="https://fitcal-life.com">fitcal-life.com</a><br>
-<a href="https://www.youtube.com/watch?v=6cLQmp8Xfpc">Demo影片</a><br>
-<a href="https://drive.google.com/drive/u/0/folders/1qshSmxno1hdNriJnzx2AXc-IsYTD777l">專案介紹</a>
-
+  <a href="https://fitcal-life.com">fitcal-life.com</a><br>
+  <a href="https://www.youtube.com/watch?v=6cLQmp8Xfpc">Demo影片</a><br>
+  <a href="https://drive.google.com/drive/u/0/folders/1qshSmxno1hdNriJnzx2AXc-IsYTD777l">專案介紹</a>
 </div>
 
 ## 功能介紹
 
 ---
 
-- 第三方登入
-<div align="center">
-  <img src="static\images\README\third-party.png"/>
-</div>
+- **第三方登入**
+  <div align="center">
+    <img src="static\images\README\third-party.png"/>
+  </div>
+  
 - **快速搜尋**
-<div align="center">
-  <img src="static\images\README\search.png" />
-</div>
-- **I客服**
-<div align="center">
-  <img src="static\images\README\AI-client.png" />
-</div>
+  <div align="center">
+    <img src="static\images\README\search.png" />
+  </div>
+  
+- **AI客服**
+  <div align="center">
+    <img src="static\images\README\AI-client.png" />
+  </div>
+
 - **商家/商品收藏 & 店家實時距離顯示**
-<div align="center">
-  <img src="static\images\README\collection.png" />
-</div>
+  <div align="center">
+    <img src="static\images\README\collection.png" />
+  </div>
+
 - **第三方金流-LinePay**
-<div align="center">
-  <img src="static\images\README\payment.png" />
-</div>
+  <div align="center">
+    <img src="static\images\README\payment.png" />
+  </div>
+
 - **商品圖片卡路里分析**
-<div align="center">
-  <img src="static\images\README\cal.png" />
-</div>
+  <div align="center">
+    <img src="static\images\README\cal.png" />
+  </div>
+
 - **銷售分析**
-  <di align="center">
-  <img src="static\images\README\analysis.png" />
-  </di **>**
+  <div align="center">
+    <img src="static\images\README\analysis.png" />
+  </div>
 
 ## 使用技術
 
@@ -93,36 +98,36 @@
 ---
 
 - 鄒幸娟[GitHub](https://github.com/Sachico0912)
-
   - AI 客服
   - 會員系統
   - 商家收藏
 
-- 洪世賢[GitHub](https://github.com/Hongben8993)
 
+- 洪世賢[GitHub](https://github.com/Hongben8993)
   - 系統排程
   - 自動寄信
   - 第三方登入
   - 商品收藏
 
-- 黃姵青[GitHub](https://github.com/Sabrinaa77)
 
+- 黃姵青[GitHub](https://github.com/Sabrinaa77)
   - 報表匯出
   - AWS S3 圖片上傳
   - 卡路里搜尋功能
   - 通知視窗
 
-- 黃韋翰[GitHub](https://github.com/ab000641)
 
+- 黃韋翰[GitHub](https://github.com/ab000641)
   - AI 卡路里分析
   - 圖表分析
   - 商家評分
 
-- 楊凱崴[GitHub](https://github.com/nivek-yang)
 
+- 楊凱崴[GitHub](https://github.com/nivek-yang)
   - 串接 LINE PAY
   - 串接 LINE BOT
   - 建構訂單系統
+
 
 - 王嘉禾[GitHub](https://github.com/Andywang-95)
   - 網站部署
