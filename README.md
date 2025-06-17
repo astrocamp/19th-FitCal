@@ -29,27 +29,33 @@
 ---
 
 - 第三方登入
+<div align="center">
   <img src="static\images\README\third-party.png"/>
-- 快速搜尋
+</div>
+- **快速搜尋**
+<div align="center">
   <img src="static\images\README\search.png" />
-- AI客服
+</div>
+- **I客服**
+<div align="center">
   <img src="static\images\README\AI-client.png" />
-- 商家/商品收藏 & 店家實時距離顯示
+</div>
+- **商家/商品收藏 & 店家實時距離顯示**
+<div align="center">
   <img src="static\images\README\collection.png" />
-- 第三方金流-LinePay
+</div>
+- **第三方金流-LinePay**
+<div align="center">
   <img src="static\images\README\payment.png" />
-- 商品圖片卡路里分析
+</div>
+- **商品圖片卡路里分析**
+<div align="center">
   <img src="static\images\README\cal.png" />
-- 銷售分析
+</div>
+- **銷售分析**
+  <di align="center">
   <img src="static\images\README\analysis.png" />
-
-## 使用技術
-
----
-
-|                                                                                                                                                    前端                                                                                                                                                     |                                                                                      後端                                                                                       |                       資料庫                       |                                                部署                                                |                                                    其他                                                     |
-| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
-| <img width="150" src="static\images\README\HTML-CSS-JS.png" alt="html5-CSS3-JavaScript"/><br><img src="static\images\README\tailwindcss.svg"/><br><img src="static\images\README\daisyUI.png"/><br><img src="static\images\README\alpine_long.svg"/><br><img src="static\images\README\htmx-seeklogo.svg"/> | <img src="static\images\README\python-logo-generic.svg" /> <br><img src="static\images\README\django-logo-positive.svg" /> <br><img src="static\images\README\amazon-s3.png" /> | <img src="static\images\README\postgresSQL.png" /> | <img src="static\images\README\docker-logo-blue.svg" /> <img src="static\images\README\EC2.svg" /> | <img src="htstatic\images\README\LINE-Pay.png"/> <br><img src="static\images\README\mailgun-seeklogo.svg"/> |
+  </di **>**
 
 ## 使用技術
 
