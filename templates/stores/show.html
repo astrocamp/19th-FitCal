@@ -26,25 +26,5 @@
   </div>
   {% endfor %}
 </div>
-{% if user.is_store and store == user.store %}
-<form action="{% url 'stores:delete' store.id %}" method="post" onsubmit="return confirm('是否確認刪除帳號與店家？此操作無法復原！')">
-  {% csrf_token %}
-  <button type="submit" class="btn">{% trans "刪除帳號" %}</button>
-</form>
-<a hx-get="{% url 'stores:new_category' store.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="btn btn-primary">{% trans "新增類別" %}</a>
-
-{% for c in categories %}
-<a hx-get="{% url 'stores:show_category' c.id %}" hx-trigger="click" hx-target="body" hx-swap="beforeend" class="cursor-pointer">
-  <span class="p-1 border-2 border-green-500 rounded-sm m-2">
-    <i class="fa-solid fa-tags" style="color: #22c55e"></i>
-    {{ c }}
-  </span>
-</a>
-{% empty %}
-<span>{% trans "暫無分類" %}</span>
-{% endfor %}
-<hr />
-<a href="{% url 'products:new' store.id %}" class="btn btn-primary"> {% trans "新增商品" %} </a><br />
-{% endif %}
 <div id="bottom_cart">{% include "stores/bottom_cart_icon.html" %}</div>
 {% endblock main %}
