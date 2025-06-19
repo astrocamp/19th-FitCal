@@ -20,7 +20,7 @@
 
 <a href="https://fitcal-life.com">fitcal-life.com</a><br>
 <a href="https://www.youtube.com/watch?v=6cLQmp8Xfpc">Demo影片</a><br>
-<a href="https://drive.google.com/file/d/1duHOmd9ZNXUcmNBKWdlv2xAnsCHMhipz/view?usp=drive_link">專案介紹</a>
+<a href="https://drive.google.com/file/d/1agi4KriW24LxEABAsupDi-7Qg-QtOua5/view?usp=sharing">專案介紹</a>
 </div>
 
 ## 功能介紹
@@ -134,4 +134,4 @@
   - 網站部署
   - 購物車
   - 地圖定位
-  - 統籌規劃
+  - 專案容器化
