@@ -3,7 +3,7 @@
     <i class="fas fa-globe text-gray-700 text-xl"></i>
   </button>
 
-  <div x-show="open" @click.outside="open = false" class="absolute right-0 mt-2 w-28 bg-white rounded shadow border z-50">
+  <div x-show="open" @click.outside="open = false" class="absolute left-0 mt-2 w-28 bg-white rounded shadow border z-50">
     <form method="post" action="{% url 'set_language' %}" class="block">
       {% csrf_token %}
       <input type="hidden" name="language" value="zh-hant" />

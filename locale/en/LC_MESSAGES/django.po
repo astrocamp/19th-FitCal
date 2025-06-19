@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-14 11:11+0800\n"
+"POT-Creation-Date: 2025-06-19 17:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,8 +71,6 @@ msgid "購物車已清空，請重新選擇商品"
 msgstr "Cart is empty. Please select your items again"
 
 #: .\carts\views.py:206
-#, fuzzy, python-format
-#| msgid "成功刪除 %(product)s"
 msgid "成功刪除 %(product_name)s"
 msgstr "Successfully removed %(product)s"
 
@@ -486,39 +484,39 @@ msgstr "Please provide a valid rating."
 msgid "分數必須在 1 到 5 分之間"
 msgstr "The rating must be between 1 and 5."
 
-#: .\stores\views.py:249 .\templates\orders\order_list.html:51
+#: .\stores\views.py:245 .\templates\orders\order_list.html:51
 msgid "已評分："
 msgstr "Rated:"
 
-#: .\stores\views.py:256
+#: .\stores\views.py:251
 msgid "伺服器發生錯誤，請稍後再試"
 msgstr "A server error occurred. Please try again later."
 
-#: .\stores\views.py:362
+#: .\stores\views.py:357
 msgid "類別名稱不能為空"
 msgstr "Category name cannot be empty"
 
-#: .\stores\views.py:366
+#: .\stores\views.py:361
 msgid "此類別已存在"
 msgstr "This category already exists"
 
-#: .\stores\views.py:370
+#: .\stores\views.py:365
 msgid "類別創建成功"
 msgstr "Category created successfully"
 
-#: .\stores\views.py:388
+#: .\stores\views.py:383
 msgid "此類別名稱已存在"
 msgstr "This category name already exists"
 
-#: .\stores\views.py:393
+#: .\stores\views.py:388
 msgid "類別名稱已更新"
 msgstr "Category name updated"
 
-#: .\stores\views.py:395
+#: .\stores\views.py:390
 msgid "請輸入有效的類別名稱"
 msgstr "Please enter a valid category name"
 
-#: .\stores\views.py:411
+#: .\stores\views.py:406
 msgid "類別已刪除"
 msgstr "Category deleted"
 
@@ -858,8 +856,6 @@ msgid "確認結帳"
 msgstr "Confirm Checkout"
 
 #: .\templates\orders\components\ordering_step1.html:23
-#, fuzzy
-#| msgid "新增店家資訊"
 msgid "店家資訊"
 msgstr "Add Store Information"
 
@@ -876,13 +872,10 @@ msgid "購物內容"
 msgstr "Shopping Details"
 
 #: .\templates\orders\components\ordering_step1.html:83
-#, fuzzy
 msgid "份"
 msgstr "pcs"
 
 #: .\templates\orders\components\ordering_step1.html:90
-#, fuzzy, python-format
-#| msgid "確定要刪除 {{ item.product.name }}？"
 msgid "確定要刪除 %(product_name)s 嗎？"
 msgstr "Are you sure you want to delete {{ item.product.name }}?"
 
@@ -987,6 +980,65 @@ msgstr "points"
 #: .\templates\orders\ordering_steps.html:14
 msgid "現金付款"
 msgstr "Cash Payment"
+
+#: .\templates\pages\about.html:5
+msgid "認識我們的團隊"
+msgstr "Meet Our Team"
+
+#: .\templates\pages\about.html:6
+msgid ""
+"我們是一群充滿熱情與活力的夥伴，致力於提供最優質的美食平台服務，為使用者帶來"
+"卓越的體驗。"
+msgstr ""
+"We are a team full of passion and energy, dedicated to providing the highest quality food platform services and delivering an exceptional user experience."
+
+#: .\templates\pages\about.html:14
+msgid "會員系統開發"
+msgstr "Membership System Development"
+
+#: .\templates\pages\about.html:15
+msgid "負責功能: AI 客服, 會員系統, 商家收藏, 全站i18n多國語言"
+msgstr "Responsibilities: AI chatbot, membership system, store bookmarking, full-site i18n multilingual support"
+
+#: .\templates\pages\about.html:27
+msgid "後端系統整合"
+msgstr "Backend System Integration"
+
+#: .\templates\pages\about.html:28
+msgid "負責功能: 系統排程, 自動寄信, 第三方登入, 商品收藏"
+msgstr "Responsibilities: system scheduling, automated emails, third-party login, product bookmarking"
+
+#: .\templates\pages\about.html:40
+msgid "數據與功能開發"
+msgstr "Data and Feature Development"
+
+#: .\templates\pages\about.html:41
+msgid "負責功能: 報表匯出, AWS S3 圖片上傳, 卡路里搜尋, 通知視窗"
+msgstr "Responsibilities: report export, AWS S3 image uploads, calorie search, notification window"
+
+#: .\templates\pages\about.html:53
+msgid "與數據分析"
+msgstr "And Data Analysis"
+
+#: .\templates\pages\about.html:54
+msgid "負責功能: AI 卡路里分析, 圖表分析, 商家評分"
+msgstr "Responsibilities: AI calorie analysis, chart analysis, store rating system"
+
+#: .\templates\pages\about.html:66
+msgid "金流與訊息整合"
+msgstr "Payment and Messaging Integration"
+
+#: .\templates\pages\about.html:67
+msgid "負責功能: 串接 LINE PAY, 串接 LINE BOT, 建構訂單系統"
+msgstr "Responsibilities: integrating LINE PAY, connecting LINE BOT, building the order system"
+
+#: .\templates\pages\about.html:79
+msgid "系統部署與核心規劃"
+msgstr "System Deployment and Core Planning"
+
+#: .\templates\pages\about.html:80
+msgid "負責功能: 網站部署, 購物車, 地圖定位, 統籌規劃"
+msgstr "Responsibilities: website deployment, shopping cart, map positioning, overall project planning"
 
 #: .\templates\pages\index.html:10
 msgid "讓你吃得更聰明"
@@ -1139,25 +1191,18 @@ msgid "新增商品"
 msgstr "Add Product"
 
 #: .\templates\products\index.html:18
-#, fuzzy
-#| msgid "商品名稱"
 msgid "商品名稱："
 msgstr "Product Name"
 
 #: .\templates\products\index.html:22 .\templates\products\product_card.html:17
-#, fuzzy
 msgid "卡路里："
 msgstr "Total Calories:"
 
 #: .\templates\products\index.html:23
-#, fuzzy
-#| msgid "可販售數量"
 msgid "可販售數量："
 msgstr "Available quantity"
 
 #: .\templates\products\index.html:24 .\templates\products\product_card.html:16
-#, fuzzy
-#| msgid "價格"
 msgid "價格："
 msgstr "Price"
 
@@ -1174,20 +1219,14 @@ msgid "查看收藏"
 msgstr "View Favorites"
 
 #: .\templates\products\show.html:25
-#, fuzzy
-#| msgid "卡路里:"
 msgid "卡路里: "
 msgstr "Calories:"
 
 #: .\templates\products\show.html:26
-#, fuzzy
-#| msgid "可販售數量"
 msgid "可販售數量:"
 msgstr "Available quantity"
 
 #: .\templates\products\show.html:47
-#, fuzzy
-#| msgid "編輯："
 msgid "編輯"
 msgstr "Edit"
 
@@ -1208,8 +1247,6 @@ msgid "相關商品"
 msgstr "Related Products"
 
 #: .\templates\search\index.html:27
-#, fuzzy
-#| msgid "商家："
 msgid "商家"
 msgstr "Store:"
 
@@ -1221,15 +1258,19 @@ msgstr "Site Information"
 msgid "關於我們"
 msgstr "About Us"
 
-#: .\templates\shared\navbar.html:26 .\templates\shared\navbar.html:128
+#: .\templates\shared\footer.html:9
+msgid "切換語言"
+msgstr "Switch Language"
+
+#: .\templates\shared\navbar.html:26 .\templates\shared\navbar.html:126
 msgid "搜尋商家、餐點"
 msgstr "Search stores and meals"
 
-#: .\templates\shared\navbar.html:34 .\templates\shared\navbar.html:136
+#: .\templates\shared\navbar.html:34 .\templates\shared\navbar.html:134
 msgid "搜尋"
 msgstr "Search"
 
-#: .\templates\shared\navbar.html:41 .\templates\shared\navbar.html:141
+#: .\templates\shared\navbar.html:41 .\templates\shared\navbar.html:139
 msgid "最多卡路里(非必填)："
 msgstr "Maximum calories (optional):"
 
@@ -1620,8 +1661,6 @@ msgstr "Store login successful!"
 msgid "已登出！"
 msgstr "You have been logged out."
 
-#, fuzzy
-#~| msgid "數量"
 #~ msgid "数量"
 #~ msgstr "Quantity"
 
