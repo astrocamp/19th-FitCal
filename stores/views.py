@@ -241,13 +241,8 @@ def rate_store(request, order_id):
         )
 
         return HttpResponse(f"""
-<<<<<<< HEAD
-            <div class="text-sm text-gray-600 px-5 py-3">
-                ✅ 已評分：<strong>{score} 分</strong>
-=======
             <div class="text-sm text-gray-600">
                 ✅ {_('已評分：')}<strong>{score} 分</strong>
->>>>>>> 1538dcd (feat(i18n):files code review adjust changes)
             </div>
         """)
 
@@ -409,7 +404,7 @@ def category_delete(request, category_id):
 
     category.delete()
     messages.success(request, _('類別已刪除'))
-    return redirect('stores:management', store.id)
+    return redirect('stores:management')
 
 
 @store_required
