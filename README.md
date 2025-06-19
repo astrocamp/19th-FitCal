@@ -20,8 +20,7 @@
 
 <a href="https://fitcal-life.com">fitcal-life.com</a><br>
 <a href="https://www.youtube.com/watch?v=6cLQmp8Xfpc">Demo影片</a><br>
-<a href="https://drive.google.com/drive/u/0/folders/1qshSmxno1hdNriJnzx2AXc-IsYTD777l">專案介紹</a>
-
+<a href="https://drive.google.com/file/d/1duHOmd9ZNXUcmNBKWdlv2xAnsCHMhipz/view?usp=drive_link">專案介紹</a>
 </div>
 
 ## 功能介紹
@@ -75,6 +74,7 @@
   - 金流：LinePay
   - Email服務：MailGun
   - 檔案存儲 ：AWS S3
+  - AI：OpenAI / Gemini
 
 ## 版本及套件
 
@@ -100,7 +100,7 @@
 
 - 鄒幸娟[GitHub](https://github.com/Sachico0912)
 
-  - AI 客服
+  - AI(OpenAI)客服
   - 會員系統
   - 商家收藏
 
@@ -120,7 +120,7 @@
 
 - 黃韋翰[GitHub](https://github.com/ab000641)
 
-  - AI 卡路里分析
+  - AI(Gemini)卡路里分析
   - 圖表分析
   - 商家評分
 
