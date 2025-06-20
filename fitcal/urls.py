@@ -4,6 +4,7 @@ from django.urls import include, path
 from django.views.i18n import set_language
 
 from products import views as products_views
+from search import views as search_views
 
 app_name = 'fitcal'
 
@@ -18,7 +19,7 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),
     path('accounts/', include('allauth.urls')),
     path('carts/', include('carts.urls', namespace='carts')),
-    path('search/', include('search.urls', namespace='search')),
+    path('search/', search_views.index, name='search'),
     path('payment/', include('payment.urls', namespace='payment')),
     path('chatbot/', include('chatbot.urls', namespace='chatbot')),
     path(

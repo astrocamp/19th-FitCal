@@ -9,16 +9,12 @@ import { initProductSort } from './stores/productSort.js';
 import { initCategorySidebarActive } from './stores/selectCategory.js';
 import { initTabs } from './stores/selectTab.js';
 
-import { copyToClipboard } from './utils/clipboard.js';
 Chart.register(...registerables);
 window.Chart = Chart;
 
 window.Alpine = Alpine;
 window.htmx = htmx;
 window.flatpickr = flatpickr;
-window.copyToClipboard = copyToClipboard;
-
-Alpine.data('clipboard', copyToClipboard);
 
 Alpine.data('dataPicker', DatePicker);
 
