@@ -6,6 +6,7 @@
   <nav class="flex flex-col justify-self-end mr-10">
     <h6 class="footer-title">{% trans "網站資訊" %}</h6>
     <a href="{% url 'pages:about_us' %}" class="link link-hover"> <i class="fa-solid fa-house fa-fw mr-1"></i>{% trans "關於我們" %}</a>
+    <div>{% include "shared/i18n_dropdown.html" %}{% trans "切換語言" %}</div>
     <p>Email：<a href="mailto:fitcal19th@gmail.com" class="link link-hover">fitcal19th@gmail.com</a></p>
   </nav>
 </div>

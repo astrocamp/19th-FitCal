@@ -22,6 +22,7 @@ dependencies = [
     "redis>=6.2.0",
     "django-anymail[mailgun]>=13.0",
     "gdal>=3.10.2",
+    "django-celery-beat>=2.8.1",
 ]
 
 [dependency-groups]

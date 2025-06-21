@@ -48,6 +48,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(null=True, blank=True)
+    reminder_sent_at = models.DateTimeField(null=True, blank=True)
 
     products = models.ManyToManyField(
         Product, through='orders.OrderItem', related_name='ordered_in'

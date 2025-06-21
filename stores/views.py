@@ -421,7 +421,7 @@ def category_delete(request, category_id):
 
     category.delete()
     messages.success(request, _('類別已刪除'))
-    return redirect('stores:management', store.id)
+    return redirect('stores:management')
 
 
 @store_required
